@@ -11,7 +11,7 @@ import type {
 } from '@ff-client/types/properties';
 
 export type SettingsNamespace = {
-  type: 'settings';
+  namespaceType: 'settings';
   namespace: string;
   [key: string]: GenericValue;
 };

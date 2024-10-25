@@ -39,7 +39,7 @@ export const formSlice = createSlice({
 
       for (const namespace of action.payload) {
         state.settings[namespace.handle] = {
-          type: 'settings',
+          namespaceType: 'settings',
           namespace: namespace.handle,
         };
         for (const property of namespace.properties) {
@@ -55,7 +55,7 @@ export const formSlice = createSlice({
 
       if (!state.settings[namespace]) {
         state.settings[namespace] = {
-          type: 'settings',
+          namespaceType: 'settings',
           namespace: namespace,
         };
       }

@@ -17,6 +17,10 @@ export const translationSlice = createSlice({
   reducers: {
     update: (state, { payload }: PayloadAction<UpdateProps>) => {
       const { siteId, type, namespace, handle, value } = payload;
+      if (!state) {
+        state = {};
+      }
+
       if (state[siteId] === undefined) {
         state[siteId] = {
           fields: {},

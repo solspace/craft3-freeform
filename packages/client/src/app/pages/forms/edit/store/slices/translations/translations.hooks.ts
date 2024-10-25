@@ -63,7 +63,8 @@ function useTranslations(
   const { data: formSettings } = useQueryFormSettings();
 
   const isField = target && 'typeClass' in target;
-  const isForm = target && 'type' in target && target.type === 'settings';
+  const isForm =
+    target && 'type' in target && target.namespaceType === 'settings';
 
   const siteId = current.id;
   const namespace = isForm ? target.namespace : target?.uid;

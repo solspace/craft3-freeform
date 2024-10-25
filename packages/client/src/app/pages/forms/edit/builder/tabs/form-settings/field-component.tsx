@@ -30,6 +30,7 @@ export const FieldComponent: React.FC<Props> = ({ namespace, property }) => {
   const context: SettingsNamespace = {
     ...settings,
     isNew: form.isNew,
+    namespaceType: 'settings',
     namespace,
   };
 
