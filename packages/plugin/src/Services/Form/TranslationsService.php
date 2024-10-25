@@ -44,7 +44,7 @@ class TranslationsService extends BaseService
         $siteId = \Craft::$app->sites->getCurrentSite()->id;
         $translationTable = $this->getFormTranslations($form);
 
-        $translation = $translationTable[$siteId][$type][$namespace][$handle] ?? null;
+        $translation = $translationTable->{$siteId}->{$type}->{$namespace}->{$handle} ?? null;
         if (null === $translation) {
             return Freeform::t($defaultValue);
         }
@@ -56,7 +56,7 @@ class TranslationsService extends BaseService
         return $translation;
     }
 
-    public function getFormTranslations(Form $form): ?array
+    public function getFormTranslations(Form $form): ?\stdClass
     {
         if (!$this->isTranslationsEnabled($form)) {
             return null;
@@ -68,9 +68,9 @@ class TranslationsService extends BaseService
                 ->all()
             ;
 
-            $translations = [];
+            $translations = new \stdClass();
             foreach ($find as $found) {
-                $translations[$found->siteId] = $this->decodeTranslations($found->translations);
+                $translations->{$found->siteId} = $this->decodeTranslations($found->translations);
             }
 
             $this->translationCache[$form->getId()] = $translations;
@@ -103,6 +103,12 @@ class TranslationsService extends BaseService
     {
         $decoded = json_decode($translations, true);
         foreach ($decoded as $type => $typeTranslations) {
+            if (empty($typeTranslations)) {
+                unset($decoded[$type]);
+
+                continue;
+            }
+
             foreach ($typeTranslations as $namespace => $namespaceTranslations) {
                 if (empty($namespaceTranslations)) {
                     unset($decoded[$type][$namespace]);
