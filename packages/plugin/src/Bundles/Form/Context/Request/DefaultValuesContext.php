@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Bundles\Form\Context\Request;
 
 use Faker\Factory;
 use Faker\Generator;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Events\FormEventInterface;
 use Solspace\Freeform\Fields\Implementations\CheckboxField;
 use Solspace\Freeform\Fields\Interfaces\DefaultValueInterface;
@@ -14,8 +15,9 @@ use yii\base\Event;
 
 class DefaultValuesContext
 {
-    public function __construct()
-    {
+    public function __construct(
+        private TranslationProvider $translationProvider,
+    ) {
         Event::on(Form::class, Form::EVENT_REGISTER_CONTEXT, [$this, 'handleDefaultValues']);
         Event::on(Form::class, Form::EVENT_BEFORE_HANDLE_REQUEST, [$this, 'handleDefaultValues']);
         Event::on(Form::class, Form::EVENT_QUICK_LOAD, [$this, 'handleDefaultValues']);
@@ -34,7 +36,16 @@ class DefaultValuesContext
                 continue;
             }
 
-            $value = $field->getDefaultValue();
+            $value = $this
+                ->translationProvider
+                ->getTranslation(
+                    $field,
+                    $field->getUid(),
+                    'defaultValue',
+                    $field->getDefaultValue(),
+                )
+            ;
+
             if (TwigHelper::isTwigValue($value) && preg_match('/\bfaker\.\b/', $value)) {
                 $value = $this->getTwig()->render($value, ['faker' => $this->getFaker()]);
             }

@@ -44,7 +44,7 @@ class TranslationsService extends BaseService
         $siteId = \Craft::$app->sites->getCurrentSite()->id;
         $translationTable = $this->getFormTranslations($form);
 
-        $translation = $translationTable->{$siteId}->{$type}->{$namespace}->{$handle} ?? null;
+        $translation = $translationTable->{$siteId}[$type][$namespace][$handle] ?? null;
         if (null === $translation) {
             return Freeform::t($defaultValue);
         }
