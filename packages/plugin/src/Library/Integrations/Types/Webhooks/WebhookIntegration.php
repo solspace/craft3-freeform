@@ -23,6 +23,6 @@ abstract class WebhookIntegration extends BaseIntegration implements WebhookInte
 
     public function getUrl(): string
     {
-        return $this->url;
+        return $this->getProcessedValue($this->url);
     }
 }

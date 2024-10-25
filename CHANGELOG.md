@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.6.8 - 2024-10-25
+
+### Fixed
+- Fixed a bug where Webhook URLs were not processing ENV variables.
+
 ## 5.6.7 - 2024-10-23
 
 ### Added
