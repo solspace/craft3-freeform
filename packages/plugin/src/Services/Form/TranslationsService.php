@@ -41,9 +41,9 @@ class TranslationsService extends BaseService
             return $defaultValue;
         }
 
-        $siteId = \Craft::$app->sites->getCurrentSite()->id;
-        $translationTable = $this->getFormTranslations($form);
+        $siteId = $this->getCurrentSiteId();
 
+        $translationTable = $this->getFormTranslations($form);
         $translation = $translationTable->{$siteId}[$type][$namespace][$handle] ?? null;
         if (null === $translation) {
             return Freeform::t($defaultValue);
@@ -117,5 +117,33 @@ class TranslationsService extends BaseService
         }
 
         return $decoded;
+    }
+
+    private function getCurrentSiteId(): int
+    {
+        static $siteId;
+
+        if (null === $siteId) {
+            $request = \Craft::$app->getRequest();
+            $currentSite = \Craft::$app->getSites()->getCurrentSite();
+
+            $siteId = $request->get('siteId');
+            $siteHandle = $request->get('siteHandle', $request->get('site'));
+
+            if ($siteId) {
+                $siteId = (int) $siteId;
+            } elseif ($siteHandle) {
+                $site = \Craft::$app->getSites()->getSiteByHandle($siteHandle);
+                if ($site) {
+                    $siteId = $site->id;
+                }
+            }
+
+            if (!$siteId) {
+                $siteId = $currentSite->id;
+            }
+        }
+
+        return $siteId;
     }
 }

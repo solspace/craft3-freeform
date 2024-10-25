@@ -125,6 +125,7 @@ class FormTransformer
             'type' => $typeClass,
             'name' => $form->getName(),
             'handle' => $form->getHandle(),
+            'description' => $form->getDescription(),
             'settings' => $settings->toArray(),
             'ownership' => $this->getOwnership($form),
             'isNew' => $isNew,

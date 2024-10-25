@@ -40,6 +40,7 @@ export type Form = {
   type: string;
   name: string;
   handle: string;
+  description?: string;
   isNew: boolean;
   settings: SettingCollection;
   ownership?: FormOwnership;
