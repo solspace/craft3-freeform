@@ -21,6 +21,9 @@ class m241023_080038_AddPdfTemplateTable extends Migration
                 'fileName' => $this->text()->notNull(),
                 'body' => $this->longText()->notNull(),
                 'sortOrder' => $this->integer()->notNull()->defaultValue(0),
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid(),
             ]
         );
 
