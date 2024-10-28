@@ -109,6 +109,8 @@ class PdfTemplatesController extends BaseController
 
     protected function renderEditForm(PdfTemplateRecord $record): Response
     {
+        PermissionHelper::requirePermission(Freeform::PERMISSION_PDF_TEMPLATES_MANAGE);
+
         $this->view->registerAssetBundle(PdfTemplateEditorBundle::class);
 
         $variables = [

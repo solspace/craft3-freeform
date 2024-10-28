@@ -242,7 +242,6 @@ class SettingsService extends BaseService
             'limited-users' => ['title' => Freeform::t('Limited Users')],
             'template-manager' => ['title' => Freeform::t('Template Manager')],
             'statuses' => ['title' => Freeform::t('Statuses')],
-            'pdf-templates' => ['title' => Freeform::t('PDF Templates')],
             'demo-templates' => ['title' => Freeform::t('Demo Templates')],
             'spam' => ['title' => Freeform::t('Spam Protection')],
             'hdapi' => ['heading' => Freeform::t('Integrations')],
