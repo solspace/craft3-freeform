@@ -174,6 +174,8 @@ class Freeform extends Plugin
     public const PERMISSION_SUBMISSIONS_MANAGE_INDIVIDUAL = 'freeform-submissionsManageIndividual';
     public const PERMISSION_NOTIFICATIONS_ACCESS = 'freeform-notificationsAccess';
     public const PERMISSION_NOTIFICATIONS_MANAGE = 'freeform-notificationsManage';
+    public const PERMISSION_PDF_TEMPLATES_ACCESS = 'freeform-pdfTemplatesAccess';
+    public const PERMISSION_PDF_TEMPLATES_MANAGE = 'freeform-pdfTemplatesManage';
     public const PERMISSION_ERROR_LOG_ACCESS = 'freeform-errorLogAccess';
     public const PERMISSION_ERROR_LOG_MANAGE = 'freeform-errorLogManage';
     public const PERMISSION_ACCESS_QUICK_EXPORT = 'freeform-access-quick-export';

@@ -123,8 +123,14 @@ class NotificationFilesService extends BaseService implements NotificationsServi
             $presetAssets = '';
         }
 
-        $output = '';
-        $output .= "{# subject: {$record->getSubject()} #}".\PHP_EOL;
+        $pdfTemplateIds = $record->getPdfTemplateIds();
+        if (\is_array($pdfTemplateIds)) {
+            $pdfTemplateIds = implode(',', $pdfTemplateIds);
+        } else {
+            $pdfTemplateIds = '';
+        }
+
+        $output = "{# subject: {$record->getSubject()} #}".\PHP_EOL;
         $output .= "{# fromEmail: {$record->getFromEmail()} #}".\PHP_EOL;
         $output .= "{# fromName: {$record->getFromName()} #}".\PHP_EOL;
         $output .= "{# replyToName: {$record->getReplyToName()} #}".\PHP_EOL;
@@ -133,6 +139,7 @@ class NotificationFilesService extends BaseService implements NotificationsServi
         $output .= "{# bcc: {$record->getBcc()} #}".\PHP_EOL;
         $output .= "{# includeAttachments: {$includeAttachments} #}".\PHP_EOL;
         $output .= "{# presetAssets: {$presetAssets} #}".\PHP_EOL;
+        $output .= "{# pdfTemplates: {$pdfTemplateIds} #}".\PHP_EOL;
         $output .= "{# templateName: {$record->name} #}".\PHP_EOL;
         $output .= "{# description: {$record->description} #}".\PHP_EOL;
         $output .= \PHP_EOL;
