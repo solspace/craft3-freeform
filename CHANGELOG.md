@@ -1,5 +1,21 @@
 # Solspace Freeform Changelog
 
+## 5.6.8 - 2024-10-25
+
+### Fixed
+- Fixed a bug where Webhook URLs were not processing ENV variables.
+
+## 5.6.7 - 2024-10-23
+
+### Added
+- Added support for sending file uploads to Salesforce objects.
+- Added complete translations for the Salesforce integration.
+
+### Fixed
+- Fixed a bug where the CP Submissions index would error when displaying File Upload and File Upload Drag & Drop fields.
+- Fixed a bug where Hidden and Invisible fields were not included in Freeform Data exports.
+- Fixed a bug where the `dateCreated`, `dateUpdated` and `uid` columns were missing when persisting rule conditions on a PostgreSQL install.
+
 ## 5.6.6 - 2024-10-18
 
 ### Fixed

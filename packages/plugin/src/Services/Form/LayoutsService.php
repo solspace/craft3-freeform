@@ -155,6 +155,7 @@ class LayoutsService extends BaseService
         Page $page,
         FormLayout $mainLayout,
     ): void {
+        $allRowsCollection = $layout->getAllRows();
         $rowCollection = $layout->getRows();
         $currentRows = array_filter(
             $allRows,
@@ -172,6 +173,7 @@ class LayoutsService extends BaseService
             foreach ($currentFields as $field) {
                 $mainLayout->getFields()->add($field);
                 $page->getFields()->add($field);
+                $row->getAllFields()->add($field);
 
                 if ($field instanceof NoRenderInterface || !$field->canRender()) {
                     continue;
@@ -194,6 +196,8 @@ class LayoutsService extends BaseService
 
                 $row->getFields()->add($field);
             }
+
+            $allRowsCollection->add($row);
 
             if (!$row->getFields()->count()) {
                 continue;

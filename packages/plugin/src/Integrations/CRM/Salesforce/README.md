@@ -15,6 +15,7 @@ Maps data to the following endpoints:
 - **Opportunity**
 - **Account**
 - **Contact**
+- **Files** (see below)
 
 ### Fields
 Maps data to the following field types:
@@ -22,6 +23,7 @@ Maps data to the following field types:
 - **Text** fields: String, Encrypted String, Textarea, Email, URL, Address, Picklist, Multipicklist, Date/Time fields
 - **Numeric** fields: Number, Phone, Currency
 - **Other** fields: Reference/relationship
+- **Files**: map uploaded files to Salesforce and relate them to **Leads**, **Opportunities**, **Accounts**, and **Contacts** .
 - There are some limitations to types of fields that can be mapped, such as **Lookup** fields.
 
 ## Duplicate Check & Update
@@ -47,7 +49,7 @@ A duplicate check on records is done in the following way:
 
 ### Alternate Logic
 
-An alternate duplicate check on records is also available. When the **Check Contact email address and Account website when checking for duplicates?** setting is enabled, the following logic will happen instead:
+An alternate duplicate check on records is also available. When the **Check Contact email address and Account website when checking for Duplicates** setting is enabled, the following logic will happen instead:
 
 1. Check whether the *Contact* already exists:
     - Check against **Email address** as the identifier.
@@ -112,7 +114,7 @@ An alternate duplicate check on records is also available. When the **Check Cont
     - **Sandbox Mode** - Enable this if your Salesforce account is in Sandbox mode.
     - **Append checkboxes field values on Contact update?** - If a Contact already exists in Salesforce, enabling this will append additional checkboxes field values to the Contact inside Salesforce, instead of overwriting the options.
     - **Append checkboxes field values on Account update?** - If an Account already exists in Salesforce, enabling this will append additional checkboxes field values to the Account inside Salesforce, instead of overwriting the options.
-    - **Check Contact email address and Account website when checking for duplicates?** - By default, Freeform will check against Contact first name, last name and email address, as well as and Account name. If enabled, Freeform will instead check against Contact email address only and Account website. If no website is mapped, Freeform will gather the website domain from the Contact email address mapped.
+    - **Check Contact email address and Account website when checking for Duplicates** - By default, Freeform checks the Contact's first name, last name, email address, and Account name. If enabled, it will check only the Contact's email address and the Account's website. If no website is provided, Freeform will use the domain from the Contact's email address.
 
 ### 5. Finish the Integration
 

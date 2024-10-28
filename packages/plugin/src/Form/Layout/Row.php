@@ -15,6 +15,7 @@ class Row implements \IteratorAggregate
     private int $index;
 
     private FieldCollection $fieldCollection;
+    private FieldCollection $allFieldsCollection;
 
     public function __construct(array $config = [])
     {
@@ -23,6 +24,7 @@ class Row implements \IteratorAggregate
         $this->index = $config['index'] ?? 0;
 
         $this->fieldCollection = new FieldCollection();
+        $this->allFieldsCollection = new FieldCollection();
     }
 
     public function getId(): ?int
@@ -43,6 +45,11 @@ class Row implements \IteratorAggregate
     public function getFields(null|array|string $implements = null, ?string $strategy = null): FieldCollection
     {
         return $this->fieldCollection->getList($implements, $strategy);
+    }
+
+    public function getAllFields(null|array|string $implements = null, ?string $strategy = null): FieldCollection
+    {
+        return $this->allFieldsCollection->getList($implements, $strategy);
     }
 
     public function getIterator(): \ArrayIterator

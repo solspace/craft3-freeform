@@ -90,7 +90,7 @@ class FileUploadBundle extends FeatureBundle
             return;
         }
 
-        $output = '';
+        $output = '<div class="inline-chips">';
         foreach ($field->getValue() as $assetId) {
             $asset = \Craft::$app->assets->getAssetById((int) $assetId);
 
@@ -101,6 +101,7 @@ class FileUploadBundle extends FeatureBundle
                 );
             }
         }
+        $output .= '</div>';
 
         $event->setOutput($output);
     }

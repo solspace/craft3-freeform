@@ -168,9 +168,12 @@ abstract class BaseSalesforceIntegration extends CRMIntegration implements OAuth
         return $domain;
     }
 
-    protected function query(Client $client, string $query, array $params = []): array
+    protected function query(Client $client, string $query, array $params = [], bool $escapeParams = true): array
     {
-        $params = array_map([$this, 'soqlEscape'], $params);
+        if ($escapeParams) {
+            $params = array_map([$this, 'soqlEscape'], $params);
+        }
+
         $query = \sprintf($query, ...$params);
 
         $response = $client->get(
@@ -201,8 +204,12 @@ abstract class BaseSalesforceIntegration extends CRMIntegration implements OAuth
         return null;
     }
 
-    protected function soqlEscape(string $str = ''): string
+    protected function soqlEscape(array|string $str = ''): string
     {
+        if (\is_array($str)) {
+            return implode(',', array_map([$this, 'soqlEscape'], $str));
+        }
+
         $characters = [
             '\\',
             '\'',

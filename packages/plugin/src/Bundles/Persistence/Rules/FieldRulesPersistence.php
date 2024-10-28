@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Bundles\Persistence\Rules;
 
+use craft\helpers\StringHelper;
 use Solspace\Freeform\controllers\api\FormsController;
 use Solspace\Freeform\Events\Forms\PersistFormEvent;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
@@ -83,11 +84,14 @@ class FieldRulesPersistence extends FeatureBundle
                 if (null === $conditionRecord) {
                     $conditionRecord = new RuleConditionRecord();
                     $conditionRecord->ruleId = $rule->id;
+                    $conditionRecord->dateCreated = (new \DateTime())->format('Y-m-d H:i:s');
+                    $conditionRecord->uid = StringHelper::UUID();
                 }
 
                 $conditionRecord->fieldId = $conditionField->id;
                 $conditionRecord->operator = $condition->operator;
                 $conditionRecord->value = $condition->value;
+                $conditionRecord->dateUpdated = (new \DateTime())->format('Y-m-d H:i:s');
                 $conditionRecord->save();
 
                 $usedConditionUids[] = $conditionRecord->uid;

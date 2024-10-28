@@ -1,12 +1,20 @@
 {% set thumbSizes = [30, 60, 100, 200] %}
 {% set srcset = "" %}
-{%- for size in thumbSizes -%}{% set srcset = srcset ~ ", " ~ craft.assets.thumbUrl(asset, size) ~ " " ~ size ~ "w" %}{%- endfor -%}
-{% set srcset = srcset|trim(", ") %}
+{%- if asset.kind == 'image' -%}
+    {%- for size in thumbSizes -%}
+        {% set thumbTransform = { width: size, height: size } %}
+        {% set srcset = srcset ~ ", " ~ asset.getUrl(thumbTransform) ~ " " ~ size ~ "w" %}
+    {%- endfor -%}
+    {% set srcset = srcset|trim(", ") %}
+{%- else -%}
+    {# Use getThumbUrl for non-image files like PDFs #}
+    {% set srcset = craft.app.assets.thumbUrl(asset, 200, 200) %}
+{%- endif -%}
 
 <div data-editable-image=""
      data-image-width="{{ asset.width }}"
      data-image-height="{{ asset.height }}"
-     class="element small hasthumb"
+     class="element small hasthumb chip small"
      data-type="craft\elements\Asset"
      data-id="{{ asset.id }}"
      data-site-id="{{ asset.siteId }}"
@@ -16,13 +24,15 @@
      data-level="{{ asset.level }}"
      data-editable
 >
-    <div class="elementthumb">
+    <div class="elementthumb thumb">
         <img sizes="30px" srcset="{{ srcset }}" alt="">
     </div>
-    <div class="label">
-        <span class="title">
-            {{ asset.title }}
-        </span>
+    <div class="label chip-content">
+        <a href="{{ asset.cpEditUrl }}">
+            <span class="title">
+                {{ asset.title }}
+            </span>
+        </a>
     </div>
 </div>
 

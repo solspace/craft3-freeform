@@ -12,11 +12,13 @@ use Solspace\Freeform\Library\Collections\RowCollection;
 class Layout implements \IteratorAggregate
 {
     private RowCollection $rowCollection;
+    private RowCollection $allRowsCollection;
     private FieldCollection $fieldCollection;
 
     public function __construct(private ?string $uid = null)
     {
         $this->rowCollection = new RowCollection();
+        $this->allRowsCollection = new RowCollection();
         $this->fieldCollection = new FieldCollection();
     }
 
@@ -28,6 +30,11 @@ class Layout implements \IteratorAggregate
     public function getRows(): RowCollection
     {
         return $this->rowCollection;
+    }
+
+    public function getAllRows(): RowCollection
+    {
+        return $this->allRowsCollection;
     }
 
     public function hasFields(string $implements): bool

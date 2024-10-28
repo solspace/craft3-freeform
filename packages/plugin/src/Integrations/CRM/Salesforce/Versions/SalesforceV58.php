@@ -13,6 +13,7 @@
 namespace Solspace\Freeform\Integrations\CRM\Salesforce\Versions;
 
 use Carbon\Carbon;
+use craft\elements\Asset;
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Attributes\Property\Flag;
@@ -24,6 +25,7 @@ use Solspace\Freeform\Attributes\Property\Validators;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Fields\Implementations\CheckboxesField;
+use Solspace\Freeform\Fields\Interfaces\FileUploadInterface;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\CRM\Salesforce\BaseSalesforceIntegration;
 use Solspace\Freeform\Integrations\CRM\Salesforce\SalesforceIntegrationInterface;
@@ -47,7 +49,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[Input\Boolean(
         label: 'Map to Leads',
-        instructions: 'Should map to the Leads endpoint.',
+        instructions: 'Map submission data to create Leads in Salesforce.',
         order: 4,
     )]
     protected bool $mapLeads = false;
@@ -56,9 +58,19 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapLeads')]
     #[Input\Boolean(
-        label: 'Assign Lead Owner',
-        instructions: 'Enabling this will make Salesforce assign a lead owner based on lead owner assignment rules.',
+        label: 'Attach Uploaded Files to Leads',
+        instructions: 'Send any uploaded files to Salesforce and relate them to the created Lead.',
         order: 5,
+    )]
+    protected bool $filesForLeads = false;
+
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[VisibilityFilter('Boolean(enabled)')]
+    #[VisibilityFilter('values.mapLeads')]
+    #[Input\Boolean(
+        label: 'Assign Lead Owner',
+        instructions: 'Assign a lead owner based on lead owner assignment rules in Salesforce.',
+        order: 6,
     )]
     protected bool $assignLeadOwner = false;
 
@@ -67,8 +79,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('values.mapLeads')]
     #[Input\Boolean(
         label: 'Convert Leads to Contact Tasks for Returning Customers',
-        instructions: 'When a Salesforce Contact already exists with the same email address, create a new Task for the Contact instead of a new Lead.',
-        order: 6,
+        instructions: 'If a Salesforce Contact with the same email exists, create a new Task for that Contact instead of a new Lead.',
+        order: 7,
     )]
     protected bool $convertLeadsToTasks = false;
 
@@ -77,8 +89,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('values.mapLeads')]
     #[VisibilityFilter('values.convertLeadsToTasks')]
     #[Input\Text(
-        instructions: "Enter the text you'd like to have set for new Task subjects.",
-        order: 7,
+        instructions: 'Enter the text you would like to have set for new Task subjects.',
+        order: 8,
     )]
     protected string $taskSubject = '';
 
@@ -88,7 +100,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('values.convertLeadsToTasks')]
     #[Input\Text(
         instructions: "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days').",
-        order: 8,
+        order: 9,
     )]
     protected string $taskDueDate = '';
 
@@ -97,8 +109,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapLeads')]
     #[Input\Special\Properties\FieldMapping(
-        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields',
-        order: 9,
+        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.',
+        order: 10,
         source: 'api/integrations/crm/fields/'.self::CATEGORY_LEAD,
         parameterFields: ['id' => 'id'],
     )]
@@ -112,10 +124,20 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[Input\Boolean(
         label: 'Map to Opportunities',
-        instructions: 'Should map to the Opportunities endpoint.',
-        order: 10,
+        instructions: 'Map submission data to create Opportunities in Salesforce.',
+        order: 11,
     )]
     protected bool $mapOpportunities = false;
+
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[VisibilityFilter('Boolean(enabled)')]
+    #[VisibilityFilter('values.mapOpportunities')]
+    #[Input\Boolean(
+        label: 'Attach Uploaded Files to Opportunities',
+        instructions: 'Send any uploaded files to Salesforce and relate them to the created Opportunity.',
+        order: 12,
+    )]
+    protected bool $filesForOpportunities = false;
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
@@ -123,7 +145,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[Validators\Required]
     #[Input\Text(
         instructions: 'Enter a relative textual date string for the Close Date of the newly created Opportunity (e.g. \'7 days\').',
-        order: 11,
+        order: 13,
     )]
     protected string $closeDate = '';
 
@@ -134,7 +156,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[Input\Text(
         label: 'Stage Name',
         instructions: 'Enter the Stage Name the newly created Opportunity should be assigned to (e.g. \'Prospecting\').',
-        order: 12,
+        order: 14,
     )]
     protected string $stage = '';
 
@@ -143,8 +165,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapOpportunities')]
     #[Input\Special\Properties\FieldMapping(
-        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields',
-        order: 13,
+        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.',
+        order: 15,
         source: 'api/integrations/crm/fields/'.self::CATEGORY_OPPORTUNITY,
         parameterFields: ['id' => 'id'],
     )]
@@ -158,8 +180,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[Input\Boolean(
         label: 'Map to Accounts',
-        instructions: 'Should map to the Accounts endpoint.',
-        order: 14,
+        instructions: 'Map submission data to create Accounts in Salesforce.',
+        order: 16,
     )]
     protected bool $mapAccounts = false;
 
@@ -167,9 +189,19 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapAccounts')]
     #[Input\Boolean(
-        label: 'Append checkbox group field values on Account update',
-        instructions: 'If an Account already exists in Salesforce, enabling this will append additional checkbox group field values to the Account inside Salesforce, instead of overwriting the options.',
-        order: 15,
+        label: 'Attach Uploaded Files to Accounts',
+        instructions: 'Send any uploaded files to Salesforce and relate them to the created Account.',
+        order: 17,
+    )]
+    protected bool $filesForAccounts = false;
+
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[VisibilityFilter('Boolean(enabled)')]
+    #[VisibilityFilter('values.mapAccounts')]
+    #[Input\Boolean(
+        label: 'Append Checkboxes field values on Account update',
+        instructions: 'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.',
+        order: 18,
     )]
     protected bool $appendAccountData = false;
 
@@ -178,8 +210,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapAccounts')]
     #[Input\Special\Properties\FieldMapping(
-        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Account fields',
-        order: 16,
+        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Contact fields.',
+        order: 19,
         source: 'api/integrations/crm/fields/'.self::CATEGORY_ACCOUNT,
         parameterFields: ['id' => 'id'],
     )]
@@ -193,8 +225,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[Input\Boolean(
         label: 'Map to Contacts',
-        instructions: 'Should map to the Contacts endpoint.',
-        order: 17,
+        instructions: 'Map submission data to create Contacts in Salesforce.',
+        order: 20,
     )]
     protected bool $mapContacts = false;
 
@@ -202,9 +234,19 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapContacts')]
     #[Input\Boolean(
-        label: 'Check Contact email address and Account website when checking for duplicates',
-        instructions: 'By default, Freeform will check against Contact first name, last name and email address, as well as and Account name. If enabled, Freeform will instead check against Contact email address only and Account website. If no website is mapped, Freeform will gather the website domain from the Contact email address mapped.',
-        order: 18,
+        label: 'Attach Uploaded Files to Contacts',
+        instructions: 'Send any uploaded files to Salesforce and relate them to the created Contact.',
+        order: 21,
+    )]
+    protected bool $filesForContacts = false;
+
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[VisibilityFilter('Boolean(enabled)')]
+    #[VisibilityFilter('values.mapContacts')]
+    #[Input\Boolean(
+        label: 'Check Contact email address and Account website when checking for Duplicates',
+        instructions: "By default, Freeform checks the Contact's first name, last name, email address, and Account name. If enabled, it will check only the Contact's email address and the Account's website. If no website is provided, Freeform will use the domain from the Contact's email address.",
+        order: 22,
     )]
     protected bool $duplicateCheck = false;
 
@@ -212,9 +254,9 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapContacts')]
     #[Input\Boolean(
-        label: 'Append checkbox group field values on Contact update',
-        instructions: 'If a Contact already exists in Salesforce, enabling this will append additional checkbox group field values to the Contact inside Salesforce, instead of overwriting the options.',
-        order: 19,
+        label: 'Append Checkboxes field values on Contact update',
+        instructions: 'If a Contact already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Contact in Salesforce instead of replacing the existing options.',
+        order: 23,
     )]
     protected bool $appendContactData = false;
 
@@ -223,26 +265,19 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapContacts')]
     #[Input\Special\Properties\FieldMapping(
-        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Account fields',
-        order: 20,
+        instructions: 'Select the Freeform fields to be mapped to the applicable Salesforce Contact fields.',
+        order: 24,
         source: 'api/integrations/crm/fields/'.self::CATEGORY_CONTACT,
         parameterFields: ['id' => 'id'],
     )]
     protected ?FieldMapping $contactMapping = null;
 
     private ?string $accountId = null;
+    private ?array $linkedContentDocumentIds = null;
 
     public function getApiRootUrl(): string
     {
         return $this->getInstanceUrl().'/services/data/'.self::API_VERSION;
-    }
-
-    public function push(Form $form, Client $client): void
-    {
-        $this->processLeads($form, $client);
-        $this->processAccounts($form, $client);
-        $this->processContacts($form, $client);
-        $this->processOpportunities($form, $client);
     }
 
     public function getTaskSubject(): string
@@ -265,59 +300,17 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         return $this->getProcessedValue($this->stage);
     }
 
+    public function push(Form $form, Client $client): void
+    {
+        $this->processLeads($form, $client);
+        $this->processAccounts($form, $client);
+        $this->processContacts($form, $client);
+        $this->processOpportunities($form, $client);
+    }
+
     private function isCreateTasksForDuplicates(): bool
     {
         return $this->convertLeadsToTasks;
-    }
-
-    private function createTasksForDuplicates(Form $form, Client $client, array $keyValueList): bool
-    {
-        // Check for existing clients
-        if ($this->isCreateTasksForDuplicates() && isset($keyValueList['Email'])) {
-            $email = $keyValueList['Email'];
-
-            $contact = $this->querySingle(
-                $client,
-                "SELECT Id, Email, OwnerId FROM Contact WHERE Email = '%s' LIMIT 1",
-                [$email]
-            );
-
-            if ($contact) {
-                $description = '';
-                foreach ($form->getLayout()->getFields()->getStorableFields() as $field) {
-                    $description .= "{$field->getLabel()}: {$field->getValueAsString()}\n";
-                }
-
-                try {
-                    $dueDate = $this->getTaskDueDate() ?: '+2 days';
-                    $dueDate = new Carbon($dueDate, 'UTC');
-                } catch (\Exception) {
-                    $dueDate = new Carbon('+2 days');
-                }
-
-                $subject = $this->getTaskSubject() ?: 'New Followup';
-
-                $payload = [
-                    'Subject' => $subject,
-                    'WhoId' => $contact->Id,
-                    'Description' => $description,
-                    'ActivityDate' => $dueDate->toDateString(),
-                ];
-
-                if ($contact->OwnerId) {
-                    $payload['OwnerId'] = $contact->OwnerId;
-                }
-
-                $response = $client->post(
-                    $this->getEndpoint('/sobjects/Task'),
-                    ['json' => $payload],
-                );
-
-                return 201 === $response->getStatusCode();
-            }
-        }
-
-        return false;
     }
 
     private function processLeads(Form $form, Client $client): void
@@ -337,15 +330,21 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
         $mapping = $this->triggerPushEvent(self::CATEGORY_LEAD, $mapping);
 
-        $response = $client->post(
-            $this->getEndpoint('/sobjects/Lead'),
-            [
-                'headers' => [
-                    'Sforce-Auto-Assign' => $this->assignLeadOwner ? 'TRUE' : 'FALSE',
-                ],
-                'json' => $mapping,
-            ]
+        [$response, $json] = $this->getJsonResponse(
+            $client->post(
+                $this->getEndpoint('/sobjects/Lead'),
+                [
+                    'headers' => [
+                        'Sforce-Auto-Assign' => $this->assignLeadOwner ? 'TRUE' : 'FALSE',
+                    ],
+                    'json' => $mapping,
+                ]
+            )
         );
+
+        if ($this->filesForLeads) {
+            $this->linkFilesTo($json->id, $form, $client);
+        }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_LEAD, $response);
     }
@@ -454,6 +453,10 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             $this->accountId = $json->id;
         }
 
+        if ($this->filesForAccounts && $this->accountId) {
+            $this->linkFilesTo($this->accountId, $form, $client);
+        }
+
         $this->triggerAfterResponseEvent(self::CATEGORY_ACCOUNT, $response);
     }
 
@@ -514,6 +517,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         }
 
         if ($contactRecord) {
+            $contactId = $contactRecord->Id;
+
             // We'll prepare appendable values
             if ($isAppendContactData) {
                 $mapping = $this->appendValues($mapping, $contactRecord, $appendContactFields);
@@ -524,10 +529,18 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 ['json' => $mapping],
             );
         } else {
-            $response = $client->post(
-                $this->getEndpoint('/sobjects/Contact'),
-                ['json' => $mapping],
+            [$response, $json] = $this->getJsonResponse(
+                $client->post(
+                    $this->getEndpoint('/sobjects/Contact'),
+                    ['json' => $mapping],
+                )
             );
+
+            $contactId = $json->id;
+        }
+
+        if ($this->filesForContacts && $contactId) {
+            $this->linkFilesTo($contactId, $form, $client);
         }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT, $response);
@@ -556,12 +569,68 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             $mapping['AccountId'] = $this->accountId;
         }
 
-        $response = $client->post(
-            $this->getEndpoint('/sobjects/Opportunity'),
-            ['json' => $mapping],
+        [$response, $json] = $this->getJsonResponse(
+            $client->post(
+                $this->getEndpoint('/sobjects/Opportunity'),
+                ['json' => $mapping],
+            )
         );
 
+        if ($this->filesForOpportunities) {
+            $this->linkFilesTo($json->id, $form, $client);
+        }
+
         $this->triggerAfterResponseEvent(self::CATEGORY_OPPORTUNITY, $response);
+    }
+
+    private function createTasksForDuplicates(Form $form, Client $client, array $keyValueList): bool
+    {
+        // Check for existing clients
+        if ($this->isCreateTasksForDuplicates() && isset($keyValueList['Email'])) {
+            $email = $keyValueList['Email'];
+
+            $contact = $this->querySingle(
+                $client,
+                "SELECT Id, Email, OwnerId FROM Contact WHERE Email = '%s' LIMIT 1",
+                [$email]
+            );
+
+            if ($contact) {
+                $description = '';
+                foreach ($form->getLayout()->getFields()->getStorableFields() as $field) {
+                    $description .= "{$field->getLabel()}: {$field->getValueAsString()}\n";
+                }
+
+                try {
+                    $dueDate = $this->getTaskDueDate() ?: '+2 days';
+                    $dueDate = new Carbon($dueDate, 'UTC');
+                } catch (\Exception) {
+                    $dueDate = new Carbon('+2 days');
+                }
+
+                $subject = $this->getTaskSubject() ?: 'New Followup';
+
+                $payload = [
+                    'Subject' => $subject,
+                    'WhoId' => $contact->Id,
+                    'Description' => $description,
+                    'ActivityDate' => $dueDate->toDateString(),
+                ];
+
+                if ($contact->OwnerId) {
+                    $payload['OwnerId'] = $contact->OwnerId;
+                }
+
+                $response = $client->post(
+                    $this->getEndpoint('/sobjects/Task'),
+                    ['json' => $payload],
+                );
+
+                return 201 === $response->getStatusCode();
+            }
+        }
+
+        return false;
     }
 
     private function extractDomainFromEmail(string $email): ?string
@@ -597,5 +666,111 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         }
 
         return $mappedValues;
+    }
+
+    private function getLinkedContentDocumentIds(Form $form, Client $client): array
+    {
+        if (null !== $this->linkedContentDocumentIds) {
+            return $this->linkedContentDocumentIds;
+        }
+
+        $this->linkedContentDocumentIds = [];
+
+        $fields = $form->getLayout()->getFields(FileUploadInterface::class);
+        if (!$fields->count()) {
+            return $this->linkedContentDocumentIds;
+        }
+
+        $this->linkedContentDocumentIds = [];
+
+        $fileBatch = [];
+
+        /** @var FileUploadInterface $field */
+        foreach ($fields as $field) {
+            $assets = $field->getAssets();
+
+            /** @var Asset $asset */
+            foreach ($assets as $asset) {
+                $fileBatch[] = [
+                    'method' => 'POST',
+                    'url' => '/services/data/'.self::API_VERSION.'/sobjects/ContentVersion',
+                    'referenceId' => 'File_'.$asset->id,
+                    'body' => [
+                        'Title' => $asset->title,
+                        'PathOnClient' => $asset->getFilename(),
+                        'VersionData' => base64_encode($asset->getContents()),
+                    ],
+                ];
+            }
+        }
+
+        if (!$fileBatch) {
+            return $this->linkedContentDocumentIds;
+        }
+
+        [, $versionData] = $this->getJsonResponse(
+            $client->post(
+                $this->getEndpoint('/composite'),
+                [
+                    'json' => [
+                        'allOrNone' => true,
+                        'compositeRequest' => $fileBatch,
+                    ],
+                ]
+            )
+        );
+
+        $versionIds = array_map(
+            fn ($item) => $item->body->id,
+            $versionData->compositeResponse,
+        );
+
+        $linkedDocumentData = $this->query(
+            $client,
+            "SELECT ContentDocumentId FROM ContentVersion WHERE Id IN ('%s')",
+            [implode("', '", $versionIds)],
+            false,
+        );
+
+        $this->linkedContentDocumentIds = array_map(
+            fn ($item) => $item->ContentDocumentId,
+            $linkedDocumentData,
+        );
+
+        return $this->linkedContentDocumentIds;
+    }
+
+    private function linkFilesTo(string $id, Form $form, Client $client): void
+    {
+        $documentIds = $this->getLinkedContentDocumentIds($form, $client);
+        if (!$documentIds) {
+            return;
+        }
+
+        $composite = array_map(
+            fn ($item, $index) => [
+                'method' => 'POST',
+                'url' => '/services/data/'.self::API_VERSION.'/sobjects/ContentDocumentLink',
+                'referenceId' => 'Link'.$index,
+                'body' => [
+                    'ContentDocumentId' => $item,
+                    'LinkedEntityId' => $id,
+                    'ShareType' => 'V',
+                    'Visibility' => 'AllUsers',
+                ],
+            ],
+            $documentIds,
+            array_keys($documentIds),
+        );
+
+        $client->post(
+            $this->getEndpoint('/composite'),
+            [
+                'json' => [
+                    'allOrNone' => true,
+                    'compositeRequest' => $composite,
+                ],
+            ]
+        );
     }
 }

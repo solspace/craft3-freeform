@@ -461,12 +461,12 @@ class FreeformFormsExporter extends BaseExporter
         $exportedLayout->uid = $layout->getUid();
         $exportedLayout->rows = new RowCollection();
 
-        foreach ($layout->getRows() as $row) {
+        foreach ($layout->getAllRows() as $row) {
             $exportedRow = new Row();
             $exportedRow->uid = $row->getUid();
             $exportedRow->fields = new FieldCollection();
 
-            foreach ($row->getFields() as $field) {
+            foreach ($row->getAllFields() as $field) {
                 $fieldRecord = $fieldRecordCache[$field->getUid()] ?? null;
                 if (null === $fieldRecord) {
                     continue;

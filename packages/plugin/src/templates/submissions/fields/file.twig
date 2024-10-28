@@ -2,24 +2,33 @@
     <div class="heading">
         <label>{{ field.label }}</label>
     </div>
-    <div class="file-preview">
+    <div class="file-preview elements chips chips-small">
         {% set assets = submission.getAssets(field.handle) %}
 
         {% if assets %}
             {% for asset in assets|filter(asset => asset is not null) %}
                 {% set thumbSizes = [30, 60, 100, 200] %}
                 {% set srcset = "" %}
-                {%- for size in thumbSizes -%}{% set srcset = srcset ~ ", " ~ craft.app.assets.thumbUrl(asset, size) ~ " " ~ size ~ "w" %}{%- endfor -%}
+                {%- if asset.kind == 'image' -%}
+                    {%- for size in thumbSizes -%}
+                        {% set thumbTransform = { width: size, height: size } %}
+                        {% set srcset = srcset ~ ", " ~ asset.getUrl(thumbTransform) ~ " " ~ size ~ "w" %}
+                    {%- endfor -%}
+                    {% set srcset = srcset|trim(", ") %}
+                {%- else -%}
+                    {# Use getThumbUrl for non-image files like PDFs #}
+                    {% set srcset = craft.app.assets.thumbUrl(asset, 200, 200) %}
+                {%- endif -%}
                 {% set srcset = srcset|trim(", ") %}
 
-                <div class="element small removable hasthumb" style="padding-right: 20px;">
+                <div class="element small removable hasthumb chip" style="padding-right: 20px;">
                     <input type="hidden" name="{{ field.handle }}[]"
                            value="{{ asset.id }}">
                     <a href="javascript:;" onclick="removeAsset(this);" class="icon delete"></a>
-                    <div class="elementthumb">
+                    <div class="elementthumb thumb">
                         <img sizes="30px" srcset="{{ srcset }}" alt="">
                     </div>
-                    <label>
+                    <label class="chip-content">
                         <a href="javascript:;" data-asset-id="{{ asset.id }}">
                             {{ asset.title }}
                         </a>
