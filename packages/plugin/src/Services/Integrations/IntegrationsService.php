@@ -515,7 +515,7 @@ class IntegrationsService extends BaseService
             try {
                 $integration->push($form, $client);
             } catch (\Exception $exception) {
-                $event = new FailedRequestEvent($integration, $exception);
+                $event = new FailedRequestEvent($form, $integration, $exception);
                 Event::trigger(
                     IntegrationInterface::class,
                     IntegrationInterface::EVENT_ON_FAILED_REQUEST,
