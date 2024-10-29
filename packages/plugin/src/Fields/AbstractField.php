@@ -22,6 +22,7 @@ use Solspace\Freeform\Attributes\Property\Middleware;
 use Solspace\Freeform\Attributes\Property\Section;
 use Solspace\Freeform\Attributes\Property\Validators;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
+use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Bundles\Fields\ImplementationProvider;
 use Solspace\Freeform\Events\Fields\CompileFieldAttributesEvent;
 use Solspace\Freeform\Events\Fields\FieldRenderEvent;
@@ -94,6 +95,16 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         order: 5
     )]
     protected bool $required = false;
+
+    #[Section('general')]
+    #[VisibilityFilter('properties.required')]
+    #[Input\Text(
+        label: 'Custom Validation Error',
+        instructions: 'If this field is left empty upon submit, show this error message.',
+        order: 5,
+        placeholder: 'This field is required',
+    )]
+    protected ?string $requiredMessage = '';
 
     #[Section(
         handle: 'attributes',
@@ -415,6 +426,11 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
     public function isRequired(): bool
     {
         return $this->required;
+    }
+
+    public function getRequiredErrorMessage(): ?string
+    {
+        return $this->requiredMessage;
     }
 
     public function getAttributes(): FieldAttributesCollection

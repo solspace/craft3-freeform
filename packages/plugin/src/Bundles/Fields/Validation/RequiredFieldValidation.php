@@ -42,7 +42,9 @@ class RequiredFieldValidation extends FeatureBundle
         }
 
         if ('' === $value || null === $value || [] === $value) {
-            $field->addError(Freeform::t('This field is required'));
+            $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
+
+            $field->addError($message);
         }
     }
 }
