@@ -18,7 +18,15 @@ export const translationSlice = createSlice({
     update: (state, { payload }: PayloadAction<UpdateProps>) => {
       const { siteId, type, namespace, handle, value } = payload;
       if (!state) {
-        state = {};
+        return {
+          [siteId]: {
+            [type]: {
+              [namespace]: {
+                [handle]: value,
+              },
+            },
+          },
+        };
       }
 
       if (state[siteId] === undefined) {

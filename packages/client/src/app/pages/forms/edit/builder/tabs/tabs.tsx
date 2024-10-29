@@ -43,7 +43,7 @@ export const Tabs: React.FC = () => {
     namespace: 'general',
   });
 
-  const formName = getTranslation('name', form.settings.general.name);
+  const formName = getTranslation('name', form.settings.general?.name);
 
   const { data: formSettingsData } = useQueryFormSettings();
 

@@ -20,7 +20,10 @@ export const translationSelectors = {
         let namespace: string = target?.uid;
         if ('properties' in target) {
           type = 'fields';
-        } else if ('type' in target && target.namespaceType === 'settings') {
+        } else if (
+          'namespaceType' in target &&
+          target.namespaceType === 'settings'
+        ) {
           type = 'form';
           namespace = target.namespace;
         } else {

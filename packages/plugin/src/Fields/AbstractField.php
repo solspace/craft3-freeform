@@ -721,7 +721,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
             '',
         );
 
-        if (!$translation || !$translation['options']) {
+        if (!$translation || !isset($translation['options'])) {
             return $defaultValue;
         }
 

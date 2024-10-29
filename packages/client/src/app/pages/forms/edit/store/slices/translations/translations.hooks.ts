@@ -64,7 +64,7 @@ function useTranslations(
 
   const isField = target && 'typeClass' in target;
   const isForm =
-    target && 'type' in target && target.namespaceType === 'settings';
+    target && 'namespaceType' in target && target.namespaceType === 'settings';
 
   const siteId = current.id;
   const namespace = isForm ? target.namespace : target?.uid;
@@ -106,8 +106,10 @@ function useTranslations(
   //       HAS
   // ================
   const hasTranslation: HasTranslation = useCallback(
-    (handle) => target && translationNamespace?.[handle] !== undefined,
-    [translationNamespace]
+    (handle) => {
+      return target && translationNamespace?.[handle] !== undefined;
+    },
+    [target, translationNamespace]
   );
 
   const willTranslate: WillTranslate = useCallback(
@@ -135,7 +137,7 @@ function useTranslations(
 
       return property.translatable;
     },
-    [isPrimary, target]
+    [isPrimary, target, isTranslationsEnabled]
   );
 
   // ================
@@ -153,7 +155,7 @@ function useTranslations(
 
       return translationNamespace[handle];
     },
-    [translationNamespace]
+    [target, translationNamespace]
   );
 
   const getOptionTranslations: GetTranslation = useCallback(
@@ -188,7 +190,7 @@ function useTranslations(
 
       return translatedValue;
     },
-    [translationNamespace]
+    [target, translationNamespace]
   );
 
   // ================
