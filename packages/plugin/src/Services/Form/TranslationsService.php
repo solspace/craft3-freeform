@@ -35,8 +35,8 @@ class TranslationsService extends BaseService
         string $type,
         string $namespace,
         string $handle,
-        string $defaultValue
-    ): array|string {
+        mixed $defaultValue
+    ): mixed {
         if (!$this->isTranslationsEnabled($form)) {
             return $defaultValue;
         }
@@ -45,11 +45,11 @@ class TranslationsService extends BaseService
 
         $translationTable = $this->getFormTranslations($form);
         $translation = $translationTable->{$siteId}[$type][$namespace][$handle] ?? null;
-        if (null === $translation) {
-            return Freeform::t($defaultValue);
-        }
-
         if (empty($translation)) {
+            if (\is_string($defaultValue)) {
+                return Freeform::t($defaultValue);
+            }
+
             return $defaultValue;
         }
 

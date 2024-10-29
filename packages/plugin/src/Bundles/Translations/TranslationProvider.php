@@ -17,8 +17,8 @@ class TranslationProvider
         mixed $context,
         string $namespace,
         string $handle,
-        string $defaultValue
-    ): string {
+        mixed $defaultValue
+    ): mixed {
         $form = $type = null;
         if ($context instanceof Form) {
             $form = $context;
