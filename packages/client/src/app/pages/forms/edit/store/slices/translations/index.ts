@@ -26,7 +26,7 @@ export const translationSlice = createSlice({
               },
             },
           },
-        };
+        } as TranslationState;
       }
 
       if (state[siteId] === undefined) {
