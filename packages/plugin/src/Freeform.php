@@ -445,6 +445,7 @@ class Freeform extends Plugin
                 'formLayouts' => LayoutsService::class,
                 'forms' => FormsService::class,
                 'formTypes' => TypesService::class,
+                'formGroups' => FormGroupsService::class,
                 'integrations' => IntegrationsService::class,
                 'integrationsQueue' => IntegrationsQueueService::class,
                 'lock' => LockService::class,
