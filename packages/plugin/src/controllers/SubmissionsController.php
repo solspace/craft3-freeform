@@ -240,7 +240,9 @@ class SubmissionsController extends BaseController
             $userId = reset($userId);
         }
 
-        $model->title = \Craft::$app->request->post('title', $model->title);
+        $title = \Craft::$app->request->post('title', $model->title);
+
+        $model->title = $title;
         $model->userId = (int) $userId;
         $model->statusId = $post['statusId'];
         $model->setFormFieldValues($post);
@@ -249,6 +251,20 @@ class SubmissionsController extends BaseController
         $this->trigger(self::EVENT_BEFORE_UPDATE, $event);
 
         if ($event->isValid && \Craft::$app->getElements()->saveElement($model)) {
+            // Update title for each site
+            if ($model->getForm()->getSettings()->getGeneral()->translations) {
+                $sites = \Craft::$app->sites->getAllSiteIds();
+                foreach ($sites as $siteId) {
+                    if ($siteId === \Craft::$app->sites->getCurrentSite()->id) {
+                        continue;
+                    }
+
+                    $model->siteId = $siteId;
+                    $model->title = $title;
+                    \Craft::$app->elements->saveElement($model, true, false);
+                }
+            }
+
             $this->trigger(self::EVENT_AFTER_UPDATE, $event);
 
             // Return JSON response if the request is an AJAX request
