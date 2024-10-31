@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Template;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Fields\TransformValueEvent;
 use Solspace\Freeform\Events\Forms\AttachFormAttributesEvent;
@@ -148,6 +149,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
         array $config,
         private Settings $settings,
         private PropertyAccessor $accessor,
+        private TranslationProvider $translationProvider,
     ) {
         $this->id = $config['id'] ?? null;
         $this->uid = $config['uid'] ?? null;
@@ -232,7 +234,12 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
 
     public function getName(): string
     {
-        return $this->getSettings()->getGeneral()->name;
+        return $this->translationProvider->getTranslation(
+            $this,
+            'general',
+            'name',
+            $this->getSettings()->getGeneral()->name,
+        );
     }
 
     public function getHandle(): string
@@ -252,7 +259,12 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
 
     public function getDescription(): string
     {
-        return $this->getSettings()->getGeneral()->description;
+        return $this->translationProvider->getTranslation(
+            $this,
+            'general',
+            'description',
+            $this->getSettings()->getGeneral()->description,
+        );
     }
 
     public function getCurrentPage(): Page

@@ -14,9 +14,11 @@ namespace Solspace\Freeform\Fields\Traits;
 
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 
 trait PlaceholderTrait
 {
+    #[Translatable]
     #[Section('general')]
     #[Input\Text(
         instructions: 'The text that will be shown if the field doesn\'t have a value',

@@ -5,7 +5,9 @@ import { useAppDispatch } from '@editor/store';
 import { useValueUpdateGenerator } from '@editor/store/hooks/value-update-generator';
 import { formActions } from '@editor/store/slices/form';
 import { formSelectors } from '@editor/store/slices/form/form.selectors';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import { useQueryFormSettings } from '@ff-client/queries/forms';
+import type { SettingsNamespace } from '@ff-client/types/forms';
 import type { Property } from '@ff-client/types/properties';
 
 type Props = {
@@ -25,24 +27,30 @@ export const FieldComponent: React.FC<Props> = ({ namespace, property }) => {
   const form = useSelector(formSelectors.current);
   const settings = useSelector(formSelectors.settings.one(namespace));
 
-  const context = {
+  const context: SettingsNamespace = {
     ...settings,
     isNew: form.isNew,
+    namespaceType: 'settings',
+    namespace,
   };
 
-  const value = context[property.handle];
+  const { getTranslation, updateTranslation } = useTranslations(context);
+
+  const value = getTranslation(property.handle, context[property.handle]);
 
   const generateUpdateHandler = useValueUpdateGenerator(
     properties,
     context,
     (handle, value) => {
-      dispatch(
-        formActions.modifySettings({
-          namespace,
-          key: handle,
-          value,
-        })
-      );
+      if (!updateTranslation(handle, value)) {
+        dispatch(
+          formActions.modifySettings({
+            namespace,
+            key: handle,
+            value,
+          })
+        );
+      }
     }
   );
 
@@ -50,12 +58,14 @@ export const FieldComponent: React.FC<Props> = ({ namespace, property }) => {
     formErrors?.[namespace]?.[property.handle];
 
   return (
-    <FormComponent
-      value={value}
-      property={property}
-      updateValue={generateUpdateHandler(property)}
-      errors={errors}
-      context={context}
-    />
+    <>
+      <FormComponent
+        value={value}
+        property={property}
+        updateValue={generateUpdateHandler(property)}
+        errors={errors}
+        context={context}
+      />
+    </>
   );
 };

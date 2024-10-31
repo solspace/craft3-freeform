@@ -10,6 +10,7 @@ const String: React.FC<ControlType<StringProperty>> = ({
   errors,
   updateValue,
   autoFocus,
+  context,
 }) => {
   const { handle } = property;
   const ref = useRef<HTMLInputElement>(null);
@@ -21,7 +22,7 @@ const String: React.FC<ControlType<StringProperty>> = ({
   }, [autoFocus]);
 
   return (
-    <Control property={property} errors={errors}>
+    <Control property={property} errors={errors} context={context}>
       <input
         id={handle}
         ref={ref}

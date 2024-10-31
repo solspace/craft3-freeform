@@ -11,6 +11,7 @@ import { contextSelectors } from '@editor/store/slices/context/context.selectors
 import { formSelectors } from '@editor/store/slices/form/form.selectors';
 import { fieldSelectors } from '@editor/store/slices/layout/fields/fields.selectors';
 import { notificationSelectors } from '@editor/store/slices/notifications/notifications.selectors';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import { useOnKeypress } from '@ff-client/hooks/use-on-keypress';
 import { useQueryFormSettings } from '@ff-client/queries/forms';
 import classes from '@ff-client/utils/classes';
@@ -35,6 +36,14 @@ export const Tabs: React.FC = () => {
   const formErrors = useSelector(formSelectors.errors);
   const fieldsHaveErrors = useSelector(fieldSelectors.hasErrors);
   const notificationsHaveErrors = useSelector(notificationSelectors.errors.any);
+
+  const { getTranslation } = useTranslations({
+    ...form.settings.general,
+    namespaceType: 'settings',
+    namespace: 'general',
+  });
+
+  const formName = getTranslation('name', form.settings.general?.name);
 
   const { data: formSettingsData } = useQueryFormSettings();
 
@@ -69,7 +78,7 @@ export const Tabs: React.FC = () => {
       />
 
       <Heading>
-        <FormName>{form.name || translate('New Form')}</FormName>
+        <FormName>{formName || translate('New Form')}</FormName>
       </Heading>
 
       <TabsWrapper className="main-tabs">

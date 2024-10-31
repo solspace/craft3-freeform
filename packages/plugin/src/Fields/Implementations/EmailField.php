@@ -59,7 +59,7 @@ class EmailField extends AbstractField implements RecipientInterface, Placeholde
             ->setIfEmpty('name', $this->getHandle())
             ->setIfEmpty('type', $this->getType())
             ->setIfEmpty('id', $this->getIdAttribute())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->setIfEmpty('value', $this->getValue())
             ->set($this->getRequiredAttribute())
         ;

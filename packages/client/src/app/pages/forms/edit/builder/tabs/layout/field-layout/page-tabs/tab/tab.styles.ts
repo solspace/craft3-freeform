@@ -29,6 +29,18 @@ export const RemoveTabButton = styled.button`
   }
 `;
 
+export const TabText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  > span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+`;
+
 export const PageTab = styled(animated.div)`
   display: flex;
   align-items: center;
@@ -43,12 +55,6 @@ export const PageTab = styled(animated.div)`
   border-bottom: 2px solid ${colors.gray100};
 
   overflow: hidden;
-
-  > span {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
 
   &.active {
     color: ${colors.gray800};

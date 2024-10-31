@@ -516,7 +516,7 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
             ->setIfEmpty('name', $this->getHandle())
             ->setIfEmpty('type', $this->getInputType())
             ->setIfEmpty('id', $this->getIdAttribute())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->setIfEmpty('value', $this->getValue())
             ->set($this->getRequiredAttribute())
             ->set('data-datepicker', true)

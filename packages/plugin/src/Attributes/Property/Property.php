@@ -23,6 +23,7 @@ abstract class Property
     public array $visibilityFilters = [];
 
     public bool $visible = true;
+    public bool $translatable = false;
 
     /** @var Edition[] */
     public ?array $editions = null;

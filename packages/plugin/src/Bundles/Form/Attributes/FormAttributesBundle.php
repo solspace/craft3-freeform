@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Bundles\Form\Attributes;
 
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Events\Forms\AttachFormAttributesEvent;
 use Solspace\Freeform\Events\Forms\SetPropertiesEvent;
 use Solspace\Freeform\Fields\Interfaces\FileUploadInterface;
@@ -12,7 +13,7 @@ use yii\base\Event;
 
 class FormAttributesBundle extends FeatureBundle
 {
-    public function __construct()
+    public function __construct(private TranslationProvider $translationProvider)
     {
         Event::on(Form::class, Form::EVENT_SET_PROPERTIES, [$this, 'separateAttributesFromProperties']);
         Event::on(Form::class, Form::EVENT_ATTACH_TAG_ATTRIBUTES, [$this, 'setConditionalAttributes']);
@@ -82,17 +83,38 @@ class FormAttributesBundle extends FeatureBundle
 
         if ($behaviorSettings->showProcessingText) {
             $attributes->replace('data-show-processing-text', true);
-            $attributes->replace('data-processing-text', $behaviorSettings->processingText);
+            $attributes->replace(
+                'data-processing-text',
+                $this->translationProvider
+                    ->getTranslation(
+                        $form,
+                        'behavior',
+                        'processingText',
+                        $behaviorSettings->processingText,
+                    )
+            );
         }
 
         $attributes->replace(
             'data-success-message',
-            \Craft::t('app', $behaviorSettings->getSuccessMessage())
+            $this->translationProvider
+                ->getTranslation(
+                    $form,
+                    'behavior',
+                    'successMessage',
+                    $behaviorSettings->getSuccessMessage(),
+                )
         );
 
         $attributes->replace(
             'data-error-message',
-            \Craft::t('app', $behaviorSettings->getErrorMessage())
+            $this->translationProvider
+                ->getTranslation(
+                    $form,
+                    'behavior',
+                    'errorMessage',
+                    $behaviorSettings->getErrorMessage(),
+                )
         );
     }
 }

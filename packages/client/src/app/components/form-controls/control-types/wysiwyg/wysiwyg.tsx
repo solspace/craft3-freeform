@@ -12,9 +12,10 @@ const Wysiwyg: React.FC<ControlType<WYSIWYGProperty>> = ({
   property,
   errors,
   updateValue,
+  context,
 }) => {
   return (
-    <Control property={property} errors={errors}>
+    <Control property={property} errors={errors} context={context}>
       <PreviewableComponent preview={<WysiwygPreview value={value} />}>
         <WysiwygEditor value={value} updateValue={updateValue} />
       </PreviewableComponent>

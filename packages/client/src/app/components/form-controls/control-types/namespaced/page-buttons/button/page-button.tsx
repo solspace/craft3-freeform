@@ -2,12 +2,12 @@ import React from 'react';
 import {
   ControlWrapper,
   FormField,
-  Label,
 } from '@components/form-controls/control.styles';
 import {
   CheckboxWrapper,
   LightSwitch,
 } from '@components/form-controls/control-types/bool/bool.styles';
+import { Label } from '@components/form-controls/label.styles';
 import type { ControlType } from '@components/form-controls/types';
 import type { PageButtonProperty } from '@ff-client/types/properties';
 import classes from '@ff-client/utils/classes';

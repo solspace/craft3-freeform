@@ -155,7 +155,7 @@ class OpinionScaleField extends BaseOptionsField implements ExtraFieldInterface,
             $output .= '<input'.$inputAttributes.' />';
 
             $output .= '<label for="'.$id.'">';
-            $output .= $this->translate($label);
+            $output .= $this->translateOption('scales', $value, $label);
             $output .= '</label>';
 
             $output .= '</li>';

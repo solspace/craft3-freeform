@@ -10,6 +10,7 @@ use Solspace\Freeform\Fields\Interfaces\EncryptionInterface;
 use Solspace\Freeform\Fields\Interfaces\ExtraFieldInterface;
 use Solspace\Freeform\Fields\Interfaces\NoEmailPresenceInterface;
 use Solspace\Freeform\Fields\Traits\EncryptionTrait;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Attributes\Attributes;
 
 #[Type(
@@ -171,7 +172,7 @@ class SignatureField extends AbstractField implements ExtraFieldInterface, Encry
 
         if ($this->showClearButton) {
             $output .= '<button'.$attributes.'>';
-            $output .= $this->translate('Clear');
+            $output .= Freeform::t('Clear');
             $output .= '</button>';
         }
 
