@@ -16,6 +16,7 @@ use Solspace\Freeform\Library\Attributes\Attributes;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\Integrations\Types\Captchas\CaptchaIntegrationInterface;
 use Solspace\Freeform\Services\Integrations\IntegrationsService;
+use Solspace\Freeform\Services\SettingsService;
 use yii\base\Event;
 
 class CaptchasBundle extends FeatureBundle
@@ -27,6 +28,7 @@ class CaptchasBundle extends FeatureBundle
 
     public function __construct(
         private FormIntegrationsProvider $formIntegrationsProvider,
+        private SettingsService $settingsService,
     ) {
         Event::on(
             Form::class,
@@ -125,7 +127,7 @@ class CaptchasBundle extends FeatureBundle
             return;
         }
 
-        $settingsModel = $this->getSettingsService()->getSettingsModel();
+        $settingsModel = $this->settingsService->getSettingsModel();
         if ($settingsModel->bypassSpamCheckOnLoggedInUsers && \Craft::$app->getUser()->id) {
             return;
         }
