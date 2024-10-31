@@ -12,6 +12,7 @@ use Solspace\Freeform\Attributes\Property\Validators\Required;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
+use Solspace\Freeform\Integrations\Captchas\CaptchasBundle;
 use Solspace\Freeform\Library\DataObjects\SpamReason;
 use Solspace\Freeform\Library\Integrations\BaseIntegration;
 use Solspace\Freeform\Library\Integrations\EnabledByDefault\EnabledByDefaultTrait;
@@ -220,6 +221,43 @@ class ReCaptcha extends BaseIntegration implements CaptchaIntegrationInterface
         } elseif (self::BEHAVIOR_SEND_TO_SPAM === $behavior) {
             $form->markAsSpam(SpamReason::TYPE_CAPTCHA, 'reCAPTCHA - '.implode(', ', $errors));
         }
+    }
+
+    public function getHtmlTag(Form $form): string
+    {
+        $locale = $this->getLocale();
+        if (empty($locale)) {
+            $locale = \Craft::$app->locale->getLanguageID();
+        }
+
+        $attributes = CaptchasBundle::getCaptchaAttributes($form);
+        $attributes
+            ->replace('data-freeform-recaptcha-container')
+            ->replace('data-captcha', 'recaptcha')
+            ->setIfEmpty('data-site-key', $this->getSiteKey())
+            ->setIfEmpty('data-theme', $this->getTheme())
+            ->setIfEmpty('data-size', $this->getSize())
+            ->setIfEmpty('data-lazy-load', $this->isTriggerOnInteract())
+            ->setIfEmpty('data-version', $this->getVersion())
+            ->setIfEmpty('data-action', $this->getAction())
+            ->setIfEmpty('data-locale', $locale)
+        ;
+
+        return '<div'.$attributes.'></div>';
+    }
+
+    public function getScriptPaths(): array
+    {
+        $version = $this->getVersion();
+
+        return [
+            'js/scripts/front-end/captchas/recaptcha/'.$version.'.js',
+        ];
+    }
+
+    public function getCaptchaHandle(): string
+    {
+        return 'g-recaptcha-response';
     }
 
     private function getValidationErrors(Form $form): array

@@ -78,6 +78,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
     public const EVENT_RENDER_AFTER_OPEN_TAG = 'render-after-opening-tag';
     public const EVENT_RENDER_BEFORE_CLOSING_TAG = 'render-before-closing-tag';
     public const EVENT_RENDER_AFTER_CLOSING_TAG = 'render-after-closing-tag';
+    public const EVENT_RENDER_CAPTCHAS = 'render-captchas';
     public const EVENT_COLLECT_SCRIPTS = 'collect-scripts';
     public const EVENT_OUTPUT_AS_JSON = 'output-as-json';
     public const EVENT_SET_PROPERTIES = 'set-properties';
@@ -703,6 +704,14 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
         $output .= $afterTag->getChunksAsString();
 
         return Template::raw($output);
+    }
+
+    public function renderCaptchas(): Markup
+    {
+        $event = new RenderTagEvent($this);
+        Event::trigger(self::class, self::EVENT_RENDER_CAPTCHAS, $event);
+
+        return Template::raw($event->getChunksAsString());
     }
 
     public function getFormHandler(): FormHandlerInterface

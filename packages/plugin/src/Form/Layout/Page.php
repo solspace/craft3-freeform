@@ -92,6 +92,11 @@ class Page implements \IteratorAggregate
         return $this->buttons;
     }
 
+    public function isFirst(): bool
+    {
+        return 0 === $this->index;
+    }
+
     public function getIterator(): \ArrayIterator
     {
         return $this->layout->getRows()->getIterator();
