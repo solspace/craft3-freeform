@@ -376,6 +376,10 @@ class FormDuplicator
                             continue;
                         }
 
+                        if (!isset($this->fieldUidMap[$value->value])) {
+                            continue;
+                        }
+
                         $metadata->{$handle}->{$key}->value = $this->fieldUidMap[$value->value];
                     }
                 }
