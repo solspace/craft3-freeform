@@ -21,6 +21,7 @@ use Solspace\Freeform\Records\Form\FormPageRecord;
 use Solspace\Freeform\Records\Form\FormRowRecord;
 use Solspace\Freeform\Records\Form\FormSiteRecord;
 use Solspace\Freeform\Records\FormRecord;
+use Solspace\Freeform\Records\FormTranslationRecord;
 use Solspace\Freeform\Records\IntegrationRecord;
 use Solspace\Freeform\Records\Rules\ButtonRuleRecord;
 use Solspace\Freeform\Records\Rules\FieldRuleRecord;
@@ -29,6 +30,7 @@ use Solspace\Freeform\Records\Rules\PageRuleRecord;
 use Solspace\Freeform\Records\Rules\RuleConditionRecord;
 use Solspace\Freeform\Records\Rules\RuleRecord;
 use Solspace\Freeform\Records\Rules\SubmitFormRuleRecord;
+use Solspace\Freeform\Services\Form\TranslationsService;
 use Solspace\Freeform\Services\FormsService;
 use yii\db\ActiveRecord;
 
@@ -76,6 +78,7 @@ class FormDuplicator
         $this->clonePages($form);
         $this->cloneRows($form);
         $this->cloneFields($form);
+        $this->cloneTranslations($id, $form);
         $this->cloneSites($id, $form);
         $this->cloneNotifications($id, $form);
         $this->cloneRules($id, $form);
@@ -222,6 +225,40 @@ class FormDuplicator
         }
     }
 
+    private function cloneTranslations(int $originalId, FormRecord $form): void
+    {
+        $translations = FormTranslationRecord::findAll(['formId' => $originalId]);
+        foreach ($translations as $translation) {
+            $clone = new FormTranslationRecord();
+            $clone->formId = $form->id;
+            $clone->siteId = $translation->siteId;
+            $clone->uid = StringHelper::UUID();
+
+            $oldTranslations = json_decode($translation->translations, true);
+
+            $updatedTranslations = [];
+            foreach ($oldTranslations as $type => $namespaces) {
+                $updatedTranslations[$type] = [];
+                foreach ($namespaces as $namespace => $translations) {
+                    $updatedNamespace = match ($type) {
+                        TranslationsService::TYPE_PAGES => $this->pageUidMap[$namespace],
+                        TranslationsService::TYPE_FIELDS => $this->fieldUidMap[$namespace],
+                        default => $namespace,
+                    };
+
+                    $updatedTranslations[$type][$updatedNamespace] = [];
+                    foreach ($translations as $key => $value) {
+                        $updatedTranslations[$type][$updatedNamespace][$key] = $value;
+                    }
+                }
+            }
+
+            $clone->translations = json_encode($updatedTranslations);
+
+            $clone->save();
+        }
+    }
+
     private function cloneNotifications(int $originalId, FormRecord $form): void
     {
         $records = FormNotificationRecord::findAll(['formId' => $originalId]);
@@ -339,6 +376,10 @@ class FormDuplicator
                             continue;
                         }
 
+                        if (!isset($this->fieldUidMap[$value->value])) {
+                            continue;
+                        }
+
                         $metadata->{$handle}->{$key}->value = $this->fieldUidMap[$value->value];
                     }
                 }
@@ -374,8 +415,13 @@ class FormDuplicator
         ;
     }
 
-    private function buildRuleClone(RuleRecord $original, RuleRecord $clone): RuleRecord
+    private function buildRuleClone(RuleRecord $original, RuleRecord $clone): void
     {
+        $originalBaseRuleRule = $original->getRule()->one();
+        if (!$originalBaseRuleRule) {
+            return;
+        }
+
         $baseRuleClone = new RuleRecord();
         $baseRuleClone->setAttributes($original->getRule()->one()->getAttributes());
         $baseRuleClone->uid = StringHelper::UUID();
@@ -386,8 +432,6 @@ class FormDuplicator
         $clone->save();
 
         $this->cloneConditions($original->id, $clone->id);
-
-        return $clone;
     }
 
     private function cloneConditions(int $oldId, int $newId): void

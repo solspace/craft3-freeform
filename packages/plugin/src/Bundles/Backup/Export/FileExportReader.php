@@ -30,6 +30,7 @@ use Solspace\Freeform\Bundles\Backup\DTO\Site;
 use Solspace\Freeform\Bundles\Backup\DTO\Submission;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\FileTemplate;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\NotificationTemplate;
+use Solspace\Freeform\Bundles\Backup\DTO\Translation;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Form\Settings\Settings as FormSettings;
 use Solspace\Freeform\Freeform;
@@ -122,6 +123,16 @@ class FileExportReader extends BaseExporter
                 $notification->idAttribute = 'template';
 
                 $form->notifications->add($notification);
+            }
+
+            $translations = $json['translations'] ?? [];
+            foreach ($translations as $translationJson) {
+                $translation = new Translation();
+                $translation->uid = $translationJson['uid'];
+                $translation->site = $translationJson['site'];
+                $translation->metadata = $translationJson['metadata'];
+
+                $form->translations->add($translation);
             }
 
             foreach ($json['integrations'] as $formIntegrationJson) {

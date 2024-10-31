@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label } from '@components/form-controls/control.styles';
+import { Label } from '@components/form-controls/label.styles';
 import { PreviewableComponent } from '@components/form-controls/preview/previewable-component';
 import translate from '@ff-client/utils/translations';
 
@@ -9,7 +9,7 @@ import type {
 } from '../../options.types';
 
 import { CustomEditor } from './custom.editor';
-import { addOption, cleanOptions } from './custom.operations';
+import { cleanOptions } from './custom.operations';
 import { CustomPreview } from './custom.preview';
 
 const Custom: React.FC<ConfigurationProps<CustomOptionsConfiguration>> = ({
@@ -33,11 +33,6 @@ const Custom: React.FC<ConfigurationProps<CustomOptionsConfiguration>> = ({
         }
         excludeClassNames={['bulk-editor']}
         onAfterEdit={() => updateValue(cleanOptions(value))}
-        onEdit={() => {
-          if (!value.options.length) {
-            updateValue(addOption(value, 0));
-          }
-        }}
       >
         <CustomEditor
           value={value}

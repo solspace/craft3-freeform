@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react';
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 import type { Row as RowType } from '@editor/builder/types/layout';
 import { fieldSelectors } from '@editor/store/slices/layout/fields/fields.selectors';
@@ -22,7 +22,7 @@ type Props = {
   row: RowType;
 };
 
-export const Row: React.FC<Props> = ({ row }) => {
+const Row: React.FC<Props> = memo(({ row }) => {
   const fields = useSelector(fieldSelectors.inRow(row));
 
   const { ref: wrapperRef, dimensions } =
@@ -76,4 +76,8 @@ export const Row: React.FC<Props> = ({ row }) => {
       </RowFieldsContainer>
     </RowWrapper>
   );
-};
+});
+
+Row.displayName = 'Row';
+
+export { Row };

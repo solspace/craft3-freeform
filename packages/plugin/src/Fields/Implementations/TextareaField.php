@@ -69,7 +69,7 @@ class TextareaField extends AbstractField implements PlaceholderInterface, TextI
             ->setIfEmpty('name', $this->getHandle())
             ->setIfEmpty('id', $this->getIdAttribute())
             ->setIfEmpty('rows', $this->getRows())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->set($this->getRequiredAttribute())
         ;
 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HelpText } from '@components/elements/help-text';
 import Bool from '@components/form-controls/control-types/bool/bool';
 import {
@@ -14,6 +14,7 @@ import CrossIcon from '@components/form-controls/icons/cross.svg';
 import MoveIcon from '@components/form-controls/icons/move.svg';
 import { PreviewableComponent } from '@components/form-controls/preview/previewable-component';
 import { PreviewEditor } from '@components/form-controls/preview/previewable-component.styles';
+import { useDebounce } from '@ff-client/hooks/use-debounce';
 import { PropertyType } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
 
@@ -37,7 +38,20 @@ import {
 export const CustomEditor: React.FC<
   ConfigurationProps<CustomOptionsConfiguration>
 > = ({ value, updateValue, defaultValue, updateDefaultValue, isMultiple }) => {
-  const { options = [], useCustomValues = false } = value;
+  const [localValue, setLocalValue] = useState(value);
+  const debouncedValue = useDebounce(localValue, 500);
+
+  useEffect(() => {
+    updateValue(debouncedValue);
+  }, [debouncedValue]);
+
+  useEffect(() => {
+    if (!localValue.options.length) {
+      setLocalValue(addOption(localValue, 0));
+    }
+  }, [localValue]);
+
+  const { options = [], useCustomValues = false } = localValue;
 
   const refs = useRef([]);
   refs.current = options.map(
@@ -53,8 +67,11 @@ export const CustomEditor: React.FC<
       atIndex !== undefined ? atIndex + 1 : options.length,
       cellIndex
     );
-    updateValue(
-      addOption(value, atIndex === undefined ? options.length : atIndex + 1)
+    setLocalValue(
+      addOption(
+        localValue,
+        atIndex === undefined ? options.length : atIndex + 1
+      )
     );
   };
 
@@ -87,7 +104,7 @@ export const CustomEditor: React.FC<
       });
     });
 
-    updateValue(setOptions(value, currentOptions));
+    setLocalValue(setOptions(localValue, currentOptions));
   };
 
   return (
@@ -101,7 +118,7 @@ export const CustomEditor: React.FC<
           }}
           value={useCustomValues}
           updateValue={() =>
-            updateValue(toggleUseCustomValues(value, !useCustomValues))
+            setLocalValue(toggleUseCustomValues(localValue, !useCustomValues))
           }
         />
 
@@ -130,7 +147,7 @@ export const CustomEditor: React.FC<
                   index={index}
                   dragRef={refs.current[index]}
                   onDrop={(fromIndex, toIndex) =>
-                    updateValue(moveOption(value, fromIndex, toIndex))
+                    setLocalValue(moveOption(localValue, fromIndex, toIndex))
                   }
                 >
                   <Cell>
@@ -147,7 +164,7 @@ export const CustomEditor: React.FC<
                         },
                       })}
                       onChange={(event) =>
-                        updateValue(
+                        setLocalValue(
                           updateOption(
                             index,
                             {
@@ -155,7 +172,7 @@ export const CustomEditor: React.FC<
                               label: event.target.value,
                               value: event.target.value,
                             },
-                            value
+                            localValue
                           )
                         )
                       }
@@ -178,14 +195,14 @@ export const CustomEditor: React.FC<
                           },
                         })}
                         onChange={(event) =>
-                          updateValue(
+                          setLocalValue(
                             updateOption(
                               index,
                               {
                                 ...option,
                                 value: event.target.value,
                               },
-                              value
+                              localValue
                             )
                           )
                         }
@@ -236,7 +253,7 @@ export const CustomEditor: React.FC<
                       <Cell $tiny>
                         <Button
                           onClick={() => {
-                            updateValue(deleteOption(index, value));
+                            setLocalValue(deleteOption(index, localValue));
                             setActiveCell(Math.max(index - 1, 0), 0);
                           }}
                         >

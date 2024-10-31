@@ -32,6 +32,7 @@ use Solspace\Freeform\Records\Form\FormPageRecord;
 use Solspace\Freeform\Records\Form\FormRowRecord;
 use Solspace\Freeform\Records\Form\FormSiteRecord;
 use Solspace\Freeform\Records\FormRecord;
+use Solspace\Freeform\Records\FormTranslationRecord;
 use Solspace\Freeform\Records\IntegrationRecord;
 use Solspace\Freeform\Records\Rules\ButtonRuleRecord;
 use Solspace\Freeform\Records\Rules\FieldRuleRecord;
@@ -189,6 +190,24 @@ class FreeformImporter
                         $formSiteRecord->save();
                     }
                 }
+            }
+
+            foreach ($form->translations as $translation) {
+                $site = \Craft::$app->sites->getSiteByHandle($translation->site);
+                if (!$site) {
+                    continue;
+                }
+
+                $translationRecord = FormTranslationRecord::findOne(['uid' => $translation->uid]);
+                if (!$translationRecord) {
+                    $translationRecord = new FormTranslationRecord();
+                    $translationRecord->uid = $translation->uid;
+                }
+
+                $translationRecord->formId = $formRecord->id;
+                $translationRecord->siteId = $site->id;
+                $translationRecord->translations = json_encode($translation->metadata);
+                $translationRecord->save();
             }
 
             foreach ($form->notifications as $notification) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Freeform for Craft CMS.
  *
@@ -77,6 +78,7 @@ use Solspace\Freeform\Services\ExportService;
 use Solspace\Freeform\Services\FilesService;
 use Solspace\Freeform\Services\Form\FieldsService;
 use Solspace\Freeform\Services\Form\LayoutsService;
+use Solspace\Freeform\Services\Form\TranslationsService;
 use Solspace\Freeform\Services\Form\TypesService;
 use Solspace\Freeform\Services\FormGroupsService;
 use Solspace\Freeform\Services\FormsService;
@@ -143,6 +145,7 @@ use yii\db\Query;
  * @property DiagnosticsService         $diagnostics
  * @property PreflightService           $preflight
  * @property TypesService               $formTypes
+ * @property TranslationsService        $translations
  */
 class Freeform extends Plugin
 {
@@ -427,37 +430,38 @@ class Freeform extends Plugin
     {
         $this->setComponents(
             [
-                'crm' => CrmService::class,
                 'charts' => ChartsService::class,
-                'files' => FilesService::class,
-                'forms' => FormsService::class,
-                'formGroups' => FormGroupsService::class,
+                'crm' => CrmService::class,
+                'diagnostics' => DiagnosticsService::class,
+                'digest' => DigestService::class,
+                'emailMarketing' => EmailMarketingService::class,
+                'export' => ExportService::class,
+                'exportNotifications' => ExportNotificationsService::class,
+                'exportProfiles' => ExportProfilesService::class,
+                'feed' => FreeformFeedService::class,
                 'field' => FieldsService::class,
                 'fields' => FieldsService::class,
+                'files' => FilesService::class,
                 'formLayouts' => LayoutsService::class,
-                'mailer' => MailerService::class,
-                'emailMarketing' => EmailMarketingService::class,
-                'notifications' => NotificationsService::class,
-                'settings' => SettingsService::class,
-                'statuses' => StatusesService::class,
-                'submissions' => SubmissionsService::class,
-                'spamSubmissions' => SpamSubmissionsService::class,
-                'logger' => LoggerService::class,
+                'forms' => FormsService::class,
+                'formTypes' => TypesService::class,
+                'formGroups' => FormGroupsService::class,
                 'integrations' => IntegrationsService::class,
                 'integrationsQueue' => IntegrationsQueueService::class,
-                'widgets' => WidgetsService::class,
-                'export' => ExportService::class,
-                'exportProfiles' => ExportProfilesService::class,
-                'exportNotifications' => ExportNotificationsService::class,
-                'relations' => RelationsService::class,
-                'notes' => NotesService::class,
-                'digest' => DigestService::class,
-                'summary' => SummaryService::class,
-                'feed' => FreeformFeedService::class,
                 'lock' => LockService::class,
-                'diagnostics' => DiagnosticsService::class,
+                'logger' => LoggerService::class,
+                'mailer' => MailerService::class,
+                'notes' => NotesService::class,
+                'notifications' => NotificationsService::class,
                 'preflight' => PreflightService::class,
-                'formTypes' => TypesService::class,
+                'relations' => RelationsService::class,
+                'settings' => SettingsService::class,
+                'spamSubmissions' => SpamSubmissionsService::class,
+                'statuses' => StatusesService::class,
+                'submissions' => SubmissionsService::class,
+                'summary' => SummaryService::class,
+                'translations' => TranslationsService::class,
+                'widgets' => WidgetsService::class,
             ]
         );
     }

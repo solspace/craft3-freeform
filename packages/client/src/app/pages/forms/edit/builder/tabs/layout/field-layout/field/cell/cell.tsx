@@ -5,6 +5,7 @@ import { useAppDispatch } from '@editor/store';
 import { contextActions, FocusType } from '@editor/store/slices/context';
 import { contextSelectors } from '@editor/store/slices/context/context.selectors';
 import type { Field } from '@editor/store/slices/layout/fields';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import { useFieldType } from '@ff-client/queries/field-types';
 import { Type } from '@ff-client/types/fields';
 import classes from '@ff-client/utils/classes';
@@ -51,9 +52,17 @@ export const FieldCell: React.FC<Props> = ({ field }) => {
   const [spinnerAnimation, iconAnimation] =
     useLoaderAnimation(isLoadingPreview);
 
+  const { getTranslation } = useTranslations(field);
+
   if (field?.properties === undefined || !type) {
     return null;
   }
+
+  const label = getTranslation('label', field.properties.label || type?.name);
+  const instructions = getTranslation(
+    'instructions',
+    field.properties.instructions
+  );
 
   return (
     <FieldCellWrapper
@@ -80,7 +89,7 @@ export const FieldCell: React.FC<Props> = ({ field }) => {
             />
           </LabelIcon>
 
-          <LabelText>{field.properties.label || type?.name}</LabelText>
+          <LabelText>{label}</LabelText>
 
           {field.properties.required && <span className="required" />}
 
@@ -88,9 +97,7 @@ export const FieldCell: React.FC<Props> = ({ field }) => {
         </Label>
       )}
 
-      {field.properties.instructions && (
-        <Instructions>{field.properties.instructions}</Instructions>
-      )}
+      {instructions && <Instructions>{instructions}</Instructions>}
 
       {type.type === Type.Group && (
         <GroupFieldLayout field={field} layoutUid={field.properties?.layout} />

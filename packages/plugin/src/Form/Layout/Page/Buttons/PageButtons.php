@@ -9,6 +9,7 @@ use Solspace\Freeform\Attributes\Property\Implementations\NotificationTemplates\
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Limitation;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Events\Fields\CompileButtonAttributesEvent;
@@ -17,6 +18,7 @@ use Solspace\Freeform\Fields\Interfaces\RecipientInterface;
 use Solspace\Freeform\Form\Layout\Page;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
+use Solspace\Freeform\Services\Form\TranslationsService;
 use Twig\Markup;
 use yii\base\Event;
 
@@ -67,6 +69,7 @@ class PageButtons
     )]
     private string $layout;
 
+    #[Translatable]
     #[Section(
         handle: 'submit',
         label: 'Submit',
@@ -83,6 +86,7 @@ class PageButtons
     #[Input\Boolean('Enable Back Button')]
     private bool $back = false;
 
+    #[Translatable]
     #[Section('back')]
     #[VisibilityFilter('Boolean(buttons.back)')]
     #[Input\Text('Label', placeholder: 'Back')]
@@ -97,6 +101,7 @@ class PageButtons
     #[Input\Boolean('Enable Save Button')]
     private bool $save = false;
 
+    #[Translatable]
     #[Section('save')]
     #[Limitation('layout.buttons')]
     #[VisibilityFilter('Boolean(buttons.save)')]
@@ -222,7 +227,7 @@ class PageButtons
 
     public function getSubmitLabel(): string
     {
-        return $this->submitLabel;
+        return $this->translate('submitLabel', $this->submitLabel);
     }
 
     public function isBack(): bool
@@ -232,7 +237,7 @@ class PageButtons
 
     public function getBackLabel(): string
     {
-        return $this->backLabel;
+        return $this->translate('backLabel', $this->submitLabel);
     }
 
     public function isSave(): bool
@@ -242,7 +247,7 @@ class PageButtons
 
     public function getSaveLabel(): string
     {
-        return $this->saveLabel;
+        return $this->translate('saveLabel', $this->submitLabel);
     }
 
     public function getSaveRedirectUrl(): string
@@ -337,6 +342,17 @@ class PageButtons
                 Freeform::t($this->getSaveLabel())
             )
             .'</button>'
+        );
+    }
+
+    protected function translate(?string $handle, ?string $defaultValue = null): string
+    {
+        return Freeform::getInstance()->translations->getTranslation(
+            $this->getPage()->getForm(),
+            TranslationsService::TYPE_PAGES,
+            $this->getPage()->getUid(),
+            $handle,
+            $defaultValue
         );
     }
 }

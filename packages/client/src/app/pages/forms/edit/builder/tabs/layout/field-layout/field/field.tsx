@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { DragPreviewImage } from 'react-dnd';
 import { RemoveButton } from '@components/elements/remove-button/remove';
 import { useAppDispatch } from '@editor/store';
@@ -23,51 +23,55 @@ type Props = {
   hoverPosition?: number;
 };
 
-export const Field: React.FC<Props> = ({
-  field,
-  index,
-  width,
-  isOver,
-  isCurrentRow,
-  isDraggingField,
-  dragFieldIndex,
-  hoverPosition,
-}) => {
-  const dispatch = useAppDispatch();
-  const [hovering, setHovering] = useState(false);
-  const { isDragging, drag, preview } = useFieldDrag(field, index);
-  const style = useFieldDragAnimation({
+export const Field: React.FC<Props> = memo(
+  ({
+    field,
+    index,
     width,
-    isDragging,
     isOver,
     isCurrentRow,
     isDraggingField,
     dragFieldIndex,
-    index,
     hoverPosition,
-  });
+  }) => {
+    const dispatch = useAppDispatch();
+    const [hovering, setHovering] = useState(false);
+    const { isDragging, drag, preview } = useFieldDrag(field, index);
+    const style = useFieldDragAnimation({
+      width,
+      isDragging,
+      isOver,
+      isCurrentRow,
+      isDraggingField,
+      dragFieldIndex,
+      index,
+      hoverPosition,
+    });
 
-  return (
-    <>
-      <DragPreviewImage
-        connect={preview}
-        src={createPreview(field.properties?.label)}
-      />
-      <FieldWrapper
-        onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
-        ref={drag}
-        style={style}
-      >
-        <RemoveButton
-          active={hovering}
-          onClick={() => {
-            dispatch(contextActions.unfocus());
-            dispatch(fieldThunks.remove(field));
-          }}
+    return (
+      <>
+        <DragPreviewImage
+          connect={preview}
+          src={createPreview(field.properties?.label)}
         />
-        <FieldCell field={field} />
-      </FieldWrapper>
-    </>
-  );
-};
+        <FieldWrapper
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
+          ref={drag}
+          style={style}
+        >
+          <RemoveButton
+            active={hovering}
+            onClick={() => {
+              dispatch(contextActions.unfocus());
+              dispatch(fieldThunks.remove(field));
+            }}
+          />
+          <FieldCell field={field} />
+        </FieldWrapper>
+      </>
+    );
+  }
+);
+
+Field.displayName = 'Field';

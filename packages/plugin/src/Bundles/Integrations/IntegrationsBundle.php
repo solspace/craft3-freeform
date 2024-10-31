@@ -122,7 +122,9 @@ class IntegrationsBundle extends FeatureBundle
 
         $message = $exception->getMessage();
         if ($exception instanceof RequestException) {
-            $message = (string) $exception->getResponse()->getBody();
+            if (method_exists($exception->getResponse(), 'getBody')) {
+                $message = (string) $exception->getResponse()->getBody();
+            }
         }
 
         $this->plugin()
