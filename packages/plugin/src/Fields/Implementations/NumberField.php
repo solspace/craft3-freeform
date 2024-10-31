@@ -146,7 +146,7 @@ class NumberField extends TextField implements NumericInterface
             ->setIfEmpty('min', $this->getMinValue())
             ->setIfEmpty('max', $this->getMaxValue())
             ->setIfEmpty('step', $this->getStep())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->setIfEmpty('value', $this->getValue())
             ->set($this->getRequiredAttribute())
         ;

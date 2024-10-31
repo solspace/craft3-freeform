@@ -61,7 +61,7 @@ class PhoneField extends TextField implements PhoneMaskInterface, ExtraFieldInte
             ->setIfEmpty('name', $this->getHandle())
             ->setIfEmpty('type', $this->customInputType ?? 'text')
             ->setIfEmpty('id', $this->getIdAttribute())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->setIfEmpty('value', $this->getValue())
             ->setIfEmpty('data-masked-input', $pattern)
             ->setIfEmpty('data-pattern', $pattern)

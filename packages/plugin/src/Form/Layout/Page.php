@@ -5,8 +5,10 @@ namespace Solspace\Freeform\Form\Layout;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Form\Layout\Page\Buttons\PageButtons;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Collections\FieldCollection;
 use Solspace\Freeform\Library\Collections\RowCollection;
+use Solspace\Freeform\Services\Form\TranslationsService;
 
 /**
  * @implements \IteratorAggregate<int, Row>
@@ -54,7 +56,15 @@ class Page implements \IteratorAggregate
 
     public function getLabel(): string
     {
-        return $this->label;
+        return Freeform::getInstance()->translations
+            ->getTranslation(
+                $this->getForm(),
+                TranslationsService::TYPE_PAGES,
+                $this->getUid(),
+                'label',
+                $this->label
+            )
+        ;
     }
 
     public function getIndex(): int
@@ -80,6 +90,11 @@ class Page implements \IteratorAggregate
     public function getButtons(): PageButtons
     {
         return $this->buttons;
+    }
+
+    public function isFirst(): bool
+    {
+        return 0 === $this->index;
     }
 
     public function getIterator(): \ArrayIterator

@@ -2,7 +2,11 @@
 
 namespace Solspace\Freeform\Integrations\Captchas;
 
+use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
+use Solspace\Freeform\Events\Forms\OutputAsJsonEvent;
+use Solspace\Freeform\Events\Forms\RenderTagEvent;
 use Solspace\Freeform\Events\Forms\SetPropertiesEvent;
+use Solspace\Freeform\Events\Forms\ValidationEvent;
 use Solspace\Freeform\Events\Integrations\RegisterIntegrationTypesEvent;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\Captchas\hCaptcha\hCaptcha;
@@ -10,7 +14,9 @@ use Solspace\Freeform\Integrations\Captchas\ReCaptcha\ReCaptcha;
 use Solspace\Freeform\Integrations\Captchas\Turnstile\Turnstile;
 use Solspace\Freeform\Library\Attributes\Attributes;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
+use Solspace\Freeform\Library\Integrations\Types\Captchas\CaptchaIntegrationInterface;
 use Solspace\Freeform\Services\Integrations\IntegrationsService;
+use Solspace\Freeform\Services\SettingsService;
 use yii\base\Event;
 
 class CaptchasBundle extends FeatureBundle
@@ -18,8 +24,36 @@ class CaptchasBundle extends FeatureBundle
     public const KEY_CAPTCHA_PROPERTIES = 'captchas';
     public const KEY_CAPTCHA_PROPERTY_STACK = 'captchaPropertyStack';
 
-    public function __construct()
-    {
+    private bool $renderedManually = false;
+
+    public function __construct(
+        private FormIntegrationsProvider $formIntegrationsProvider,
+        private SettingsService $settingsService,
+    ) {
+        Event::on(
+            Form::class,
+            Form::EVENT_RENDER_CAPTCHAS,
+            [$this, 'renderCaptchaManually'],
+        );
+
+        Event::on(
+            Form::class,
+            Form::EVENT_RENDER_BEFORE_CLOSING_TAG,
+            [$this, 'attachHtmlElement'],
+        );
+
+        Event::on(
+            Form::class,
+            Form::EVENT_RENDER_BEFORE_CLOSING_TAG,
+            [$this, 'attachScripts'],
+        );
+
+        Event::on(
+            Form::class,
+            Form::EVENT_BEFORE_VALIDATE,
+            [$this, 'triggerValidation']
+        );
+
         Event::on(
             IntegrationsService::class,
             IntegrationsService::EVENT_REGISTER_INTEGRATION_TYPES,
@@ -30,6 +64,98 @@ class CaptchasBundle extends FeatureBundle
             Form::class,
             Form::EVENT_SET_PROPERTIES,
             [$this, 'processOptions']
+        );
+    }
+
+    public function renderCaptchaManually(RenderTagEvent $event): void
+    {
+        if ($this->attachHtmlElement($event)) {
+            $this->renderedManually = true;
+        }
+    }
+
+    public function attachHtmlElement(RenderTagEvent $event): bool
+    {
+        if ($this->renderedManually) {
+            return false;
+        }
+
+        $form = $event->getForm();
+        if (!$form->isLastPage()) {
+            return false;
+        }
+
+        $integrations = $this->getCaptchasForForm($form);
+        if (!$integrations) {
+            return false;
+        }
+
+        foreach ($integrations as $integration) {
+            $event->addChunk(
+                $integration->getHtmlTag($form),
+                position: RenderTagEvent::POSITION_BEGINNING
+            );
+        }
+
+        return true;
+    }
+
+    public function attachScripts(RenderTagEvent $event): void
+    {
+        if (!$event->isGenerateTag()) {
+            return;
+        }
+
+        $form = $event->getForm();
+
+        $integrations = $this->getCaptchasForForm($form);
+        if (!$integrations) {
+            return;
+        }
+
+        foreach ($integrations as $integration) {
+            $scriptPaths = $integration->getScriptPaths();
+            foreach ($scriptPaths as $scriptPath) {
+                $event->addScript($scriptPath);
+            }
+        }
+    }
+
+    public function triggerValidation(ValidationEvent $event): void
+    {
+        if (!$event->isValid) {
+            return;
+        }
+
+        $settingsModel = $this->settingsService->getSettingsModel();
+        if ($settingsModel->bypassSpamCheckOnLoggedInUsers && \Craft::$app->getUser()->id) {
+            return;
+        }
+
+        $form = $event->getForm();
+        if (!$form->isLastPage()) {
+            return;
+        }
+
+        $integrations = $this->getCaptchasForForm($form);
+        foreach ($integrations as $integration) {
+            $integration->validate($form);
+        }
+    }
+
+    public function attachToJson(OutputAsJsonEvent $event): void
+    {
+        $integrations = $this->getCaptchasForForm($event->getForm());
+        if (!$integrations) {
+            return;
+        }
+
+        $event->add(
+            'captchas',
+            array_map(
+                fn (CaptchaIntegrationInterface $integration) => $integration->getCaptchaHandle(),
+                $integrations
+            )
         );
     }
 
@@ -77,5 +203,17 @@ class CaptchasBundle extends FeatureBundle
         // Remove from current properties
         unset($properties[self::KEY_CAPTCHA_PROPERTIES]);
         $event->setProperties($properties);
+    }
+
+    /**
+     * @return CaptchaIntegrationInterface[]
+     */
+    private function getCaptchasForForm(Form $form): array
+    {
+        if ($form->isDisabled()->captchas) {
+            return [];
+        }
+
+        return $this->formIntegrationsProvider->getForForm($form, CaptchaIntegrationInterface::class);
     }
 }

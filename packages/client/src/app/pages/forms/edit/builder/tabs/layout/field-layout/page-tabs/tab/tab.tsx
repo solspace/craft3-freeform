@@ -2,17 +2,20 @@ import type { KeyboardEvent, MutableRefObject } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RemoveButton } from '@components/elements/remove-button/remove';
+import { TranslateIconWrapper } from '@components/form-controls/label.styles';
 import type { Page } from '@editor/builder/types/layout';
 import { useAppDispatch } from '@editor/store';
 import { contextActions } from '@editor/store/slices/context';
 import { contextSelectors } from '@editor/store/slices/context/context.selectors';
 import { pageActions } from '@editor/store/slices/layout/pages';
 import { pageSelecors } from '@editor/store/slices/layout/pages/pages.selectors';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import { deletePage } from '@editor/store/thunks/pages';
 import { useClickOutside } from '@ff-client/hooks/use-click-outside';
 import { useHover } from '@ff-client/hooks/use-hover';
 import classes from '@ff-client/utils/classes';
 import translate from '@ff-client/utils/translations';
+import TranslateIcon from '@ff-icons/translate.icon.svg';
 
 import { useDragContext } from '../../../drag.context';
 
@@ -24,6 +27,7 @@ import {
   PageTab,
   RemoveButtonWrapper,
   TabDrop,
+  TabText,
   TabWrapper,
 } from './tab.styles';
 
@@ -38,6 +42,13 @@ export const Tab: React.FC<Props> = ({ page, index }) => {
 
   const dispatch = useAppDispatch();
   const { dragType } = useDragContext();
+  const {
+    willTranslate,
+    updateTranslation,
+    getTranslation,
+    hasTranslation,
+    removeTranslation,
+  } = useTranslations(page);
 
   const pageHasErrors = useSelector(contextSelectors.hasErrors(page.uid));
 
@@ -75,12 +86,15 @@ export const Tab: React.FC<Props> = ({ page, index }) => {
   );
 
   const persistInputChanges = (): void => {
-    dispatch(
-      pageActions.updateLabel({
-        uid: page.uid,
-        label: inputRef.current.value || page.label,
-      })
-    );
+    const newLabel = inputRef.current.value || page.label;
+    if (!updateTranslation('label', newLabel)) {
+      dispatch(
+        pageActions.updateLabel({
+          uid: page.uid,
+          label: newLabel,
+        })
+      );
+    }
   };
 
   const handleKeyboardEvent = (
@@ -128,11 +142,28 @@ export const Tab: React.FC<Props> = ({ page, index }) => {
             ref={inputRef}
             className="text small"
             placeholder={page.label}
-            defaultValue={page.label}
+            defaultValue={getTranslation('label', page.label)}
             onKeyUp={handleKeyboardEvent}
           />
         ) : (
-          <span>{page.label}</span>
+          <TabText>
+            <span>{getTranslation('label', page.label)}</span>
+            {willTranslate('label') && (
+              <TranslateIconWrapper
+                className={classes(hasTranslation('label') && 'active')}
+                onClick={(): void => {
+                  if (
+                    hasTranslation('label') &&
+                    confirm('Are you sure you want to remove the translation?')
+                  ) {
+                    removeTranslation('label');
+                  }
+                }}
+              >
+                <TranslateIcon />
+              </TranslateIconWrapper>
+            )}
+          </TabText>
         )}
 
         {totalPages > 1 && (

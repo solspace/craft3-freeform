@@ -26,6 +26,7 @@ import { Builder } from './builder/builder';
 import { LoaderBuilder } from './builder/builder.loader';
 import { pageActions } from './store/slices/layout/pages';
 import { rowActions } from './store/slices/layout/rows';
+import { translationActions } from './store/slices/translations';
 import { addNewPage } from './store/thunks/pages';
 import { useAppDispatch } from './store';
 
@@ -53,6 +54,7 @@ export const Edit: React.FC = () => {
     if (formId === undefined || !data) return;
 
     const {
+      translations,
       layout: { fields, pages, layouts, rows },
     } = data;
 
@@ -61,6 +63,7 @@ export const Edit: React.FC = () => {
     dispatch(pageActions.set(pages));
     dispatch(layoutActions.set(layouts));
     dispatch(rowActions.set(rows));
+    dispatch(translationActions.init(translations));
 
     document.title = data.name;
 

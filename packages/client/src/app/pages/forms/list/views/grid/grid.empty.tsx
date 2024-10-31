@@ -29,6 +29,8 @@ const generateFormData = (
   },
   settings: {
     general: {
+      namespaceType: 'settings',
+      namespace: 'general',
       description,
       color,
     },

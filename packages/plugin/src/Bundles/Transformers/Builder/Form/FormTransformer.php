@@ -10,6 +10,7 @@ use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Services\ChartsService;
 use Solspace\Freeform\Services\Form\FieldsService;
 use Solspace\Freeform\Services\Form\LayoutsService;
+use Solspace\Freeform\Services\Form\TranslationsService;
 use Solspace\Freeform\Services\SubmissionsService;
 use yii\base\Event;
 
@@ -20,6 +21,7 @@ class FormTransformer
     public function __construct(
         private FieldsService $fieldsService,
         private LayoutsService $layoutsService,
+        private TranslationsService $translationsService,
         private FieldTransformer $fieldTransformer,
         private LayoutTransformer $layoutTransformer,
         private ChartsService $chartsService,
@@ -89,6 +91,7 @@ class FormTransformer
         $fields = $this->fieldsService->getFields($form);
 
         $transformed = $this->transformBasic($form);
+        $transformed->translations = $this->translationsService->getFormTranslations($form);
         $transformed->layout = (object) [
             'fields' => array_map([$this->fieldTransformer, 'transform'], $fields),
             'pages' => array_map(
@@ -120,8 +123,9 @@ class FormTransformer
             'id' => $form->getId(),
             'uid' => $form->getUid(),
             'type' => $typeClass,
-            'name' => $settings->name,
-            'handle' => $settings->handle,
+            'name' => $form->getName(),
+            'handle' => $form->getHandle(),
+            'description' => $form->getDescription(),
             'settings' => $settings->toArray(),
             'ownership' => $this->getOwnership($form),
             'isNew' => $isNew,

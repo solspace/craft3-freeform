@@ -4,6 +4,7 @@ import type { Page } from '@editor/builder/types/layout';
 import { useAppDispatch } from '@editor/store';
 import { contextActions, FocusType } from '@editor/store/slices/context';
 import { contextSelectors } from '@editor/store/slices/context/context.selectors';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import classes from '@ff-client/utils/classes';
 
 import { PageFieldLayoutWrapper } from '../../layout/layout.styles';
@@ -23,6 +24,7 @@ const buttonClasses: Record<string, string> = {
 
 export const PageButtons: React.FC<Props> = ({ page }) => {
   const dispatch = useAppDispatch();
+  const { getTranslation } = useTranslations(page);
 
   const {
     active,
@@ -57,7 +59,7 @@ export const PageButtons: React.FC<Props> = ({ page }) => {
                 key={index}
                 type="button"
               >
-                {button.label}
+                {getTranslation(`${button?.handle}Label`, button?.label)}
               </Button>
             ))}
           </ButtonGroup>

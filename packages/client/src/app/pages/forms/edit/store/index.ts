@@ -13,6 +13,7 @@ import layout from './slices/layout';
 import notifications from './slices/notifications';
 import rules from './slices/rules';
 import search from './slices/search';
+import translations from './slices/translations';
 
 export const store = configureStore({
   middleware: [thunk, statePersistMiddleware],
@@ -24,6 +25,7 @@ export const store = configureStore({
     rules,
     context,
     search,
+    translations,
   },
 });
 

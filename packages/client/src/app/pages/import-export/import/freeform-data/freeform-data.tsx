@@ -1,8 +1,9 @@
 import type { ChangeEventHandler } from 'react';
 import React, { useRef, useState } from 'react';
 import { Breadcrumb } from '@components/breadcrumbs/breadcrumbs';
-import { Instructions, Label } from '@components/form-controls/control.styles';
+import { Instructions } from '@components/form-controls/control.styles';
 import { FormErrorList } from '@components/form-controls/error-list';
+import { Label } from '@components/form-controls/label.styles';
 import { ContentContainer } from '@components/layout/blocks/content-container';
 import { Field } from '@components/layout/blocks/field';
 import { LoadingText } from '@components/loaders/loading-text/loading-text';

@@ -17,6 +17,7 @@ use Solspace\Freeform\Bundles\Backup\Collections\SitesCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\TemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\FileTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\NotificationTemplateCollection;
+use Solspace\Freeform\Bundles\Backup\Collections\TranslationCollection;
 use Solspace\Freeform\Bundles\Backup\DTO\Field;
 use Solspace\Freeform\Bundles\Backup\DTO\Form;
 use Solspace\Freeform\Bundles\Backup\DTO\FormIntegration;
@@ -33,6 +34,7 @@ use Solspace\Freeform\Bundles\Backup\DTO\Site;
 use Solspace\Freeform\Bundles\Backup\DTO\Submission;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\FileTemplate;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\NotificationTemplate;
+use Solspace\Freeform\Bundles\Backup\DTO\Translation;
 use Solspace\Freeform\Bundles\Notifications\Providers\NotificationsProvider;
 use Solspace\Freeform\Bundles\Rules\RuleProvider;
 use Solspace\Freeform\Elements\Submission as FFSubmission;
@@ -50,6 +52,7 @@ use Solspace\Freeform\Records\Form\FormFieldRecord;
 use Solspace\Freeform\Records\Form\FormIntegrationRecord;
 use Solspace\Freeform\Records\Form\FormSiteRecord;
 use Solspace\Freeform\Records\FormRecord;
+use Solspace\Freeform\Records\FormTranslationRecord;
 use Solspace\Freeform\Records\IntegrationRecord;
 use Solspace\Freeform\Services\FormsService;
 use Solspace\Freeform\Services\Integrations\IntegrationsService;
@@ -149,7 +152,6 @@ class FreeformFormsExporter extends BaseExporter
             $exported->settings = $form->getSettings();
 
             $isSitesEnabled = Freeform::getInstance()->settings->getSettingsModel()->sitesEnabled;
-
             if ($isSitesEnabled) {
                 $exported->sites = new SitesCollection();
 
@@ -162,6 +164,19 @@ class FreeformFormsExporter extends BaseExporter
 
                     $exported->sites->add($exportedSite, $exportedSite->id);
                 }
+            }
+
+            $exported->translations = new TranslationCollection();
+
+            /** @var FormTranslationRecord[] $translationRecords */
+            $translationRecords = FormTranslationRecord::find()->where(['formId' => $form->getId()])->all();
+            foreach ($translationRecords as $translationRecord) {
+                $exportedTranslation = new Translation();
+                $exportedTranslation->uid = $translationRecord->uid;
+                $exportedTranslation->site = \Craft::$app->sites->getSiteById($translationRecord->siteId)->handle;
+                $exportedTranslation->metadata = json_decode($translationRecord->translations, false);
+
+                $exported->translations->add($exportedTranslation);
             }
 
             $exported->rules = $this->collectRules($form);

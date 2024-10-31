@@ -1,12 +1,24 @@
 import type { Layout, Page, Row } from '@editor/builder/types/layout';
 import type { Field } from '@editor/store/slices/layout/fields';
 import type {
+  TranslationItems,
+  TranslationType,
+} from '@editor/store/slices/translations/translations.types';
+import type {
   GenericValue,
   Property,
   Section,
 } from '@ff-client/types/properties';
 
-export type SettingsNamespace = Record<string, GenericValue>;
+export type SettingsNamespace = {
+  namespaceType: 'settings';
+  namespace: string;
+  [key: string]: GenericValue;
+};
+
+export type SettingCollection = {
+  [namespace: string]: SettingsNamespace;
+};
 
 type FormOwnershipMeta = {
   datetime: string;
@@ -28,15 +40,21 @@ export type Form = {
   type: string;
   name: string;
   handle: string;
+  description?: string;
   isNew: boolean;
-  settings: {
-    [namespace: string]: SettingsNamespace;
-  };
+  settings: SettingCollection;
   ownership?: FormOwnership;
   dateArchived: string | null;
 };
 
 export type ExtendedFormType = Form & {
+  translations: {
+    [siteId: string]: {
+      [type in TranslationType]: {
+        [namespace: string]: TranslationItems;
+      };
+    };
+  };
   layout: {
     fields: Field[];
     pages: Page[];

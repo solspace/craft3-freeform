@@ -70,8 +70,8 @@ export const Card: React.FC<Props> = ({
     uv: randomSubmissions(0, Math.random() > 0.9 ? 50 : 20), // 15% chance for peak day
   }));
 
-  const { id, name, dateArchived, settings } = form;
-  const { color, description } = settings.general;
+  const { id, name, description, dateArchived, settings } = form;
+  const { color } = settings.general;
 
   const isArchiving =
     archiveMutation.isLoading && archiveMutation.context === id;

@@ -1,25 +1,7 @@
 import { colors } from '@ff-client/styles/variables';
 import styled from 'styled-components';
 
-type LabelProps = {
-  $regular?: boolean;
-};
-
-export const Label = styled.label<LabelProps>`
-  display: block;
-
-  color: ${colors.gray550};
-  font-weight: ${({ $regular }) => ($regular ? 'normal' : 'bold')} !important;
-
-  &.is-required {
-    &:after {
-      content: '*';
-      padding-left: 2px;
-
-      color: ${colors.error};
-    }
-  }
-`;
+import { Label } from './label.styles';
 
 export const Instructions = styled.span`
   display: block;
