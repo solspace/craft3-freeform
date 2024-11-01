@@ -111,6 +111,7 @@ class ExportController extends BaseApiController
         $chunks = array_filter([
             'forms.jsonl' => $collection->getForms(),
             'notifications.jsonl' => $collection->getTemplates()->getNotification(),
+            'pdf-templates.jsonl' => $collection->getTemplates()->getPdf(),
             'formatting-templates.jsonl' => $collection->getTemplates()->getFormatting(),
             'success-templates.jsonl' => $collection->getTemplates()->getSuccess(),
             'integrations.jsonl' => $collection->getIntegrations(),

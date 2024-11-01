@@ -1,0 +1,135 @@
+{% extends "freeform/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedSubnavItem = "general" %}
+{% set saveShortcutRedirect = 'freeform/settings/pdf-templates/{id}' %}
+
+{% set crumbs = [
+    { label: craft.freeform.name, url: url("freeform") },
+    { label: "PDF Templates"|t("freeform"), url: url("freeform/settings/pdf-templates") },
+    { label: title, url: url("freeform/settings/pdf-templates/" ~ (template.id ?: 'new') ) },
+] %}
+
+{% set fullPageForm = true %}
+
+{% block actionButton %}
+    <div class="buttons">
+        <div class="btngroup submit">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('freeform') }}">
+
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <ul>
+                    <li>
+                        <a class="formsubmit" data-redirect="{{ ('freeform/settings/pdf-templates/{id}')|hash }}">
+                            {{ "Save and continue editing"|t('freeform') }}
+                            <span class="shortcut">⌘S</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="formsubmit" data-redirect="{{ url('freeform/settings/pdf-templates/new')|hash }}">
+                            {{ "Save and add another"|t('freeform') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <input type="hidden" name="action" value="freeform/pdf/pdf-templates/save">
+    <input type="hidden" name="id" value="{{ template.id }}" />
+    {{ redirectInput('freeform/settings/pdf-templates') }}
+    {{ csrfInput() }}
+
+    {{ forms.textField({
+        first: true,
+        label: "Name"|t('freeform'),
+        instructions: "What this template will be called in the CP."|t('freeform'),
+        id: 'name',
+        name: 'name',
+        value: template.name,
+        errors: template.getErrors('name'),
+        autofocus: true,
+        required: true
+    }) }}
+
+    {{ forms.textareaField({
+        label: "Description"|t('freeform'),
+        instructions: "Description of this template."|t('freeform'),
+        id: 'description',
+        name: 'description',
+        value: template.description,
+        errors: template.getErrors('description'),
+        required: false
+    }) }}
+
+    <hr>
+
+    {{ forms.autosuggestField({
+        first: true,
+        label: "File Name"|t('freeform'),
+        instructions: "The generated File Name of the PDF file when it's generated. Can use twig variables."|t('freeform'),
+        id: 'fileName',
+        name: 'fileName',
+        value: template.fileName,
+        errors: template.getErrors('fileName'),
+        required: true
+    }) }}
+
+    {{ forms.textareaField({
+        label: "PDF Body (HTML)"|t('freeform'),
+        instructions: "The HTML content of the PDF file. See documentation for availability of variables."|t('freeform'),
+        id: "body",
+        name: "body",
+        value: template.body,
+        errors: template.getErrors("body"),
+        required: false,
+    }) }}
+
+    <style>
+        #editor {
+            display: none;
+            overflow: hidden;
+
+            width: 100%;
+            height: 400px;
+            margin-top: -20px;
+
+            border-radius: 3px;
+            border: 1px solid #e0e5ea;
+        }
+
+        .ace_gutter-layer, .ace_gutter-cell {
+            background: #f4f7fc;
+        }
+
+        #editor:not(.ace_focus) .ace_active-line {
+            background: #f4f7fc !important;
+        }
+
+        #body {
+            display: none;
+        }
+    </style>
+    <div id="editor">{{ template.body }}</div>
+
+{% endblock %}
+
+{% js %}
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/github");
+    var textarea = $('textarea[name="body"]').hide();
+
+    editor.getSession().setValue(textarea.val());
+    editor.getSession().on('change', function() {
+        textarea.val(editor.getSession().getValue());
+    });
+
+    editor.getSession().setUseWorker(false);
+    editor.getSession().setMode("ace/mode/html");
+
+    document.getElementById("editor").style.display = "block";
+{% endjs %}

@@ -17,6 +17,7 @@ use Solspace\Freeform\Bundles\Backup\Collections\SitesCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\TemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\FileTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\NotificationTemplateCollection;
+use Solspace\Freeform\Bundles\Backup\Collections\Templates\PdfTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\TranslationCollection;
 use Solspace\Freeform\Bundles\Backup\DTO\Field;
 use Solspace\Freeform\Bundles\Backup\DTO\Form;
@@ -34,6 +35,7 @@ use Solspace\Freeform\Bundles\Backup\DTO\Site;
 use Solspace\Freeform\Bundles\Backup\DTO\Submission;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\FileTemplate;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\NotificationTemplate;
+use Solspace\Freeform\Bundles\Backup\DTO\Templates\PdfTemplate;
 use Solspace\Freeform\Bundles\Backup\DTO\Translation;
 use Solspace\Freeform\Bundles\Notifications\Providers\NotificationsProvider;
 use Solspace\Freeform\Bundles\Rules\RuleProvider;
@@ -54,6 +56,7 @@ use Solspace\Freeform\Records\Form\FormSiteRecord;
 use Solspace\Freeform\Records\FormRecord;
 use Solspace\Freeform\Records\FormTranslationRecord;
 use Solspace\Freeform\Records\IntegrationRecord;
+use Solspace\Freeform\Records\PdfTemplateRecord;
 use Solspace\Freeform\Services\FormsService;
 use Solspace\Freeform\Services\Integrations\IntegrationsService;
 
@@ -74,6 +77,7 @@ class FreeformFormsExporter extends BaseExporter
         $preview->forms = $this->collectForms();
         $preview->settings = (bool) $this->collectSettings(true);
         $preview->templates = (new TemplateCollection())
+            ->setPdf($this->collectPdfTemplates())
             ->setNotification($this->collectNotifications())
             ->setFormatting($this->collectFormattingTemplates())
             ->setSuccess($this->collectSuccessTemplates())
@@ -314,11 +318,39 @@ class FreeformFormsExporter extends BaseExporter
             $exported->bcc = FreeformStringHelper::extractSeparatedValues($notification->bcc ?? '');
 
             $exported->includeAttachments = $notification->isIncludeAttachmentsEnabled();
+            $exported->pdfTemplateIds = array_map('intval', json_decode($notification->pdfTemplateIds ?: '[]', true));
 
             $exported->subject = $notification->subject ?? '';
             $exported->body = $notification->bodyHtml ?? '';
             $exported->textBody = $notification->bodyText ?? '';
             $exported->autoText = $notification->isAutoText();
+
+            $collection->add($exported);
+        }
+
+        return $collection;
+    }
+
+    protected function collectPdfTemplates(?array $ids = null): PdfTemplateCollection
+    {
+        $collection = new PdfTemplateCollection();
+        $templates = PdfTemplateRecord::find()->all();
+
+        /** @var PdfTemplateRecord $template */
+        foreach ($templates as $template) {
+            $uid = $template->uid;
+            if (null !== $ids && !\in_array($uid, $ids, true)) {
+                continue;
+            }
+
+            $exported = new PdfTemplate();
+            $exported->uid = $uid;
+            $exported->id = $template->id;
+
+            $exported->name = $template->name;
+            $exported->fileName = $template->fileName;
+            $exported->description = $template->description;
+            $exported->body = $template->body;
 
             $collection->add($exported);
         }

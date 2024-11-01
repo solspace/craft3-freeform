@@ -20,6 +20,7 @@ use Solspace\Freeform\Library\Helpers\TwigHelper;
 
 /**
  * @property int    $id
+ * @property string $pdfTemplateIds
  * @property string $name
  * @property string $handle
  * @property string $description
@@ -88,6 +89,7 @@ class NotificationTemplateRecord extends ActiveRecord
 
         $record = new self();
         $record->filepath = pathinfo($filePath, \PATHINFO_BASENAME);
+        $record->pdfTemplateIds = $template->getPdfTemplateIds();
         $record->name = $template->getName();
         $record->handle = $template->getHandle();
         $record->description = $template->getDescription();
@@ -211,5 +213,18 @@ class NotificationTemplateRecord extends ActiveRecord
         }
 
         return null;
+    }
+
+    public function getPdfTemplateIds(): array
+    {
+        if (\is_array($this->pdfTemplateIds)) {
+            return $this->pdfTemplateIds;
+        }
+
+        if (\is_string($this->pdfTemplateIds)) {
+            return json_decode($this->pdfTemplateIds, true) ?: [];
+        }
+
+        return [];
     }
 }

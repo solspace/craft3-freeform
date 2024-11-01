@@ -19,6 +19,8 @@
 
 {% block sidebar %}
     {% set segment = segment3~(segment4 ? '/'~segment4) %}
+    {% set segment = segment|freeformRegexReplace('/\\/\\d+$/') %}
+
     <nav>
         <ul>
             {% for id, item in navItems %}

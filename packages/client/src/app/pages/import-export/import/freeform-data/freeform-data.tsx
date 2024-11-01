@@ -34,6 +34,7 @@ export const ImportFreeformData: React.FC = () => {
     forms: [],
     formSubmissions: [],
     templates: {
+      pdf: [],
       notification: [],
       formatting: [],
       success: [],

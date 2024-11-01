@@ -22,6 +22,7 @@ export const ImportExpressForms: React.FC = () => {
     forms: [],
     formSubmissions: [],
     templates: {
+      pdf: [],
       notification: [],
       formatting: [],
       success: [],
@@ -58,6 +59,7 @@ export const ImportExpressForms: React.FC = () => {
 
   if (
     !data.forms.length &&
+    !data.templates.pdf.length &&
     !data.templates.notification.length &&
     !data.templates.formatting.length &&
     !data.templates.success.length &&
@@ -103,6 +105,7 @@ export const ImportExpressForms: React.FC = () => {
           'submit',
           active && 'disabled',
           !options.forms.length &&
+            !options.templates.pdf.length &&
             !options.templates.notification.length &&
             !options.templates.formatting.length &&
             !options.templates.success.length &&

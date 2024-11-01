@@ -21,6 +21,7 @@ class NotificationTemplate
 
     public bool $includeAttachments = false;
     public ?array $presetAssets = null;
+    public ?array $pdfTemplateIds = null;
 
     public string $subject;
     public string $body;
