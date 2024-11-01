@@ -237,7 +237,7 @@ class PageButtons
 
     public function getBackLabel(): string
     {
-        return $this->translate('backLabel', $this->submitLabel);
+        return $this->translate('backLabel', $this->backLabel);
     }
 
     public function isSave(): bool
@@ -247,7 +247,7 @@ class PageButtons
 
     public function getSaveLabel(): string
     {
-        return $this->translate('saveLabel', $this->submitLabel);
+        return $this->translate('saveLabel', $this->saveLabel);
     }
 
     public function getSaveRedirectUrl(): string
@@ -345,7 +345,7 @@ class PageButtons
         );
     }
 
-    protected function translate(?string $handle, ?string $defaultValue = null): string
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
         return Freeform::getInstance()->translations->getTranslation(
             $this->getPage()->getForm(),

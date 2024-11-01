@@ -380,6 +380,10 @@ class FormDuplicator
                             continue;
                         }
 
+                        if (!\is_object($metadata->{$handle}->{$key}) || !isset($metadata->{$handle}->{$key}->value)) {
+                            continue;
+                        }
+
                         $metadata->{$handle}->{$key}->value = $this->fieldUidMap[$value->value];
                     }
                 }

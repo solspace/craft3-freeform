@@ -100,6 +100,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
     )]
     protected bool $required = false;
 
+    #[Translatable]
     #[Section('general')]
     #[VisibilityFilter('properties.required')]
     #[Input\Text(
@@ -434,7 +435,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
 
     public function getRequiredErrorMessage(): ?string
     {
-        return $this->requiredMessage;
+        return $this->translate('requiredMessage', $this->requiredMessage);
     }
 
     public function getAttributes(): FieldAttributesCollection
@@ -716,7 +717,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         return '';
     }
 
-    protected function translate(?string $handle, ?string $defaultValue = null): string
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
         return Freeform::getInstance()->translations->getTranslation(
             $this->getForm(),
@@ -727,7 +728,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         );
     }
 
-    protected function translateOption(?string $handle, string $key, string $defaultValue): string
+    protected function translateOption(?string $handle, string $key, mixed $defaultValue): mixed
     {
         $translation = Freeform::getInstance()->translations->getTranslation(
             $this->getForm(),
