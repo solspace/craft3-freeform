@@ -100,6 +100,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
     )]
     protected bool $required = false;
 
+    #[Translatable]
     #[Section('general')]
     #[VisibilityFilter('properties.required')]
     #[Input\Text(
@@ -434,7 +435,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
 
     public function getRequiredErrorMessage(): ?string
     {
-        return $this->requiredMessage;
+        return $this->translate('requiredMessage', $this->requiredMessage);
     }
 
     public function getAttributes(): FieldAttributesCollection
