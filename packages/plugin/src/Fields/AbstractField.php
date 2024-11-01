@@ -717,7 +717,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         return '';
     }
 
-    protected function translate(?string $handle, ?string $defaultValue = null): string
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
         return Freeform::getInstance()->translations->getTranslation(
             $this->getForm(),
@@ -728,7 +728,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         );
     }
 
-    protected function translateOption(?string $handle, string $key, string $defaultValue): string
+    protected function translateOption(?string $handle, string $key, mixed $defaultValue): mixed
     {
         $translation = Freeform::getInstance()->translations->getTranslation(
             $this->getForm(),

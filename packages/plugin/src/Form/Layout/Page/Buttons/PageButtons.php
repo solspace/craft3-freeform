@@ -345,7 +345,7 @@ class PageButtons
         );
     }
 
-    protected function translate(?string $handle, ?string $defaultValue = null): string
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
         return Freeform::getInstance()->translations->getTranslation(
             $this->getPage()->getForm(),
