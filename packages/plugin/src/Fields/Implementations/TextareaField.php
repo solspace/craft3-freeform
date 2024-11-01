@@ -15,6 +15,7 @@ namespace Solspace\Freeform\Fields\Implementations;
 use GraphQL\Type\Definition\Type as GQLType;
 use Solspace\Freeform\Attributes\Field\Type;
 use Solspace\Freeform\Attributes\Property\Input;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Fields\AbstractField;
 use Solspace\Freeform\Fields\Interfaces\DefaultValueInterface;
 use Solspace\Freeform\Fields\Interfaces\EncryptionInterface;
@@ -39,6 +40,7 @@ class TextareaField extends AbstractField implements PlaceholderInterface, TextI
     use MaxLengthTrait;
     use PlaceholderTrait;
 
+    #[Translatable]
     #[Input\TextArea(
         label: 'Default value',
         instructions: 'Enter a default value for this field',
