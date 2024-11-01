@@ -237,7 +237,7 @@ class PageButtons
 
     public function getBackLabel(): string
     {
-        return $this->translate('backLabel', $this->submitLabel);
+        return $this->translate('backLabel', $this->backLabel);
     }
 
     public function isSave(): bool
@@ -247,7 +247,7 @@ class PageButtons
 
     public function getSaveLabel(): string
     {
-        return $this->translate('saveLabel', $this->submitLabel);
+        return $this->translate('saveLabel', $this->saveLabel);
     }
 
     public function getSaveRedirectUrl(): string
