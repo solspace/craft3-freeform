@@ -7,7 +7,7 @@
 {% set crumbs = [
     { label: craft.freeform.name, url: url("freeform") },
     { label: "PDF Templates"|t("freeform"), url: url("freeform/settings/pdf-templates") },
-    { label: template.name, url: url("freeform/settings/pdf-notifications/" ~ template.id) },
+    { label: title, url: url("freeform/settings/pdf-templates/" ~ (template.id ?: 'new') ) },
 ] %}
 
 {% set fullPageForm = true %}
@@ -124,8 +124,8 @@
     var textarea = $('textarea[name="body"]').hide();
 
     editor.getSession().setValue(textarea.val());
-    editor.getSession().on('change', function(){
-    textarea.val(editor.getSession().getValue());
+    editor.getSession().on('change', function() {
+        textarea.val(editor.getSession().getValue());
     });
 
     editor.getSession().setUseWorker(false);

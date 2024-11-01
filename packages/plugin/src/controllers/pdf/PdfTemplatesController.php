@@ -117,13 +117,13 @@ class PdfTemplatesController extends BaseController
             'template' => $record,
             'continueEditingUrl' => 'freeform/settings/pdf-templates/{id}',
             'action' => 'freeform/pdf-templates/save',
-            'title' => $record->name,
+            'title' => $record->name ?: 'New PDF Template',
         ];
 
         return $this->renderTemplate('freeform/pdf-templates/edit', $variables);
     }
 
-    protected function getNewOrExistingRecord(?int $id): PdfTemplateRecord
+    protected function getNewOrExistingRecord(mixed $id): PdfTemplateRecord
     {
         $record = PdfTemplateRecord::findOne($id);
         if (!$record) {
