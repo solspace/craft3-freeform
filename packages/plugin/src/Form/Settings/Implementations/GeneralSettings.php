@@ -95,10 +95,11 @@ class GeneralSettings extends SettingsNamespace
     public array $sites = [];
 
     #[Section(self::SECTION_GENERAL)]
+    #[Limitation('settings.tab.general.translations')]
     #[VisibilityFilter('Boolean(context.config.sites.enabled)')]
     #[Input\Boolean(
-        label: 'Enable Translations',
-        instructions: 'Enable translations for this form.',
+        label: 'Translatable',
+        instructions: 'Enable translations per site for this form.',
         order: 5,
     )]
     public bool $translations = false;

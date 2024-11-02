@@ -28,7 +28,7 @@ class PdfTemplatesBundle extends FeatureBundle
 
         $event->addNavigationItem(
             'pdf-templates',
-            'PDF Templates',
+            Freeform::t('PDF Templates'),
             'template-manager'
         );
     }

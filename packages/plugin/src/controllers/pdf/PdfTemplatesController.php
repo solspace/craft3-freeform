@@ -81,7 +81,7 @@ class PdfTemplatesController extends BaseController
                 return $this->asJson(['success' => false]);
             }
 
-            $session->setError(Freeform::t('Integration not saved.'));
+            $session->setError(Freeform::t('PDF template not saved.'));
 
             return $this->renderEditForm($record);
         }
@@ -90,7 +90,7 @@ class PdfTemplatesController extends BaseController
             return $this->asJson(['success' => true]);
         }
 
-        $session->setSuccess(Freeform::t('Integration saved.'));
+        $session->setSuccess(Freeform::t('PDF template saved.'));
 
         return $this->redirectToPostedUrl($record);
     }

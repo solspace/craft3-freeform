@@ -27,7 +27,7 @@
             <table id="templates" data-file-templates class="data fullwidth collapsible">
                 <thead>
                 <th scope="col">{{ "Name"|t('freeform') }}</th>
-                <th scope="col">{{ "Filename"|t('freeform') }}</th>
+                <th scope="col">{{ "File Name"|t('freeform') }}</th>
                 <th scope="col">{{ "Description"|t('freeform') }}</th>
                 <td class="thin"></td>
                 </thead>
@@ -44,7 +44,7 @@
                                 {{ template.name }}
                             {% endif %}
                         </th>
-                        <td data-title="{{ 'Filename'|t('freeform') }}">
+                        <td data-title="{{ 'File Name'|t('freeform') }}">
                             <code>{{ template.fileName }}</code>
                         </td>
                         <td style="width: 50%;">
@@ -68,7 +68,7 @@
     {% else %}
 
         <div class="zilch">
-            {{ "No PDF Templates exist yet."|t('freeform') }}
+            {{ "No PDF templates exist yet."|t('freeform') }}
         </div>
 
     {% endif %}

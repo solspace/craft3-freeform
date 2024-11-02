@@ -63,12 +63,12 @@
     {% if craft.freeform.pro %}
 
         {{ forms.lightswitchField({
-            label: "Site Filtering for Forms and Submissions"|t('freeform'),
-            instructions: "Allows you to filter form lists by Sites and prevents other admins from accessing forms that belong to Sites they don't have access to. By default, any new forms created will be visible for the Site they were created on (with the ability to enable additional sites)."|t('freeform'),
+            label: "Site-Aware Forms"|t('freeform'),
+            instructions: "When enabled, forms become aware of the currently active Site when loaded on the front end. In the control panel, you can filter form lists by Site and prevent other admins from accessing forms that belong to Sites they don't have access to. By default, any new forms created will be visible for the Site they were created on (with the ability to enable additional sites)."|t('freeform'),
             name: "settings[sitesEnabled]",
             on: settings.sitesEnabled,
             errors: settings.errors("sitesEnabled"),
-            warning: "This only controls access to forms and submissions. It does not enable translations per site."|t('freeform'),
+            tip: "To enable translations on forms per Site, go to the form builder and enable the 'Translatable' setting under the 'Settings' tab."|t('freeform'),
         }) }}
 
     {% endif %}

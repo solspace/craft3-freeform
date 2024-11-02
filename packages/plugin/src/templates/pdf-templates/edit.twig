@@ -47,7 +47,7 @@
     {{ forms.textField({
         first: true,
         label: "Name"|t('freeform'),
-        instructions: "What this template will be called in the CP."|t('freeform'),
+        instructions: "What this template will be called in the control panel."|t('freeform'),
         id: 'name',
         name: 'name',
         value: template.name,
@@ -71,7 +71,7 @@
     {{ forms.autosuggestField({
         first: true,
         label: "File Name"|t('freeform'),
-        instructions: "The generated File Name of the PDF file when it's generated. Can use twig variables."|t('freeform'),
+        instructions: "The name of the PDF file when it's generated. Can use Twig variables."|t('freeform'),
         id: 'fileName',
         name: 'fileName',
         value: template.fileName,
