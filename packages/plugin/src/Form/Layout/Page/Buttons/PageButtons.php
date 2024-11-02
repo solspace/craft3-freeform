@@ -12,13 +12,13 @@ use Solspace\Freeform\Attributes\Property\Section;
 use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Events\Fields\CompileButtonAttributesEvent;
 use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Interfaces\RecipientInterface;
 use Solspace\Freeform\Form\Layout\Page;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
-use Solspace\Freeform\Services\Form\TranslationsService;
 use Twig\Markup;
 use yii\base\Event;
 
@@ -184,8 +184,11 @@ class PageButtons
     )]
     private ButtonAttributesCollection $attributes;
 
-    public function __construct(private Page $page, array $config)
-    {
+    public function __construct(
+        private Page $page,
+        private TranslationProvider $translationProvider,
+        array $config
+    ) {
         $this->layout = $config['layout'] ?? 'save back|submit';
         $this->attributes = new ButtonAttributesCollection($config['attributes'] ?? []);
     }
@@ -347,12 +350,14 @@ class PageButtons
 
     protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
-        return Freeform::getInstance()->translations->getTranslation(
-            $this->getPage()->getForm(),
-            TranslationsService::TYPE_PAGES,
-            $this->getPage()->getUid(),
-            $handle,
-            $defaultValue
-        );
+        return $this
+            ->translationProvider
+            ->getTranslation(
+                $this->getPage(),
+                $this->getPage()->getUid(),
+                $handle,
+                $defaultValue
+            )
+        ;
     }
 }
