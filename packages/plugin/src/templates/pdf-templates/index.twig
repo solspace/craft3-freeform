@@ -3,13 +3,15 @@
 {% block actionButton %}
 
     {% if currentUser.can("freeform-pdfTemplatesManage") %}
-        <div class="buttons">
-            <div class="btngroup submit">
-                <a class="btn submit add icon" href="{{ url('freeform/settings/pdf-templates/new') }}">
-                    {{ "New Template"|t('freeform') }}
-                </a>
+        {% if craft.freeform.pro == "pro" %}
+            <div class="buttons">
+                <div class="btngroup submit">
+                    <a class="btn submit add icon" href="{{ url('freeform/settings/pdf-templates/new') }}">
+                        {{ "New Template"|t('freeform') }}
+                    </a>
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
 
 {% endblock %}
@@ -21,54 +23,64 @@
 
 {% set content %}
 
-    {% if templates|length %}
+    {% if craft.freeform.pro == "pro" %}
 
-        <div class="vue-admin-tablepane tablepane">
-            <table id="templates" data-file-templates class="data fullwidth collapsible">
-                <thead>
-                <th scope="col">{{ "Name"|t('freeform') }}</th>
-                <th scope="col">{{ "File Name"|t('freeform') }}</th>
-                <th scope="col">{{ "Description"|t('freeform') }}</th>
-                <td class="thin"></td>
-                </thead>
-                <tbody>
-                {# File based templates #}
-                {% for id, template in templates %}
-                    <tr data-id="{{ id }}" data-name="{{ template.name|t('freeform') }}">
-                        <th scope="row" data-title="{{ 'Name'|t('freeform') }}">
-                            {% if currentUser.can("freeform-pdfTemplatesManage") %}
-                                <a href="{{ url('freeform/settings/pdf-templates/' ~ id) }}">
-                                    {{ template.name }}
-                                </a>
-                            {% else %}
-                                {{ template.name }}
-                            {% endif %}
-                        </th>
-                        <td data-title="{{ 'File Name'|t('freeform') }}">
-                            <code>{{ template.fileName }}</code>
-                        </td>
-                        <td style="width: 50%;">
-                            {{ template.description }}
-                        </td>
-                        <td class="thin">
-                            <div class='action-buttons'>
+        {% if templates|length %}
+
+            <div class="vue-admin-tablepane tablepane">
+                <table id="templates" data-file-templates class="data fullwidth collapsible">
+                    <thead>
+                    <th scope="col">{{ "Name"|t('freeform') }}</th>
+                    <th scope="col">{{ "File Name"|t('freeform') }}</th>
+                    <th scope="col">{{ "Description"|t('freeform') }}</th>
+                    <td class="thin"></td>
+                    </thead>
+                    <tbody>
+                    {# File based templates #}
+                    {% for id, template in templates %}
+                        <tr data-id="{{ id }}" data-name="{{ template.name|t('freeform') }}">
+                            <th scope="row" data-title="{{ 'Name'|t('freeform') }}">
                                 {% if currentUser.can("freeform-pdfTemplatesManage") %}
-                                    <a class="clone icon" data-id="{{ id }}"
-                                       title="{{ 'Duplicate'|t('freeform') }}" role="button"></a>
-                                    <a class="delete icon" data-id="{{ id }}" title="{{ 'Delete'|t('freeform') }}" role="button"></a>
+                                    <a href="{{ url('freeform/settings/pdf-templates/' ~ id) }}">
+                                        {{ template.name }}
+                                    </a>
+                                {% else %}
+                                    {{ template.name }}
                                 {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                            </th>
+                            <td data-title="{{ 'File Name'|t('freeform') }}">
+                                <code>{{ template.fileName }}</code>
+                            </td>
+                            <td style="width: 50%;">
+                                {{ template.description }}
+                            </td>
+                            <td class="thin">
+                                <div class='action-buttons'>
+                                    {% if currentUser.can("freeform-pdfTemplatesManage") %}
+                                        <a class="clone icon" data-id="{{ id }}"
+                                        title="{{ 'Duplicate'|t('freeform') }}" role="button"></a>
+                                        <a class="delete icon" data-id="{{ id }}" title="{{ 'Delete'|t('freeform') }}" role="button"></a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="zilch">
+                {{ "No PDF templates exist yet."|t("freeform") }}
+            </div>
+
+        {% endif %}
 
     {% else %}
 
         <div class="zilch">
-            {{ "No PDF templates exist yet."|t('freeform') }}
+            {{ "Upgrade to the Freeform Pro edition to get access to PDF Templates."|t('freeform') }}
         </div>
 
     {% endif %}

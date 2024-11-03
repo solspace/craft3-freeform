@@ -74,6 +74,7 @@
         instructions: "The name of the PDF file when it's generated. Can use Twig variables."|t('freeform'),
         id: 'fileName',
         name: 'fileName',
+        placeholder: "e.g. tickets-{{ form.handle }}-event-{{ firstName }}-{{ lastName }}",
         value: template.fileName,
         errors: template.getErrors('fileName'),
         required: true
