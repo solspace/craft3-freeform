@@ -86,6 +86,10 @@ class Submission extends Element
 
     public function __get($name): mixed
     {
+        if (null === $name) {
+            return null;
+        }
+
         $gettingByFieldMarker = false;
         if (preg_match('/^field:(\d+)$/', $name, $matches)) {
             $gettingByFieldMarker = true;
