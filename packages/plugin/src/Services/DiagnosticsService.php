@@ -415,7 +415,7 @@ class DiagnosticsService extends BaseService
                     'Form Submission Throttling: <b>{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second"  }}{% else %}Unlimited{% endif %}</b>',
                     [
                         'count' => $this->getSummary()->statistics->spam->submissionThrottlingCount,
-                        'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame
+                        'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame,
                     ],
                 ),
             ],
