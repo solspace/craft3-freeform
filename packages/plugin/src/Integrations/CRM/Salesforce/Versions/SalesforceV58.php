@@ -58,6 +58,16 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapLeads')]
     #[Input\Boolean(
+        label: 'Check for Lead duplicates',
+        instructions: 'Check for Lead duplicates using the email address field, and update found Lead data instead of creating a new one.',
+        order: 5,
+    )]
+    protected bool $checkLeadDuplicates = false;
+
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[VisibilityFilter('Boolean(enabled)')]
+    #[VisibilityFilter('values.mapLeads')]
+    #[Input\Boolean(
         label: 'Attach Uploaded Files to Leads',
         instructions: 'Send any uploaded files to Salesforce and relate them to the created Lead.',
         order: 5,
@@ -330,20 +340,45 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
         $mapping = $this->triggerPushEvent(self::CATEGORY_LEAD, $mapping);
 
-        [$response, $json] = $this->getJsonResponse(
-            $client->post(
-                $this->getEndpoint('/sobjects/Lead'),
-                [
-                    'headers' => [
-                        'Sforce-Auto-Assign' => $this->assignLeadOwner ? 'TRUE' : 'FALSE',
-                    ],
-                    'json' => $mapping,
-                ]
-            )
-        );
+        $leadId = null;
+        $leadEmail = $mapping['Email'];
+        if ($leadEmail) {
+            $existingRecord = $this->querySingle(
+                $client,
+                'SELECT Id FROM Lead WHERE Email = \'%s\' LIMIT 1',
+                [$leadEmail],
+            );
+
+            $leadId = $existingRecord->Id ?? null;
+        }
+
+        $requestConfiguration = [
+            'headers' => [
+                'Sforce-Auto-Assign' => $this->assignLeadOwner ? 'TRUE' : 'FALSE',
+            ],
+            'json' => $mapping,
+        ];
+
+        if ($leadId) {
+            [$response] = $this->getJsonResponse(
+                $client->patch(
+                    $this->getEndpoint('/sobjects/Lead/'.$leadId),
+                    $requestConfiguration,
+                )
+            );
+        } else {
+            [$response, $json] = $this->getJsonResponse(
+                $client->post(
+                    $this->getEndpoint('/sobjects/Lead'),
+                    $requestConfiguration
+                )
+            );
+
+            $leadId = $json->id;
+        }
 
         if ($this->filesForLeads) {
-            $this->linkFilesTo($json->id, $form, $client);
+            $this->linkFilesTo($leadId, $form, $client);
         }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_LEAD, $response);
