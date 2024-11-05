@@ -127,6 +127,10 @@ class DiagnosticsService extends BaseService
                 ],
             ),
             new DiagnosticItem(
+                'Async CSRF Inputs: <b>{{ value == 1 ? "Yes" : "No" }}</b>',
+                \Craft::$app->getConfig()->getGeneral()->asyncCsrfInputs,
+            ),
+            new DiagnosticItem(
                 'Memory Limit: <b>{{ value }}</b>',
                 \ini_get('memory_limit'),
                 [
