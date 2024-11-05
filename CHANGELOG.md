@@ -143,7 +143,7 @@
 - Changed Freeform so it does not set `noCache` headers on every request. Includes support for Craft's `asyncCsrfInputs` feature.
 
 ### Fixed
-- Fixed a bug where the `site` parameter would lose track of the active site on nav links in the control panel when using the multi-site feature. For this to work correctly, you must enable the **Site Filtering for Forms and Submissions** setting.
+- Fixed a bug where the `site` parameter would lose track of the active site on nav links in the control panel when using the multi-site feature. For this to work correctly, you must enable the **Site-Aware Forms** setting.
 - Fixed a bug where Freeform scripts were being attached to non-Freeform forms.
 
 ## 5.5.6 - 2024-08-10

@@ -48,6 +48,7 @@ Maps data to the following field types:
         - **Full Access**
     - **Leads**
         - **Full Access**
+    - **Search for all data**
     - The **Installation URL** field can be left blank.
 - Copy the value in the **Client ID** setting.
 - Copy the value in the **Client Secret** setting.

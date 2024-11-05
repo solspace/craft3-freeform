@@ -8,6 +8,7 @@ use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Implementations\Date\DateTimeTransformer;
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\Validators;
 use Solspace\Freeform\Attributes\Property\ValueGenerator;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
@@ -68,6 +69,7 @@ class BehaviorSettings extends SettingsNamespace
     )]
     public bool $showProcessingText = false;
 
+    #[Translatable]
     #[Section(self::SECTION_PROCESSING)]
     #[VisibilityFilter('Boolean(showProcessingText)')]
     #[DefaultValue('settings.processing.processingText')]
@@ -115,6 +117,7 @@ class BehaviorSettings extends SettingsNamespace
     )]
     public string $returnUrl = '';
 
+    #[Translatable]
     #[Section(self::SECTION_SUCCESS_AND_ERRORS)]
     #[DefaultValue('settings.successAndErrors.successMessage')]
     #[Input\TextArea(
@@ -124,6 +127,7 @@ class BehaviorSettings extends SettingsNamespace
     )]
     public string $successMessage = self::DEFAULT_SUCCESS_MESSAGE;
 
+    #[Translatable]
     #[Section(self::SECTION_SUCCESS_AND_ERRORS)]
     #[DefaultValue('settings.successAndErrors.errorMessage')]
     #[Input\TextArea(

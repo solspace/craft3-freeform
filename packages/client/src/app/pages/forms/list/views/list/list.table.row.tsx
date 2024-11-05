@@ -36,7 +36,7 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
 
   const openDeleteFormModal = useDeleteFormModal({ form });
 
-  const { id, name, handle, settings, dateArchived } = form;
+  const { id, name, handle, description, settings, dateArchived } = form;
   const color = settings.general.color;
 
   const hasTitleLink = form.links.some(({ type }) => type === 'title');
@@ -61,7 +61,7 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
         </code>
       </td>
       <td>
-        <Truncate size={400}>{settings.general.description}</Truncate>
+        <Truncate size={400}>{description}</Truncate>
       </td>
       <td>
         <ResponsiveContainer width={200} height={20}>

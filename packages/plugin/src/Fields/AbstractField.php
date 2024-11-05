@@ -20,8 +20,10 @@ use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Limitation;
 use Solspace\Freeform\Attributes\Property\Middleware;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\Validators;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
+use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Bundles\Fields\ImplementationProvider;
 use Solspace\Freeform\Events\Fields\CompileFieldAttributesEvent;
 use Solspace\Freeform\Events\Fields\FieldRenderEvent;
@@ -38,6 +40,7 @@ use Solspace\Freeform\Library\Attributes\FieldAttributesCollection;
 use Solspace\Freeform\Library\Exceptions\FieldExceptions\FieldException;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 use Solspace\Freeform\Library\Serialization\Normalizers\IdentificatorInterface;
+use Solspace\Freeform\Services\Form\TranslationsService;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Twig\Markup;
 use yii\base\Event;
@@ -47,6 +50,7 @@ use yii\base\Event;
  */
 abstract class AbstractField implements FieldInterface, IdentificatorInterface
 {
+    #[Translatable]
     #[Section(
         handle: 'general',
         label: 'General',
@@ -81,6 +85,7 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
     #[Validators\ReservedWord]
     protected string $handle = '';
 
+    #[Translatable]
     #[Section('general')]
     #[Input\TextArea(
         instructions: 'Field specific user instructions',
@@ -94,6 +99,17 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         order: 5
     )]
     protected bool $required = false;
+
+    #[Translatable]
+    #[Section('general')]
+    #[VisibilityFilter('properties.required')]
+    #[Input\Text(
+        label: 'Custom Validation Error',
+        instructions: 'If this field is left empty upon submit, show this error message.',
+        order: 5,
+        placeholder: 'This field is required',
+    )]
+    protected ?string $requiredMessage = '';
 
     #[Section(
         handle: 'attributes',
@@ -404,17 +420,22 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
 
     public function getLabel(): string
     {
-        return $this->translate($this->label);
+        return $this->translate('label', $this->label);
     }
 
     public function getInstructions(): string
     {
-        return $this->translate($this->instructions);
+        return $this->translate('instructions', $this->instructions);
     }
 
     public function isRequired(): bool
     {
         return $this->required;
+    }
+
+    public function getRequiredErrorMessage(): ?string
+    {
+        return $this->translate('requiredMessage', $this->requiredMessage);
     }
 
     public function getAttributes(): FieldAttributesCollection
@@ -696,12 +717,38 @@ abstract class AbstractField implements FieldInterface, IdentificatorInterface
         return '';
     }
 
-    /**
-     * An alias method for translator.
-     */
-    protected function translate(?string $string = null, array $variables = []): string
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
     {
-        return null === $string ? '' : Freeform::t($string, $variables);
+        return Freeform::getInstance()->translations->getTranslation(
+            $this->getForm(),
+            TranslationsService::TYPE_FIELDS,
+            $this->getUid(),
+            $handle,
+            $defaultValue
+        );
+    }
+
+    protected function translateOption(?string $handle, string $key, mixed $defaultValue): mixed
+    {
+        $translation = Freeform::getInstance()->translations->getTranslation(
+            $this->getForm(),
+            TranslationsService::TYPE_FIELDS,
+            $this->getUid(),
+            $handle,
+            '',
+        );
+
+        if (!$translation || !isset($translation['options'])) {
+            return $defaultValue;
+        }
+
+        foreach ($translation['options'] as $option) {
+            if ($option['value'] === $key) {
+                return $option['label'];
+            }
+        }
+
+        return $defaultValue;
     }
 
     protected function renderRaw(string $output): Markup

@@ -147,6 +147,7 @@ class SummaryService extends Component
         $spam->minSubmitTime = (bool) $settingsService->getSettingsModel()->minimumSubmitTime;
         $spam->submitExpiration = (bool) $settingsService->getSettingsModel()->formSubmitExpiration;
         $spam->submissionThrottlingCount = (int) $settingsService->getSettingsModel()->submissionThrottlingCount;
+        $spam->submissionThrottlingTimeFrame = $settingsService->getSettingsModel()->submissionThrottlingTimeFrame;
         $spam->bypassSpamCheckOnLoggedInUsers = $settingsService->getSettingsModel()->bypassSpamCheckOnLoggedInUsers;
 
         $summary->statistics->spam = $spam;

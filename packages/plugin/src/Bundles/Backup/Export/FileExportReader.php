@@ -14,6 +14,7 @@ use Solspace\Freeform\Bundles\Backup\Collections\SitesCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\TemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\FileTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\NotificationTemplateCollection;
+use Solspace\Freeform\Bundles\Backup\Collections\Templates\PdfTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\DTO\Field;
 use Solspace\Freeform\Bundles\Backup\DTO\Form;
 use Solspace\Freeform\Bundles\Backup\DTO\FormIntegration;
@@ -30,6 +31,8 @@ use Solspace\Freeform\Bundles\Backup\DTO\Site;
 use Solspace\Freeform\Bundles\Backup\DTO\Submission;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\FileTemplate;
 use Solspace\Freeform\Bundles\Backup\DTO\Templates\NotificationTemplate;
+use Solspace\Freeform\Bundles\Backup\DTO\Templates\PdfTemplate;
+use Solspace\Freeform\Bundles\Backup\DTO\Translation;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Form\Settings\Settings as FormSettings;
 use Solspace\Freeform\Freeform;
@@ -53,6 +56,7 @@ class FileExportReader extends BaseExporter
         $preview->integrations = $this->collectIntegrations();
         $preview->settings = (bool) $this->collectSettings(true);
         $preview->templates = (new TemplateCollection())
+            ->setPdf($this->collectPdfTemplates())
             ->setNotification($this->collectNotifications())
             ->setFormatting($this->collectFormattingTemplates())
             ->setSuccess($this->collectSuccessTemplates())
@@ -122,6 +126,16 @@ class FileExportReader extends BaseExporter
                 $notification->idAttribute = 'template';
 
                 $form->notifications->add($notification);
+            }
+
+            $translations = $json['translations'] ?? [];
+            foreach ($translations as $translationJson) {
+                $translation = new Translation();
+                $translation->uid = $translationJson['uid'];
+                $translation->site = $translationJson['site'];
+                $translation->metadata = $translationJson['metadata'];
+
+                $form->translations->add($translation);
             }
 
             foreach ($json['integrations'] as $formIntegrationJson) {
@@ -223,11 +237,36 @@ class FileExportReader extends BaseExporter
             $template->bcc = $json['bcc'] ?? [];
 
             $template->includeAttachments = $json['includeAttachments'];
+            $template->pdfTemplateIds = $json['pdfTemplateIds'] ?? [];
 
             $template->subject = $json['subject'] ?? '';
             $template->body = $json['body'] ?? '';
             $template->textBody = $json['textBody'] ?? '';
             $template->autoText = $json['autoText'] ?? false;
+
+            $collection->add($template);
+        }
+
+        return $collection;
+    }
+
+    protected function collectPdfTemplates(?array $ids = null): PdfTemplateCollection
+    {
+        $collection = new PdfTemplateCollection();
+
+        foreach ($this->readLineData('pdf-templates.jsonl') as $json) {
+            if (null !== $ids && !\in_array($json['uid'], $ids)) {
+                continue;
+            }
+
+            $template = new PdfTemplate();
+            $template->uid = $json['uid'];
+            $template->id = $json['id'];
+
+            $template->name = $json['name'];
+            $template->description = $json['description'];
+            $template->fileName = $json['fileName'];
+            $template->body = $json['body'];
 
             $collection->add($template);
         }

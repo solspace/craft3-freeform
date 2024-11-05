@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Template;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Fields\TransformValueEvent;
 use Solspace\Freeform\Events\Forms\AttachFormAttributesEvent;
@@ -77,6 +78,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
     public const EVENT_RENDER_AFTER_OPEN_TAG = 'render-after-opening-tag';
     public const EVENT_RENDER_BEFORE_CLOSING_TAG = 'render-before-closing-tag';
     public const EVENT_RENDER_AFTER_CLOSING_TAG = 'render-after-closing-tag';
+    public const EVENT_RENDER_CAPTCHAS = 'render-captchas';
     public const EVENT_COLLECT_SCRIPTS = 'collect-scripts';
     public const EVENT_OUTPUT_AS_JSON = 'output-as-json';
     public const EVENT_SET_PROPERTIES = 'set-properties';
@@ -148,6 +150,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
         array $config,
         private Settings $settings,
         private PropertyAccessor $accessor,
+        private TranslationProvider $translationProvider,
     ) {
         $this->id = $config['id'] ?? null;
         $this->uid = $config['uid'] ?? null;
@@ -232,7 +235,12 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
 
     public function getName(): string
     {
-        return $this->getSettings()->getGeneral()->name;
+        return $this->translationProvider->getTranslation(
+            $this,
+            'general',
+            'name',
+            $this->getSettings()->getGeneral()->name,
+        );
     }
 
     public function getHandle(): string
@@ -252,7 +260,12 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
 
     public function getDescription(): string
     {
-        return $this->getSettings()->getGeneral()->description;
+        return $this->translationProvider->getTranslation(
+            $this,
+            'general',
+            'description',
+            $this->getSettings()->getGeneral()->description,
+        );
     }
 
     public function getCurrentPage(): Page
@@ -691,6 +704,14 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
         $output .= $afterTag->getChunksAsString();
 
         return Template::raw($output);
+    }
+
+    public function renderCaptchas(): Markup
+    {
+        $event = new RenderTagEvent($this);
+        Event::trigger(self::class, self::EVENT_RENDER_CAPTCHAS, $event);
+
+        return Template::raw($event->getChunksAsString());
     }
 
     public function getFormHandler(): FormHandlerInterface

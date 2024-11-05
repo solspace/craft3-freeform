@@ -126,6 +126,10 @@ export const NotificationIcon: React.FC = () => {
   return <Icon className="fa-light fa-envelope" />;
 };
 
+export const PdfTemplateIcon: React.FC = () => {
+  return <Icon className="fa-light fa-file-pdf" />;
+};
+
 export const FormattingIcon: React.FC = () => {
   return <Icon className="fa-light fa-file-code" />;
 };

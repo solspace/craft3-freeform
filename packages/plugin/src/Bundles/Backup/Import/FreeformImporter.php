@@ -32,7 +32,9 @@ use Solspace\Freeform\Records\Form\FormPageRecord;
 use Solspace\Freeform\Records\Form\FormRowRecord;
 use Solspace\Freeform\Records\Form\FormSiteRecord;
 use Solspace\Freeform\Records\FormRecord;
+use Solspace\Freeform\Records\FormTranslationRecord;
 use Solspace\Freeform\Records\IntegrationRecord;
+use Solspace\Freeform\Records\PdfTemplateRecord;
 use Solspace\Freeform\Records\Rules\ButtonRuleRecord;
 use Solspace\Freeform\Records\Rules\FieldRuleRecord;
 use Solspace\Freeform\Records\Rules\NotificationRuleRecord;
@@ -49,6 +51,7 @@ class FreeformImporter
 
     private array $formsByUid = [];
     private array $notificationTransferIdMap = [];
+    private array $pdfTemplateTransferIdMap = [];
     private array $integrationRecords = [];
     private FreeformDataset $dataset;
     private SSE $sse;
@@ -64,11 +67,13 @@ class FreeformImporter
     {
         $this->sse = $sse;
         $this->notificationTransferIdMap = [];
+        $this->pdfTemplateTransferIdMap = [];
         $this->dataset = $dataset;
 
         $this->announceTotals();
 
         $this->importSettings();
+        $this->importPdfTemplates();
         $this->importNotifications();
         $this->importFormattingTemplates();
         $this->importSuccessTemplates();
@@ -189,6 +194,24 @@ class FreeformImporter
                         $formSiteRecord->save();
                     }
                 }
+            }
+
+            foreach ($form->translations as $translation) {
+                $site = \Craft::$app->sites->getSiteByHandle($translation->site);
+                if (!$site) {
+                    continue;
+                }
+
+                $translationRecord = FormTranslationRecord::findOne(['uid' => $translation->uid]);
+                if (!$translationRecord) {
+                    $translationRecord = new FormTranslationRecord();
+                    $translationRecord->uid = $translation->uid;
+                }
+
+                $translationRecord->formId = $formRecord->id;
+                $translationRecord->siteId = $site->id;
+                $translationRecord->translations = json_encode($translation->metadata);
+                $translationRecord->save();
             }
 
             foreach ($form->notifications as $notification) {
@@ -481,8 +504,66 @@ class FreeformImporter
             $record->includeAttachments = $notification->includeAttachments;
             $record->presetAssets = implode(', ', $notification->presetAssets ?? []);
 
+            if ($notification->pdfTemplateIds) {
+                $mappedTransferIdList = [];
+                foreach ($notification->pdfTemplateIds as $pdfTemplateId) {
+                    $mappedId = $this->pdfTemplateTransferIdMap[$pdfTemplateId] ?? null;
+                    if ($mappedId) {
+                        $mappedTransferIdList[] = (int) $mappedId;
+                    }
+                }
+
+                if ($mappedTransferIdList) {
+                    $record->pdfTemplateIds = json_encode($mappedTransferIdList);
+                }
+            }
+
             $this->notificationsService->save($record);
             $this->notificationTransferIdMap[$notification->id] = $record->id;
+
+            $this->sse->message('progress', 1);
+        }
+    }
+
+    private function importPdfTemplates(): void
+    {
+        $this->pdfTemplateTransferIdMap = [];
+
+        $collection = $this->dataset->getTemplates()?->getPdf();
+        if (!$collection) {
+            return;
+        }
+
+        $strategy = $this->dataset->getStrategy()->templates;
+
+        $this->sse->message('reset', $collection->count());
+
+        /** @var PdfTemplateRecord[] $existingTemplates */
+        $existingTemplates = PdfTemplateRecord::find()->indexBy('uid')->all();
+
+        foreach ($collection as $template) {
+            $this->sse->message('info', 'Importing pdf template: '.$template->name);
+
+            $record = $existingTemplates[$template->uid] ?? null;
+            if ($record) {
+                if (ImportStrategy::TYPE_SKIP === $strategy) {
+                    $this->pdfTemplateTransferIdMap[$template->id] = $record->id;
+                    $this->sse->message('progress', 1);
+
+                    continue;
+                }
+            } else {
+                $record = new PdfTemplateRecord(['uid' => $template->uid]);
+            }
+
+            $record->name = $template->name;
+            $record->fileName = $template->fileName;
+            $record->description = $template->description;
+            $record->body = $template->body;
+
+            $record->save();
+
+            $this->pdfTemplateTransferIdMap[$template->id] = $record->id;
 
             $this->sse->message('progress', 1);
         }

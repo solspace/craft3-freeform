@@ -102,7 +102,7 @@ return [
   'this button when' => 'this button when',
   'this field when' => 'this field when',
   'Go to this page when' => 'Go to this page when',
-  'Submit form' => 'Submit form',
+  'Submit Form' => 'Submit Form',
   'Submit this form when ' => 'Submit this form when ',
   'Rules' => 'Rules',
   'Submit Form' => 'Submit Form',

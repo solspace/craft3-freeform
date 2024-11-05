@@ -19,6 +19,7 @@ use craft\helpers\App;
 use craft\helpers\Template;
 use craft\web\View;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Forms\CollectScriptsEvent;
 use Solspace\Freeform\Events\Forms\DeleteEvent;
@@ -53,8 +54,11 @@ class FormsService extends BaseService implements FormHandlerInterface
 
     private static array $spamCountIncrementedForms = [];
 
-    public function __construct(?array $config, private PropertyProvider $propertyProvider)
-    {
+    public function __construct(
+        ?array $config,
+        private PropertyProvider $propertyProvider,
+        private TranslationProvider $translationProvider,
+    ) {
         parent::__construct($config);
     }
 
@@ -664,6 +668,7 @@ class FormsService extends BaseService implements FormHandlerInterface
             $data,
             $settings,
             new PropertyAccessor(),
+            $this->translationProvider,
         );
     }
 

@@ -4,10 +4,12 @@ namespace Solspace\Freeform\Bundles\Backup\Collections;
 
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\FileTemplateCollection;
 use Solspace\Freeform\Bundles\Backup\Collections\Templates\NotificationTemplateCollection;
+use Solspace\Freeform\Bundles\Backup\Collections\Templates\PdfTemplateCollection;
 
 class TemplateCollection
 {
     private ?NotificationTemplateCollection $notification = null;
+    private ?PdfTemplateCollection $pdf = null;
     private ?FileTemplateCollection $formatting = null;
     private ?FileTemplateCollection $success = null;
 
@@ -24,6 +26,18 @@ class TemplateCollection
     public function setNotification(?NotificationTemplateCollection $notificationTemplates): self
     {
         $this->notification = $notificationTemplates;
+
+        return $this;
+    }
+
+    public function getPdf(): ?PdfTemplateCollection
+    {
+        return $this->pdf;
+    }
+
+    public function setPdf(?PdfTemplateCollection $pdf): self
+    {
+        $this->pdf = $pdf;
 
         return $this;
     }

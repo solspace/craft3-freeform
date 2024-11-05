@@ -8,6 +8,7 @@ use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
 use Solspace\Freeform\Fields\Interfaces\ExtraFieldInterface;
 use Solspace\Freeform\Fields\Interfaces\PlaceholderInterface;
+use Solspace\Freeform\Freeform;
 
 #[Type(
     name: 'File Drag & Drop',
@@ -67,11 +68,11 @@ class FileDragAndDropField extends FileUploadField implements ExtraFieldInterfac
 
     public function getInputHtml(): string
     {
-        $messageFiles = $this->translate(
+        $messageFiles = Freeform::t(
             'Maximum file upload limit of {limit} reached',
             ['limit' => $this->getFileCount()]
         );
-        $messageSize = $this->translate(
+        $messageSize = Freeform::t(
             'Maximum file upload size is {maxFileSize}KB',
             ['maxFileSize' => $this->getMaxFileSizeKB()]
         );
@@ -91,8 +92,8 @@ class FileDragAndDropField extends FileUploadField implements ExtraFieldInterfac
             ->replace('data-max-files', $this->getFileCount())
             ->replace('data-max-size', $this->getMaxFileSizeBytes())
             ->setIfEmpty('data-theme', $this->getTheme())
-            ->setIfEmpty('data-message-progress', $this->translate('Upload in progress...'))
-            ->setIfEmpty('data-message-complete', $this->translate('Upload complete!'))
+            ->setIfEmpty('data-message-progress', Freeform::t('Upload in progress...'))
+            ->setIfEmpty('data-message-complete', Freeform::t('Upload complete!'))
             ->setIfEmpty('data-message-files', $messageFiles)
             ->setIfEmpty('data-message-size', $messageSize)
             ->setIfEmpty('data-accent', $this->getAccent())
@@ -102,7 +103,7 @@ class FileDragAndDropField extends FileUploadField implements ExtraFieldInterfac
         $output = '';
         $output .= '<div'.$attributes.'>';
         $output .= '<div data-placeholder class="freeform-file-dnd__placeholder">';
-        $output .= $this->translate($this->getPlaceholder());
+        $output .= $this->translate('placeholder', $this->getPlaceholder());
         $output .= '</div>';
         $output .= '<div data-preview-zone class="freeform-file-dnd__preview-zone"></div>';
         $output .= '<ul data-messages class="freeform-file-dnd__messages"></ul>';

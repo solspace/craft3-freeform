@@ -4,6 +4,7 @@ import {
   Source,
 } from '@components/form-controls/control-types/options/options.types';
 import type { Field } from '@editor/store/slices/layout/fields';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import type { FieldType } from '@ff-client/types/fields';
 import { Implementation, Type } from '@ff-client/types/fields';
 import {
@@ -19,6 +20,8 @@ type FieldOptions = (
 ) => [OptionCollection, boolean];
 
 export const useFieldOptions: FieldOptions = (field, type) => {
+  const { getOptionTranslations } = useTranslations(field);
+
   let optionsConfiguration: OptionsConfiguration | undefined;
   let emptyOption: string | undefined;
 
@@ -38,12 +41,13 @@ export const useFieldOptions: FieldOptions = (field, type) => {
       );
 
       if (optionsProperty) {
-        emptyOption = field?.properties[optionsProperty.handle]?.emptyOption;
+        const fieldValue = field?.properties[optionsProperty.handle];
+        optionsConfiguration = getOptionTranslations(
+          optionsProperty.handle,
+          fieldValue
+        );
 
-        optionsConfiguration = {
-          ...field?.properties[optionsProperty.handle],
-          emptyOption: undefined,
-        };
+        emptyOption = fieldValue?.emptyOption;
       }
     }
   }
