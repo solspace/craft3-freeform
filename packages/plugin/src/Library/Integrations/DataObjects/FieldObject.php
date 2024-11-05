@@ -24,22 +24,29 @@ class FieldObject
     public const TYPE_MICROTIME = 'microtime';
     public const TYPE_BOOLEAN = 'boolean';
 
+    private FieldOptionCollection $options;
+
     public function __construct(
         private string $handle,
         private string $label,
         private string $type,
         private string $category,
-        private bool $required = false
-    ) {}
+        private bool $required = false,
+        ?array $options = null,
+    ) {
+        $this->options = new FieldOptionCollection();
 
-    public static function getTypes(): array
-    {
-        return [self::TYPE_STRING, self::TYPE_NUMERIC, self::TYPE_BOOLEAN, self::TYPE_ARRAY];
-    }
-
-    public static function getDefaultType(): string
-    {
-        return self::TYPE_STRING;
+        if (null !== $options) {
+            foreach ($options as $option) {
+                $this->options->add(
+                    new FieldObjectOption(
+                        $option['key'],
+                        $option['label'],
+                        $option['description'] ?? null
+                    )
+                );
+            }
+        }
     }
 
     public function getHandle(): string
@@ -65,5 +72,10 @@ class FieldObject
     public function isRequired(): bool
     {
         return (bool) $this->required;
+    }
+
+    public function getOptions(): ?FieldOptionCollection
+    {
+        return $this->options;
     }
 }

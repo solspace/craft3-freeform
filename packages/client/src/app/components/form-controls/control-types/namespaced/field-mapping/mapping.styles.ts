@@ -23,7 +23,7 @@ export const MappingWrapper = styled.div`
   align-items: center;
   gap: ${spacings.sm};
 
-  grid-template-columns: 1.5fr min-content 1fr;
+  grid-template-columns: auto min-content 400px;
 
   padding: 2px 0;
 

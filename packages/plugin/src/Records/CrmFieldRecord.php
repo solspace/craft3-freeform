@@ -22,6 +22,7 @@ use yii\db\ActiveQuery;
  * @property string $label
  * @property string $type
  * @property bool   $required
+ * @property array  $options
  */
 class CrmFieldRecord extends ActiveRecord
 {
