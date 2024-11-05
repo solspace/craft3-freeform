@@ -408,8 +408,11 @@ class DiagnosticsService extends BaseService
                     $this->getSummary()->statistics->spam->bypassSpamCheckOnLoggedInUsers
                 ),
                 new DiagnosticItem(
-                    'Form Submission Throttling: <b>{{ value }} per minutes</b>',
-                    $this->getSummary()->statistics->spam->submissionThrottlingCount
+                    'Form Submission Throttling: <b>{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second"  }}{% else %}Unlimited{% endif %}</b>',
+                    [
+                        'count' => $this->getSummary()->statistics->spam->submissionThrottlingCount,
+                        'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame
+                    ],
                 ),
             ],
 
