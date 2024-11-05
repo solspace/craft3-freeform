@@ -86,7 +86,7 @@ class Submission extends Element
 
     public function __get($name): mixed
     {
-        if (null === $name) {
+        if (empty($name)) {
             return null;
         }
 
