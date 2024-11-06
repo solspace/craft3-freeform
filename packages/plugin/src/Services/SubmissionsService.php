@@ -15,7 +15,6 @@ namespace Solspace\Freeform\Services;
 use Carbon\Carbon;
 use craft\db\Query;
 use craft\db\Table;
-use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Db;
 use craft\helpers\Session;
@@ -28,9 +27,8 @@ use Solspace\Freeform\Events\Submissions\ProcessSubmissionEvent;
 use Solspace\Freeform\Events\Submissions\RenderSubmissionFieldEvent;
 use Solspace\Freeform\Events\Submissions\SubmitEvent;
 use Solspace\Freeform\Fields\FieldInterface;
-use Solspace\Freeform\Fields\Implementations\FileUploadField;
+use Solspace\Freeform\Fields\Interfaces\FileUploadInterface;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Form\Layout\FormLayout;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Database\SubmissionHandlerInterface;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
@@ -390,16 +388,18 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
 
             /** @var Submission $submission */
             foreach ($results as $submission) {
-                $this->extractAssetsIds($submission, $assetIds);
+                $assetIds = array_merge($assetIds, $this->extractAssetsIds($submission));
 
-                \Craft::$app->elements->deleteElement($submission);
+                \Craft::$app->elements->deleteElement($submission, true);
                 ++$deletedSubmissions;
             }
 
             $assetIds = array_unique($assetIds);
-            $assets = Asset::find()->id($assetIds)->all();
-            foreach ($assets as $asset) {
-                \Craft::$app->elements->deleteElement($asset);
+            foreach ($assetIds as $assetId) {
+                \Craft::$app->elements->deleteElementById(
+                    $assetId,
+                    hardDelete: true,
+                );
                 ++$deletedAssets;
             }
         }
@@ -433,37 +433,16 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
         \Craft::$app->session->setFlash(Form::SUBMISSION_FLASH_KEY, $form->getId());
     }
 
-    private function getUploadFieldIds(FormLayout $layout): array
+    private function extractAssetsIds(Submission $submission): array
     {
-        $fieldIds = [];
+        $assetIds = [];
+        $uploadFields = $submission->getForm()->getLayout()->getFields(FileUploadInterface::class);
 
-        $fields = $layout->getFields(FileUploadField::class)->getIterator();
-
-        foreach ($fields as $field) {
-            $fieldIds[] = $field->getId();
+        foreach ($uploadFields as $field) {
+            $value = $submission->getFormFieldValue($field);
+            $assetIds = array_merge($assetIds, $value);
         }
 
-        return $fieldIds;
-    }
-
-    private function extractAssetsIds(Submission $submission, array &$assetIds): void
-    {
-        static $uploadFieldIds = null;
-
-        if (null === $uploadFieldIds) {
-            $uploadFieldIds = $this->getUploadFieldIds($submission->getForm()->getLayout());
-        }
-
-        foreach ($uploadFieldIds as $fieldId) {
-            $field = $submission->{'field:'.$fieldId};
-            if (!$field) {
-                continue;
-            }
-
-            $value = $field->getValue();
-            if ($value && !\in_array($value, $assetIds)) {
-                $assetIds = array_merge($assetIds, $value);
-            }
-        }
+        return $assetIds;
     }
 }
