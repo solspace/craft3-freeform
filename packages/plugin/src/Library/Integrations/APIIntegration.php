@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapItem;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Events\Integrations\CrmIntegrations\ProcessValueEvent;
+use Solspace\Freeform\Events\Integrations\ProcessMappingEvent;
 use Solspace\Freeform\Form\Form;
 use yii\base\Event;
 
@@ -40,9 +41,11 @@ abstract class APIIntegration extends BaseIntegration implements APIIntegrationI
             return [];
         }
 
-        $fields = $this->getProcessableFields($category);
+        $event = new ProcessMappingEvent($this, $form, $this->getProcessableFields($category));
+        Event::trigger($this, self::EVENT_BEFORE_PROCESS_MAPPING, $event);
 
-        $keyValueMap = [];
+        $fields = $event->getFields();
+        $keyValueMap = $event->getMappedValues();
         foreach ($mapping as $item) {
             $integrationField = $fields[$item->getSource()] ?? null;
             if (!$integrationField) {
@@ -74,6 +77,9 @@ abstract class APIIntegration extends BaseIntegration implements APIIntegrationI
             $keyValueMap[$key] = $event->getValue();
         }
 
-        return $keyValueMap;
+        $event = new ProcessMappingEvent($this, $form, $fields, $keyValueMap);
+        Event::trigger($this, self::EVENT_AFTER_PROCESS_MAPPING, $event);
+
+        return $event->getMappedValues();
     }
 }

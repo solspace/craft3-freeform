@@ -38,13 +38,17 @@ class FieldObject
 
         if (null !== $options) {
             foreach ($options as $option) {
-                $this->options->add(
-                    new FieldObjectOption(
-                        $option['key'],
-                        $option['label'],
-                        $option['description'] ?? null
-                    )
-                );
+                if ($option instanceof FieldObjectOption) {
+                    $this->options->add($option);
+                } else {
+                    $this->options->add(
+                        new FieldObjectOption(
+                            $option['key'],
+                            $option['label'],
+                            $option['description'] ?? null
+                        )
+                    );
+                }
             }
         }
     }

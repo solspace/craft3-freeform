@@ -10,6 +10,7 @@ class FieldMapItem
 {
     public const TYPE_RELATION = 'relation';
     public const TYPE_CUSTOM = 'custom';
+    public const TYPE_PRESET = 'preset';
 
     public function __construct(
         private string $type,
@@ -39,6 +40,10 @@ class FieldMapItem
             $field = $form->get($this->getValue());
 
             return $field?->getValue();
+        }
+
+        if (self::TYPE_PRESET === $this->getType()) {
+            return $this->getValue();
         }
 
         static $twig;

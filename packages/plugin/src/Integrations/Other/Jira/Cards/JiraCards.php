@@ -3,6 +3,8 @@
 namespace Solspace\Freeform\Integrations\Other\Jira\Cards;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
@@ -11,8 +13,10 @@ use Solspace\Freeform\Attributes\Property\Input\Special\Properties\FieldMappingT
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
 use Solspace\Freeform\Form\Form;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Integrations\Other\Jira\BaseJiraIntegration;
 use Solspace\Freeform\Library\Integrations\DataObjects\FieldObject;
+use Solspace\Freeform\Library\Integrations\DataObjects\FieldObjectOption;
 
 #[Type(
     name: 'Jira',
@@ -25,6 +29,8 @@ class JiraCards extends BaseJiraIntegration
 {
     public const TYPE_JDOC = 'jdoc';
     public const TYPE_NAME_MAP = 'name-map';
+    public const TYPE_ID_MAP = 'id-map';
+    public const TYPE_KEY_MAP = 'key-map';
 
     private const CATEGORY_CARD = 'card';
 
@@ -61,69 +67,137 @@ class JiraCards extends BaseJiraIntegration
 
     public function push(Form $form, Client $client): void
     {
-        $client->post(
+        $mapping = $this->processMapping($form, $this->mapping, self::CATEGORY_CARD);
+        if (!$mapping) {
+            return;
+        }
+
+        $mapping['project'] = ['key' => $this->getProjectKey()];
+
+        $response = $client->post(
             $this->getEndpoint('issue'),
-            [
-                'json' => [
-                    'fields' => [
-                        'project' => [
-                            'key' => $this->getProjectKey(),
-                        ],
-                        'summary' => 'Test issue',
-                        'description' => [
-                            'type' => 'doc',
-                            'version' => 1,
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'content' => [
-                                        [
-                                            'text' => 'This is a test issue',
-                                            'type' => 'text',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'issuetype' => [
-                            'id' => '10120',
-                        ],
-                    ],
-                ],
-            ]
+            ['json' => ['fields' => $mapping]]
         );
+
+        $this->triggerAfterResponseEvent(self::CATEGORY_CARD, $response);
     }
 
     public function fetchFields(string $category, Client $client): array
     {
-        $fields = [];
+        $query = http_build_query([
+            'projectKeys' => $this->getProjectKey(),
+            'expand' => 'projects.issuetypes.fields',
+        ]);
 
-        $fields[] = new FieldObject(
-            'issuetype',
-            'Issue Type',
-            self::TYPE_NAME_MAP,
-            $category,
-            true,
-            $this->getIssueTypeOptions($client)
+        [, $json] = $this->getJsonResponse(
+            $client->get(
+                $this->getEndpoint('issue/createmeta'),
+                ['query' => $query]
+            )
         );
 
-        $fields[] = new FieldObject(
-            'summary',
-            'Summary',
-            FieldObject::TYPE_STqRING,
-            $category,
-            true
-        );
+        $userOptions = $this->getUserOptions($client);
 
-        $fields[] = new FieldObject(
-            'description',
-            'Description',
-            self::TYPE_JDOC,
-            $category,
-            true
-        );
+        $issueTypeOptions = [];
+        if (isset($json->projects[0])) {
+            $project = $json->projects[0];
 
-        return $fields;
+            foreach ($project->issuetypes as $issueType) {
+                $issueTypeOptions[] = [
+                    'key' => $issueType->name,
+                    'label' => $issueType->name,
+                    'description' => $issueType->description,
+                ];
+            }
+        }
+
+        $fields = [
+            'issuetype' => new FieldObject(
+                'issuetype',
+                'Issue Type',
+                self::TYPE_NAME_MAP,
+                $category,
+                true,
+                $issueTypeOptions,
+            ),
+            'parent' => new FieldObject(
+                'parent',
+                'Parent Key',
+                self::TYPE_KEY_MAP,
+                $category,
+                false,
+            ),
+            'summary' => new FieldObject(
+                'summary',
+                'Summary',
+                FieldObject::TYPE_STRING,
+                $category,
+                true,
+            ),
+            'description' => new FieldObject(
+                'description',
+                'Description',
+                self::TYPE_JDOC,
+                $category,
+                false,
+            ),
+            'reporter' => new FieldObject(
+                'reporter',
+                'Reporter',
+                self::TYPE_ID_MAP,
+                $category,
+                false,
+                $userOptions,
+            ),
+            'assignee' => new FieldObject(
+                'assignee',
+                'Assignee',
+                self::TYPE_ID_MAP,
+                $category,
+                false,
+                $userOptions,
+            ),
+            'priority' => new FieldObject(
+                'priority',
+                'Priority',
+                self::TYPE_ID_MAP,
+                $category,
+                false,
+                $this->getPriorityOptions($client),
+            ),
+            'labels' => new FieldObject(
+                'labels',
+                'Labels',
+                FieldObject::TYPE_ARRAY,
+                $category,
+                false,
+            ),
+            'components' => new FieldObject(
+                'components',
+                'Components',
+                FieldObject::TYPE_ARRAY,
+                $category,
+                false,
+                $this->getComponentOptions($client),
+            ),
+            'versions' => new FieldObject(
+                'versions',
+                'Versions',
+                FieldObject::TYPE_ARRAY,
+                $category,
+                false,
+                $this->getVersionOptions($client),
+            ),
+            'duedate' => new FieldObject(
+                'duedate',
+                'Due Date',
+                FieldObject::TYPE_DATE,
+                $category,
+                false,
+            ),
+        ];
+
+        return array_values($fields);
     }
 
     public function populateParameters(Client $client): void
@@ -142,24 +216,105 @@ class JiraCards extends BaseJiraIntegration
 
     protected function getProcessableFields(string $category): array
     {
-        return [];
+        return Freeform::getInstance()->crm->getFields($this, $category);
     }
 
-    private function getIssueTypeOptions(Client $client): array
+    private function getUserOptions(Client $client): array
     {
         [, $json] = $this->getJsonResponse(
-            $client->get($this->getEndpoint('issue/createmeta/'.$this->getProjectKey().'/issuetypes'))
+            $client->get(
+                $this->getEndpoint('user/assignable/multiProjectSearch'),
+                ['query' => ['projectKeys' => $this->getProjectKey()]]
+            )
         );
 
-        $types = [];
-        foreach ($json->issueTypes as $issueType) {
-            $types[] = [
-                'key' => $issueType->id,
-                'label' => $issueType->name,
-                'description' => $issueType->description,
-            ];
-        }
+        return array_map(
+            fn ($user) => new FieldObjectOption(
+                $user->accountId,
+                $user->displayName,
+                'Account ID: '.$user->accountId,
+            ),
+            $json
+        );
+    }
 
-        return $types;
+    private function getComponentOptions(Client $client): array
+    {
+        $components = $this->getPaginatedResults(
+            new Request(
+                'GET',
+                $this->getEndpoint('component?projectIdsOrKeys='.$this->getProjectKey())
+            ),
+            $client
+        );
+
+        return array_map(
+            fn ($component) => new FieldObjectOption(
+                $component->id,
+                $component->name,
+            ),
+            $components
+        );
+    }
+
+    private function getPriorityOptions(Client $client): array
+    {
+        [, $json] = $this->getJsonResponse($client->get($this->getEndpoint('priority')));
+
+        return array_map(
+            fn ($priority) => new FieldObjectOption(
+                $priority->id,
+                $priority->name,
+            ),
+            $json
+        );
+    }
+
+    private function getVersionOptions(Client $client): array
+    {
+        $versions = $this->getPaginatedResults(
+            new Request(
+                'GET',
+                $this->getEndpoint('/project/'.$this->getProjectKey().'/version')
+            ),
+            $client
+        );
+
+        return array_map(
+            fn ($priority) => new FieldObjectOption(
+                $priority->id,
+                $priority->name,
+                $priority->description,
+            ),
+            $versions
+        );
+    }
+
+    private function getPaginatedResults(Request $request, Client $client): array
+    {
+        $results = [];
+        $startAt = 0;
+        $maxResults = 50;
+
+        $baseUrl = $request->getUri();
+
+        do {
+            $uri = new Uri($baseUrl);
+            $query = $uri->getQuery();
+            $queryParts = explode('&', $query);
+            $queryParts[] = 'startAt='.$startAt;
+            $queryParts[] = 'maxResults='.$maxResults;
+
+            $response = $client->send(
+                $request->withUri($uri->withQuery(implode('&', $queryParts)))
+            );
+
+            $json = json_decode((string) $response->getBody(), false);
+            $results = array_merge($results, $json->values);
+
+            $startAt += $maxResults;
+        } while ($startAt < $json->total);
+
+        return $results;
     }
 }

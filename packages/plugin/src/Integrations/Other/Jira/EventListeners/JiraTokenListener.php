@@ -45,6 +45,7 @@ class JiraTokenListener extends FeatureBundle
             'offline_access',
             'write:jira-work',
             'read:jira-work',
+            'read:jira-user',
         ];
 
         // Join scopes with a space delimiter
