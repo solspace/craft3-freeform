@@ -1205,6 +1205,8 @@ return [
     'Map submission data to create Leads in Salesforce.' => 'Übermittlungsdaten zuordnen, um Leads in Salesforce zu erstellen.',
     'Attach Uploaded Files to Leads' => 'Hochgeladene Dateien an Leads anhängen',
     'Send any uploaded files to Salesforce and relate them to the created Lead.' => 'Senden Sie alle hochgeladenen Dateien an Salesforce und verknüpfen Sie sie mit dem erstellten Lead.',
+    'Update Duplicate Leads' => 'Aktualisieren Sie doppelte Leads',
+    'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.' => 'Überprüfen Sie vorhandene Salesforce-Lead-Datensätze auf eine passende E-Mail-Adresse und aktualisieren Sie den Datensatz, anstatt einen neuen zu erstellen.',
     'Assign Lead Owner' => 'Lead-Besitzer zuweisen',
     'Assign a lead owner based on lead owner assignment rules in Salesforce.' => 'Weisen Sie einen Lead-Besitzer basierend auf den Zuweisungsregeln in Salesforce zu.',
     'Convert Leads to Contact Tasks for Returning Customers' => 'Leads in Kontaktaufgaben für wiederkehrende Kunden umwandeln',
