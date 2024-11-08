@@ -342,7 +342,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
         $leadId = null;
         $leadEmail = $mapping['Email'];
-        if ($leadEmail) {
+        if ($this->checkLeadDuplicates && $leadEmail) {
             $existingRecord = $this->querySingle(
                 $client,
                 'SELECT Id FROM Lead WHERE Email = \'%s\' LIMIT 1',
