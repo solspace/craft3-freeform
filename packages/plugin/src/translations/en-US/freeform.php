@@ -1205,6 +1205,8 @@ return [
     'Map submission data to create Leads in Salesforce.' => 'Map submission data to create Leads in Salesforce.',
     'Attach Uploaded Files to Leads' => 'Attach Uploaded Files to Leads',
     'Send any uploaded files to Salesforce and relate them to the created Lead.' => 'Send any uploaded files to Salesforce and relate them to the created Lead.',
+    'Update Duplicate Leads' => 'Update Duplicate Leads',
+    'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.' => 'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.',
     'Assign Lead Owner' => 'Assign Lead Owner',
     'Assign a lead owner based on lead owner assignment rules in Salesforce.' => 'Assign a lead owner based on lead owner assignment rules in Salesforce.',
     'Convert Leads to Contact Tasks for Returning Customers' => 'Convert Leads to Contact Tasks for Returning Customers',
