@@ -58,8 +58,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('values.mapLeads')]
     #[Input\Boolean(
-        label: 'Check for Lead duplicates',
-        instructions: 'Check for Lead duplicates using the email address field, and update found Lead data instead of creating a new one.',
+        label: 'Update Duplicate Leads',
+        instructions: 'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.',
         order: 5,
     )]
     protected bool $checkLeadDuplicates = false;
