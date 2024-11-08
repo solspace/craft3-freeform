@@ -1205,6 +1205,8 @@ return [
     'Map submission data to create Leads in Salesforce.' => 'Mapper les données soumises pour créer des Pistes dans Salesforce.',
     'Attach Uploaded Files to Leads' => 'Joindre les fichiers téléchargés aux Pistes',
     'Send any uploaded files to Salesforce and relate them to the created Lead.' => 'Envoyer les fichiers téléchargés à Salesforce et les associer au Piste créé.',
+    'Update Duplicate Leads' => 'Mettre à jour les Pistes en double',
+    'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.' => 'Vérifiez les enregistrements Salesforce Piste existants pour une adresse e-mail correspondante et mettez à jour l’enregistrement au lieu d’en créer un nouveau.',
     'Assign Lead Owner' => 'Attribuer un propriétaire de Piste',
     'Assign a lead owner based on lead owner assignment rules in Salesforce.' => 'Attribuer un propriétaire de Piste selon les règles d’attribution des propriétaires dans Salesforce.',
     'Convert Leads to Contact Tasks for Returning Customers' => 'Convertir les Pistes en tâches de Contact pour les clients récurrents',
