@@ -177,9 +177,9 @@ class MailerService extends BaseService implements MailHandlerInterface
 
                 $this->notifyAboutEmailSendingError($emailAddress, $notificationTemplate, $exception, $form);
             }
-
-            \Craft::$app->view->setTemplateMode($templateMode);
         }
+
+        \Craft::$app->view->setTemplateMode($templateMode);
 
         return $sentMailCount;
     }
