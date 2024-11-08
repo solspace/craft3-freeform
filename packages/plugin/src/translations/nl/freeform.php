@@ -1205,6 +1205,8 @@ return [
     'Map submission data to create Leads in Salesforce.' => 'Koppel ingediende gegevens om Leads in Salesforce te creëren.',
     'Attach Uploaded Files to Leads' => 'Geüploade bestanden koppelen aan Leads',
     'Send any uploaded files to Salesforce and relate them to the created Lead.' => 'Stuur geüploade bestanden naar Salesforce en koppel ze aan de aangemaakte Lead.',
+    'Update Duplicate Leads' => 'Update dubbele Leads',
+    'Check existing Salesforce Lead records for a matching email address and update the record instead of creating a new one.' => 'Controleer bestaande Salesforce Lead-records op een overeenkomend e-mailadres en werk de record bij in plaats van een nieuwe te maken.',
     'Assign Lead Owner' => 'Wijs een Lead-eigenaar toe',
     'Assign a lead owner based on lead owner assignment rules in Salesforce.' => 'Wijs een Lead-eigenaar toe op basis van de toewijzingsregels voor Lead-eigenaren in Salesforce.',
     'Convert Leads to Contact Tasks for Returning Customers' => 'Converteer Leads naar Contacttaken voor terugkerende klanten',
