@@ -20,7 +20,7 @@ abstract class BaseJiraIntegration extends CRMIntegration implements JiraIntegra
     #[Flag(self::FLAG_GLOBAL_PROPERTY)]
     #[Input\Text(
         label: 'Instance URL',
-        instructions: 'Enter your Jira instance URL (Optional). If you do not enter a value, the first available resource URL is going to be used.',
+        instructions: 'Enter your Jira instance URL (optional). If you do not enter a value, the first available resource URL is going to be used.',
         placeholder: 'your-instance.atlassian.net',
     )]
     protected string $instanceUrl = '';

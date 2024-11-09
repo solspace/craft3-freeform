@@ -1199,6 +1199,12 @@ return [
     'Enable this if your Zoho account is in Sandbox mode (connects to "sandbox.zohoapis.{domain}" instead of "www.zohoapis.com" or "www.zohoapis.{domain}").' => 'Schakel dit in als uw Zoho-account zich in de Sandbox-modus bevindt (verbindt met "sandbox.zohoapis.{domain}" in plaats van "www.zohoapis.com" of "www.zohoapis.{domain}").',
     'Developer Mode' => 'Ontwikkelaarsmodus',
     'Enable this if your Zoho account is in Developer mode (connects to "developer.zohoapis.{domain}" instead of "www.zohoapis.com", "www.zohoapis.{domain}" or "sandbox.zohoapis.{domain}").' => 'Schakel dit in als uw Zoho-account zich in de ontwikkelaarsmodus bevindt (verbinding maakt met "developer.zohoapis.{domain}" in plaats van "www.zohoapis.com", "www.zohoapis.{domain}" of "sandbox.zohoapis.{domein}").',
+    'Instance URL' => 'Instantie-URL',
+    'Enter your Jira instance URL (optional). If you do not enter a value, the first available resource URL is going to be used.' => 'Voer uw Jira-instantie-URL in (optioneel). Als u geen waarde invoert, wordt de eerste beschikbare bron-URL gebruikt.',
+    'Project Key' => 'Projectsleutel',
+    'Enter the project key for the Jira project you want to interact with. If left empty, it will be auto-populated with the first available project key of your account.' => 'Voer de projectsleutel in van het Jira-project waarmee u wilt communiceren. Als u dit leeg laat, wordt het automatisch ingevuld met de eerste beschikbare projectsleutel van uw account.',
+    'Mapping' > 'In kaart brengen',
+    'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Selecteer de Freeform-velden die moeten worden toegewezen aan de toepasselijke Jira Issue-velden.',
 
     // Integrations // CRM // Salesforce
     'Map to Leads' => 'Koppel aan Leads',
@@ -1215,7 +1221,7 @@ return [
     'Enter the text you would like to have set for new Task subjects.' => 'Voer de tekst in die je wilt instellen voor nieuwe Taak-onderwerpen.',
     'Task Due Date' => 'Taak Vervaldatum',
     "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days')." => "Voer een relatieve tekstuele datumreeks in voor de Vervaldatum van de nieuw aangemaakte Taak (bijv. '2 dagen').",
-    'Lead Mapping' => 'Lead Mapping',
+    'Lead Mapping' => 'Lead in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Lead-velden.',
     'Map to Opportunities' => 'Koppel aan Opportunities',
     'Map submission data to create Opportunities in Salesforce.' => 'Koppel ingediende gegevens om Opportunities in Salesforce te creëren.',
@@ -1225,7 +1231,7 @@ return [
     "Enter a relative textual date string for the Close Date of the newly created Opportunity (e.g. '7 days')." => "Voer een relatieve tekstuele datumreeks in voor de Sluitingsdatum van de nieuw aangemaakte Opportunity (bijv. '7 dagen').",
     'Stage Name' => 'Stadium Naam',
     "Enter the Stage Name the newly created Opportunity should be assigned to (e.g. 'Prospecting')." => "Voer de Stadium Naam in waaraan de nieuw aangemaakte Opportunity moet worden toegewezen (bijv. 'Prospecting').",
-    'Opportunity Mapping' => 'Opportunity Mapping',
+    'Opportunity Mapping' => 'Opportunity in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Opportunity-velden.',
     'Map to Accounts' => 'Koppel aan Accounts',
     'Map submission data to create Accounts in Salesforce.' => 'Koppel ingediende gegevens om Accounts in Salesforce te creëren.',
@@ -1233,7 +1239,7 @@ return [
     'Send any uploaded files to Salesforce and relate them to the created Account.' => 'Stuur geüploade bestanden naar Salesforce en koppel ze aan het aangemaakte Account.',
     'Append Checkboxes field values on Account update' => 'Checkbox-veldwaarden toevoegen bij Account-update',
     'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.' => 'Als er al een Account bestaat in Salesforce, zal het inschakelen van deze optie extra Checkbox-veldwaarden toevoegen aan het Account in Salesforce in plaats van de bestaande opties te vervangen.',
-    'Account Mapping' => 'Account Mapping',
+    'Account Mapping' => 'Account in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Account-velden.',
     'Map to Contacts' => 'Koppel aan Contacten',
     'Map submission data to create Contacts in Salesforce.' => 'Koppel ingediende gegevens om Contacten in Salesforce te creëren.',
@@ -1243,7 +1249,7 @@ return [
     "By default, Freeform checks the Contact's first name, last name, email address, and Account name. If enabled, it will check only the Contact's email address and the Account's website. If no website is provided, Freeform will use the domain from the Contact's email address." => 'Standaard controleert Freeform de voornaam, achternaam, het e-mailadres van het Contact en de Accountnaam. Indien ingeschakeld, wordt alleen het e-mailadres van het Contact en de website van het Account gecontroleerd. Als er geen website is opgegeven, gebruikt Freeform het domein van het e-mailadres van het Contact.',
     'Append Checkboxes field values on Contact update' => 'Checkbox-veldwaarden toevoegen bij Contact-update',
     'If a Contact already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Contact in Salesforce instead of replacing the existing options.' => 'Als er al een Contact bestaat in Salesforce, zal het inschakelen van deze optie extra Checkbox-veldwaarden toevoegen aan het Contact in Salesforce in plaats van de bestaande opties te vervangen.',
-    'Contact Mapping' => 'Contact Mapping',
+    'Contact Mapping' => 'Contact in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Contact fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Contact-velden.',
 
     // Integrations // Captchas

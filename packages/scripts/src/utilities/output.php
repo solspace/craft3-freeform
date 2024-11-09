@@ -10,6 +10,7 @@ return [
   'Insert Field' => 'Insert Field',
   'Click to edit data' => 'Click to edit data',
   'Not configured yet' => 'Not configured yet',
+  'Mapping' => 'Mapping',
   'Are you sure? You might potentially lose important data.' => 'Are you sure? You might potentially lose important data.',
   'Do not map this field' => 'Do not map this field',
   'No data present' => 'No data present',
