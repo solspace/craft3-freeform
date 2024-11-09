@@ -5,12 +5,12 @@
 ### Added
 - Added support for site-aware translatable forms inside the form builder (Pro).
 - Added PDF Templates that can be dynamically generated and attached to submission notifications (Pro).
-- Added the ability to designate in your template where to render a visible captcha.
+- Added the ability to designate where to render a visible captcha in your template.
 - Added a **Jira Cards** integration (Pro).
 - Added the ability to set custom error messages for **Required** validation on fields.
 - Added support for overwriting existing Salesforce Lead records if the email address matches.
-- Added a fallback formatting template for forms that have a missing or invalid formatting template configured.
-- Added a check for `asyncCsrfInputs` in the Diagnostics page.
+- Added a fallback formatting template for forms with a missing or invalid formatting template configured.
+- Added a check for `asyncCsrfInputs` on the Diagnostics page.
 
 ### Fixed
 - Fixed a bug where associated assets were not removed when submissions were deleted in the control panel or via the Submission Purge feature.
