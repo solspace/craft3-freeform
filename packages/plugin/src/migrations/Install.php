@@ -113,6 +113,7 @@ class Install extends StreamlinedInstallMigration
 
             (new Table('freeform_notification_templates'))
                 ->addField('id', $this->primaryKey())
+                ->addField('pdfTemplateIds', $this->text())
                 ->addField('name', $this->string(255)->notNull())
                 ->addField('handle', $this->string(255)->notNull()->unique())
                 ->addField('subject', $this->string(255)->notNull())
@@ -399,6 +400,23 @@ class Install extends StreamlinedInstallMigration
                 ->addField('order', $this->integer()->notNull())
                 ->addForeignKey('groupId', 'freeform_forms_groups', 'id', ForeignKey::CASCADE)
                 ->addForeignKey('formId', 'freeform_forms', 'id', ForeignKey::CASCADE),
+
+            (new Table('freeform_forms_translations'))
+                ->addField('id', $this->primaryKey())
+                ->addField('formId', $this->integer()->notNull())
+                ->addField('siteId', $this->integer()->notNull())
+                ->addField('translations', $this->longText()->notNull())
+                ->addIndex(['formId', 'siteId'], true)
+                ->addForeignKey('formId', 'freeform_forms', 'id', ForeignKey::CASCADE)
+                ->addForeignKey('siteId', 'sites', 'id', ForeignKey::CASCADE),
+
+            (new Table('freeform_pdf_templates'))
+                ->addField('id', $this->primaryKey())
+                ->addField('name', $this->string(255)->notNull())
+                ->addField('description', $this->text())
+                ->addField('fileName', $this->text()->notNull())
+                ->addField('body', $this->longText()->notNull())
+                ->addField('sortOrder', $this->integer()->notNull()->defaultValue(0)),
         ];
     }
 

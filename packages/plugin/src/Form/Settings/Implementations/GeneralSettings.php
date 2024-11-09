@@ -9,6 +9,7 @@ use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Limitation;
 use Solspace\Freeform\Attributes\Property\Middleware;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\Validators;
 use Solspace\Freeform\Attributes\Property\ValueGenerator;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
@@ -34,6 +35,7 @@ class GeneralSettings extends SettingsNamespace
     private const SECTION_GENERAL = 'general';
     private const SECTION_DATA_STORAGE = 'data-storage';
 
+    #[Translatable]
     #[Section(
         self::SECTION_GENERAL,
         label: 'General',
@@ -93,12 +95,22 @@ class GeneralSettings extends SettingsNamespace
     public array $sites = [];
 
     #[Section(self::SECTION_GENERAL)]
+    #[Limitation('settings.tab.general.translations')]
+    #[VisibilityFilter('Boolean(context.config.sites.enabled)')]
+    #[Input\Boolean(
+        label: 'Translatable',
+        instructions: 'Enable translations per site for this form.',
+        order: 5,
+    )]
+    public bool $translations = false;
+
+    #[Section(self::SECTION_GENERAL)]
     #[Limitation('settings.tab.general.submissionTitle')]
     #[Validators\Required]
     #[DefaultValue('settings.general.submissionTitle')]
     #[Input\Text(
         instructions: 'How the titles of submissions should be auto-generated for this form.',
-        order: 4,
+        order: 6,
     )]
     public ?string $submissionTitle = null;
 
@@ -110,16 +122,17 @@ class GeneralSettings extends SettingsNamespace
     #[Input\Select(
         label: 'Formatting Template',
         instructions: 'Select a formatting template to be used when rendering this form.',
-        order: 5,
+        order: 7,
         options: FormattingTemplateOptions::class,
     )]
     public ?string $formattingTemplate = null;
 
+    #[Translatable]
     #[Section(self::SECTION_GENERAL)]
     #[Input\Textarea(
         label: 'Form Description',
         instructions: 'Enter a description or notes for this form.',
-        order: 6,
+        order: 8,
     )]
     public string $description = '';
 
@@ -128,7 +141,7 @@ class GeneralSettings extends SettingsNamespace
     #[Input\ColorPicker(
         label: 'Form Color',
         instructions: 'Choose a color for this form (generally used in the control panel).',
-        order: 7,
+        order: 9,
     )]
     public string $color = '';
 

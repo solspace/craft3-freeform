@@ -53,6 +53,7 @@ class PermissionsBundle extends FeatureBundle
             $this->getSubmissionPermissions($readPermissions, $managePermissions),
             $this->getFormPermissions($formPermissions),
             $this->getNotificationPermissions(),
+            $this->getPdfTemplatePermissions(),
             $this->getExportPermissions(),
             $this->getSettingsPermissions(),
             $this->getLimitedUsersPermissions(),
@@ -124,6 +125,22 @@ class PermissionsBundle extends FeatureBundle
                     Freeform::PERMISSION_NOTIFICATIONS_MANAGE => [
                         'label' => Freeform::t(
                             'Manage Email Templates'
+                        ),
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function getPdfTemplatePermissions(): array
+    {
+        return [
+            Freeform::PERMISSION_PDF_TEMPLATES_ACCESS => [
+                'label' => Freeform::t('Access PDF Templates'),
+                'nested' => [
+                    Freeform::PERMISSION_PDF_TEMPLATES_MANAGE => [
+                        'label' => Freeform::t(
+                            'Manage PDF Templates'
                         ),
                     ],
                 ],

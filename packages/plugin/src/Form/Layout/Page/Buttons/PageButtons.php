@@ -9,8 +9,10 @@ use Solspace\Freeform\Attributes\Property\Implementations\NotificationTemplates\
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Limitation;
 use Solspace\Freeform\Attributes\Property\Section;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\ValueTransformer;
 use Solspace\Freeform\Attributes\Property\VisibilityFilter;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Events\Fields\CompileButtonAttributesEvent;
 use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Interfaces\RecipientInterface;
@@ -67,6 +69,7 @@ class PageButtons
     )]
     private string $layout;
 
+    #[Translatable]
     #[Section(
         handle: 'submit',
         label: 'Submit',
@@ -83,6 +86,7 @@ class PageButtons
     #[Input\Boolean('Enable Back Button')]
     private bool $back = false;
 
+    #[Translatable]
     #[Section('back')]
     #[VisibilityFilter('Boolean(buttons.back)')]
     #[Input\Text('Label', placeholder: 'Back')]
@@ -97,6 +101,7 @@ class PageButtons
     #[Input\Boolean('Enable Save Button')]
     private bool $save = false;
 
+    #[Translatable]
     #[Section('save')]
     #[Limitation('layout.buttons')]
     #[VisibilityFilter('Boolean(buttons.save)')]
@@ -179,8 +184,11 @@ class PageButtons
     )]
     private ButtonAttributesCollection $attributes;
 
-    public function __construct(private Page $page, array $config)
-    {
+    public function __construct(
+        private Page $page,
+        private TranslationProvider $translationProvider,
+        array $config
+    ) {
         $this->layout = $config['layout'] ?? 'save back|submit';
         $this->attributes = new ButtonAttributesCollection($config['attributes'] ?? []);
     }
@@ -222,7 +230,7 @@ class PageButtons
 
     public function getSubmitLabel(): string
     {
-        return $this->submitLabel;
+        return $this->translate('submitLabel', $this->submitLabel);
     }
 
     public function isBack(): bool
@@ -232,7 +240,7 @@ class PageButtons
 
     public function getBackLabel(): string
     {
-        return $this->backLabel;
+        return $this->translate('backLabel', $this->backLabel);
     }
 
     public function isSave(): bool
@@ -242,7 +250,7 @@ class PageButtons
 
     public function getSaveLabel(): string
     {
-        return $this->saveLabel;
+        return $this->translate('saveLabel', $this->saveLabel);
     }
 
     public function getSaveRedirectUrl(): string
@@ -338,5 +346,18 @@ class PageButtons
             )
             .'</button>'
         );
+    }
+
+    protected function translate(?string $handle, mixed $defaultValue = null): mixed
+    {
+        return $this
+            ->translationProvider
+            ->getTranslation(
+                $this->getPage(),
+                $this->getPage()->getUid(),
+                $handle,
+                $defaultValue
+            )
+        ;
     }
 }

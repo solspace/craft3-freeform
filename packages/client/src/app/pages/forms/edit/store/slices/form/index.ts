@@ -38,7 +38,10 @@ export const formSlice = createSlice({
       if (Object.entries(state.settings).length > 0) return;
 
       for (const namespace of action.payload) {
-        state.settings[namespace.handle] = {};
+        state.settings[namespace.handle] = {
+          namespaceType: 'settings',
+          namespace: namespace.handle,
+        };
         for (const property of namespace.properties) {
           state.settings[namespace.handle][property.handle] = property.value;
         }
@@ -51,7 +54,10 @@ export const formSlice = createSlice({
       const { namespace, key, value } = payload;
 
       if (!state.settings[namespace]) {
-        state.settings[namespace] = {};
+        state.settings[namespace] = {
+          namespaceType: 'settings',
+          namespace: namespace,
+        };
       }
 
       state.settings[namespace][key] = value;

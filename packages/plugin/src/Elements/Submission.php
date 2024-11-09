@@ -86,6 +86,10 @@ class Submission extends Element
 
     public function __get($name): mixed
     {
+        if (empty($name)) {
+            return null;
+        }
+
         $gettingByFieldMarker = false;
         if (preg_match('/^field:(\d+)$/', $name, $matches)) {
             $gettingByFieldMarker = true;
@@ -358,6 +362,11 @@ class Submission extends Element
         }
 
         return $assets;
+    }
+
+    public function getFormFieldValue(FieldInterface $field): mixed
+    {
+        return $this->fieldCollection->get($field)?->getValue();
     }
 
     public function getFormFieldValues(): array

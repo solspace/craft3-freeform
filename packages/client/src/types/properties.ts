@@ -73,6 +73,7 @@ type BaseProperty<T, PT extends PropertyType> = {
   order?: number;
   width?: number;
   disabled?: boolean;
+  translatable?: boolean;
   flags?: string[];
   messages?: Message[];
   visible?: boolean;

@@ -78,7 +78,7 @@ class TextField extends AbstractField implements PlaceholderInterface, DefaultVa
             ->setIfEmpty('name', $this->getHandle())
             ->setIfEmpty('type', $this->customInputType ?? 'text')
             ->setIfEmpty('id', $this->getIdAttribute())
-            ->setIfEmpty('placeholder', $this->translate($this->getPlaceholder()))
+            ->setIfEmpty('placeholder', $this->translate('placeholder', $this->getPlaceholder()))
             ->setIfEmpty('value', $this->getValue())
         ;
 

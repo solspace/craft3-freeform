@@ -241,6 +241,7 @@ class SettingsService extends BaseService
             'form-builder' => ['title' => Freeform::t('Form Builder')],
             'limited-users' => ['title' => Freeform::t('Limited Users')],
             'template-manager' => ['title' => Freeform::t('Template Manager')],
+            'pdf-templates' => ['title' => Freeform::t('PDF Templates')],
             'statuses' => ['title' => Freeform::t('Statuses')],
             'demo-templates' => ['title' => Freeform::t('Demo Templates')],
             'spam' => ['title' => Freeform::t('Spam Protection')],
@@ -292,6 +293,7 @@ class SettingsService extends BaseService
         $nonSettingSections = [
             'limited-users',
             'statuses',
+            'pdf-templates',
             'error-log',
             'diagnostics',
             'integrations/email-marketing',

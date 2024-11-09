@@ -7,6 +7,7 @@ use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Models\Settings;
 use Solspace\Freeform\Records\NotificationTemplateRecord;
+use Solspace\Freeform\Records\PdfTemplateRecord;
 use Solspace\Freeform\Resources\Bundles\NotificationEditorBundle;
 use Solspace\Freeform\Services\Notifications\NotificationsServiceInterface;
 use yii\web\Response;
@@ -25,6 +26,7 @@ abstract class AbstractNotificationsController extends BaseController
         $notificationId = $post['notificationId'] ?? null;
         $notification = $this->getService()->getById($notificationId) ?? NotificationTemplateRecord::create();
 
+        $notification->pdfTemplateIds = $request->post('pdfTemplateIds');
         $notification->name = $request->post('name');
         $notification->handle = $request->post('handle');
         $notification->description = $request->post('description');
@@ -126,11 +128,19 @@ abstract class AbstractNotificationsController extends BaseController
             }
         }
 
+        $pdfTemplates = PdfTemplateRecord::find()
+            ->select('name')
+            ->orderBy('sortOrder')
+            ->indexBy('id')
+            ->column()
+        ;
+
         $variables = [
             'notification' => $record,
             'title' => $title,
             'type' => $this->getType(),
             'showPresetAssets' => $showPresetAssets,
+            'pdfTemplateOptions' => $pdfTemplates,
         ];
 
         return $this->renderTemplate('freeform/notifications/edit', $variables);

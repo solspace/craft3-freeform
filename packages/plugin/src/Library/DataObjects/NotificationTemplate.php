@@ -12,11 +12,13 @@
 
 namespace Solspace\Freeform\Library\DataObjects;
 
+use craft\web\View;
 use Solspace\Freeform\Library\Exceptions\DataObjects\EmailTemplateException;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 use Solspace\Freeform\Library\Helpers\TwigHelper;
 use Solspace\Freeform\Library\Serialization\Normalizers\IdentificatorInterface;
 use Solspace\Freeform\Records\NotificationTemplateRecord;
+use Solspace\Freeform\Records\PdfTemplateRecord;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 class NotificationTemplate implements IdentificatorInterface
@@ -24,6 +26,7 @@ class NotificationTemplate implements IdentificatorInterface
     public const METADATA_PATTERN = '/{#\s*__KEY__:\s*(.*)#}/';
 
     private int|string $id;
+    private array $pdfTemplateIds = [];
     private string $uid;
 
     private string $name;
@@ -52,6 +55,7 @@ class NotificationTemplate implements IdentificatorInterface
 
         $template->id = $record->id ?? $record->filepath;
         $template->uid = $record->uid ?? $record->filepath;
+        $template->pdfTemplateIds = $record->getPdfTemplateIds();
         $template->handle = $record->handle;
         $template->name = $record->name;
         $template->description = $record->description;
@@ -126,6 +130,23 @@ class NotificationTemplate implements IdentificatorInterface
             }
         }
 
+        $pdfTemplateIds = $template->getMetadata('pdfTemplates');
+        if ($pdfTemplateIds) {
+            $isTwigValue = TwigHelper::isTwigValue($pdfTemplateIds);
+            $idArrayString = $pdfTemplateIds;
+            if ($isTwigValue) {
+                $idArrayString = \Craft::$app->view->renderString(
+                    $pdfTemplateIds,
+                    templateMode: View::TEMPLATE_MODE_CP
+                );
+            }
+
+            $idArrayString = trim($idArrayString);
+            if ('' !== $idArrayString) {
+                $template->pdfTemplateIds = StringHelper::extractSeparatedValues($idArrayString);
+            }
+        }
+
         return $template;
     }
 
@@ -149,6 +170,23 @@ class NotificationTemplate implements IdentificatorInterface
     public function getUid(): string
     {
         return $this->uid;
+    }
+
+    public function getPdfTemplateIds(): array
+    {
+        return $this->pdfTemplateIds;
+    }
+
+    /**
+     * @return PdfTemplateRecord[]
+     */
+    public function getPdfTemplateRecords(): array
+    {
+        if (!$this->pdfTemplateIds) {
+            return [];
+        }
+
+        return PdfTemplateRecord::findAll(['id' => $this->pdfTemplateIds]);
     }
 
     public function getNormalizeIdentificator(): null|int|string

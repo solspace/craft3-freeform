@@ -1,5 +1,22 @@
 # Solspace Freeform Changelog
 
+## 5.7.0 - Unreleased
+
+### Added
+- Added support for site-aware translatable forms inside the form builder (Pro).
+- Added PDF Templates that can be dynamically generated and attached to submission notifications (Pro).
+- Added the ability to designate where to render a visible captcha in your template.
+- Added a **Jira Cards** integration (Pro).
+- Added the ability to set custom error messages for **Required** validation on fields.
+- Added support for overwriting existing Salesforce Lead records if the email address matches.
+- Added a fallback formatting template for forms with a missing or invalid formatting template configured.
+- Added a check for `asyncCsrfInputs` on the Diagnostics page.
+
+### Fixed
+- Fixed a bug where associated assets were not removed when submissions were deleted in the control panel or via the Submission Purge feature.
+- Fixed a bug where the mailer service was resetting template mode too early.
+- Fixed a bug where there could be a possible infinite loop in the Submission element.
+
 ## 5.6.8 - 2024-10-25
 
 ### Fixed
@@ -143,7 +160,7 @@
 - Changed Freeform so it does not set `noCache` headers on every request. Includes support for Craft's `asyncCsrfInputs` feature.
 
 ### Fixed
-- Fixed a bug where the `site` parameter would lose track of the active site on nav links in the control panel when using the multi-site feature. For this to work correctly, you must enable the **Site Filtering for Forms and Submissions** setting.
+- Fixed a bug where the `site` parameter would lose track of the active site on nav links in the control panel when using the multi-site feature. For this to work correctly, you must enable the **Site-Aware Forms** setting.
 - Fixed a bug where Freeform scripts were being attached to non-Freeform forms.
 
 ## 5.5.6 - 2024-08-10

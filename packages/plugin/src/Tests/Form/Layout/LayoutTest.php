@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Tests\Form\Layout;
 
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Form\Layout\FormLayout;
 use Solspace\Freeform\Form\Layout\Layout;
@@ -17,20 +18,28 @@ use Solspace\Freeform\Form\Layout\Page;
 class LayoutTest extends TestCase
 {
     private PropertyProvider $propertyProvider;
+    private TranslationProvider $translationProvider;
     private Form $formMock;
 
     protected function setUp(): void
     {
         $this->propertyProvider = $this->createMock(PropertyProvider::class);
+        $this->translationProvider = $this->createMock(TranslationProvider::class);
         $this->formMock = $this->createMock(Form::class);
+
+        $this
+            ->translationProvider
+            ->method('getTranslation')
+            ->willReturnArgument(3)
+        ;
     }
 
     public function testIteratePages()
     {
         $layout = new FormLayout();
         $layout->getPages()
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page One']))
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page Two']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page One']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page Two']))
         ;
 
         $labels = [];
@@ -45,8 +54,8 @@ class LayoutTest extends TestCase
     {
         $layout = new FormLayout();
         $layout->getPages()
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page One']))
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page Two']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page One']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page Two']))
         ;
 
         $this->assertCount(2, $layout);
@@ -56,8 +65,8 @@ class LayoutTest extends TestCase
     {
         $layout = new FormLayout();
         $layout->getPages()
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page One']))
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page Two']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page One']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page Two']))
         ;
 
         $this->assertSame('Page One', $layout->getPages()->getByIndex(0)->getLabel());
@@ -68,8 +77,8 @@ class LayoutTest extends TestCase
     {
         $layout = new FormLayout();
         $layout->getPages()
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page One']))
-            ->add(new Page($this->formMock, $this->propertyProvider, new Layout(), ['label' => 'Page Two']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page One']))
+            ->add(new Page($this->formMock, $this->propertyProvider, $this->translationProvider, new Layout(), ['uid' => 'one', 'label' => 'Page Two']))
         ;
 
         $buttons = $layout->getPages()->getByIndex(0)->getButtons();

@@ -19,6 +19,7 @@ use craft\helpers\App;
 use craft\helpers\Template;
 use craft\web\View;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Forms\CollectScriptsEvent;
 use Solspace\Freeform\Events\Forms\DeleteEvent;
@@ -43,6 +44,8 @@ use yii\base\InvalidConfigException;
 
 class FormsService extends BaseService implements FormHandlerInterface
 {
+    private const FALLBACK_TEMPLATE = 'flexbox/index.twig';
+
     /** @var Form[] */
     private static array $formsById = [];
 
@@ -53,8 +56,11 @@ class FormsService extends BaseService implements FormHandlerInterface
 
     private static array $spamCountIncrementedForms = [];
 
-    public function __construct(?array $config, private PropertyProvider $propertyProvider)
-    {
+    public function __construct(
+        ?array $config,
+        private PropertyProvider $propertyProvider,
+        private TranslationProvider $translationProvider,
+    ) {
         parent::__construct($config);
     }
 
@@ -372,12 +378,12 @@ class FormsService extends BaseService implements FormHandlerInterface
         $customTemplates = $settings->getCustomFormTemplates();
         $solspaceTemplates = $settings->getSolspaceFormTemplates();
 
+        $fallback = null;
         $templateMode = View::TEMPLATE_MODE_SITE;
         $templatePath = null;
         foreach ($customTemplates as $template) {
             if (str_ends_with($template->getFilePath(), $templateName)) {
                 $templatePath = $template->getFilePath();
-                //  $templatePath = str_replace(\Craft::getAlias('@templates'), '', $templatePath);
 
                 break;
             }
@@ -385,10 +391,12 @@ class FormsService extends BaseService implements FormHandlerInterface
 
         if (!$templatePath) {
             foreach ($solspaceTemplates as $template) {
+                if (self::FALLBACK_TEMPLATE === $template->getFileName()) {
+                    $fallback = $template;
+                }
+
                 if (str_ends_with($template->getFilePath(), $templateName)) {
                     $templatePath = $template->getFilePath();
-                    //  $templatePath = str_replace(\Craft::getAlias('@freeform/templates'), '', $templatePath);
-                    //  $templatePath = 'freeform'.$templatePath;
                     $templateMode = View::TEMPLATE_MODE_CP;
 
                     break;
@@ -396,18 +404,25 @@ class FormsService extends BaseService implements FormHandlerInterface
             }
         }
 
-        // if (null === $templatePath) {
         if (null === $templatePath || !file_exists($templatePath)) {
-            throw new FreeformException(
-                Freeform::t(
-                    "Form template '{name}' not found",
-                    ['name' => $templateName]
+            $templatePath = $fallback?->getFilePath();
+            $templateMode = View::TEMPLATE_MODE_CP;
+
+            Freeform::getInstance()
+                ->logger
+                ->getLogger('templates')
+                ->warning(
+                    \sprintf(
+                        "Form template '%s' not found for form #%d '%s'. Using fallback template '%s'",
+                        $templateName,
+                        $form->getId(),
+                        $form->getName(),
+                        $fallback?->getFileName() ?? self::FALLBACK_TEMPLATE,
+                    )
                 )
-            );
+            ;
         }
 
-        //  $output = \Craft::$app->view->renderTemplate(
-        //      $templatePath,
         $output = \Craft::$app->view->renderString(
             file_get_contents($templatePath),
             ['form' => $form],
@@ -664,6 +679,7 @@ class FormsService extends BaseService implements FormHandlerInterface
             $data,
             $settings,
             new PropertyAccessor(),
+            $this->translationProvider,
         );
     }
 

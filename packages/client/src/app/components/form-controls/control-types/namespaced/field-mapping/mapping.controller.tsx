@@ -1,4 +1,5 @@
 import React from 'react';
+import { Dropdown } from '@components/elements/custom-dropdown/dropdown';
 import { HelpText } from '@components/elements/help-text';
 import {
   type FieldMapping,
@@ -8,6 +9,7 @@ import classes from '@ff-client/utils/classes';
 import translate from '@ff-client/utils/translations';
 
 import CustomIcon from './icons/custom.svg';
+import ListIcon from './icons/list.svg';
 import RelationIcon from './icons/relation.svg';
 import { FieldSelect } from './field-select';
 import {
@@ -67,6 +69,18 @@ export const FieldMappingController: React.FC<Props> = ({
             </SourceField>
 
             <TypeButtonGroup>
+              {source.options?.length > 0 && (
+                <TypeButton
+                  title={translate('Pre-defined options')}
+                  className={classes(
+                    map.type === TargetFieldType.Preset && 'active'
+                  )}
+                  onClick={() => update(source.id, TargetFieldType.Preset)}
+                >
+                  <ListIcon />
+                </TypeButton>
+              )}
+
               <TypeButton
                 title={translate('Twig code')}
                 className={classes(
@@ -76,6 +90,7 @@ export const FieldMappingController: React.FC<Props> = ({
               >
                 <CustomIcon />
               </TypeButton>
+
               <TypeButton
                 title={translate('Freeform field')}
                 className={classes(
@@ -88,6 +103,20 @@ export const FieldMappingController: React.FC<Props> = ({
             </TypeButtonGroup>
 
             <div>
+              {map.type === TargetFieldType.Preset && (
+                <Dropdown
+                  value={map?.value}
+                  emptyOption={translate('Select an option')}
+                  onChange={(fieldUid) => {
+                    update(source.id, TargetFieldType.Preset, fieldUid);
+                  }}
+                  options={source.options.map((opt) => ({
+                    value: opt.key,
+                    label: opt.label,
+                  }))}
+                />
+              )}
+
               {map.type === TargetFieldType.Relation && (
                 <FieldSelect
                   value={map?.value}

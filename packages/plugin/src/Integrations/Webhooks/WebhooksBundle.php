@@ -63,7 +63,7 @@ class WebhooksBundle extends FeatureBundle
             try {
                 $webhook->trigger($form);
             } catch (\Exception $exception) {
-                $event = new FailedRequestEvent($webhook, $exception);
+                $event = new FailedRequestEvent($form, $webhook, $exception);
                 Event::trigger(
                     IntegrationInterface::class,
                     IntegrationInterface::EVENT_ON_FAILED_REQUEST,

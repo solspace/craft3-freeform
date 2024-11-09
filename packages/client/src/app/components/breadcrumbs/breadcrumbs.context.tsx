@@ -83,7 +83,7 @@ export const BreadcrumbProvider: React.FC<PropsWithChildren> = ({
     <BreadcrumbContext.Provider value={{ stack, push, pop, update }}>
       {children}
       {createPortal(
-        <nav aria-label="Breadcrumbs">
+        <nav aria-label="Breadcrumbs" className="breadcrumbs">
           <ul id="crumb-list" className="breadcrumb-list">
             <SiteCrumb />
             {stack.map(({ label, url, external }, i) => (

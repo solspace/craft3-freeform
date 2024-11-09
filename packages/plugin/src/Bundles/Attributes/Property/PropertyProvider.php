@@ -21,6 +21,7 @@ use Solspace\Freeform\Attributes\Property\PropertyCollection;
 use Solspace\Freeform\Attributes\Property\PropertyValidatorInterface;
 use Solspace\Freeform\Attributes\Property\Section;
 use Solspace\Freeform\Attributes\Property\TransformerInterface;
+use Solspace\Freeform\Attributes\Property\Translatable;
 use Solspace\Freeform\Attributes\Property\Validators\Required;
 use Solspace\Freeform\Attributes\Property\ValueGenerator;
 use Solspace\Freeform\Attributes\Property\ValueGeneratorInterface;
@@ -152,6 +153,7 @@ class PropertyProvider
             $attribute->handle = $property->getName();
             $attribute->label ??= $fallbackLabel;
             $attribute->order ??= $collection->getNextOrder();
+            $attribute->translatable = (bool) AttributeHelper::findAttribute($property, Translatable::class);
 
             $collection->add($attribute);
 

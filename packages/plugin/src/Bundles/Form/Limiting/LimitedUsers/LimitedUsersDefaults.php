@@ -147,6 +147,7 @@ class LimitedUsersDefaults
                                 ->setChildren([
                                     new Boolean('handle', 'Form Handle'),
                                     new Boolean('type', 'Form Type'),
+                                    new Boolean('translations', 'Translatable'),
                                     new Boolean('submissionTitle', 'Submission Title'),
                                     new Boolean('formattingTemplate', 'Formatting Template'),
                                     new Boolean('attributes', 'Attributes'),

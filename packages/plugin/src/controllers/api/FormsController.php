@@ -114,7 +114,6 @@ class FormsController extends BaseApiController
 
     public function actionDelete(): Response
     {
-        $freeform = Freeform::getInstance();
         $this->requirePostRequest();
         $id = (int) \Craft::$app->request->post('id');
         if (!$id) {
@@ -125,10 +124,6 @@ class FormsController extends BaseApiController
         $this->requireFormPermission($id, Freeform::PERMISSION_FORMS_DELETE);
 
         $this->getFormsService()->deleteById($id);
-
-        if ($freeform->isPro()) {
-            $freeform->formGroups->deleteById($id);
-        }
 
         return $this->asEmptyResponse(204);
     }

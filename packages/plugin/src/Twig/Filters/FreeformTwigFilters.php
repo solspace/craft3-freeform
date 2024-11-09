@@ -12,6 +12,7 @@ class FreeformTwigFilters extends AbstractExtension
         return [
             new TwigFilter('truncater', [$this, 'truncateFilter']),
             new TwigFilter('call', [$this, 'callUserFunction']),
+            new TwigFilter('freeformRegexReplace', [$this, 'regexReplace']),
         ];
     }
 
@@ -31,5 +32,10 @@ class FreeformTwigFilters extends AbstractExtension
         }
 
         return \call_user_func($callable, ...$arguments);
+    }
+
+    public function regexReplace($input, $pattern, $replacement = ''): string
+    {
+        return preg_replace($pattern, $replacement, $input);
     }
 }

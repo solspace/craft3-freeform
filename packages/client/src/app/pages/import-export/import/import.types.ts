@@ -47,6 +47,15 @@ export type NotificationTemplate = {
   description: string;
 };
 
+export type PdfTemplate = {
+  uid: string;
+  id: number;
+  name: string;
+  description: string;
+  fileName: string;
+  body: string;
+};
+
 export type FileTemplate = {
   filePath: string;
   fileName: string;
@@ -60,6 +69,7 @@ export type Integration = {
 };
 
 export type TemplateCollection = {
+  pdf: PdfTemplate[];
   notification: NotificationTemplate[];
   formatting: FileTemplate[];
   success: FileTemplate[];
@@ -81,6 +91,7 @@ export type StrategyCollection = {
 };
 
 export type TemplateValues = {
+  pdf: string[];
   notification: Array<string | number>;
   formatting: string[];
   success: string[];

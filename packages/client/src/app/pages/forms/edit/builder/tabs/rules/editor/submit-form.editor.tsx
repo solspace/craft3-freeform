@@ -32,7 +32,7 @@ export const SubmitFormRulesEditor: React.FC = () => {
             loadingText={translate('Loading data')}
             loading={isFetching}
           >
-            {translate('Submit form')}
+            {translate('Submit Form')}
           </LoadingText>
         </Label>
         {!isFetching && (
@@ -61,7 +61,7 @@ export const SubmitFormRulesEditor: React.FC = () => {
           loadingText={translate('Loading data')}
           loading={isFetching}
         >
-          {translate('Submit form')}
+          {translate('Submit Form')}
         </LoadingText>
       </Label>
       {!isFetching && (

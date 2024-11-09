@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Services\Form;
 
 use craft\db\Query;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\Pro\GroupField;
 use Solspace\Freeform\Fields\Interfaces\NoRenderInterface;
@@ -30,6 +31,7 @@ class LayoutsService extends BaseService
         $config = [],
         private ?FieldsService $fieldsService = null,
         private ?PropertyProvider $propertyProvider = null,
+        private ?TranslationProvider $translationProvider = null,
     ) {
         parent::__construct($config);
     }
@@ -47,7 +49,14 @@ class LayoutsService extends BaseService
                 $pageData['index'] = $index;
                 $layout = new Layout($pageData['layoutUid']);
 
-                $page = new Page($form, $this->propertyProvider, $layout, $pageData);
+                $page = new Page(
+                    $form,
+                    $this->propertyProvider,
+                    $this->translationProvider,
+                    $layout,
+                    $pageData
+                );
+
                 $formLayout->getPages()->add($page);
 
                 $this->attachRows(
@@ -65,6 +74,7 @@ class LayoutsService extends BaseService
                     new Page(
                         $form,
                         $this->propertyProvider,
+                        $this->translationProvider,
                         new Layout(''),
                         ['label' => 'Page 1']
                     )

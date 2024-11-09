@@ -13,8 +13,10 @@
 namespace Solspace\Freeform\Services;
 
 use craft\helpers\App;
+use craft\helpers\Assets;
 use craft\mail\Message;
 use craft\web\View;
+use Dompdf\Dompdf;
 use Solspace\Freeform\Bundles\Rules\RuleValidator;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Mailer\RenderEmailEvent;
@@ -93,6 +95,34 @@ class MailerService extends BaseService implements MailHandlerInterface
                 $email = $this->compileMessage($notificationTemplate, $fieldValues);
                 $email->setTo([$emailAddress]);
 
+                $pdfTemplates = $notificationTemplate->getPdfTemplateRecords();
+                if ($pdfTemplates) {
+                    foreach ($pdfTemplates as $pdfTemplate) {
+                        $fileName = $this->renderString($pdfTemplate->fileName, $fieldValues);
+                        $body = $this->renderString($pdfTemplate->getBody(), $fieldValues);
+
+                        if (!preg_match('/\.pdf$/i', $fileName)) {
+                            $fileName .= '.pdf';
+                        }
+
+                        $domPdf = new Dompdf();
+                        $domPdf->loadHtml($body);
+                        $domPdf->render();
+
+                        $pdfPath = Assets::tempFilePath('pdf');
+                        file_put_contents($pdfPath, $domPdf->output());
+
+                        $email->attach($pdfPath, [
+                            'fileName' => $fileName,
+                            'contentType' => 'application/pdf',
+                        ]);
+
+                        if (file_exists($pdfPath)) {
+                            unset($pdfPath);
+                        }
+                    }
+                }
+
                 if ($notificationTemplate->isIncludeAttachments()) {
                     foreach ($fields as $field) {
                         if ($field instanceof SignatureField && $field->getValueAsString()) {
@@ -147,9 +177,9 @@ class MailerService extends BaseService implements MailHandlerInterface
 
                 $this->notifyAboutEmailSendingError($emailAddress, $notificationTemplate, $exception, $form);
             }
-
-            \Craft::$app->view->setTemplateMode($templateMode);
         }
+
+        \Craft::$app->view->setTemplateMode($templateMode);
 
         return $sentMailCount;
     }

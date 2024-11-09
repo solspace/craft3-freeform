@@ -103,6 +103,8 @@ interface FieldInterface
 
     public function isRequired(): bool;
 
+    public function getRequiredErrorMessage(): ?string;
+
     public function getErrors(): ?array;
 
     public function hasErrors(): bool;

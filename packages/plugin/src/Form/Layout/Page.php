@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Form\Layout;
 
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Translations\TranslationProvider;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Form\Layout\Page\Buttons\PageButtons;
 use Solspace\Freeform\Library\Collections\FieldCollection;
@@ -23,6 +24,7 @@ class Page implements \IteratorAggregate
     public function __construct(
         private Form $form,
         private PropertyProvider $propertyProvider,
+        private TranslationProvider $translationProvider,
         private Layout $layout,
         array $config = [],
     ) {
@@ -31,7 +33,7 @@ class Page implements \IteratorAggregate
         $this->label = $config['label'] ?? '';
         $this->index = $config['index'] ?? 0;
 
-        $buttons = new PageButtons($this, []);
+        $buttons = new PageButtons($this, $this->translationProvider, []);
         $this->propertyProvider->setObjectProperties($buttons, $config['metadata']['buttons'] ?? []);
 
         $this->buttons = $buttons;
@@ -54,7 +56,15 @@ class Page implements \IteratorAggregate
 
     public function getLabel(): string
     {
-        return $this->label;
+        return $this
+            ->translationProvider
+            ->getTranslation(
+                $this->getForm(),
+                $this->getUid(),
+                'label',
+                $this->label
+            )
+        ;
     }
 
     public function getIndex(): int
@@ -80,6 +90,11 @@ class Page implements \IteratorAggregate
     public function getButtons(): PageButtons
     {
         return $this->buttons;
+    }
+
+    public function isFirst(): bool
+    {
+        return 0 === $this->index;
     }
 
     public function getIterator(): \ArrayIterator

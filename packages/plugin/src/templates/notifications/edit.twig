@@ -289,6 +289,20 @@
             </div>
         {% endif %}
 
+
+        {% if pdfTemplateOptions|length %}
+
+            {{ forms.checkboxSelectField({
+                id: "pdf-templates",
+                name: "pdfTemplateIds",
+                label: "PDF Templates"|t('freeform'),
+                instructions: "Select any PDF Templates you wish to generate and include as attachments on all email notifications using this template."|t('freeform'),
+                options: pdfTemplateOptions,
+                values: notification.getPdfTemplateIds(),
+            }) }}
+
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}

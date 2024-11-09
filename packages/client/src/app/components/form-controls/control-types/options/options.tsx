@@ -1,21 +1,21 @@
 import React from 'react';
 import { ButtonGroup } from '@components/elements/button-group/button-group';
-import {
-  ControlWrapper,
-  Label,
-} from '@components/form-controls/control.styles';
+import { ControlWrapper } from '@components/form-controls/control.styles';
 import { FormErrorList } from '@components/form-controls/error-list';
+import { Label } from '@components/form-controls/label.styles';
 import type { ControlType } from '@components/form-controls/types';
 import { useFieldOptions } from '@components/options/use-field-options';
 import config, { Edition } from '@config/freeform/freeform.config';
 import { useAppDispatch } from '@editor/store';
 import { type Field, fieldActions } from '@editor/store/slices/layout/fields';
+import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import { useFieldType } from '@ff-client/queries/field-types';
 import type { OptionsProperty } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
 
 import { generateDefaultValue } from './sources/defaults';
 import { SourceComponent } from './sources/source.component';
+import { OptionsTranslatable } from './sources/translations/translations';
 import type { Option } from './options.types';
 import { Source } from './options.types';
 import { sourceLabels } from './options.types';
@@ -32,6 +32,8 @@ const Options: React.FC<ControlType<OptionsProperty, Field>> = ({
 
   const fieldType = useFieldType(context.typeClass);
   const isMultiple = fieldType?.implements.includes('multiValue');
+
+  const { willTranslate } = useTranslations(context);
 
   const [options] = useFieldOptions(context, fieldType);
   const dispatch = useAppDispatch();
@@ -51,6 +53,12 @@ const Options: React.FC<ControlType<OptionsProperty, Field>> = ({
       useCustomValues: true,
       options: [...options] as Option[],
     });
+
+  if (willTranslate(property.handle)) {
+    return (
+      <OptionsTranslatable property={property} value={value} field={context} />
+    );
+  }
 
   return (
     <>

@@ -158,7 +158,7 @@ class IntegrationsController extends BaseController
 
             return $this->asJson(['success' => false]);
         } catch (\Exception $exception) {
-            $event = new FailedRequestEvent($integrationObject, $exception);
+            $event = new FailedRequestEvent(null, $integrationObject, $exception);
             Event::trigger(
                 IntegrationInterface::class,
                 IntegrationInterface::EVENT_ON_FAILED_REQUEST,

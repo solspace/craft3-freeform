@@ -28,6 +28,7 @@ export const Preview: React.FC<Props> = ({
   const isAllSelected =
     options.forms.length === data.forms?.length &&
     options.integrations.length === data.integrations?.length &&
+    options.templates.pdf.length === data.templates.pdf?.length &&
     options.templates.notification.length ===
       data.templates.notification?.length &&
     options.templates.formatting.length === data.templates.formatting?.length &&
@@ -38,6 +39,7 @@ export const Preview: React.FC<Props> = ({
   const emptyOptions: ExportOptions = {
     forms: [],
     templates: {
+      pdf: [],
       notification: [],
       formatting: [],
       success: [],
@@ -50,6 +52,7 @@ export const Preview: React.FC<Props> = ({
   const filledOptions: ExportOptions = {
     forms: data.forms.map((form) => form.uid),
     templates: {
+      pdf: data.templates.pdf.map((template) => template.uid),
       notification: data.templates.notification.map((template) => template.uid),
       formatting: data.templates.formatting.map(
         (template) => template.fileName

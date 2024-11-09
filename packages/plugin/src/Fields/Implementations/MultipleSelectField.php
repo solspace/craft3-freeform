@@ -61,7 +61,7 @@ class MultipleSelectField extends BaseGeneratedOptionsField implements MultiValu
             $isSelected = \in_array($option->getValue(), $this->getValue());
 
             $output .= '<option value="'.$option->getValue().'"'.($isSelected ? ' selected' : '').'>';
-            $output .= $this->translate($option->getLabel());
+            $output .= $this->translate('label', $option->getLabel());
             $output .= '</option>';
         }
 

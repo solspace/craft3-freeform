@@ -3,6 +3,7 @@ import type { Property } from './properties';
 export enum TargetFieldType {
   Relation = 'relation',
   Custom = 'custom',
+  Preset = 'preset',
 }
 
 type TargetField = {
