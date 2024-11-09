@@ -1199,6 +1199,12 @@ return [
     'Enable this if your Zoho account is in Sandbox mode (connects to "sandbox.zohoapis.{domain}" instead of "www.zohoapis.com" or "www.zohoapis.{domain}").' => 'Aktivieren Sie diese Option, wenn sich Ihr Zoho-Konto im Sandbox-Modus befindet (verbindet sich mit "sandbox.zohoapis.{domain}" anstelle von "www.zohoapis.com" oder "www.zohoapis.{domain}").',
     'Developer Mode' => 'Entwicklermodus',
     'Enable this if your Zoho account is in Developer mode (connects to "developer.zohoapis.{domain}" instead of "www.zohoapis.com", "www.zohoapis.{domain}" or "sandbox.zohoapis.{domain}").' => 'Aktivieren Sie diese Option, wenn sich Ihr Zoho-Konto im Entwicklermodus befindet (verbindet sich mit "developer.zohoapis.{domain}" anstelle von "www.zohoapis.com", "www.zohoapis.{domain}" oder "sandbox.zohoapis.{domain}").',
+    'Instance URL' => 'Instanz-URL',
+    'Enter your Jira instance URL (optional). If you do not enter a value, the first available resource URL is going to be used.' => 'Geben Sie die URL Ihrer Jira-Instanz ein (optional). Wenn Sie keinen Wert eingeben, wird die erste verfügbare Ressourcen-URL verwendet.',
+    'Project Key' => 'Projektschlüssel',
+    'Enter the project key for the Jira project you want to interact with. If left empty, it will be auto-populated with the first available project key of your account.' => 'Geben Sie den Projektschlüssel für das Jira-Projekt ein, mit dem Sie interagieren möchten. Wenn es leer bleibt, wird es automatisch mit dem ersten verfügbaren Projektschlüssel Ihres Kontos ausgefüllt.',
+    'Mapping' > 'Zuordnung',
+    'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Wählen Sie die Freeform-Felder aus, die den entsprechenden Jira-Issue-Feldern zugeordnet werden sollen.',
 
     // Integrations // CRM // Salesforce
     'Map to Leads' => 'Zu Leads zuordnen',

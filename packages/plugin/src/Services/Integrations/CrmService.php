@@ -57,6 +57,7 @@ class CrmService extends IntegrationsService
                 $record->type = $field->getType();
                 $record->required = $field->isRequired();
                 $record->category = $category;
+                $record->options = $field->getOptions()->getIterator()->getArrayCopy();
                 $record->save();
 
                 $existingRecords[$field->getHandle()] = $record;
@@ -72,6 +73,7 @@ class CrmService extends IntegrationsService
                     $record->type = $field->getType();
                     $record->required = $field->isRequired();
                     $record->category = $category;
+                    $record->options = $field->getOptions()->getIterator()->getArrayCopy();
                     $record->save();
                 }
             }
@@ -84,6 +86,7 @@ class CrmService extends IntegrationsService
                 $record->type,
                 $record->category,
                 $record->required,
+                $record->options
             ),
             $existingRecords
         );
