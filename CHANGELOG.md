@@ -1,6 +1,6 @@
 # Solspace Freeform Changelog
 
-## 5.7.0 - Unreleased
+## 5.7.0 - 2024-11-09
 
 ### Added
 - Added support for site-aware translatable forms inside the form builder (Pro).
