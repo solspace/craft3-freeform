@@ -23,14 +23,14 @@ class m240819_104209_AddTranslationTable extends Migration
 
         $this->createIndex(
             null,
-            '{{freeform_forms_translations}}',
+            '{{%freeform_forms_translations}}',
             ['formId', 'siteId'],
-            true,
+            true
         );
 
         $this->addForeignKey(
             null,
-            '{{freeform_forms_translations}}',
+            '{{%freeform_forms_translations}}',
             ['formId'],
             '{{%freeform_forms}}',
             ['id'],
@@ -39,7 +39,7 @@ class m240819_104209_AddTranslationTable extends Migration
 
         $this->addForeignKey(
             null,
-            '{{freeform_forms_translations}}',
+            '{{%freeform_forms_translations}}',
             ['siteId'],
             '{{%sites}}',
             ['id'],
