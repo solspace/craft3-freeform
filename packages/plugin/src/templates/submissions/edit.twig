@@ -196,6 +196,10 @@
 		</div>
 	</div>
 
+	{% if submission.id and sidebarHtml %}
+		{{ sidebarHtml|raw }}
+	{% endif %}
+
 	{% if submission.isSpam and submission.spamReasons %}
 
 		<fieldset>
@@ -215,10 +219,6 @@
 	{% hook 'freeform.submissions.edit.sidepanel' %}
 
 	{% if submission.id %}
-
-		{% if sidebarHtml %}
-			{{ sidebarHtml|raw }}
-		{% endif %}
 
 		<div class="meta read-only">
 			<div class="data">
