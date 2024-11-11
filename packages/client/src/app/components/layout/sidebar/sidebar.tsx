@@ -21,4 +21,7 @@ export const Sidebar = styled.div<WrapperProps>`
   background: ${colors.gray050};
 
   overflow-y: auto;
+
+  --background-color: ${colors.gray050};
+  --margins: -18px;
 `;

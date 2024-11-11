@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use craft\elements\Asset;
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapItem;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
@@ -47,6 +48,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Leads')]
     #[Input\Boolean(
         label: 'Map to Leads',
         instructions: 'Map submission data to create Leads in Salesforce.',
@@ -132,6 +134,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Opportunities')]
     #[Input\Boolean(
         label: 'Map to Opportunities',
         instructions: 'Map submission data to create Opportunities in Salesforce.',
@@ -188,6 +191,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Accounts')]
     #[Input\Boolean(
         label: 'Map to Accounts',
         instructions: 'Map submission data to create Accounts in Salesforce.',
@@ -233,6 +237,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Contacts')]
     #[Input\Boolean(
         label: 'Map to Contacts',
         instructions: 'Map submission data to create Contacts in Salesforce.',
