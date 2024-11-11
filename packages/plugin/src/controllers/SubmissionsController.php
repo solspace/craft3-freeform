@@ -204,6 +204,7 @@ class SubmissionsController extends BaseController
             'continueEditingUrl' => 'freeform/submissions/{id}',
             'fieldRenderer' => $fieldRenderer,
             'tabs' => $tabs,
+            'sidebarHtml' => $submission->getSidebarHtml(true),
         ];
 
         return $this->renderTemplate(

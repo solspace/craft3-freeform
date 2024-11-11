@@ -216,6 +216,10 @@
 
 	{% if submission.id %}
 
+		{% if sidebarHtml %}
+			{{ sidebarHtml|raw }}
+		{% endif %}
+
 		<div class="meta read-only">
 			<div class="data">
 				<h5 class="heading">{{ "ID"|t('app') }}</h5>
