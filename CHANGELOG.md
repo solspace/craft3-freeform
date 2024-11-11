@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.7.0.1 - 2024-11-10
+
+### Fixed
+- Fixed a bug where the translation table migration wouldn't work with prefixed databases.
+
 ## 5.7.0 - 2024-11-09
 
 ### Added
