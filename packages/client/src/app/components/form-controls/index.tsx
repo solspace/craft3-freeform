@@ -10,6 +10,7 @@ import type {
 
 import { ErrorBoundary } from './boundaries/ErrorBoundary';
 import { useVisibility } from './hooks/use-visibility';
+import { DelimiterElement } from './delimiter';
 
 export type UpdateValue<T> = (value: T) => void;
 
@@ -55,6 +56,8 @@ export const FormComponent: React.FC<Props> = ({
   return (
     <ErrorBoundary message={`...${handle} <${type}>`}>
       <Suspense>
+        <DelimiterElement delimiter={property.delimiter} />
+
         <FormControl
           value={value as GenericValue}
           property={property}

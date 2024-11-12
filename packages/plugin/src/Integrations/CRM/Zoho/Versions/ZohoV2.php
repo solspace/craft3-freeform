@@ -14,6 +14,7 @@ namespace Solspace\Freeform\Integrations\CRM\Zoho\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Attributes\Property\Input;
@@ -40,6 +41,7 @@ class ZohoV2 extends BaseZohoIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Leads')]
     #[Input\Boolean(
         label: 'Map Leads',
         instructions: 'Should map to the Leads endpoint.',
@@ -64,6 +66,7 @@ class ZohoV2 extends BaseZohoIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Deals')]
     #[Input\Boolean(
         label: 'Map Deals',
         instructions: 'Should map to the Deals endpoint.',
@@ -103,6 +106,7 @@ class ZohoV2 extends BaseZohoIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Accounts')]
     #[Input\Boolean(
         label: 'Map Account',
         instructions: 'Should map to the Account endpoint.',
@@ -128,6 +132,7 @@ class ZohoV2 extends BaseZohoIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Contacts')]
     #[Input\Boolean(
         label: 'Map Contact',
         instructions: 'Should map to the Contact endpoint.',

@@ -14,6 +14,7 @@ namespace Solspace\Freeform\Integrations\CRM\HubSpot\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapItem;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
@@ -41,6 +42,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Deals')]
     #[Input\Boolean(
         label: 'Map to Deals',
         instructions: 'Should map to the Deals endpoint.',
@@ -66,6 +68,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Contacts')]
     #[Input\Boolean(
         label: 'Map to Contacts',
         instructions: 'Should map to the Contacts endpoint.',
@@ -91,6 +94,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Companies')]
     #[Input\Boolean(
         label: 'Map to Companies',
         instructions: 'Should map to the Companies endpoint.',

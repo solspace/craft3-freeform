@@ -1207,6 +1207,7 @@ return [
     'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Selecteer de Freeform-velden die moeten worden toegewezen aan de toepasselijke Jira Issue-velden.',
 
     // Integrations // CRM // Salesforce
+    'Leads' => 'Leads',
     'Map to Leads' => 'Koppel aan Leads',
     'Map submission data to create Leads in Salesforce.' => 'Koppel ingediende gegevens om Leads in Salesforce te creëren.',
     'Attach Uploaded Files to Leads' => 'Geüploade bestanden koppelen aan Leads',
@@ -1223,6 +1224,7 @@ return [
     "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days')." => "Voer een relatieve tekstuele datumreeks in voor de Vervaldatum van de nieuw aangemaakte Taak (bijv. '2 dagen').",
     'Lead Mapping' => 'Lead in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Lead-velden.',
+    'Opportunities' => 'Opportunities',
     'Map to Opportunities' => 'Koppel aan Opportunities',
     'Map submission data to create Opportunities in Salesforce.' => 'Koppel ingediende gegevens om Opportunities in Salesforce te creëren.',
     'Attach Uploaded Files to Opportunities' => 'Geüploade bestanden koppelen aan Opportunities',
@@ -1233,6 +1235,7 @@ return [
     "Enter the Stage Name the newly created Opportunity should be assigned to (e.g. 'Prospecting')." => "Voer de Stadium Naam in waaraan de nieuw aangemaakte Opportunity moet worden toegewezen (bijv. 'Prospecting').",
     'Opportunity Mapping' => 'Opportunity in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Opportunity-velden.',
+    'Accounts' => 'Accounts',
     'Map to Accounts' => 'Koppel aan Accounts',
     'Map submission data to create Accounts in Salesforce.' => 'Koppel ingediende gegevens om Accounts in Salesforce te creëren.',
     'Attach Uploaded Files to Accounts' => 'Geüploade bestanden koppelen aan Accounts',
@@ -1241,6 +1244,7 @@ return [
     'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.' => 'Als er al een Account bestaat in Salesforce, zal het inschakelen van deze optie extra Checkbox-veldwaarden toevoegen aan het Account in Salesforce in plaats van de bestaande opties te vervangen.',
     'Account Mapping' => 'Account in kaart brengen',
     'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Selecteer de Freeform-velden die moeten worden gekoppeld aan de relevante Salesforce Account-velden.',
+    'Contacts' => 'Contacten',
     'Map to Contacts' => 'Koppel aan Contacten',
     'Map submission data to create Contacts in Salesforce.' => 'Koppel ingediende gegevens om Contacten in Salesforce te creëren.',
     'Attach Uploaded Files to Contacts' => 'Geüploade bestanden koppelen aan Contacten',

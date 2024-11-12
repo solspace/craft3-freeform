@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Bundles\Attributes\Property;
 
 use Carbon\Carbon;
 use Solspace\Freeform\Attributes\Property\DefaultValue;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\Options\OptionCollection;
@@ -135,6 +136,7 @@ class PropertyProvider
             $this->processValidators($property, $attribute);
             $this->processMiddleware($property, $attribute);
             $this->processVisibilityFilters($property, $attribute);
+            $this->processDelimiters($property, $attribute);
             $this->processDateProperties($attribute);
             $this->processLimitations($property, $attribute);
             $this->processMessages($property, $attribute);
@@ -367,6 +369,11 @@ class PropertyProvider
     private function processVisibilityFilters(\ReflectionProperty $property, Property $attribute): void
     {
         $attribute->visibilityFilters = AttributeHelper::findAttributes($property, VisibilityFilter::class);
+    }
+
+    private function processDelimiters(\ReflectionProperty $property, Property $attribute): void
+    {
+        $attribute->delimiter = AttributeHelper::findAttribute($property, Delimiter::class);
     }
 
     private function processDateProperties(Property $attribute): void

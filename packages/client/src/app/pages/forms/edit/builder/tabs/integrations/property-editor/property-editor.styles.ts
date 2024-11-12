@@ -9,12 +9,15 @@ export const PropertyEditorWrapper = styled.div`
   flex-direction: column;
   gap: ${spacings.xl};
 
-  background: ${colors.white};
   padding: ${spacings.xl};
 
+  background: ${colors.white};
   overflow-y: auto;
 
   ${scrollBar};
+
+  --background-color: ${colors.white};
+  --margins: -24px;
 
   h1 {
     padding: 0;
