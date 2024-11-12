@@ -62,6 +62,11 @@ export type OptionGroup = {
 
 export type OptionCollection = Array<Option | OptionGroup>;
 
+export type Delimiter = {
+  name?: string;
+  icon?: string;
+};
+
 type BaseProperty<T, PT extends PropertyType> = {
   type: PT;
   handle: string;
@@ -78,6 +83,7 @@ type BaseProperty<T, PT extends PropertyType> = {
   messages?: Message[];
   visible?: boolean;
   visibilityFilters?: VisibilityFilter[];
+  delimiter?: Delimiter;
   middleware?: Middleware[];
   category?: string;
   section?: string;

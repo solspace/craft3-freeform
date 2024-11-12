@@ -1207,6 +1207,7 @@ return [
     'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Wählen Sie die Freeform-Felder aus, die den entsprechenden Jira-Issue-Feldern zugeordnet werden sollen.',
 
     // Integrations // CRM // Salesforce
+    'Leads' => 'Leads',
     'Map to Leads' => 'Zu Leads zuordnen',
     'Map submission data to create Leads in Salesforce.' => 'Übermittlungsdaten zuordnen, um Leads in Salesforce zu erstellen.',
     'Attach Uploaded Files to Leads' => 'Hochgeladene Dateien an Leads anhängen',
@@ -1223,6 +1224,7 @@ return [
     "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days')." => "Geben Sie eine relative Textdatumszeichenfolge für das Fälligkeitsdatum der neu erstellten Aufgabe ein (z.B. '2 Tage').",
     'Lead Mapping' => 'Lead-Zuordnung',
     'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Wählen Sie die Freeform-Felder aus, die den entsprechenden Salesforce-Lead-Feldern zugeordnet werden sollen.',
+    'Opportunities' => 'Opportunities',
     'Map to Opportunities' => 'Zu Opportunities zuordnen',
     'Map submission data to create Opportunities in Salesforce.' => 'Übermittlungsdaten zuordnen, um Opportunities in Salesforce zu erstellen.',
     'Attach Uploaded Files to Opportunities' => 'Hochgeladene Dateien an Opportunities anhängen',
@@ -1233,6 +1235,7 @@ return [
     "Enter the Stage Name the newly created Opportunity should be assigned to (e.g. 'Prospecting')." => "Geben Sie den Phasennamen ein, der der neu erstellten Opportunity zugewiesen werden soll (z.B. 'Prospecting').",
     'Opportunity Mapping' => 'Opportunity-Zuordnung',
     'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Wählen Sie die Freeform-Felder aus, die den entsprechenden Salesforce-Opportunity-Feldern zugeordnet werden sollen.',
+    'Accounts' => 'Account',
     'Map to Accounts' => 'Zu Account zuordnen',
     'Map submission data to create Accounts in Salesforce.' => 'Übermittlungsdaten zuordnen, um Account in Salesforce zu erstellen.',
     'Attach Uploaded Files to Accounts' => 'Hochgeladene Dateien an Account anhängen',
@@ -1241,6 +1244,7 @@ return [
     'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.' => 'Wenn bereits ein Account in Salesforce existiert, fügt das Aktivieren dieser Option zusätzliche Checkbox-Feldwerte zum Account in Salesforce hinzu, anstatt die vorhandenen Optionen zu ersetzen.',
     'Account Mapping' => 'Account-Zuordnung',
     'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Wählen Sie die Freeform-Felder aus, die den entsprechenden Salesforce-Accountfeldern zugeordnet werden sollen.',
+    'Contacts' => 'Kontakten',
     'Map to Contacts' => 'Zu Kontakten zuordnen',
     'Map submission data to create Contacts in Salesforce.' => 'Übermittlungsdaten zuordnen, um Kontakte in Salesforce zu erstellen.',
     'Attach Uploaded Files to Contacts' => 'Hochgeladene Dateien an Kontakte anhängen',

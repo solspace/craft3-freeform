@@ -14,6 +14,7 @@ namespace Solspace\Freeform\Integrations\CRM\Pipedrive\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Attributes\Property\Input;
@@ -40,6 +41,7 @@ class PipedriveV1 extends BasePipedriveIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Leads')]
     #[Input\Boolean(
         label: 'Map to Leads',
         instructions: 'Should map to the Leads endpoint.',
@@ -64,6 +66,7 @@ class PipedriveV1 extends BasePipedriveIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Deals')]
     #[Input\Boolean(
         label: 'Map to Deals',
         instructions: 'Should map to the Deals endpoint.',
@@ -103,6 +106,7 @@ class PipedriveV1 extends BasePipedriveIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Organizations')]
     #[Input\Boolean(
         label: 'Map to Organization',
         instructions: 'Should map to the Organization endpoint.',
@@ -128,6 +132,7 @@ class PipedriveV1 extends BasePipedriveIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Persons')]
     #[Input\Boolean(
         label: 'Map to Person',
         instructions: 'Should map to the Person endpoint.',

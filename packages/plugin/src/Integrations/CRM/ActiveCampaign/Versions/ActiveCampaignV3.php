@@ -14,6 +14,7 @@ namespace Solspace\Freeform\Integrations\CRM\ActiveCampaign\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Attributes\Property\Input;
@@ -40,6 +41,7 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Contacts')]
     #[Input\Boolean(
         label: 'Map to Contact',
         instructions: 'Should map to the Contact endpoint.',
@@ -65,6 +67,7 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Deals')]
     #[Input\Boolean(
         label: 'Map to Deal',
         instructions: 'Should map to the Deal endpoint.',
@@ -90,6 +93,7 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Accounts')]
     #[Input\Boolean(
         label: 'Map to Account',
         instructions: 'Should map to the Account endpoint.',

@@ -1207,6 +1207,7 @@ return [
     'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Sélectionnez les champs de forme libre à mapper aux champs de problème Jira applicables.',
 
     // Integrations // CRM // Salesforce
+    'Leads' => 'Pistes',
     'Map to Leads' => 'Mapper vers les Pistes',
     'Map submission data to create Leads in Salesforce.' => 'Mapper les données soumises pour créer des Pistes dans Salesforce.',
     'Attach Uploaded Files to Leads' => 'Joindre les fichiers téléchargés aux Pistes',
@@ -1223,6 +1224,7 @@ return [
     "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days')." => "Entrez une chaîne de date relative pour la date d’échéance de la nouvelle tâche (par ex. '2 jours').",
     'Lead Mapping' => 'Mappage des Pistes',
     'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Sélectionnez les champs Freeform à mapper aux champs de Piste Salesforce correspondants.',
+    'Opportunities' => 'Opportunités',
     'Map to Opportunities' => 'Mapper vers les Opportunités',
     'Map submission data to create Opportunities in Salesforce.' => 'Mapper les données soumises pour créer des Opportunités dans Salesforce.',
     'Attach Uploaded Files to Opportunities' => 'Joindre les fichiers téléchargés aux Opportunités',
@@ -1233,6 +1235,7 @@ return [
     "Enter the Stage Name the newly created Opportunity should be assigned to (e.g. 'Prospecting')." => "Entrez le nom de l’étape à laquelle la nouvelle Opportunité doit être attribuée (par ex. 'Prospection').",
     'Opportunity Mapping' => 'Mappage des Opportunités',
     'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Sélectionnez les champs Freeform à mapper aux champs d’Opportunité Salesforce correspondants.',
+    'Accounts' => 'Comptes',
     'Map to Accounts' => 'Mapper vers les Comptes',
     'Map submission data to create Accounts in Salesforce.' => 'Mapper les données soumises pour créer des Comptes dans Salesforce.',
     'Attach Uploaded Files to Accounts' => 'Joindre les fichiers téléchargés aux Comptes',
@@ -1241,6 +1244,7 @@ return [
     'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.' => 'Si un Compte existe déjà dans Salesforce, activer cette option ajoutera des valeurs supplémentaires aux champs à cases dans Salesforce au lieu de remplacer les options existantes.',
     'Account Mapping' => 'Mappage des Comptes',
     'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Sélectionnez les champs Freeform à mapper aux champs de Compte Salesforce correspondants.',
+    'Contacts' => 'Contacts',
     'Map to Contacts' => 'Mapper vers les Contacts',
     'Map submission data to create Contacts in Salesforce.' => 'Mapper les données soumises pour créer des Contacts dans Salesforce.',
     'Attach Uploaded Files to Contacts' => 'Joindre les fichiers téléchargés aux Contacts',

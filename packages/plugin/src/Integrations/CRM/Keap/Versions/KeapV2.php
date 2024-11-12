@@ -14,6 +14,7 @@ namespace Solspace\Freeform\Integrations\CRM\Keap\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Attributes\Property\Input;
@@ -40,6 +41,7 @@ class KeapV2 extends BaseKeapIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Contacts')]
     #[Input\Boolean(
         label: 'Map to Contacts',
         instructions: 'Should map to the Contacts endpoint.',
@@ -61,6 +63,7 @@ class KeapV2 extends BaseKeapIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Tags')]
     #[Input\Boolean(
         label: 'Map to Tags',
         instructions: 'Should map to the Tags endpoint.',

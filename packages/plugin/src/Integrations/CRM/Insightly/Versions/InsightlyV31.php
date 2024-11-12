@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Integrations\CRM\Insightly\Versions;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
+use Solspace\Freeform\Attributes\Property\Delimiter;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Implementations\FieldMapping\FieldMapping;
 use Solspace\Freeform\Attributes\Property\Input;
@@ -30,6 +31,7 @@ class InsightlyV31 extends BaseInsightlyIntegration
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[VisibilityFilter('Boolean(enabled)')]
+    #[Delimiter('Leads')]
     #[Input\Boolean(
         label: 'Map to Leads',
         instructions: 'Should map to the Leads endpoint.',

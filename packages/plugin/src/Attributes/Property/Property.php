@@ -21,6 +21,7 @@ abstract class Property
 
     /** @var VisibilityFilter[] */
     public array $visibilityFilters = [];
+    public ?Delimiter $delimiter = null;
 
     public bool $visible = true;
     public bool $translatable = false;
