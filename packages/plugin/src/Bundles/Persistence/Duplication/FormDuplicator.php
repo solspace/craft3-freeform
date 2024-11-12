@@ -380,7 +380,11 @@ class FormDuplicator
                             continue;
                         }
 
-                        if (!\is_object($metadata->{$handle}->{$key}) || !isset($metadata->{$handle}->{$key}->value)) {
+                        if (!isset($metadata->{$handle}->{$key}) || !\is_object($metadata->{$handle}->{$key})) {
+                            continue;
+                        }
+
+                        if (!isset($metadata->{$handle}->{$key}->value)) {
                             continue;
                         }
 
