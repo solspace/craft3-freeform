@@ -1,5 +1,18 @@
 # Solspace Freeform Changelog
 
+## 5.7.1 - 2024-11-12
+
+### Added
+- Added `EVENT_DEFINE_SIDEBAR_HTML` in the Freeform Submissions CP view. Thanks @mofman!
+
+### Changed
+- Updated CRM integrations in the form builder to include separators for objects to improve clarity.
+- Updated comppser.json to force the `phpstan/phpdoc-parser` package to `^1.33` to work around an issue in the `symfony/property-access` package.
+
+### Fixed
+- Fixed a bug where labels in the Jira integration would sometimes error about array values.
+- Fixed a bug where some forms could error when duplicating forms.
+
 ## 5.7.0.1 - 2024-11-10
 
 ### Fixed
