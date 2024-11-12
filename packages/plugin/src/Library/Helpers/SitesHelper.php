@@ -7,6 +7,25 @@ use Solspace\Freeform\Freeform;
 
 class SitesHelper
 {
+    public static function getPostedSite(): ?Site
+    {
+        if (\Craft::$app->request->isConsoleRequest) {
+            return null;
+        }
+
+        $site = null;
+        $query = \Craft::$app->request->get('site');
+        if ($query) {
+            if (is_numeric($query)) {
+                $site = \Craft::$app->sites->getSiteById($query);
+            } else {
+                $site = \Craft::$app->sites->getSiteByHandle($query);
+            }
+        }
+
+        return $site;
+    }
+
     public static function getCurrentCpSite(): ?Site
     {
         if (!self::isEnabled()) {
