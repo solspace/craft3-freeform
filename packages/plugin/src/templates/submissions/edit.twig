@@ -196,6 +196,10 @@
 		</div>
 	</div>
 
+	{% if submission.id and sidebarHtml %}
+		{{ sidebarHtml|raw }}
+	{% endif %}
+
 	{% if submission.isSpam and submission.spamReasons %}
 
 		<fieldset>
