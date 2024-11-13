@@ -4,6 +4,7 @@ namespace Solspace\Freeform\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
+use craft\helpers\StringHelper;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Form\Settings\Implementations\BehaviorSettings;
 use Solspace\Freeform\Form\Settings\Implementations\GeneralSettings;
@@ -14,6 +15,22 @@ use Solspace\Freeform\Models\Settings;
 class m230101_100010_FF4to5_MigrateForms extends Migration
 {
     public function safeUp(): bool
+    {
+        if ($this->processForms()) {
+            $this->applyFormHandleChangesToMatchingSubmissionsTable();
+        }
+
+        return true;
+    }
+
+    public function safeDown(): bool
+    {
+        echo "m230101_100010_FF4to5_MigrateForms cannot be reverted.\n";
+
+        return false;
+    }
+
+    private function processForms(): bool
     {
         $propertyProvider = \Craft::$container->get(PropertyProvider::class);
 
@@ -49,11 +66,14 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
                 $attributes[$attr] = $value;
             }
 
+            $formHandle = preg_replace('/\ /', '_', $form->handle);
+            $formHandle = StringHelper::toHandle($formHandle);
+
             $propertyProvider->setObjectProperties(
                 $general,
                 [
                     'name' => $form->name,
-                    'handle' => $form->handle,
+                    'handle' => $formHandle,
                     'type' => $formData->formType ?? $data['type'] ?? 'Solspace\Freeform\Form\Types\Regular',
                     'submissionTitle' => $form->submissionTitleFormat,
                     'formattingTemplate' => $this->transformTemplate($form->formTemplate),
@@ -94,7 +114,10 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
 
             $this->update(
                 '{{%freeform_forms}}',
-                ['metadata' => json_encode($metadata)],
+                [
+                    'handle' => $formHandle,
+                    'metadata' => json_encode($metadata),
+                ],
                 ['id' => $id],
             );
         }
@@ -102,11 +125,38 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
         return true;
     }
 
-    public function safeDown(): bool
+    private function applyFormHandleChangesToMatchingSubmissionsTable(): void
     {
-        echo "m230101_100010_FF4to5_MigrateForms cannot be reverted.\n";
+        $forms = (new Query())
+            ->select(['id', 'handle'])
+            ->from('{{%freeform_forms}}')
+            ->pairs()
+        ;
 
-        return false;
+        $prefix = \Craft::$app->db->tablePrefix;
+
+        $tables = $this->db->schema->getTableSchemas();
+        foreach ($tables as $table) {
+            if (!preg_match("/{$prefix}(freeform_submissions_.*_(\\d+))$/", $table->name, $matches)) {
+                continue;
+            }
+
+            $tableName = $matches[1];
+            $formId = $matches[2];
+
+            $formHandle = $forms[$formId] ?? null;
+            if (!$formHandle) {
+                continue;
+            }
+
+            $tempTableName = 'tmp_'.substr(sha1($tableName), 0, 5);
+
+            $this->renameTable('{{%'.$tableName.'}}', '{{%'.$tempTableName.'}}');
+
+            $newName = "{{%freeform_submissions_{$formHandle}_{$formId}}}";
+
+            $this->renameTable('{{%'.$tempTableName.'}}', $newName);
+        }
     }
 
     private function extractSuccessBehavior(array $form, Defaults $defaults): string
