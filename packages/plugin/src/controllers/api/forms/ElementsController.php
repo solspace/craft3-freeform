@@ -5,6 +5,7 @@ namespace Solspace\Freeform\controllers\api\forms;
 use craft\base\ElementInterface;
 use craft\db\Query;
 use craft\db\Table;
+use craft\elements\User;
 use Solspace\Freeform\controllers\BaseApiController;
 use Solspace\Freeform\FieldTypes\FormFieldType;
 use Solspace\Freeform\Library\Helpers\SitesHelper;
@@ -76,9 +77,9 @@ class ElementsController extends BaseApiController
         $elements = array_map(
             fn (ElementInterface $element) => [
                 'id' => $element->id,
-                'title' => $element->title,
+                'title' => $element instanceof User ? $element->fullName : $element->title,
                 'type' => $element::displayName(),
-                'status' => $element->getStatus(),
+                'status' => ucfirst($element->getStatus()),
                 'url' => $element->getCpEditUrl(),
             ],
             $elements,

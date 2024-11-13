@@ -2,6 +2,7 @@ import React from 'react';
 import { useResolvedPath } from 'react-router-dom';
 import { Breadcrumb } from '@components/breadcrumbs/breadcrumbs';
 import { EmptyBlock } from '@components/empty-block/empty-block';
+import config from '@config/freeform/freeform.config';
 import { useQueryFormUsage } from '@ff-client/queries/forms';
 import classes from '@ff-client/utils/classes';
 import translate from '@ff-client/utils/translations';
@@ -12,6 +13,11 @@ import { FormSettingsContainer, SectionHeader } from './settings.editor.styles';
 export const FormUsage: React.FC = () => {
   const { data, isFetching } = useQueryFormUsage();
   const currentPath = useResolvedPath('');
+  const isCraft5 = config.metadata.craft.is5;
+
+  if (!isCraft5) {
+    return null;
+  }
 
   return (
     <FormSettingsContainer>
@@ -41,9 +47,9 @@ export const FormUsage: React.FC = () => {
           <table className="data fullwidth collapsible">
             <thead>
               <tr>
-                <th>Element</th>
-                <th>Type</th>
-                <th>Status</th>
+                <th>{translate('Element')}</th>
+                <th>{translate('Type')}</th>
+                <th>{translate('Status')}</th>
               </tr>
             </thead>
             <tbody>
@@ -53,7 +59,10 @@ export const FormUsage: React.FC = () => {
                     <div className="chip small element" data-id={usage.id}>
                       <div className="chip-content">
                         <span
-                          className={classes('status', usage.status)}
+                          className={classes(
+                            'status',
+                            usage.status.toLowerCase()
+                          )}
                           role="img"
                         />
 
