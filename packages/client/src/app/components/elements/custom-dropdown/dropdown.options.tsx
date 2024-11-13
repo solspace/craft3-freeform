@@ -8,11 +8,14 @@ import {
   Item,
   Label,
   LabelContainer,
+  LabelValueDisplay,
   List,
 } from './dropdown.options.styles';
+
 type Props = DropdownProps & {
   focusIndex: number;
   query?: string;
+  showValues?: boolean;
 };
 
 export const Options: React.FC<Props> = ({
@@ -20,6 +23,7 @@ export const Options: React.FC<Props> = ({
   options,
   query,
   focusIndex,
+  showValues,
   onChange,
 }) => {
   const optionRefs = useRef<HTMLLIElement[]>([]);
@@ -83,6 +87,10 @@ export const Options: React.FC<Props> = ({
                   {option.icon && option.icon}
                   {option.label}
                 </LabelContainer>
+
+                {showValues && value && value !== option.label && (
+                  <LabelValueDisplay>{value}</LabelValueDisplay>
+                )}
               </Label>
 
               {children && (

@@ -106,6 +106,7 @@ export const FieldMappingController: React.FC<Props> = ({
               {map.type === TargetFieldType.Preset && (
                 <Dropdown
                   value={map?.value}
+                  showValues
                   emptyOption={translate('Select an option')}
                   onChange={(fieldUid) => {
                     update(source.id, TargetFieldType.Preset, fieldUid);
