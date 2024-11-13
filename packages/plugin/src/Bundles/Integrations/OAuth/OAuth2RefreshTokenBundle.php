@@ -96,6 +96,10 @@ class OAuth2RefreshTokenBundle extends FeatureBundle
             );
         }
 
+        if (isset($payload->refresh_token)) {
+            $integration->setRefreshToken($payload->refresh_token);
+        }
+
         $integration->setAccessToken($payload->access_token);
         $integration->setIssuedAt($payload->issued_at ?? time());
         $integration->setExpiresIn($payload->expires_in ?? self::DEFAULT_TOKEN_DURATION);
