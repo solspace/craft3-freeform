@@ -36,6 +36,8 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
 
   const openDeleteFormModal = useDeleteFormModal({ form });
 
+  const { canDelete } = config.metadata.freeform;
+
   const { id, name, handle, description, settings, dateArchived } = form;
   const color = settings.general.color;
 
@@ -116,11 +118,13 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
               </ControlButton>
             </Tooltip>
           )}
-          <Tooltip title={translate('Delete this Form')} {...tooltipProps}>
-            <ControlButton onClick={openDeleteFormModal}>
-              <CrossIcon />
-            </ControlButton>
-          </Tooltip>
+          {canDelete && (
+            <Tooltip title={translate('Delete this Form')} {...tooltipProps}>
+              <ControlButton onClick={openDeleteFormModal}>
+                <CrossIcon />
+              </ControlButton>
+            </Tooltip>
+          )}
         </FlexRow>
       </td>
     </tr>
