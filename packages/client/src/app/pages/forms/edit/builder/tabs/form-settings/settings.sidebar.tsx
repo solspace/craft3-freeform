@@ -6,14 +6,14 @@ import config from '@config/freeform/freeform.config';
 import { SettingsOwnership } from '@editor/builder/tabs/form-settings/settings.ownership';
 import { formSelectors } from '@editor/store/slices/form/form.selectors';
 import { useQueryFormSettings } from '@ff-client/queries/forms';
-import type { FormSettingNamespace } from '@ff-client/types/forms';
-import type { Section } from '@ff-client/types/properties';
 import classes from '@ff-client/utils/classes';
 import { hasErrors } from '@ff-client/utils/errors';
 import translate from '@ff-client/utils/translations';
 
 import { useLastTab } from '../tabs.hooks';
 
+import NewsIcon from './news.icon.svg';
+import { TAB_USAGE } from './settings';
 import {
   SectionIcon,
   SectionLink,
@@ -25,6 +25,7 @@ export const SettingsSidebar: React.FC = () => {
   const navigate = useNavigate();
   const { setLastTab } = useLastTab('settings');
   const { sectionHandle } = useParams();
+  const isCraft5 = config.metadata.craft.is5;
 
   const formErrors = useSelector(formSelectors.errors);
 
@@ -33,18 +34,9 @@ export const SettingsSidebar: React.FC = () => {
     return null;
   }
 
-  let selectedNamespace: FormSettingNamespace;
-  let selectedSection: Section;
   const sectionsWithErrors: string[] = [];
 
   data.forEach((namespace) => {
-    namespace.sections.forEach((section) => {
-      if (section.handle === sectionHandle) {
-        selectedNamespace = namespace;
-        selectedSection = section;
-      }
-    });
-
     namespace.properties.forEach((prop) => {
       if (hasErrors(formErrors?.[namespace.handle]?.[prop.handle])) {
         if (!sectionsWithErrors.includes(prop.section)) {
@@ -53,10 +45,6 @@ export const SettingsSidebar: React.FC = () => {
       }
     });
   });
-
-  if (!selectedNamespace || !selectedSection) {
-    return null;
-  }
 
   return (
     <Sidebar $lean>
@@ -84,6 +72,21 @@ export const SettingsSidebar: React.FC = () => {
                 {translate(section.label)}
               </SectionLink>
             ))
+        )}
+
+        {isCraft5 && (
+          <SectionLink
+            onClick={() => {
+              setLastTab(TAB_USAGE);
+              navigate(TAB_USAGE);
+            }}
+            className={classes(sectionHandle === TAB_USAGE && 'active')}
+          >
+            <SectionIcon>
+              <NewsIcon />
+            </SectionIcon>
+            {translate('Usage in Elements')}
+          </SectionLink>
         )}
       </SectionWrapper>
       <SettingsOwnership />
