@@ -62,6 +62,8 @@ export const Card: React.FC<Props> = ({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const { canDelete } = config.metadata.freeform;
+
   const [titleRef, isTitleOverflowing] = useCheckOverflow<HTMLHeadingElement>();
   const [descriptionRef, isDescriptionOverflowing] =
     useCheckOverflow<HTMLSpanElement>();
@@ -132,11 +134,13 @@ export const Card: React.FC<Props> = ({
             </ControlButton>
           </Tooltip>
         )}
-        <Tooltip title={translate('Delete this Form')} {...tooltipProps}>
-          <ControlButton onClick={openDeleteFormModal}>
-            <CrossIcon />
-          </ControlButton>
-        </Tooltip>
+        {canDelete && (
+          <Tooltip title={translate('Delete this Form')} {...tooltipProps}>
+            <ControlButton onClick={openDeleteFormModal}>
+              <CrossIcon />
+            </ControlButton>
+          </Tooltip>
+        )}
       </Controls>
 
       <CardBody>

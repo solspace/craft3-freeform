@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '@config/freeform/freeform.config';
 import type { FormWithStats } from '@ff-client/types/forms';
 import translate from '@ff-client/utils/translations';
 
@@ -40,18 +41,25 @@ const generateFormData = (
 
 export const GridEmpty: React.FC = () => {
   const openCreateFormModal = useCreateFormModal();
+  const { canCreate } = config.metadata.freeform;
 
   return (
     <div>
-      <p>
-        {translate(
-          `You don't have any forms yet. Create your first form now...`
-        )}
-      </p>
+      {canCreate && (
+        <>
+          <p>
+            {translate(
+              `You don't have any forms yet. Create your first form now...`
+            )}
+          </p>
 
-      <button className="btn submit add icon" onClick={openCreateFormModal}>
-        {translate('New Form')}
-      </button>
+          <button className="btn submit add icon" onClick={openCreateFormModal}>
+            {translate('New Form')}
+          </button>
+        </>
+      )}
+
+      {!canCreate && <p>{translate(`You don't have any forms.`)}</p>}
 
       <MutedWrapper>
         <Card
