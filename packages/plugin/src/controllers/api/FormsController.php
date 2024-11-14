@@ -88,7 +88,7 @@ class FormsController extends BaseApiController
 
     public function actionSort(): Response
     {
-        PermissionHelper::requirePermission(Freeform::PERMISSION_FORMS_MANAGE);
+        $this->requireFormPermission();
 
         $data = json_decode($this->request->getRawBody());
         $orderedFormIds = $data->orderedFormIds ?? [];
@@ -114,6 +114,8 @@ class FormsController extends BaseApiController
 
     public function actionDelete(): Response
     {
+        $this->requireFormPermission(permission: Freeform::PERMISSION_FORMS_DELETE);
+
         $this->requirePostRequest();
         $id = (int) \Craft::$app->request->post('id');
         if (!$id) {
@@ -168,9 +170,9 @@ class FormsController extends BaseApiController
         return $event->getResponseData();
     }
 
-    private function requireFormPermission(int $id, string $permission = Freeform::PERMISSION_FORMS_MANAGE): void
+    private function requireFormPermission(?int $id = null, string $permission = Freeform::PERMISSION_FORMS_MANAGE): void
     {
-        $nestedPermission = PermissionHelper::prepareNestedPermission($permission, $id);
+        $nestedPermission = PermissionHelper::prepareNestedPermission($permission, $id ?? 0);
 
         $canManageAll = PermissionHelper::checkPermission($permission);
         $canManageCurrent = PermissionHelper::checkPermission($nestedPermission);

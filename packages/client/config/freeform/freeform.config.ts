@@ -22,6 +22,8 @@ type Config = {
     };
     freeform: {
       version: string;
+      canCreate: boolean;
+      canDelete: boolean;
     };
   };
   editions: {
