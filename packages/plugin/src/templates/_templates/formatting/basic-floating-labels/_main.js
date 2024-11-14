@@ -1,5 +1,5 @@
-var form = document.querySelector('[data-freeform-basic-floating-labels]');
-if (form) {
+var forms = document.querySelectorAll("[data-freeform-basic-floating-labels]");
+forms.forEach(function (form) {
     form.addEventListener("freeform-stripe-appearance", function (event) {
         event.elementOptions.appearance = Object.assign(
             event.elementOptions.appearance,
@@ -40,4 +40,16 @@ if (form) {
             }
         );
     });
-}
+    // Hides other form field error messaging
+    form.addEventListener("freeform-on-submit", function (event) {
+        var formId = event.form.getAttribute("data-id");
+        forms.forEach(function (otherForm) {
+            var otherFormId = otherForm.getAttribute("data-id");
+            if (formId !== otherFormId) {
+                otherForm.querySelectorAll("[data-field-errors]").forEach(element => element.remove());
+                otherForm.querySelectorAll(".freeform-input").forEach(element => element.classList.remove("freeform-has-errors"));
+            }
+        });
+    });
+});
+

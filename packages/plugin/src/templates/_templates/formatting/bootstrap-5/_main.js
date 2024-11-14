@@ -1,9 +1,8 @@
-var form = document.querySelector('[data-freeform-bootstrap]');
-if (form) {
+var forms = document.querySelectorAll("[data-freeform-bootstrap]");
+forms.forEach(function (form) {
     // Styling for AJAX responses
     form.addEventListener("freeform-ready", function (event) {
         var freeform = event.freeform;
-
         freeform.setOption("errorClassBanner", ["alert", "alert-danger"]);
         freeform.setOption("errorClassList", ["list-unstyled", "m-0", "fst-italic", "text-danger"]);
         freeform.setOption("errorClassField", ["is-invalid"]);
@@ -46,4 +45,15 @@ if (form) {
             }
         );
     });
-}
+    // Hides other form field error messaging
+    form.addEventListener("freeform-on-submit", function (event) {
+        var formId = event.form.getAttribute("data-id");
+        forms.forEach(function (otherForm) {
+            var otherFormId = otherForm.getAttribute("data-id");
+            if (formId !== otherFormId) {
+                otherForm.querySelectorAll("[data-field-errors]").forEach(element => element.remove());
+                otherForm.querySelectorAll(".form-control").forEach(element => element.classList.remove("is-invalid"));
+            }
+        });
+    });
+});

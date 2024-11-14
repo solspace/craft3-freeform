@@ -1,11 +1,11 @@
-var form = document.querySelector('[data-freeform-tailwind]');
-if (form) {
+var forms = document.querySelectorAll("[data-freeform-tailwind]");
+forms.forEach(function (form) {
     // Styling for AJAX responses
     form.addEventListener("freeform-ready", function (event) {
         var freeform = event.freeform;
         freeform.setOption("errorClassBanner", ["bg-red-100", "border", "border-red-400", "font-bold", "text-red-700", "px-4", "py-3", "rounded", "relative", "mb-4"]);
         freeform.setOption("errorClassList", ["errors", "text-red-500", "text-sm", "italic"]);
-        freeform.setOption("errorClassField", ["border-red-500"]);
+        freeform.setOption("errorClassField", ["freeform-input", "border-red-500"]);
         freeform.setOption("successClassBanner", ["bg-green-100", "border", "border-green-500", "font-bold", "text-green-700", "px-4", "py-3", "rounded", "relative", "mb-4"]);
     })
     // Styling for Stripe Payments field
@@ -45,4 +45,15 @@ if (form) {
             }
         );
     });
-}
+    // Hides other form field error messaging
+    form.addEventListener("freeform-on-submit", function (event) {
+        var formId = event.form.getAttribute("data-id");
+        forms.forEach(function (otherForm) {
+            var otherFormId = otherForm.getAttribute("data-id");
+            if (formId !== otherFormId) {
+                otherForm.querySelectorAll("[data-field-errors]").forEach(element => element.remove());
+                otherForm.querySelectorAll(".freeform-input").forEach(element => element.classList.remove("border-red-500"));
+            }
+        });
+    });
+});
