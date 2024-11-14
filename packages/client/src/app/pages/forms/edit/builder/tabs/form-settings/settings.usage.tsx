@@ -23,7 +23,7 @@ export const FormUsage: React.FC = () => {
     <FormSettingsContainer>
       <Breadcrumb
         id="settings-usage"
-        label={translate('Usage in Forms')}
+        label={translate('Usage in Elements')}
         url={currentPath.pathname}
       />
 
@@ -42,7 +42,7 @@ export const FormUsage: React.FC = () => {
 
       {data?.length > 0 && (
         <>
-          <SectionHeader>{translate('Usage in Forms')}</SectionHeader>
+          <SectionHeader>{translate('Usage in Elements')}</SectionHeader>
 
           <table className="data fullwidth collapsible">
             <thead>

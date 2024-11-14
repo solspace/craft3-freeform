@@ -572,6 +572,10 @@ return [
     'Stop Submissions After Date' => 'Arrêter les contributions après la date',
     'Set a date after which this form will no longer accept new submissions.' => 'Définissez une date après laquelle ce formulaire n’acceptera plus de nouvelles contributions.',
 
+    // Form Builder // Settings // Usage in Elements
+    'Usage in Elements' => 'Utilisation dans les Éléments',
+    'Element' => 'Élément',
+
     // Submissions
     'All Submissions' => 'Toutes les contributions',
     'Forms' => 'Formulaires',
