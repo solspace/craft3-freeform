@@ -34,27 +34,34 @@ If a duplicate email address is found in _Constant Contact_, the profile data wi
 
 - Open up a new browser tab and go to Constant Contact's API [*My Applications* website](https://app.constantcontact.com/pages/dma/portal/).
 - Log into your Constant Contact account there.
-- Go to the **My Applications** page (click at top nav menu).
+- Go to the **My Applications** page.
 - Click on the **New Application** button at top right.
-- Enter a name for the application in the modal window that pops up, and click **Save**. Leave the other 2 settings as they are defaulted.
-- On the next page, paste the value you copied from Freeform's **OAuth 2.0 Return URI** field into the Constant Contact **Redirect URI** field.
-- Fill out the rest of the form if you like, and then click the **Save** button at the top right.
-- On the **My Applications** list page, click on your newly created application.
-- Copy the `API Key` value from Constant Contact.
-- Click the **Generate Secret** button beside the API Key field, and then copy the `App Secret` value from Constant Contact.
+    - In the modal window that pops up, enter a name for the application.
+    - Leave the other 2 settings as they are defaulted.
+    - Click the **Create** button.
+- Once saved, it'll display a list of your applications.
+- For the application you just created, click on the **Edit** button.
+    - In the Constant Contact **Redirect URI** field, click on the pencil icon at the right to edit the value.
+    - Paste the value you copied from Freeform's **OAuth 2.0 Return URI** field.
+    - Click the **Confirm** button.
+- Click the **Save** button at the top right.
+- On the **Details** page of your application, copy the `API Key` value.
+- Click the **Generate Client Secret** button beside the API Key field.
+    - On the confirm screen that loads, click the **Generate Client Secret** button.
+    - Copy the newly created **Application Secret** value from Constant Contact.
 
 ### 3. Prepare the Connection
 
 - Go back to your Craft/Freeform browser tab.
-- Paste the `API Key` value from Constant Contact into the the **API Key** field in Freeform.
-- Paste the `App Secret` value from Constant Contact into the the **App Secret** field in Freeform.
+- Paste the `API Key` value from Constant Contact into the the **Client ID** field in Freeform.
+- Paste the `Application Secret` value from Constant Contact into the the **Client Secret** field in Freeform.
 
 ### 4. Finish the Connection
 
 - Click the **Save** button.
 - You will be redirected to a Constant Contact OAuth page to allow permissions.
     - If not currently logged in, fill in your credentials.
-    - Click **Allow** when asked for permissions.
+    - Click **Allow Access** when asked for permissions.
 - You will then be redirected back to the **Freeform Email Marketing Integration** page.
 - Confirm that there is a green circle with **Authorized** in the middle of the page.
 

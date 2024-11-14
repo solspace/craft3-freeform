@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '@editor/store';
 import { formActions } from '@editor/store/slices/form';
 import { useSiteContext } from '@ff-client/contexts/site/site.context';
@@ -16,6 +17,8 @@ export const QKForms = {
   all: (site: string) => [...QKForms.base, site] as const,
   single: (id: number) => [...QKForms.base, id] as const,
   settings: () => [...QKForms.base, 'settings'] as const,
+  usage: (id: number, siteId: number) =>
+    [...QKForms.base, id, 'usage', siteId] as const,
 };
 
 export const useQueryFormsWithStats = (): UseQueryResult<
@@ -69,4 +72,24 @@ export const useQueryFormSettings = (): UseQueryResult<
         }),
     { staleTime: Infinity, cacheTime: Infinity }
   );
+};
+
+type FormUsage = Array<{
+  id: number;
+  title: string;
+  type: string;
+  status: string;
+  url: string;
+}>;
+
+export const useQueryFormUsage = (): UseQueryResult<FormUsage, AxiosError> => {
+  const { formId } = useParams();
+  const { current } = useSiteContext();
+
+  return useQuery(QKForms.usage(Number(formId), current.id), {
+    queryFn: () =>
+      axios
+        .get(`/api/forms/${formId}/elements?site=${current.id}`)
+        .then((res) => res.data),
+  });
 };

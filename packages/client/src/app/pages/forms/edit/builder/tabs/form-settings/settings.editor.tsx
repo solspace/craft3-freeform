@@ -7,11 +7,13 @@ import type { Section } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
 
 import { FieldComponent } from './field-component';
+import { TAB_USAGE } from './settings';
 import {
   FormSettingsContainer,
   SectionContainer,
   SectionHeader,
 } from './settings.editor.styles';
+import { FormUsage } from './settings.usage';
 
 export const SettingsEditor: React.FC = () => {
   const { sectionHandle } = useParams();
@@ -34,6 +36,10 @@ export const SettingsEditor: React.FC = () => {
   });
 
   if (!selectedNamespace || !selectedSection) {
+    if (sectionHandle === TAB_USAGE) {
+      return <FormUsage />;
+    }
+
     return null;
   }
 
