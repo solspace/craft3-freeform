@@ -572,6 +572,10 @@ return [
     'Stop Submissions After Date' => 'Stop Submissions After Date',
     'Set a date after which this form will no longer accept new submissions.' => 'Set a date after which this form will no longer accept new submissions.',
 
+    // Form Builder // Settings // Usage in Elements
+    'Usage in Elements' => 'Usage in Elements',
+    'Element' => 'Element',
+
     // Submissions
     'All Submissions' => 'All Submissions',
     'Forms' => 'Forms',

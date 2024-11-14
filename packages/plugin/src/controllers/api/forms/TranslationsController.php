@@ -1,6 +1,6 @@
 <?php
 
-namespace Solspace\Freeform\controllers\api;
+namespace Solspace\Freeform\controllers\api\forms;
 
 use craft\db\Query;
 use Solspace\Freeform\controllers\BaseApiController;

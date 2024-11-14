@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import React from 'react';
+import classes from '@ff-client/utils/classes';
 
 import {
   EmptyBlockWrapper,
@@ -13,6 +14,7 @@ type Props = {
   title?: string;
   subtitle?: string;
   icon?: React.ReactNode;
+  iconFade?: boolean;
   lite?: boolean;
 };
 
@@ -20,6 +22,7 @@ export const EmptyBlock: React.FC<PropsWithChildren<Props>> = ({
   title,
   subtitle,
   icon,
+  iconFade,
   lite,
   children,
 }) => {
@@ -33,7 +36,7 @@ export const EmptyBlock: React.FC<PropsWithChildren<Props>> = ({
 
   return (
     <EmptyBlockWrapper>
-      {icon && <Icon>{icon}</Icon>}
+      {icon && <Icon className={classes(iconFade && 'fade')}>{icon}</Icon>}
 
       {title && <Title>{title}</Title>}
       {subtitle && <Subtitle>{subtitle}</Subtitle>}
