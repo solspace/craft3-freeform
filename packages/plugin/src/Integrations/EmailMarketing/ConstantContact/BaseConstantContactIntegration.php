@@ -13,7 +13,6 @@
 namespace Solspace\Freeform\Integrations\EmailMarketing\ConstantContact;
 
 use GuzzleHttp\Client;
-use Solspace\Freeform\Library\Exceptions\Integrations\IntegrationException;
 use Solspace\Freeform\Library\Integrations\DataObjects\FieldObject;
 use Solspace\Freeform\Library\Integrations\OAuth\OAuth2ConnectorInterface;
 use Solspace\Freeform\Library\Integrations\OAuth\OAuth2RefreshTokenInterface;
@@ -45,10 +44,6 @@ abstract class BaseConstantContactIntegration extends EmailMarketingIntegration 
         $response = $client->get($this->getEndpoint('/contact_custom_fields'));
         $json = json_decode((string) $response->getBody());
 
-        if (!isset($json->custom_fields) || !$json->custom_fields) {
-            throw new IntegrationException('Could not fetch fields for '.$category);
-        }
-
         $fieldList = [];
 
         $fieldList[] = new FieldObject('first_name', 'First Name', FieldObject::TYPE_STRING, $category, false);
@@ -65,6 +60,10 @@ abstract class BaseConstantContactIntegration extends EmailMarketingIntegration 
         $fieldList[] = new FieldObject('street_address_state', 'Address: State', FieldObject::TYPE_STRING, $category, false);
         $fieldList[] = new FieldObject('street_address_postal_code', 'Address: Postal Code', FieldObject::TYPE_STRING, $category, false);
         $fieldList[] = new FieldObject('street_address_country', 'Address: Country', FieldObject::TYPE_STRING, $category, false);
+
+        if (!isset($json->custom_fields) || !$json->custom_fields) {
+            return $fieldList;
+        }
 
         foreach ($json->custom_fields as $field) {
             $fieldList[] = new FieldObject(
