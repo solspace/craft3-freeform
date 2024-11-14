@@ -9,7 +9,9 @@ use Solspace\Freeform\controllers\api\FormsController;
 use Solspace\Freeform\controllers\BaseApiController;
 use Solspace\Freeform\Events\Forms\PersistFormEvent;
 use Solspace\Freeform\Form\Types\Regular;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\FormModal\CreateFormModal;
+use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Library\Helpers\SitesHelper;
 use Solspace\Freeform\Services\SettingsService;
 use yii\base\Event;
@@ -34,6 +36,8 @@ class ModalController extends BaseApiController
 
     protected function post(null|int|string $id = null): null|array|object
     {
+        PermissionHelper::requirePermission(Freeform::PERMISSION_FORMS_CREATE);
+
         $data = json_decode($this->request->getRawBody(), false);
         $data->uid = StringHelper::UUID();
         if (!isset($data->type)) {

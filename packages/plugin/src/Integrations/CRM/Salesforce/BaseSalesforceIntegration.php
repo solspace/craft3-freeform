@@ -111,6 +111,16 @@ abstract class BaseSalesforceIntegration extends CRMIntegration implements OAuth
                 continue;
             }
 
+            $options = null;
+            if (\count($field->picklistValues)) {
+                foreach ($field->picklistValues as $picklistValue) {
+                    $options[] = [
+                        'key' => $picklistValue->value,
+                        'label' => $picklistValue->label,
+                    ];
+                }
+            }
+
             $type = match ($field->type) {
                 'string', 'encryptedstring', 'textarea', 'email', 'url', 'address', 'picklist', 'phone', 'reference' => FieldObject::TYPE_STRING,
                 'int', 'number', 'currency' => FieldObject::TYPE_NUMERIC,
@@ -131,7 +141,8 @@ abstract class BaseSalesforceIntegration extends CRMIntegration implements OAuth
                 $field->label,
                 $type,
                 $category,
-                !$field->nillable
+                !$field->nillable,
+                $options,
             );
         }
 

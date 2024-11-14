@@ -43,8 +43,8 @@ class ConstantContactV3 extends BaseConstantContactIntegration
     #[VisibilityFilter('Boolean(enabled)')]
     #[VisibilityFilter('Boolean(values.mailingList)')]
     #[Input\Special\Properties\FieldMapping(
-        label: 'Contact Custom Fields',
-        instructions: 'Select the Freeform fields to be mapped to the applicable Constant Contact, Contact Custom fields.',
+        label: 'Contact Fields',
+        instructions: 'Select the Freeform fields to be mapped to the applicable Constant Contact fields.',
         order: 4,
         source: 'api/integrations/email-marketing/fields/'.self::CATEGORY_CONTACT_CUSTOM,
         parameterFields: [
