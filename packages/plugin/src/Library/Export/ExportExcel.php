@@ -37,9 +37,11 @@ class ExportExcel extends ExportCsv
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
 
-        $content = ob_get_clean();
+        $content = ob_get_contents();
 
-        ob_end_clean();
+        if (ob_get_length() > 0) {
+            ob_end_clean();
+        }
 
         return $content;
     }
