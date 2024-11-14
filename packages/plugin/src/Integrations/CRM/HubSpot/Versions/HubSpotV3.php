@@ -147,6 +147,16 @@ class HubSpotV3 extends BaseHubSpotIntegration
                 continue;
             }
 
+            $options = null;
+            if (\count($field->options)) {
+                foreach ($field->options as $option) {
+                    $options[] = [
+                        'key' => $option->value,
+                        'label' => $option->label,
+                    ];
+                }
+            }
+
             $type = match ($field->type) {
                 'string', 'phone_number' => FieldObject::TYPE_STRING,
                 'datetime', 'date' => FieldObject::TYPE_MICROTIME,
@@ -166,6 +176,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
                 $type,
                 $category,
                 false,
+                $options,
             );
         }
 

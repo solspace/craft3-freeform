@@ -39,6 +39,7 @@ export type DropdownProps = {
   emptyOption?: string;
   options?: OptionCollection;
   value?: string;
+  showValues?: boolean;
   onChange?: (value: string) => void;
 };
 
@@ -46,6 +47,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   emptyOption,
   value,
   options,
+  showValues,
   onChange,
   loading = false,
 }) => {
@@ -194,6 +196,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 options={filteredOptions}
                 value={value}
                 focusIndex={focusIndex}
+                showValues={showValues}
                 onChange={onOptionClick}
               />
             </ListWrapper>
