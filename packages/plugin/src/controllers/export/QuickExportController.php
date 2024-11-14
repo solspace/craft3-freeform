@@ -70,15 +70,20 @@ class QuickExportController extends BaseController
                         $field = $form->get($fieldId);
                         if ($field) {
                             $label = $field->getLabel();
+
+                            $storedFieldIds[] = $fieldId;
+
+                            $fieldSetting[$fieldId] = [
+                                'label' => $label,
+                                'checked' => $isChecked,
+                            ];
                         }
-
-                        $storedFieldIds[] = $fieldId;
+                    } else {
+                        $fieldSetting[$fieldId] = [
+                            'label' => $label,
+                            'checked' => $isChecked,
+                        ];
                     }
-
-                    $fieldSetting[$fieldId] = [
-                        'label' => $label,
-                        'checked' => $isChecked,
-                    ];
                 }
             }
 
@@ -214,10 +219,12 @@ class QuickExportController extends BaseController
 
             if (is_numeric($fieldId)) {
                 $field = $form->get($fieldId);
-                $fieldName = Submission::getFieldColumnName($field);
-                $fieldHandle = $field->getHandle();
+                if ($field) {
+                    $fieldName = Submission::getFieldColumnName($field);
+                    $fieldHandle = $field->getHandle();
 
-                $searchableFields[] = "[[sc.{$fieldName}]] as {$fieldHandle}";
+                    $searchableFields[] = "[[sc.{$fieldName}]] as {$fieldHandle}";
+                }
             } else {
                 $fieldName = $fieldId;
                 $fieldName = match ($fieldName) {
