@@ -5,6 +5,7 @@ namespace Solspace\Freeform\Library\Configuration;
 use craft\models\Site;
 use Solspace\Freeform\Bundles\Form\Limiting\LimitedUsers\LimitedUserChecker;
 use Solspace\Freeform\Freeform;
+use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Library\Helpers\SitesHelper;
 use Solspace\Freeform\Services\SettingsService;
 
@@ -25,6 +26,9 @@ class FreeformConfig implements \JsonSerializable
 
         $currentSiteId = SitesHelper::getCurrentCpPageSiteId();
         $sites = \Craft::$app->sites->getEditableSites();
+        if (empty($sites)) {
+            $sites = [\Craft::$app->sites->getCurrentSite()];
+        }
 
         $this->config = [
             'templates' => [
@@ -42,6 +46,8 @@ class FreeformConfig implements \JsonSerializable
                 ],
                 'freeform' => [
                     'version' => $plugin->getVersion(),
+                    'canCreate' => PermissionHelper::checkPermission(Freeform::PERMISSION_FORMS_CREATE),
+                    'canDelete' => PermissionHelper::checkPermission(Freeform::PERMISSION_FORMS_DELETE),
                 ],
             ],
             'editions' => [

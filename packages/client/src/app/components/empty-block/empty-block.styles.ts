@@ -4,6 +4,18 @@ import styled from 'styled-components';
 export const Icon = styled.div`
   font-size: 10rem;
   margin: 0 0 1.5rem;
+
+  svg {
+    min-width: 160px;
+    min-height: 160px;
+  }
+
+  &.fade {
+    svg {
+      fill: #a1a5aa;
+      opacity: 0.5;
+    }
+  }
 `;
 
 export const Title = styled.h2`

@@ -54,6 +54,14 @@ export const LabelContainer = styled.div`
   }
 `;
 
+export const LabelValueDisplay = styled.div`
+  color: ${colors.gray300};
+  font-size: 11px;
+  font-style: italic;
+  line-height: 11px;
+  height: 11px;
+`;
+
 export const Label = styled.label`
   display: block;
   padding: 5px 14px 5px 30px;

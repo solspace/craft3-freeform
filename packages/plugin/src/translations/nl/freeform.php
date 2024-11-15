@@ -572,6 +572,10 @@ return [
     'Stop Submissions After Date' => 'Inzendingen stoppen na datum',
     'Set a date after which this form will no longer accept new submissions.' => 'Stel een datum in waarna dit formulier geen nieuwe inzendingen meer accepteert.',
 
+    // Form Builder // Settings // Usage in Elements
+    'Usage in Elements' => 'Gebruik in Elementen',
+    'Element' => 'Element',
+
     // Submissions
     'All Submissions' => 'Alle Inzendingen',
     'Forms' => 'Formulieren',

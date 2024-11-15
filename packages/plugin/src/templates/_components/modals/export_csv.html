@@ -8,7 +8,7 @@
     #export-csv-modal .body {
         overflow-y: auto;
         height: 380px;
-        width: 280px;
+        width: 400px;
     }
 
     #export-csv-modal .footer {
@@ -27,6 +27,7 @@
         flex-direction: row;
         align-items: center;
         justify-items: flex-start;
+        width: fit-content;
     }
 
     #export-csv-modal .checkbox-list-item .icon {
@@ -83,7 +84,7 @@
             {% set form = settingItem.form %}
             {% set fields = settingItem.fields %}
 
-            <div class="form-field-list field{{ form.id != selectedFormId ? ' hidden' }}" data-id="{{ form.id }}">
+            <div class="form-field-list field" data-id="{{ form.id }}">
                 <div class="heading">
                     <label>{{ ('Fields for'|t('freeform')) ~ " " ~ form.name }}</label>
                 </div>
@@ -140,5 +141,15 @@
 
       return true;
     });
+    setTimeout(function() {
+        var formFieldLists = form.querySelectorAll('.form-field-list');
+        for (var i in formFieldLists) {
+            if (formFieldLists.hasOwnProperty(i)) {
+                if (formFieldLists[i].getAttribute('data-id') !== '{{ selectedFormId }}') {
+                    formFieldLists[i].classList.add('hidden');
+                }
+            }
+        }
+    }, 1000);
   })();
 </script>

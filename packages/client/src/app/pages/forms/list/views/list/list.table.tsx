@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '@config/freeform/freeform.config';
 import type { FormWithStats } from '@ff-client/types/forms';
 import translate from '@ff-client/utils/translations';
 
@@ -15,6 +16,8 @@ type Props = {
 
 export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
   const openCreateFormModal = useCreateFormModal();
+
+  const { canCreate } = config.metadata.freeform;
 
   return (
     <Table className="table data">
@@ -39,7 +42,7 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
           </>
         )}
 
-        {!isFetching && !forms?.length && (
+        {!isFetching && !forms?.length && canCreate && (
           <tr>
             <td colSpan={7}>
               <p>
@@ -54,6 +57,14 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
               >
                 {translate('New Form')}
               </button>
+            </td>
+          </tr>
+        )}
+
+        {!isFetching && !forms?.length && !canCreate && (
+          <tr>
+            <td colSpan={7}>
+              <p>{translate(`You don't have any forms yet.`)}</p>
             </td>
           </tr>
         )}
