@@ -1,5 +1,5 @@
-var form = document.querySelector('[data-freeform-foundation]');
-if (form) {
+var forms = document.querySelectorAll("[data-freeform-foundation]");
+forms.forEach(function (form) {
     // Styling for AJAX responses
     form.addEventListener("freeform-ready", function (event) {
         var freeform = event.freeform;
@@ -45,4 +45,15 @@ if (form) {
           }
         );
     });
-}
+    // Hides other form field error messaging
+    form.addEventListener("freeform-on-submit", function (event) {
+        var formId = event.form.getAttribute("data-id");
+        forms.forEach(function (otherForm) {
+            var otherFormId = otherForm.getAttribute("data-id");
+            if (formId !== otherFormId) {
+                otherForm.querySelectorAll("[data-field-errors]").forEach(element => element.remove());
+                otherForm.querySelectorAll(".freeform-field").forEach(element => element.classList.remove("has-error"));
+            }
+        });
+    });
+});
