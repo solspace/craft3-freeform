@@ -1,5 +1,28 @@
 # Solspace Freeform Changelog
 
+## 5.7.2 - 2024-11-15
+
+### Added
+- Added a **Usage in Elements** tab to each form's settings in the form builder, displaying which elements use that form in the Freeform Form element type (Craft 5 only).
+- Added detection and mapping of predefined options to applicable fields in the Salesforce integration.
+- Added detection and mapping of predefined options to applicable fields in the HubSpot integration.
+- Added an accessibility check for reduced motion on form scroll.
+- Verified support for Craft 5.5.x.
+
+### Changed
+- Updated composer.json to no longer force `^1.33` of the `phpstan/phpdoc-parser` package to workaround an issue in the `symfony/property-access` package now that the issue is resolved.
+
+### Fixed
+- Fixed a bug where the Constant Contact integration could not map to standard fields if no custom fields existed.
+- Fixed a bug where user permission checks for creating and deleting forms were not working.
+- Fixed a bug where some integrations might lose their `refresh_token`.
+- Fixed an autoloading warning issue.
+- Fixed a bug where the sample formatting templates' validation errors were not always working correctly when multiple forms with the same template existed in the same template.
+- Fixed a bug in the Freeform 4.x migration where it wasn't converting extended ASCII characters in form or field handles.
+- Fixed a bug where Quick Export could fail if there were invalid or stale field IDs.
+- Fixed a bug where exporting submissions to Excel format could sometimes fail.
+- Fixed a bug where the Constant Contact integration instructions were not up to date with the latest setup flow.
+
 ## 5.7.1 - 2024-11-12
 
 ### Added
@@ -7,7 +30,7 @@
 
 ### Changed
 - Updated CRM integrations in the form builder to include separators for objects to improve clarity.
-- Updated comppser.json to force the `phpstan/phpdoc-parser` package to `^1.33` to work around an issue in the `symfony/property-access` package.
+- Updated composer.json to force the `phpstan/phpdoc-parser` package to `^1.33` to work around an issue in the `symfony/property-access` package.
 
 ### Fixed
 - Fixed a bug where labels in the Jira integration would sometimes error about array values.
