@@ -28,6 +28,7 @@ export const ListProvider: React.FC = () => {
 
   const [view, setView] = useLocalStorage('forms-list-view', View.Grid);
   const isCraft5 = config.metadata.craft.is5;
+  const { canCreate } = config.metadata.freeform;
 
   queryClient.prefetchQuery(QKFieldTypes.all, fetchFieldTypes);
   queryClient.prefetchQuery(
@@ -62,9 +63,11 @@ export const ListProvider: React.FC = () => {
           />
         </ViewButtons>
 
-        <Button className="btn submit add icon" onClick={openCreateFormModal}>
-          {translate('Add new Form')}
-        </Button>
+        {canCreate && (
+          <Button className="btn submit add icon" onClick={openCreateFormModal}>
+            {translate('Add new Form')}
+          </Button>
+        )}
       </Header>
 
       {view === View.List && <FormList />}

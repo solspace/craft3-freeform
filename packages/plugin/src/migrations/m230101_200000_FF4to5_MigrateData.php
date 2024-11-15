@@ -235,6 +235,8 @@ class m230101_200000_FF4to5_MigrateData extends Migration
 
         $label = $data->label ?? '';
         $handle = $data->handle ?? $data->type.'_'.HashHelper::sha1(random_bytes(10).microtime(), 5);
+        $handle = preg_replace('/\ /', '_', $handle);
+        $handle = StringHelper::toHandle($handle);
 
         if (!$label) {
             $globalField = $this->globalFieldData[$data->id ?? 0] ?? null;

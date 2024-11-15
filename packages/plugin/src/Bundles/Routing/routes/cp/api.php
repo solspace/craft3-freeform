@@ -21,6 +21,9 @@ return [
     // FORM GROUPS
     'freeform/api/forms/groups' => 'freeform/api/form-groups',
 
+    // FORM ELEMENTS
+    'freeform/api/forms/<id:\d+>/elements' => 'freeform/api/forms/elements/get',
+
     // FORM MODAL
     'freeform/api/forms/modal' => 'freeform/api/forms/modal/index',
 

@@ -142,7 +142,13 @@ export default class Freeform {
   _scrollToForm = (): void => {
     const { scrollOffset, scrollElement } = this.options;
     const y = this.form.getBoundingClientRect().top + window.scrollY + scrollOffset;
-    scrollElement.scrollTo({ top: y, behavior: 'smooth' });
+    scrollElement.scrollTo({ top: y, behavior: this._isReducedMotion() ? 'instant' : 'smooth' });
+  };
+
+  _isReducedMotion = (): boolean => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    return !mediaQuery || mediaQuery.matches;
   };
 
   _setUp = (): void => {
