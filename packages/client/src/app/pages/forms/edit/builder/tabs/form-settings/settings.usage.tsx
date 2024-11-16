@@ -31,9 +31,9 @@ export const FormUsage: React.FC = () => {
 
       {!isFetching && data?.length === 0 && (
         <EmptyBlock
-          title={translate("This form isn't used anywhere")}
+          title={translate("No results found")}
           subtitle={translate(
-            'If you add it to any elements, the elements will show here.'
+            'This form is currently not attached to any elements.'
           )}
           icon={<NewsIcon />}
           iconFade

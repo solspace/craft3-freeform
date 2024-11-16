@@ -575,6 +575,8 @@ return [
     // Form Builder // Settings // Usage in Elements
     'Usage in Elements' => 'Gebruik in Elementen',
     'Element' => 'Element',
+    'No results found' => 'Geen resultaten gevonden',
+    'This form is currently not attached to any elements.' => 'Dit formulier is momenteel aan geen enkel element gekoppeld.',
 
     // Submissions
     'All Submissions' => 'Alle Inzendingen',

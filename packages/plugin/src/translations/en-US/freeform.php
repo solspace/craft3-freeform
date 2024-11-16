@@ -575,6 +575,8 @@ return [
     // Form Builder // Settings // Usage in Elements
     'Usage in Elements' => 'Usage in Elements',
     'Element' => 'Element',
+    'No results found' => 'No results found',
+    'This form is currently not attached to any elements.' => 'This form is currently not attached to any elements.',
 
     // Submissions
     'All Submissions' => 'All Submissions',
