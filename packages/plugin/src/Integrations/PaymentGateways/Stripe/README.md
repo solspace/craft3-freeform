@@ -2,17 +2,17 @@
 
 This guide assumes you have a [Stripe](https://stripe.com) account already.
 
-<span class="note warning">Please refer to the [Freeform Stripe integration documentation](https://docs.solspace.com/craft/freeform/v5/integrations/payments/) for a complete setup guide.</span>
+<span class="note warning">Please refer to the [Freeform Stripe integration documentation](https://docs.solspace.com/craft/freeform/v5/integrations/stripe-payments/) for a complete setup guide.</span>
 
 ## Compatibility
 
 Uses OAuth flow on `v4` of the REST API.
 
 ### Endpoints
-Maps data to spreadsheets via the **Google Sheets API**.
+Maps data to Stripe via the **Payment Element API**.
 
 ### Fields
-Maps Freeform submission data as new rows in a Google Sheets spreadsheet.
+Maps Freeform fields to Stripe fields to populate more customer information for the transaction/customer profile in Stripe.
 
 ## Setup Instructions
 
@@ -68,7 +68,7 @@ To use this integration on your form(s), you'll need to configure each form indi
 - Toggle the _Enable_ setting ON.
 - Map your Freeform fields to Stripe's fields as necessary.
 
-<span class="note warning">Please refer to the [Freeform Stripe integration documentation](https://docs.solspace.com/craft/freeform/v5/integrations/payments/) for a complete setup guide.</span>
+<span class="note warning">Please refer to the [Freeform Stripe integration documentation](https://docs.solspace.com/craft/freeform/v5/integrations/stripe-payments/) for a complete setup guide.</span>
 
 ---
 

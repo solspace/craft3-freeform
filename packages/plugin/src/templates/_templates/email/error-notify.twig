@@ -35,7 +35,7 @@
     {% set troubleshootText = "The most common reason why an email notification fails is due to a naming error of a variable in the template. It could be that you're manually calling a field handle incorrectly, or that the field you're calling is empty or no longer exists for the form. Please carefully review you form inside the form builder and compare it to the email notification template and ensure all values are correct." | t('freeform') %}
     {{ macros.paragraph(troubleshootText, 'small') }}
 
-    {% set subText = "Check out our <a href='{link}'>Common Issues documentation</a> for more information." | t('freeform', { link: 'https://docs.solspace.com/craft/freeform/v3/setup/common-issues.html' }) %}
+    {% set subText = "Check out our <a href='{link}'>Common Issues documentation</a> for more information." | t('freeform', { link: 'https://docs.solspace.com/craft/freeform/v5/guides/common-issues/' }) %}
     {{ macros.paragraph(subText, 'small') }}
 
 {% endblock %}
