@@ -1,9 +1,9 @@
-import 'core-js/features/array/for-each';
-import 'core-js/features/array/includes';
-import 'core-js/features/dom-collections/for-each';
-import 'core-js/features/get-iterator';
-import 'core-js/features/iterator/for-each';
-import 'core-js/features/object/assign';
+// import 'core-js/features/array/for-each';
+// import 'core-js/features/array/includes';
+// import 'core-js/features/dom-collections/for-each';
+// import 'core-js/features/get-iterator';
+// import 'core-js/features/iterator/for-each';
+// import 'core-js/features/object/assign';
 
 import events from '@lib/plugin/constants/event-types';
 import { SuccessBehavior } from '@lib/plugin/constants/form';
@@ -18,14 +18,12 @@ import TableHandler from '@lib/plugin/handlers/fields/table';
 import GoogleTagManager from '@lib/plugin/handlers/form/google-tag-manager';
 import RuleHandler from '@lib/plugin/handlers/form/rules';
 import SaveFormHandler from '@lib/plugin/handlers/form/save-form';
+import { ajax } from '@lib/plugin/helpers/ajax';
 import { isSafari } from '@lib/plugin/helpers/browser-check';
 import { getClassQuery } from '@lib/plugin/helpers/classes';
 import { addClass, getClassArray, removeClass, removeElement } from '@lib/plugin/helpers/elements';
 import { dispatchCustomEvent } from '@lib/plugin/helpers/event-handling';
-import type { AxiosResponse } from 'axios';
-import axios from 'axios';
-import type { Callback } from 'types/events';
-import { type FreeformResponse } from 'types/events';
+import type { Callback, FreeformResponseWithToken } from 'types/events';
 import type { FreeformEventParameters, FreeformHandler, FreeformHandlerConstructor, FreeformOptions } from 'types/form';
 
 export default class Freeform {
@@ -614,17 +612,11 @@ export default class Freeform {
       data.set('token', token);
     }
 
-    let request: AxiosResponse<FreeformResponse & { storageToken: string }>;
+    let response;
     try {
-      request = await axios<FreeformResponse & { storageToken: string }>({
+      response = await ajax<FreeformResponseWithToken>(form.getAttribute('action') || window.location.href, {
         method: form.getAttribute('method'),
-        url: form.getAttribute('action') || window.location.href,
         data,
-        headers: {
-          'Cache-Control': 'no-cache',
-          'X-Requested-With': 'XMLHttpRequest',
-          HTTP_X_REQUESTED_WITH: 'XMLHttpRequest',
-        },
       });
     } catch (error) {
       if (error?.response?.status === 417) {
@@ -636,17 +628,17 @@ export default class Freeform {
 
     this._removeMessages();
 
-    const response = request.data;
+    const responseData = response.data;
 
-    if (request.status === 200) {
-      const { success, errors, formErrors, storageToken } = response;
+    if (response.status === 200) {
+      const { success, errors, formErrors, storageToken } = responseData;
 
       if (success) {
         return storageToken;
       }
 
       if (errors || formErrors) {
-        this._dispatchEvent(events.form.ajaxError, { request, response, errors, formErrors });
+        this._dispatchEvent(events.form.ajaxError, { request: response, response: responseData, errors, formErrors });
         this._dispatchEvent(events.form.afterFailedSubmit, { cancelable: false });
         this._renderFieldErrors(errors);
         this._renderFormErrors(formErrors);
@@ -656,7 +648,7 @@ export default class Freeform {
         this._scrollToForm();
       }
     } else {
-      this._dispatchEvent(events.form.ajaxError, { request, response });
+      this._dispatchEvent(events.form.ajaxError, { request: response, response: responseData });
       this._dispatchEvent(events.form.afterFailedSubmit, { cancelable: false });
     }
 
