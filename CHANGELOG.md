@@ -1,5 +1,16 @@
 # Solspace Freeform Changelog
 
+## 5.7.3 - Unreleased
+
+### Added
+- Added translations for the **Usage in Elements** feature.
+
+### Changed
+- Updated the `phpoffice/phpspreadsheet` dependency to include `^2.0` and `^3.0`.
+
+### Fixed
+- Fixed a bug where the Stripe instructions guide had some errors.
+
 ## 5.7.2 - 2024-11-15
 
 ### Added
@@ -1058,10 +1069,18 @@
 - **Stripe Payments**
     - The **Stripe Payment** feature has been removed and replaced by all-new support for the newer Stripe Payment Element.
 
+## 4.1.23 - 2024-11-19
+
+### Added
+- Verified support for Craft 4.13.x.
+
+### Changed
+- Updated the `phpoffice/phpspreadsheet` dependency to include `^2.0` and `^3.0`.
+
 ## 4.1.22 - 2024-09-06
 
 ### Added
-- Verified support for Craft 5.4.x.
+- Verified support for Craft 4.12.x.
 
 ### Fixed
 - Fixed a bug where uploading assets to submissions in the control panel would incorrectly mark them as unfinalized assets to be deleted.
