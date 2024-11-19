@@ -24,7 +24,7 @@ class m230424_010101_announcement_4_0_23 extends Migration
         \Craft::$app->announcements->push(
             Translation::prep('freeform', 'New Demo Templates area!', []),
             Translation::prep('freeform', 'Completely revamped [demo templates]({url})! Quickly try on a wide range of sample formatting templates on your forms, view submission data, check out advanced setups and more.', [
-                'url' => 'https://docs.solspace.com/craft/freeform/v4/setup/demo-templates/',
+                'url' => 'https://docs.solspace.com/craft/freeform/v4/configuration/demo-templates/',
             ]),
             'freeform',
             true
@@ -33,7 +33,7 @@ class m230424_010101_announcement_4_0_23 extends Migration
         \Craft::$app->announcements->push(
             Translation::prep('freeform', 'Parse Twig inside Predefined Assets feature', []),
             Translation::prep('freeform', 'Set [Predefined Assets]({url}) dynamically from a field value, allowing the user\'s selection to determine which asset(s) to include in the email notification.', [
-                'url' => 'https://docs.solspace.com/craft/freeform/v4/overview/email-notifications/#template-options',
+                'url' => 'https://docs.solspace.com/craft/freeform/v4/forms/email-notifications/#template-options',
             ]),
             'freeform',
             true
