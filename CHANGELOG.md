@@ -1,9 +1,17 @@
 # Solspace Freeform Changelog
 
+## 4.1.23 - 2024-11-19
+
+### Added
+- Verified support for Craft 4.13.x.
+
+### Changed
+- Updated the `phpoffice/phpspreadsheet` dependency to include `^2.0` and `^3.0`.
+
 ## 4.1.22 - 2024-09-06
 
 ### Added
-- Verified support for Craft 5.4.x.
+- Verified support for Craft 4.12.x.
 
 ### Fixed
 - Fixed a bug where uploading assets to submissions in the control panel would incorrectly mark them as unfinalized assets to be deleted.
