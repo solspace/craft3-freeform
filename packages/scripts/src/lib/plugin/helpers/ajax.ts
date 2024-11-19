@@ -2,11 +2,13 @@ type Headers = Record<string, string | boolean | number>;
 
 type Options = {
   headers?: Headers;
+  cancelToken?: CancelToken;
+  onUploadProgress?: (progress: ProgressEvent) => void;
 };
 
 type ExtendedOptions = Options & {
   method?: string;
-  data?: Document | BodyInit | null;
+  data?: Document | XMLHttpRequestBodyInit | null;
 };
 
 type ResponseObject<D> = {
@@ -15,47 +17,78 @@ type ResponseObject<D> = {
 };
 
 type AjaxGET = <R>(url: URL | string, options?: Options) => Promise<ResponseObject<R>>;
-type AjaxPOST = <R, D = object>(url: URL | string, data: D, options?: Options) => Promise<ResponseObject<R>>;
+type AjaxPOST = <R, D = unknown>(url: URL | string, data: D, options?: Options) => Promise<ResponseObject<R>>;
 
 const get: AjaxGET = async (url, options = {}) =>
   new Promise((resolve, reject) => {
-    const xhr = createXhrRequest(resolve, reject, options);
+    const xhr = createXhrRequest('GET', url, resolve, reject, options);
     xhr.open('GET', url);
     xhr.send();
   });
 
 const post: AjaxPOST = async (url, data, options = {}) =>
   new Promise((resolve, reject) => {
-    const xhr = createXhrRequest(resolve, reject, options);
-    xhr.open('POST', url);
-    xhr.send(JSON.stringify(data));
+    const xhr = createXhrRequest('POST', url, resolve, reject, options);
+
+    if (data instanceof FormData) {
+      xhr.send(data);
+    } else {
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(data));
+    }
   });
 
 type CreateXhrRequest = <T>(
-  resolve: (value: T) => void,
+  method: string,
+  url: string | URL,
+  resolve: (value: ResponseObject<T>) => void,
   reject: (reason?: unknown) => void,
   options?: Options
 ) => XMLHttpRequest;
 
-const createXhrRequest: CreateXhrRequest = (resolve, reject, options) => {
+const createXhrRequest: CreateXhrRequest = (method, url, resolve, reject, options) => {
   const xhr = new XMLHttpRequest();
+  xhr.open(method, url);
 
   xhr.setRequestHeader('Cache-Control', 'no-cache');
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-  attachHeaders(xhr, options?.headers);
-
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
 
+  attachHeaders(xhr, options?.headers);
+
   xhr.onload = () => {
-    console.log('success', xhr.response);
-    resolve(xhr.response);
+    let data = xhr.response;
+    try {
+      data = JSON.parse(xhr.response);
+    } catch (error) {
+      // Do nothing
+    }
+
+    resolve({
+      status: xhr.status,
+      data,
+    });
   };
 
   xhr.onerror = () => {
-    reject(xhr.response);
+    reject(new Error('Network error'));
   };
+
+  xhr.onabort = () => {
+    reject(new Error('Request aborted'));
+  };
+
+  if (options.onUploadProgress) {
+    xhr.upload.onprogress = (event) => {
+      options.onUploadProgress(event);
+    };
+  }
+
+  if (options.cancelToken) {
+    options.cancelToken._setCancelFn(() => {
+      xhr.abort();
+    });
+  }
 
   return xhr;
 };
@@ -72,10 +105,33 @@ const attachHeaders = (xhr: XMLHttpRequest, headers?: Headers) => {
 
 export const ajax = <R>(url: URL | string, options?: ExtendedOptions): Promise<ResponseObject<R>> =>
   new Promise((resolve, reject) => {
-    const xhr = createXhrRequest(resolve, reject, options);
-    xhr.open(options?.method || 'GET', url);
-    xhr.send(JSON.stringify(options.data));
+    const xhr = createXhrRequest(options?.method || 'GET', url, resolve, reject, options);
+
+    const data = options?.data;
+    if (data instanceof FormData) {
+      xhr.send(data);
+    } else {
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(data));
+    }
   });
 
 ajax.get = get;
 ajax.post = post;
+
+export class CancelToken {
+  private cancelFn: () => void;
+
+  constructor() {}
+
+  cancel() {
+    if (this.cancelFn) {
+      this.cancelFn();
+      this.cancelFn = null;
+    }
+  }
+
+  _setCancelFn(fn: () => void) {
+    this.cancelFn = fn;
+  }
+}
