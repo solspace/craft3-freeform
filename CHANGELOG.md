@@ -1,5 +1,15 @@
 # Solspace Freeform Changelog
 
+## 5.8.0 - Unreleased
+
+### Changed
+- Optimized all front end Freeform scripts.
+    - Removed the `axios` dependency.
+    - Removed the `lodash` dependency.
+    - Removed the `core-js` polyfills.
+    - Scripts for Calculation fields now load seperately as `calculation.js` only if the field exists in the form being displayed.
+    - When using `freeform.loadScripts()` (for manually loading scripts) and Calculation fields, be sure to include the `field.calculation` option.
+
 ## 5.7.3 - Unreleased
 
 ### Added
