@@ -62,7 +62,7 @@ class Condition
     }
 
     #[Groups(['front-end', 'builder'])]
-    public function getValue(): string
+    public function getValue(): array|string
     {
         return $this->value;
     }
