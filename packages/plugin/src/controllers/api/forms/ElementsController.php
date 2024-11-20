@@ -74,8 +74,8 @@ class ElementsController extends BaseApiController
         $elements = array_map(
             fn (ElementInterface $element) => [
                 'id' => $element->id,
-                'title' => $element instanceof User ? ($element->fullName ?: $element->username) : $element->title,
-                'type' => $element::displayName(),
+                'title' => $this->_getElementTitle($element),
+                'type' => $this->_getElementType($element),
                 'status' => ucfirst($element->getStatus()),
                 'url' => $element->getCpEditUrl(),
             ],
@@ -98,5 +98,23 @@ class ElementsController extends BaseApiController
                 $fieldUids[] = $customField->uid;
             }
         }
+    }
+
+    private function _getElementTitle(ElementInterface $element): string
+    {
+        if ($element instanceof User) {
+            return $element->fullName ?: $element->username;
+        }
+
+        return $element->title ?: 'Entry '.$element->id;
+    }
+
+    private function _getElementType(ElementInterface $element): string
+    {
+        if ($element::refHandle() === 'matrixblock') {
+            return $element::displayName().' (Matrix)';
+        }
+
+        return $element::displayName();
     }
 }
