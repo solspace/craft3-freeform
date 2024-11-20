@@ -11,6 +11,21 @@ class ConditionValidator
         $expectedValue = $condition->getValue();
 
         if (\is_array($value)) {
+            if (preg_match('/^[\[{].*[]}]$/', $expectedValue)) {
+                $expectedValue = json_decode($expectedValue, true);
+                $hasCommonValue = [] !== array_intersect($value, $expectedValue);
+
+                return match ($condition->getOperator()) {
+                    Condition::TYPE_EQUALS => $expectedValue == $value,
+                    Condition::TYPE_NOT_EQUALS => $expectedValue != $value,
+                    Condition::TYPE_CONTAINS, Condition::TYPE_IS_ONE_OF => $hasCommonValue,
+                    Condition::TYPE_NOT_CONTAINS, Condition::TYPE_IS_NOT_ONE_OF => !$hasCommonValue,
+                    Condition::TYPE_IS_EMPTY => empty($value),
+                    Condition::TYPE_IS_NOT_EMPTY => !empty($value),
+                    default => false,
+                };
+            }
+
             return match ($condition->getOperator()) {
                 Condition::TYPE_EQUALS => $expectedValue === implode(',', $value),
                 Condition::TYPE_NOT_EQUALS => $expectedValue !== implode(',', $value),
