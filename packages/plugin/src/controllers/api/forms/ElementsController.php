@@ -111,7 +111,7 @@ class ElementsController extends BaseApiController
 
     private function _getElementType(ElementInterface $element): string
     {
-        if ($element::refHandle() === 'matrixblock') {
+        if ('matrixblock' === $element::refHandle()) {
             return $element::displayName().' (Matrix)';
         }
 
