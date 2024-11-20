@@ -75,7 +75,7 @@ class ElementsController extends BaseApiController
             fn (ElementInterface $element) => [
                 'id' => $element->id,
                 'title' => $this->_getElementTitle($element),
-                'type' => $this->_getElementType($element),
+                'type' => $element::displayName(),
                 'status' => ucfirst($element->getStatus()),
                 'url' => $element->getCpEditUrl(),
             ],
@@ -107,14 +107,5 @@ class ElementsController extends BaseApiController
         }
 
         return $element->title ?: 'Entry '.$element->id;
-    }
-
-    private function _getElementType(ElementInterface $element): string
-    {
-        if ('matrixblock' === $element::refHandle()) {
-            return $element::displayName().' (Matrix)';
-        }
-
-        return $element::displayName();
     }
 }
