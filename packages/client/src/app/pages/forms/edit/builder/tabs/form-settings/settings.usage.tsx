@@ -31,7 +31,7 @@ export const FormUsage: React.FC = () => {
 
       {!isFetching && data?.length === 0 && (
         <EmptyBlock
-          title={translate("No results found")}
+          title={translate('No results found')}
           subtitle={translate(
             'This form is currently not attached to any elements.'
           )}
