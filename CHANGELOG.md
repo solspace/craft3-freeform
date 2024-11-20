@@ -3,6 +3,7 @@
 ## 5.8.0 - Unreleased
 
 ### Changed
+- Improved the usability of the Submit button layout settings to hide unnecessary options in the form builder.
 - Optimized all front end Freeform scripts.
     - Removed the `axios` dependency.
     - Removed the `lodash` dependency.
