@@ -1,7 +1,7 @@
 import type Freeform from '@components/front-end/plugin/freeform';
 import events from '@lib/plugin/constants/event-types';
+import { isEqual } from '@lib/plugin/helpers/comparisons';
 import { dispatchCustomEvent } from '@lib/plugin/helpers/event-handling';
-import { isEqual } from 'lodash';
 import type { FreeformHandler } from 'types/form';
 
 export const enum Operator {

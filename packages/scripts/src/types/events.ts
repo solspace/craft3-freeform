@@ -20,7 +20,7 @@ type Action = {
 export type FreeformResponse = {
   success: boolean;
   finished: boolean;
-  onSuccess: '';
+  onSuccess: string;
   id: number;
   hash: string;
   values: Record<string, GenericValue>;
@@ -33,7 +33,10 @@ export type FreeformResponse = {
   actions: string[];
   multipage: boolean;
   duplicate: boolean;
+  freeform_payload: string;
 };
+
+export type FreeformResponseWithToken = FreeformResponse & { storageToken: string };
 
 export type FreeformResponseEvent = FreeformEvent & {
   response: FreeformResponse;
