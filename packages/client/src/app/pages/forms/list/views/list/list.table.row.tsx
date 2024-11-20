@@ -5,11 +5,16 @@ import { Tooltip } from 'react-tippy';
 import { FlexRow } from '@components/layout/blocks/flex';
 import { Truncate } from '@components/layout/blocks/truncate';
 import config, { Edition } from '@config/freeform/freeform.config';
+import { useSiteContext } from '@ff-client/contexts/site/site.context';
+import { QKGroups } from '@ff-client/queries/form-groups';
+import { QKForms } from '@ff-client/queries/forms';
 import type { FormWithStats } from '@ff-client/types/forms';
 import translate from '@ff-client/utils/translations';
 import ArchiveIcon from '@ff-icons/actions/archive.svg';
 import CloneIcon from '@ff-icons/actions/clone.svg';
 import CrossIcon from '@ff-icons/actions/delete.svg';
+import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
 import { useDeleteFormModal } from '../../modals/hooks/use-delete-form-modal';
@@ -34,6 +39,8 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
   const archiveMutation = useArchiveFormMutation();
   const cloneMutation = useCloneFormMutation();
 
+  const queryClient = useQueryClient();
+  const { getCurrentHandleWithFallback } = useSiteContext();
   const openDeleteFormModal = useDeleteFormModal({ form });
 
   const { canDelete } = config.metadata.freeform;
@@ -120,7 +127,23 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
           )}
           {canDelete && (
             <Tooltip title={translate('Delete this Form')} {...tooltipProps}>
-              <ControlButton onClick={openDeleteFormModal}>
+              <ControlButton
+                onClick={async (event) => {
+                  if (event.metaKey && event.shiftKey) {
+                    await axios.post(`/api/forms/delete`, {
+                      id: id,
+                    });
+                    queryClient.invalidateQueries(
+                      QKGroups.all(getCurrentHandleWithFallback())
+                    );
+                    queryClient.invalidateQueries(
+                      QKForms.all(getCurrentHandleWithFallback())
+                    );
+                  } else {
+                    openDeleteFormModal();
+                  }
+                }}
+              >
                 <CrossIcon />
               </ControlButton>
             </Tooltip>
