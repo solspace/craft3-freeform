@@ -6,6 +6,8 @@ use craft\base\ElementInterface;
 use craft\db\Query;
 use craft\db\Table;
 use craft\elements\User;
+use craft\fields\Matrix;
+use craft\models\FieldLayout;
 use Solspace\Freeform\controllers\BaseApiController;
 use Solspace\Freeform\FieldTypes\FormFieldType;
 use Solspace\Freeform\Library\Helpers\SitesHelper;
@@ -33,12 +35,7 @@ class ElementsController extends BaseApiController
         $fieldUids = [];
         $layouts = $service->getAllLayouts();
         foreach ($layouts as $layout) {
-            $customFields = $layout->getCustomFieldElements();
-            foreach ($customFields as $customField) {
-                if ($customField->getField() instanceof FormFieldType) {
-                    $fieldUids[] = $customField->uid;
-                }
-            }
+            $this->_getCustomFieldElements($layout, $fieldUids);
         }
 
         $conditions = ['or'];
@@ -77,8 +74,8 @@ class ElementsController extends BaseApiController
         $elements = array_map(
             fn (ElementInterface $element) => [
                 'id' => $element->id,
-                'title' => $element instanceof User ? $element->fullName : $element->title,
-                'type' => $element::displayName(),
+                'title' => $this->_getElementTitle($element),
+                'type' => $this->_getElementType($element),
                 'status' => ucfirst($element->getStatus()),
                 'url' => $element->getCpEditUrl(),
             ],
@@ -86,5 +83,38 @@ class ElementsController extends BaseApiController
         );
 
         return $this->asJson($elements);
+    }
+
+    private function _getCustomFieldElements(FieldLayout $layout, array &$fieldUids = []): void
+    {
+        $customFields = $layout->getCustomFieldElements();
+        foreach ($customFields as $customField) {
+            $field = $customField->getField();
+            if ($field instanceof Matrix) {
+                foreach ($field->getEntryTypes() as $entryType) {
+                    $this->_getCustomFieldElements($entryType->getFieldLayout(), $fieldUids);
+                }
+            } elseif ($field instanceof FormFieldType) {
+                $fieldUids[] = $customField->uid;
+            }
+        }
+    }
+
+    private function _getElementTitle(ElementInterface $element): string
+    {
+        if ($element instanceof User) {
+            return $element->fullName ?: $element->username;
+        }
+
+        return $element->title ?: 'Entry '.$element->id;
+    }
+
+    private function _getElementType(ElementInterface $element): string
+    {
+        if ('matrixblock' === $element::refHandle()) {
+            return $element::displayName().' (Matrix)';
+        }
+
+        return $element::displayName();
     }
 }
