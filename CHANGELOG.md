@@ -9,6 +9,7 @@
 - Updated the `phpoffice/phpspreadsheet` dependency to include `^2.0` and `^3.0`.
 
 ### Fixed
+- Fixed a bug where Matrix relation titles would not always display correctly in the **Usage in Elements** tab. Set `Entry ID#` as a title fallback for Matrix relations without a title.
 - Fixed a bug where the Stripe instructions guide had some errors.
 
 ## 5.7.2 - 2024-11-15
