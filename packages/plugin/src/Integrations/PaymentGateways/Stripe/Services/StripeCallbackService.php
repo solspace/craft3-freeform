@@ -86,6 +86,10 @@ class StripeCallbackService
         }
 
         if ($paymentMethod) {
+            if (\is_string($paymentMethod)) {
+                $paymentMethod = $stripe->paymentMethods->retrieve($paymentMethod);
+            }
+
             $metadata['type'] = $paymentMethod->type;
             $metadata['details'] = $paymentMethod->{$paymentMethod->type}->toArray();
         }
