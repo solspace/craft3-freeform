@@ -48,6 +48,10 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
         $settings = Freeform::getInstance()->getSettings();
         $defaults = $settings->defaults;
 
+        $prefix = \Craft::$app->db->tablePrefix;
+        $prefixLength = \strlen($prefix);
+        $maxHandleSize = 36 - $prefixLength;
+
         foreach ($formData as $data) {
             $id = $data['id'];
             $layoutJson = json_decode($data['layoutJson']);
@@ -68,6 +72,7 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
 
             $formHandle = preg_replace('/\ /', '_', $form->handle);
             $formHandle = StringHelper::toHandle($formHandle);
+            $formHandle = StringHelper::truncate($formHandle, $maxHandleSize, '');
 
             $propertyProvider->setObjectProperties(
                 $general,
