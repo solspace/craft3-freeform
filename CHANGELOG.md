@@ -10,6 +10,7 @@
 
 ### Fixed
 - Fixed a bug where Matrix relation titles would not always display correctly in the **Usage in Elements** tab. Set `Entry ID#` as a title fallback for Matrix relations without a title.
+- Fixed a bug where the Pipedrive integration was not correctly mapping to Lead fields.
 - Fixed a bug where required field validation wasn't working correctly when using `is one of` and `is not one of` conditional rules logic on it.
 - Fixed a bug where the Freeform 4.x migration could fail if a form name was too long.
 - Fixed a bug where the Stripe payment status was not updating for previously declined cards.
