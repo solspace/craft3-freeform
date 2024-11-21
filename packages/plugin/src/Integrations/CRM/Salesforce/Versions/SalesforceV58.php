@@ -365,6 +365,9 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         ];
 
         if ($leadId) {
+            // Remove empty values
+            $requestConfiguration['json'] = array_filter($requestConfiguration['json']);
+
             [$response] = $this->getJsonResponse(
                 $client->patch(
                     $this->getEndpoint('/sobjects/Lead/'.$leadId),
