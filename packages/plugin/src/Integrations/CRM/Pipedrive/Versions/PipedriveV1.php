@@ -55,7 +55,7 @@ class PipedriveV1 extends BasePipedriveIntegration
     #[Input\Special\Properties\FieldMapping(
         instructions: 'Select the Freeform fields to be mapped to the applicable Pipedrive Lead fields',
         order: 4,
-        source: 'api/integrations/crm/fields/'.self::CATEGORY_DEAL,
+        source: 'api/integrations/crm/fields/'.self::CATEGORY_LEAD,
         parameterFields: ['id' => 'id'],
     )]
     protected ?FieldMapping $leadMapping = null;

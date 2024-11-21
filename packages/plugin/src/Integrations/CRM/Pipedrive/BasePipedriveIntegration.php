@@ -89,7 +89,13 @@ abstract class BasePipedriveIntegration extends CRMIntegration implements OAuth2
 
     public function fetchFields(string $category, Client $client): array
     {
-        $response = $client->get($this->getEndpoint('/'.strtolower($category).'Fields'));
+        $segment = match ($category) {
+            self::CATEGORY_PERSON => '/personFields',
+            self::CATEGORY_ORGANIZATION => '/organizationFields',
+            self::CATEGORY_LEAD, self::CATEGORY_DEAL => '/dealFields',
+        };
+
+        $response = $client->get($this->getEndpoint($segment));
         $json = json_decode((string) $response->getBody());
 
         if (!isset($json->success) || !$json->success) {
