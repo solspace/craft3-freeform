@@ -1,17 +1,18 @@
 # Solspace Freeform Changelog
 
-## 5.7.3 - Unreleased
+## 5.7.3 - 2024-11-22
 
 ### Added
 - Added translations for the **Usage in Elements** feature.
 
 ### Changed
 - Updated the `phpoffice/phpspreadsheet` dependency to include `^2.0` and `^3.0`.
+- Updated the Salesforce Lead **Update Duplicate Leads** setting to skip empty values in the new data when overwriting an existing Lead record.
 
 ### Fixed
 - Fixed a bug where Matrix relation titles would not always display correctly in the **Usage in Elements** tab. Set `Entry ID#` as a title fallback for Matrix relations without a title.
 - Fixed a bug where the Pipedrive integration was not correctly mapping to Lead fields.
-- Fixed a bug where required field validation wasn't working correctly when using `is one of` and `is not one of` conditional rules logic on it.
+- Fixed a bug where required field validation wasn't working correctly when using `is one of` and `is not one of` conditional rules logic.
 - Fixed a bug where the Freeform 4.x migration could fail if a form name was too long.
 - Fixed a bug where the Stripe payment status was not updating for previously declined cards.
 - Fixed a bug where the Stripe instructions guide had some errors.
