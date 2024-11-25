@@ -8,7 +8,9 @@ import {
 
 export const TableEditorWrapper = styled(PreviewEditor)``;
 
-export const TableContainer = styled(PreviewEditorContainer)``;
+export const TableContainer = styled(PreviewEditorContainer)`
+  background-color: white;
+`;
 
 export const TabularOptions = styled.table`
   width: 100%;
@@ -31,7 +33,6 @@ export const Cell = styled.td<CellProps>`
   label {
     display: none;
   }
-}
 `;
 
 export const Input = styled.input`
@@ -52,7 +53,6 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  width: 100%;
   height: 34px;
 
   padding: 6px 9px;

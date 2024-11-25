@@ -24,6 +24,10 @@ import MoveIcon from '@components/form-controls/icons/move.svg';
 import type { Option as PropertyOption } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
 
+import { TableCheckboxEditor } from './editor/table.input.checkbox';
+import { TableDropdownEditor } from './editor/table.input.dropdown';
+import { TableTextEditor } from './editor/table.input.text';
+
 type Props = {
   columnTypes: PropertyOption[];
   columns: ColumnDescription[];
@@ -42,7 +46,7 @@ export const TableEditor: React.FC<Props> = ({
   );
 
   const { activeCell, setActiveCell, setCellRef, keyPressHandler } =
-    useCellNavigation(columns.length, 3);
+    useCellNavigation(columns.length, 2);
 
   const appendAndFocus = (cellIndex: number, atIndex?: number): void => {
     setActiveCell(
@@ -125,31 +129,9 @@ export const TableEditor: React.FC<Props> = ({
                   </Select>
                 </Cell>
                 <Cell>
-                  <Input
-                    type="text"
-                    value={column.value}
-                    placeholder={translate('Value')}
-                    autoFocus={activeCell === `${rowIndex}:2`}
-                    ref={(element) => setCellRef(element, rowIndex, 2)}
-                    onFocus={() => setActiveCell(rowIndex, 2)}
-                    onKeyDown={keyPressHandler({
-                      onEnter: (event) => {
-                        appendAndFocus(
-                          2,
-                          event.shiftKey ? rowIndex : undefined
-                        );
-                      },
-                    })}
-                    onChange={(event) =>
-                      updateValue(
-                        updateColumn(
-                          rowIndex,
-                          { ...column, value: event.target.value },
-                          columns
-                        )
-                      )
-                    }
-                  />
+                  {renderCellEditor(column, (col: ColumnDescription) =>
+                    updateValue(updateColumn(rowIndex, col, columns))
+                  )}
                 </Cell>
                 {columns.length > 1 && (
                   <>
@@ -187,4 +169,23 @@ export const TableEditor: React.FC<Props> = ({
       </HelpText>
     </TableEditorWrapper>
   );
+};
+
+const renderCellEditor = (
+  column: ColumnDescription,
+  update: (col: ColumnDescription) => void
+): React.ReactNode => {
+  if (column.type === 'text') {
+    return <TableTextEditor column={column} onUpdate={update} />;
+  }
+
+  if (column.type === 'select') {
+    return <TableDropdownEditor column={column} onUpdate={update} />;
+  }
+
+  if (column.type === 'checkbox') {
+    return <TableCheckboxEditor column={column} onUpdate={update} />;
+  }
+
+  return null;
 };

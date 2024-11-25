@@ -175,7 +175,7 @@
                         </div>
                     <% } else if (column.type === 'checkbox') { %>
                         <div class="checkbox-label">
-                            <input type="checkbox" class="checkbox" checked="checked" />
+                            <input type="checkbox" class="checkbox"<%= !!column.checked ? 'checked="checked"' : '' %> />
                             <label for=""></label>
                         </div>
                     <% } else { %>

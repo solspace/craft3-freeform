@@ -42,13 +42,14 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
     public const COLUMN_TYPE_STRING = 'string';
     public const COLUMN_TYPE_DROPDOWN = 'select';
     public const COLUMN_TYPE_CHECKBOX = 'checkbox';
+    public const COLUMN_TYPE_RADIO = 'radio';
+    public const COLUMN_TYPE_TEXTAREA = 'textarea';
 
     public array $columns = [];
 
     #[ValueTransformer(TableTransformer::class)]
     #[Input\Table(
         label: 'Table Layout',
-        instructions: 'Use semicolon ";" separated values for dropdown options.',
         value: [],
         options: [
             [
@@ -56,8 +57,16 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                 'label' => 'Text',
             ],
             [
+                'value' => self::COLUMN_TYPE_TEXTAREA,
+                'label' => 'Textarea',
+            ],
+            [
                 'value' => self::COLUMN_TYPE_CHECKBOX,
                 'label' => 'Checkbox',
+            ],
+            [
+                'value' => self::COLUMN_TYPE_RADIO,
+                'label' => 'Radios',
             ],
             [
                 'value' => self::COLUMN_TYPE_DROPDOWN,
@@ -380,16 +389,14 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
 
                 switch ($type) {
                     case self::COLUMN_TYPE_CHECKBOX:
-                        $value = $row[$index];
-
                         $inputAttributes = $attributes
                             ->getCheckbox()
                             ->clone()
                             ->replace('type', 'checkbox')
                             ->replace('name', $name)
-                            ->replace('value', $defaultValue)
-                            ->replace('data-default-value', $defaultValue)
-                            ->replace('checked', (bool) $value)
+                            ->replace('value', '1')
+                            ->replace('data-default-value', '1')
+                            ->replace('checked', $column->checked)
                         ;
 
                         $output .= '<input'.$inputAttributes.' />';
@@ -403,7 +410,7 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                             ->replace('name', $name)
                         ;
 
-                        $options = explode(';', $defaultValue);
+                        $options = $column->options;
                         $output .= '<select'.$dropdownAttributes.'>';
 
                         foreach ($options as $option) {
@@ -429,6 +436,7 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                             ->replace('type', 'text')
                             ->replace('name', $name)
                             ->replace('value', $value)
+                            ->replace('placeholder', $column->placeholder)
                             ->replace('data-default-value', $defaultValue)
                         ;
 

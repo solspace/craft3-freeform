@@ -98,13 +98,14 @@ export const PreviewRow = styled.div`
 
     position: absolute;
     left: calc(100% - 105px);
-    bottom: -7px;
+    bottom: -4px;
 
     padding: 0 5px;
     background: ${colors.white};
 
     ${labelText};
     font-size: 8px;
+    line-height: 8px;
   }
 
   > div {
