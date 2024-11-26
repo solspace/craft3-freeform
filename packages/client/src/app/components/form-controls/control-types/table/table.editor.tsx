@@ -175,11 +175,11 @@ const renderCellEditor = (
   column: ColumnDescription,
   update: (col: ColumnDescription) => void
 ): React.ReactNode => {
-  if (column.type === 'text') {
+  if (['text', 'textarea'].includes(column.type)) {
     return <TableTextEditor column={column} onUpdate={update} />;
   }
 
-  if (column.type === 'select') {
+  if (['select', 'radio'].includes(column.type)) {
     return <TableDropdownEditor column={column} onUpdate={update} />;
   }
 

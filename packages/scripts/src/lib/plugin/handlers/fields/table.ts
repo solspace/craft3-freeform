@@ -5,6 +5,7 @@ import type { FreeformHandler } from 'types/form';
 
 class Table implements FreeformHandler {
   PATTERN = /([^[]+)\[(\d+)\](\[\d+\])$/g;
+  ID_PATTERN = /^(labeled-.*)-(\d+)-(\d+)-(\d+)$/g;
 
   freeform: Freeform;
 
@@ -65,6 +66,12 @@ class Table implements FreeformHandler {
                 }
               } else {
                 item.checked = false;
+              }
+
+              if (item.id && this.ID_PATTERN.test(item.id)) {
+                item.id = item.id.replace(this.ID_PATTERN, `$1-${maxIndex}-$3-$4`);
+                const label = item.nextSibling as HTMLLabelElement;
+                label.htmlFor = item.id;
               }
 
               item.value = defaultValue;

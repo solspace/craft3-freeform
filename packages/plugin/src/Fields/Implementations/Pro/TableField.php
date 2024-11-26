@@ -419,12 +419,53 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                                 ->set('selected', $option === $value)
                             ;
 
-                            $output .= '<option '.$optionAttributes.'>'
-                                .$option
-                                .'</option>';
+                            $output .= '<option '.$optionAttributes.'>'.$option.'</option>';
                         }
 
                         $output .= '</select>';
+
+                        break;
+
+                    case self::COLUMN_TYPE_RADIO:
+                        $radioAttributes = $attributes
+                            ->getRadios()
+                            ->clone()
+                            ->replace('type', 'radio')
+                            ->replace('name', $name)
+                        ;
+
+                        $options = $column->options;
+                        $output .= '<div>';
+
+                        foreach ($options as $radioIndex => $option) {
+                            $radioId = 'labeled-'.$handle.'-'.$rowIndex.'-'.$index.'-'.$radioIndex;
+                            $radioAttributes
+                                ->replace('id', $radioId)
+                                ->replace('value', $option)
+                                ->replace('checked', $option === $value)
+                            ;
+
+                            $output .= '<div>';
+                            $output .= '<input'.$radioAttributes.' />';
+                            $output .= '<label for="'.$radioId.'">'.$option.'</label>';
+                            $output .= '</div>';
+                        }
+
+                        $output .= '</div>';
+
+                        break;
+
+                    case self::COLUMN_TYPE_TEXTAREA:
+                        $inputAttributes = $attributes
+                            ->getTextarea()
+                            ->clone()
+                            ->replace('type', 'text')
+                            ->replace('name', $name)
+                            ->replace('placeholder', $column->placeholder)
+                            ->replace('data-default-value', $defaultValue)
+                        ;
+
+                        $output .= '<textarea'.$inputAttributes.'>'.$value.'</textarea>';
 
                         break;
 
