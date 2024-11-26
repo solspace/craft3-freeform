@@ -26,6 +26,9 @@
     border-radius: 50%;
     animation: freeform-processing .5s linear infinite;
 }
+.freeform-form [data-field-type=table] [type=radio] + label {
+    color: rgb(71, 85, 105);
+}
 @keyframes freeform-processing {
     0% {
         transform: rotate(0);

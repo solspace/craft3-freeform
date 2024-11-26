@@ -16,6 +16,14 @@
     border-radius: 50%;
     animation: freeform-processing .5s linear infinite;
 }
+.freeform-form .freeform-fieldtype-table [type=radio] {
+    display: inline;
+    padding: 0;
+    margin-right: 8px;
+}
+.freeform-form .freeform-fieldtype-table [type=radio] + label {
+    display: inline;
+}
 @keyframes freeform-processing {
     0% {
         transform: rotate(0);

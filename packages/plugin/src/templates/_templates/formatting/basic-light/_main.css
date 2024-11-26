@@ -192,12 +192,12 @@
     resize: none;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
-.freeform-row [class*="freeform-col-"] input[type=radio] {
+.freeform-row [class*="freeform-col-"].freeform-fieldtype-table input[type=radio] {
     width: auto;
     display: inline;
     padding: 0;
 }
-.freeform-row [class*="freeform-col-"] input[type=radio] + label {
+.freeform-row [class*="freeform-col-"].freeform-fieldtype-table input[type=radio] + label {
     width: auto;
     display: inline;
 }
