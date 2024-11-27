@@ -139,6 +139,8 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
         ;
 
         $prefix = \Craft::$app->db->tablePrefix;
+        $prefixLength = \strlen($prefix);
+        $maxHandleSize = 36 - $prefixLength;
 
         $tables = $this->db->schema->getTableSchemas();
         foreach ($tables as $table) {
@@ -150,6 +152,9 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
             $formId = $matches[2];
 
             $formHandle = $forms[$formId] ?? null;
+            $formHandle = StringHelper::toSnakeCase($formHandle);
+            $formHandle = StringHelper::truncate($formHandle, $maxHandleSize, '');
+            $formHandle = trim($formHandle, '-_');
             if (!$formHandle) {
                 continue;
             }
