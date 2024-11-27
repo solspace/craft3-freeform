@@ -70,9 +70,9 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
                 $attributes[$attr] = $value;
             }
 
-            $formHandle = preg_replace('/\ /', '_', $form->handle);
-            $formHandle = StringHelper::toHandle($formHandle);
+            $formHandle = StringHelper::toAscii($form->handle);
             $formHandle = StringHelper::truncate($formHandle, $maxHandleSize, '');
+            $formHandle = trim($formHandle, '-_');
 
             $propertyProvider->setObjectProperties(
                 $general,
@@ -139,6 +139,8 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
         ;
 
         $prefix = \Craft::$app->db->tablePrefix;
+        $prefixLength = \strlen($prefix);
+        $maxHandleSize = 36 - $prefixLength;
 
         $tables = $this->db->schema->getTableSchemas();
         foreach ($tables as $table) {
@@ -153,6 +155,10 @@ class m230101_100010_FF4to5_MigrateForms extends Migration
             if (!$formHandle) {
                 continue;
             }
+
+            $formHandle = StringHelper::toSnakeCase($formHandle);
+            $formHandle = StringHelper::truncate($formHandle, $maxHandleSize, '');
+            $formHandle = trim($formHandle, '-_');
 
             $tempTableName = 'tmp_'.substr(sha1($tableName), 0, 5);
 
