@@ -211,14 +211,20 @@ abstract class BaseMailchimpIntegration extends EmailMarketingIntegration implem
 
         $emailHash = md5(strtolower($email));
 
-        $response = $client->get(
-            $this->getEndpoint('/lists/'.$listId.'/members/'.$emailHash.'/tags'),
-            [
-                'query' => [
-                    'count' => 999,
+        try {
+            $response = $client->get(
+                $this->getEndpoint('/lists/'.$listId.'/members/'.$emailHash.'/tags'),
+                [
+                    'query' => [
+                        'count' => 999,
+                    ],
                 ],
-            ],
-        );
+            );
+
+            $this->triggerAfterResponseEvent(self::CATEGORY_TAG, $response);
+        } catch (RequestException $exception) {
+            throw $exception;
+        }
 
         $json = json_decode((string) $response->getBody());
 
@@ -265,15 +271,21 @@ abstract class BaseMailchimpIntegration extends EmailMarketingIntegration implem
             return $this->existingTags;
         }
 
-        $response = $client->get(
-            $this->getEndpoint('/lists/'.$listId.'/segments'),
-            [
-                'query' => [
-                    'fields' => 'segments.id,segments.name',
-                    'count' => 999,
+        try {
+            $response = $client->get(
+                $this->getEndpoint('/lists/'.$listId.'/segments'),
+                [
+                    'query' => [
+                        'fields' => 'segments.id,segments.name',
+                        'count' => 999,
+                    ],
                 ],
-            ],
-        );
+            );
+
+            $this->triggerAfterResponseEvent(self::CATEGORY_TAG, $response);
+        } catch (RequestException $exception) {
+            throw $exception;
+        }
 
         $json = json_decode((string) $response->getBody());
 
@@ -293,15 +305,21 @@ abstract class BaseMailchimpIntegration extends EmailMarketingIntegration implem
             return array_search($tagNameLowerCase, $existingTags, true);
         }
 
-        $response = $client->post(
-            $this->getEndpoint('/lists/'.$listId.'/segments'),
-            [
-                'json' => [
-                    'name' => $tagName,
-                    'static_segment' => [],
+        try {
+            $response = $client->post(
+                $this->getEndpoint('/lists/'.$listId.'/segments'),
+                [
+                    'json' => [
+                        'name' => $tagName,
+                        'static_segment' => [],
+                    ],
                 ],
-            ],
-        );
+            );
+
+            $this->triggerAfterResponseEvent(self::CATEGORY_TAG, $response);
+        } catch (RequestException $exception) {
+            throw $exception;
+        }
 
         $json = json_decode((string) $response->getBody());
 
@@ -313,21 +331,35 @@ abstract class BaseMailchimpIntegration extends EmailMarketingIntegration implem
         foreach ($tags as $tag) {
             $tagId = $this->getOrCreateTag($client, $listId, $tag);
 
-            $client->post(
-                $this->getEndpoint('/lists/'.$listId.'/segments/'.$tagId.'/members'),
-                [
-                    'json' => [
-                        'email_address' => $email,
+            try {
+                $response = $client->post(
+                    $this->getEndpoint('/lists/'.$listId.'/segments/'.$tagId.'/members'),
+                    [
+                        'json' => [
+                            'email_address' => $email,
+                        ],
                     ],
-                ],
-            );
+                );
+
+                $this->triggerAfterResponseEvent(self::CATEGORY_TAG, $response);
+            } catch (RequestException $exception) {
+                throw $exception;
+            }
+
+            $json = json_decode((string) $response->getBody());
         }
     }
 
     private function deleteTagsForMember(Client $client, string $listId, string $emailHash, array $tagsToDelete): void
     {
         foreach ($tagsToDelete as $tagId => $tagName) {
-            $client->delete($this->getEndpoint('/lists/'.$listId.'/segments/'.$tagId.'/members/'.$emailHash));
+            try {
+                $response = $client->delete($this->getEndpoint('/lists/'.$listId.'/segments/'.$tagId.'/members/'.$emailHash));
+
+                $this->triggerAfterResponseEvent(self::CATEGORY_TAG, $response);
+            } catch (RequestException $exception) {
+                throw $exception;
+            }
         }
     }
 
