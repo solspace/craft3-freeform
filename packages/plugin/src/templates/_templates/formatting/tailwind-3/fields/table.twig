@@ -13,8 +13,10 @@
             "text-left"
         ] },
         input: { class: [ field.attributes.input.get("class"), "mr-5 w-11/12 block" ] },
+        textarea: { class: [ field.attributes.input.get("class"), "mr-5" ] },
         dropdown: { class: [ field.attributes.input.get("class"), "mr-5 w-11/12 block" ] },
-        checkbox: { class: [ field.attributes.input.get("class"), "mr-5" ] },
+        checkbox: { class: [ field.attributes.input.get("class"), "w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded" ] },
+        radios: { class: [ field.attributes.input.get("class"), "w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded mr-2 font-normal text-slate-600", "freeform-table-radios" ] },
         removeButton: { class: "bg-red-500 hover:bg-red-700 text-white font-normal py-1 px-3 rounded" },
         addButton: { class: "bg-green-500 hover:bg-green-700 text-white font-normal py-1 px-3 rounded mt-2" },
     },

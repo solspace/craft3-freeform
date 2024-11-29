@@ -5,6 +5,7 @@ import type { FreeformHandler } from 'types/form';
 
 class Table implements FreeformHandler {
   PATTERN = /([^[]+)\[(\d+)\](\[\d+\])$/g;
+  ID_PATTERN = /^(labeled-.*)-(\d+)-(\d+)-(\d+)$/g;
 
   freeform: Freeform;
 
@@ -56,18 +57,22 @@ class Table implements FreeformHandler {
             const maxIndex = getNextMaxIndex();
             for (let i = 0; i < inputs.length; i++) {
               const item = inputs[i];
-              let defaultValue = item.dataset.defaultValue || '';
+              const defaultValue = item.dataset.defaultValue || '';
               item.name = item.name.replace(this.PATTERN, `$1[${maxIndex}]$3`);
-              if (item.tagName === 'SELECT') {
-                const firstOption = item.querySelector<HTMLOptionElement>('option:first-child');
-                if (firstOption) {
-                  defaultValue = firstOption.value;
-                }
-              } else {
-                item.checked = false;
+
+              if (item.id && this.ID_PATTERN.test(item.id)) {
+                item.id = item.id.replace(this.ID_PATTERN, `$1-${maxIndex}-$3-$4`);
+                const label = item.nextSibling as HTMLLabelElement;
+                label.htmlFor = item.id;
               }
 
-              item.value = defaultValue;
+              if (item.tagName === 'INPUT' && item.type === 'radio') {
+                item.checked = item.value === defaultValue;
+              } else if (item.tagName === 'INPUT' && item.type === 'checkbox') {
+                item.checked = defaultValue === '1';
+              } else {
+                item.value = defaultValue;
+              }
             }
 
             const removeRowButton = cloneRow.querySelector<HTMLButtonElement>('[data-freeform-table-remove-row]');

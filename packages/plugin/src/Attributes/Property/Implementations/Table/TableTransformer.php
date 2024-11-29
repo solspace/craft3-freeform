@@ -24,6 +24,9 @@ class TableTransformer extends Transformer
                 'label' => $column->label,
                 'value' => $column->value,
                 'type' => $column->type,
+                'placeholder' => $column->placeholder,
+                'options' => $column->options,
+                'checked' => $column->checked,
             ];
         }
 

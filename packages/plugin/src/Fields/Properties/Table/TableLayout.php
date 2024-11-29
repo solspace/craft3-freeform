@@ -19,16 +19,28 @@ class TableLayout implements \IteratorAggregate, \ArrayAccess
                 $column['label'] ?? '',
                 $column['value'] ?? '',
                 $column['type'] ?? TableField::COLUMN_TYPE_STRING,
+                $column['placeholder'] ?? '',
+                $column['options'] ?? [],
+                $column['checked'] ?? false,
             );
         }
     }
 
-    public function add(string $label, string $value, string $type): self
-    {
+    public function add(
+        string $label,
+        string $value,
+        string $type,
+        string $placeholder,
+        array $options,
+        bool $checked
+    ): self {
         $column = new TableColumn();
         $column->label = $label;
         $column->value = $value;
         $column->type = $type;
+        $column->placeholder = $placeholder;
+        $column->options = $options;
+        $column->checked = $checked;
 
         $this->rows[] = $column;
 

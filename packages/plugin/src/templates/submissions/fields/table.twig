@@ -34,12 +34,22 @@
                                 <select name="{{ colName }}"
                                         data-default-value="{{ column.value|default("") }}"
                                 >
-                                    {% for option in column.value|default("")|split(";") %}
+                                    {% for option in column.options %}
                                         <option value="{{ option }}">
                                             {{ option }}
                                         </option>
                                     {% endfor %}
                                 </select>
+                            </div>
+                        {% case "radio" %}
+                            <div>
+                                {% for option in column.options %}
+                                    <div>
+                                        <input type="radio" name="{{ colName }}"
+                                               value="{{ option }}" {{ column.value == option ? 'checked="checked"' }} />
+                                        <label>{{ option }}</label>
+                                    </div>
+                                {% endfor %}
                             </div>
                         {% case "checkbox" %}
                             <input type="checkbox"
@@ -83,12 +93,22 @@
                                     <select name="{{ colName }}"
                                             data-default-value="{{ column.value|default("") }}"
                                     >
-                                        {% for option in column.value|default("")|split(";") %}
+                                        {% for option in column.options %}
                                             <option value="{{ option }}"{{ option == colValue ? " selected" }}>
                                                 {{ option }}
                                             </option>
                                         {% endfor %}
                                     </select>
+                                </div>
+                            {% case "radio" %}
+                                <div>
+                                    {% for option in column.options %}
+                                        <div>
+                                            <input type="radio" name="{{ colName }}"
+                                                   value="{{ option }}" {{ colValue == option ? 'checked="checked"' }} />
+                                            <label>{{ option }}</label>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             {% case "checkbox" %}
                                 <input type="checkbox"
@@ -100,7 +120,7 @@
                             {% default %}
                                 <textarea name="{{ colName }}"
                                           data-default-value="{{ column.value|default("") }}"
-                                          rows="1"
+                                          rows="{{ colType == 'textarea' ? 4 : 1 }}"
                                 >
                                                                             {{- colValue -}}
                                                                         </textarea>
