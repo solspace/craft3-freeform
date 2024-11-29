@@ -365,8 +365,18 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
 
         foreach ($layout as $column) {
             $label = $column->label;
+            $defaultValue = $column->value;
+            if (self::COLUMN_TYPE_CHECKBOX === $column->type) {
+                $defaultValue = $column->checked ? '1' : '0';
+            }
 
-            $output .= '<th'.$attributes->getLabel().'>'.htmlentities($label).'</th>';
+            $thAttributes = new Attributes();
+            $thAttributes
+                ->merge($attributes->getLabel())
+                ->set('data-default-value', $defaultValue)
+            ;
+
+            $output .= '<th'.$thAttributes.'>'.htmlentities($label).'</th>';
         }
         $output .= '<th>&nbsp;</th></tr>';
         $output .= '</thead>';
@@ -395,7 +405,7 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                             ->replace('type', 'checkbox')
                             ->replace('name', $name)
                             ->replace('value', '1')
-                            ->replace('data-default-value', '1')
+                            ->replace('data-default-value', $column->checked ? '1' : '0')
                             ->replace('checked', $column->checked)
                         ;
 
@@ -407,6 +417,7 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                         $dropdownAttributes = $attributes
                             ->getDropdown()
                             ->clone()
+                            ->replace('data-default-value', $defaultValue)
                             ->replace('name', $name)
                         ;
 
@@ -438,15 +449,18 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
                         $output .= '<div>';
 
                         foreach ($options as $radioIndex => $option) {
+                            $isChecked = $option === $value;
                             $radioId = 'labeled-'.$handle.'-'.$rowIndex.'-'.$index.'-'.$radioIndex;
-                            $radioAttributes
+                            $optionAttributes = $radioAttributes
+                                ->clone()
                                 ->replace('id', $radioId)
                                 ->replace('value', $option)
-                                ->replace('checked', $option === $value)
+                                ->replace('checked', $isChecked)
+                                ->replace('data-default-value', $defaultValue)
                             ;
 
                             $output .= '<div>';
-                            $output .= '<input'.$radioAttributes.' />';
+                            $output .= '<input'.$optionAttributes.' />';
                             $output .= '<label for="'.$radioId.'">'.$option.'</label>';
                             $output .= '</div>';
                         }
