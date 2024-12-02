@@ -25,7 +25,7 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
         $this->createTable(
             '{{%freeform_rules_fields}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'fieldId' => $this->integer()->notNull(),
                 'display' => $this->string(10)->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
@@ -33,10 +33,6 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_fields}}', 'id');
-        }
 
         $this->addForeignKey(
             null,
@@ -61,17 +57,13 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
         $this->createTable(
             '{{%freeform_rules_pages}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'pageId' => $this->integer()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_pages}}', 'id');
-        }
 
         $this->addForeignKey(
             null,
@@ -96,7 +88,7 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
         $this->createTable(
             '{{%freeform_rules_notifications}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'notificationId' => $this->integer()->notNull(),
                 'send' => $this->boolean()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
@@ -104,10 +96,6 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_notifications}}', 'id');
-        }
 
         $this->addForeignKey(
             null,
@@ -166,17 +154,13 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
         $this->createTable(
             '{{%freeform_rules_submit_form}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'formId' => $this->integer()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_submit_form}}', 'id');
-        }
 
         $this->addForeignKey(
             null,
@@ -201,7 +185,7 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
         $this->createTable(
             '{{%freeform_rules_buttons}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'pageId' => $this->integer()->notNull(),
                 'button' => $this->string(10)->notNull(),
                 'display' => $this->string(10)->notNull(),
@@ -210,10 +194,6 @@ class m230101_100060_FF4to5_MigrateConditionalRules extends Migration
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_buttons}}', 'id');
-        }
 
         $this->addForeignKey(
             null,
