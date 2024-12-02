@@ -19,7 +19,7 @@ class m240425_062916_CreateButtonRuleTable extends Migration
         $this->createTable(
             '{{%freeform_rules_buttons}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'pageId' => $this->integer()->notNull(),
                 'button' => $this->string(10)->notNull(),
                 'display' => $this->string(10)->notNull(),
@@ -28,10 +28,6 @@ class m240425_062916_CreateButtonRuleTable extends Migration
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_buttons}}', 'id');
-        }
 
         $this->addForeignKey(
             null,

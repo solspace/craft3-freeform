@@ -16,17 +16,13 @@ class m240415_150746_CreateSubmitFormRuleTable extends Migration
         $this->createTable(
             '{{%freeform_rules_submit_form}}',
             [
-                'id' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
                 'formId' => $this->integer()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
             ]
         );
-
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_submit_form}}', 'id');
-        }
 
         $this->addForeignKey(
             null,

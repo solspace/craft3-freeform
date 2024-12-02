@@ -103,7 +103,7 @@ class m220330_111857_SplitSubmissionsTable extends Migration
 
     private function createFormTable(int $id, string $formHandle, array $fieldMap): ?string
     {
-        $tableColumns = ['id' => $this->integer()->notNull()];
+        $tableColumns = ['id' => $this->primaryKey()];
         foreach ($fieldMap as $handle) {
             $tableColumns[$handle] = $this->text();
         }
@@ -121,10 +121,6 @@ class m220330_111857_SplitSubmissionsTable extends Migration
         $tableExists = \Craft::$app->db->schema->getTableSchema($tableName);
         if (null === $tableExists) {
             $this->createTable($tableName, $tableColumns);
-
-            if (!$this->db->getIsPgsql()) {
-                $this->addPrimaryKey('PK', $tableName, ['id']);
-            }
 
             $this->addForeignKey(null, $tableName, 'id', '{{%freeform_submissions}}', 'id', ForeignKey::CASCADE);
 

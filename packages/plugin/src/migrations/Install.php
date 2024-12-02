@@ -330,25 +330,25 @@ class Install extends StreamlinedInstallMigration
                 ->addField('combinator', $this->string(20)->notNull()),
 
             (new Table('freeform_rules_fields'))
-                ->addField('id', $this->integer()->notNull())
+                ->addField('id', $this->primaryKey())
                 ->addField('fieldId', $this->integer()->notNull())
                 ->addField('display', $this->string(10)->notNull()),
 
             (new Table('freeform_rules_pages'))
-                ->addField('id', $this->integer()->notNull())
+                ->addField('id', $this->primaryKey())
                 ->addField('pageId', $this->integer()->notNull()),
 
             (new Table('freeform_rules_notifications'))
-                ->addField('id', $this->integer()->notNull())
+                ->addField('id', $this->primaryKey())
                 ->addField('notificationId', $this->integer()->notNull())
                 ->addField('send', $this->boolean()->notNull()),
 
             (new Table('freeform_rules_submit_form'))
-                ->addField('id', $this->integer()->notNull())
+                ->addField('id', $this->primaryKey())
                 ->addField('formId', $this->integer()->notNull()),
 
             (new Table('freeform_rules_buttons'))
-                ->addField('id', $this->integer()->notNull())
+                ->addField('id', $this->primaryKey())
                 ->addField('pageId', $this->integer()->notNull())
                 ->addField('button', $this->string(30)->notNull())
                 ->addField('display', $this->string(10)->notNull()),
@@ -422,14 +422,6 @@ class Install extends StreamlinedInstallMigration
 
     protected function afterInstall(): bool
     {
-        if ($this->db->getIsMysql()) {
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_fields}}', 'id');
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_pages}}', 'id');
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_notifications}}', 'id');
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_submit_form}}', 'id');
-            $this->addPrimaryKey('PRIMARY_KEY', '{{%freeform_rules_buttons}}', 'id');
-        }
-
         $this->addForeignKey(null, '{{%freeform_rules_fields}}', ['id'], '{{%freeform_rules}}', ['id'], ForeignKey::CASCADE, ForeignKey::CASCADE);
         $this->addForeignKey(null, '{{%freeform_rules_fields}}', ['fieldId'], '{{%freeform_forms_fields}}', ['id'], ForeignKey::CASCADE, ForeignKey::CASCADE);
         $this->addForeignKey(null, '{{%freeform_rules_pages}}', ['id'], '{{%freeform_rules}}', ['id'], ForeignKey::CASCADE, ForeignKey::CASCADE);
