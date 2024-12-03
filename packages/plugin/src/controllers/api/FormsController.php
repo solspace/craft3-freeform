@@ -21,6 +21,8 @@ class FormsController extends BaseApiController
     public const EVENT_CREATE_FORM = 'create-form';
     public const EVENT_UPDATE_FORM = 'update-form';
 
+    public const EVENT_AFTER_SAVE_FORM = 'after-save-form';
+
     public function __construct(
         $id,
         $module,
@@ -164,6 +166,7 @@ class FormsController extends BaseApiController
         $event = new PersistFormEvent($data, $id);
         $this->trigger(self::EVENT_UPDATE_FORM, $event);
         $this->trigger(self::EVENT_UPSERT_FORM, $event);
+        $this->trigger(self::EVENT_AFTER_SAVE_FORM, $event);
 
         $this->response->statusCode = $event->getStatus() ?? 204;
 
