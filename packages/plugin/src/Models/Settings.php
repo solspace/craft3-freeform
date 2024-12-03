@@ -481,23 +481,16 @@ class Settings extends Model
         return null;
     }
 
-    public function getDemoTemplateContent(string $name = 'flexbox'): string
+    public function cloneDemoTemplateContent(string $name, string $destination): void
     {
-        $path = __DIR__."/../templates/_templates/formatting/{$name}.twig";
-        if (!file_exists($path)) {
+        $source = __DIR__."/../templates/_templates/formatting/{$name}";
+        if (!file_exists($source) || !is_dir($source)) {
             throw new FreeformException(
                 Freeform::t('Could not get demo template content. Please contact Solspace.')
             );
         }
 
-        $contents = file_get_contents($path);
-
-        if ('flexbox' === $name) {
-            $css = file_get_contents(__DIR__.'/../Resources/css/front-end/formatting-templates/flexbox.css');
-            $contents = str_replace('{% css formCss %}', "<style>{$css}</style>", $contents);
-        }
-
-        return $contents;
+        FileHelper::copyDirectory($source, $destination);
     }
 
     /**

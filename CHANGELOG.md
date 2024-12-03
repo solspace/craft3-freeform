@@ -11,6 +11,15 @@
     - Scripts for Calculation fields now load seperately as `calculation.js` only if the field exists in the form being displayed.
     - When using `freeform.loadScripts()` (for manually loading scripts) and Calculation fields, be sure to include the `field.calculation` option.
 
+## 5.7.4 - 2024-11-29
+
+### Changed
+- Updated the Mailchimp integration to include additional error logging around Contact Tags.
+
+### Fixed
+- Fixed a bug in the Freeform 4.x migration where form submission table names were not always being named correctly.
+- Fixed a bug in the Freeform 4.x migration where original form handles were not being preserved.
+
 ## 5.7.3 - 2024-11-22
 
 ### Added

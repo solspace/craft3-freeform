@@ -104,10 +104,9 @@ class SettingsController extends BaseController
 
         $errors = [];
         $settings = $this->getSettingsModel();
-        $extension = '.twig';
 
         $templateDirectory = $settings->getAbsoluteFormTemplateDirectory();
-        $templateName = \Craft::$app->request->post('templateName', null);
+        $templateName = \Craft::$app->request->post('templateName');
 
         if (!$templateDirectory) {
             $errors[] = Freeform::t('No custom template directory specified in settings');
@@ -115,12 +114,12 @@ class SettingsController extends BaseController
             if ($templateName) {
                 $templateName = CraftStringHelper::toSnakeCase($templateName);
 
-                $templatePath = $templateDirectory.'/'.$templateName.$extension;
+                $templatePath = $templateDirectory.'/'.$templateName;
                 if (file_exists($templatePath)) {
-                    $errors[] = Freeform::t("Template '{name}' already exists", ['name' => $templateName.$extension]);
+                    $errors[] = Freeform::t("Template '{name}' already exists", ['name' => $templateName]);
                 } else {
                     try {
-                        FileHelper::writeToFile($templatePath, $settings->getDemoTemplateContent());
+                        $settings->cloneDemoTemplateContent($templateName, $templatePath);
                     } catch (FreeformException $exception) {
                         $errors[] = $exception->getMessage();
                     }
@@ -132,7 +131,7 @@ class SettingsController extends BaseController
 
         return $this->asJson(
             [
-                'templateName' => $templateName.$extension,
+                'templateName' => $templateName,
                 'errors' => $errors,
             ]
         );

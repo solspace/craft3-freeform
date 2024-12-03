@@ -1,10 +1,4 @@
-{# CSS overrides #}
-{% set cssPath = view.assetManager.publishedUrl('@freeform-formatting-templates/basic-light/_main.css', true) %}
-{% do view.registerCssFile(cssPath) %}
-
-{# JS overrides #}
-{% set jsPath = view.assetManager.publishedUrl('@freeform-formatting-templates/basic-light/_main.js', true) %}
-{% do view.registerJsFile(jsPath) %}
+{% do view.registerAssetBundle('Solspace\\Freeform\\Resources\\Bundles\\FormattingTemplates\\BasicLightBundle') %}
 
 {% import "freeform/_templates/formatting/basic-light/_row.twig" as rowMacro %}
 

@@ -1,10 +1,4 @@
-{# CSS overrides #}
-{% set cssPath = view.assetManager.publishedUrl('@freeform-formatting-templates/conversational/_main.css', true) %}
-{% do view.registerCssFile(cssPath) %}
-
-{# JS overrides #}
-{% set jsPath = view.assetManager.publishedUrl('@freeform-formatting-templates/conversational/_main.js', true) %}
-{% do view.registerJsFile(jsPath) %}
+{% do view.registerAssetBundle('Solspace\\Freeform\\Resources\\Bundles\\FormattingTemplates\\ConversationalBundle') %}
 
 {% import "freeform/_templates/formatting/conversational/_row.twig" as rowMacro %}
 

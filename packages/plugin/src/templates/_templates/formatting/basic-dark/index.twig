@@ -1,10 +1,4 @@
-{# CSS overrides #}
-{% set cssPath = view.assetManager.publishedUrl('@freeform-formatting-templates/basic-dark/_main.css', true) %}
-{% do view.registerCssFile(cssPath) %}
-
-{# JS overrides #}
-{% set jsPath = view.assetManager.publishedUrl('@freeform-formatting-templates/basic-dark/_main.js', true) %}
-{% do view.registerJsFile(jsPath) %}
+{% do view.registerAssetBundle('Solspace\\Freeform\\Resources\\Bundles\\FormattingTemplates\\BasicDarkBundle') %}
 
 {% import "freeform/_templates/formatting/basic-dark/_row.twig" as rowMacro %}
 
