@@ -1,6 +1,6 @@
 # Solspace Freeform Changelog
 
-## 5.8.0 - Unreleased
+## 5.8.0 - 2024-12-03
 
 ### Added
 - Added the ability to use Textareas and Radios inside a Table field.
