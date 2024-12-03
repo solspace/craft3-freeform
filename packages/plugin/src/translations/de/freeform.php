@@ -1091,7 +1091,6 @@ return [
     'Stats Digest Email' => 'Statistik-Zusammenfassungs-E-Mail',
     "Send weekly or daily emails on the day specified (if using 'Weekly') to the email address(es) below. This is the same as the Developer one above, but only includes a snapshot of the previous period's performance." => "Senden Sie wöchentliche oder tägliche E-Mails am angegebenen Tag (bei Verwendung von 'Wöchentlich') an die unten angegebenen E-Mail-Adressen. Dies ist das gleiche wie die Entwickler-Zusammenfassung, enthält jedoch nur eine Momentaufnahme der Leistung des vorherigen Zeitraums.",
     'Stats Digest Email Frequency' => 'Häufigkeit der Statistik-Zusammenfassungs-E-Mails',
-    "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning from the period before that date." => 'Geben Sie an, wie oft und an welchen Tagen (falls zutreffend) Sie die E-Mail-Benachrichtigungen erhalten möchten. Das gewählte Datum versucht, eine Benachrichtigung am Morgen für den Zeitraum vor diesem Datum zu senden.',
     'Send Notifications on Live Environment only' => 'Benachrichtigungen nur in der Live-Umgebung senden',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'Wenn diese Einstellung aktiviert ist, sendet Freeform Zusammenfassungs-E-Mails nur, wenn die Craft-Umgebung auf Produktion eingestellt ist.',
 
