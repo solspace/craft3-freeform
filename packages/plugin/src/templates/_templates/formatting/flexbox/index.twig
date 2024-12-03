@@ -1,10 +1,4 @@
-{# CSS overrides #}
-{% set cssPath = view.assetManager.publishedUrl('@freeform-formatting-templates/flexbox/_main.css', true) %}
-{% do view.registerCssFile(cssPath) %}
-
-{# JS overrides #}
-{% set jsPath = view.assetManager.publishedUrl('@freeform-formatting-templates/flexbox/_main.js', true) %}
-{% do view.registerJsFile(jsPath) %}
+{% do view.registerAssetBundle('Solspace\\Freeform\\Resources\\Bundles\\FormattingTemplates\\FlexboxBundle') %}
 
 {% import "freeform/_templates/formatting/flexbox/_row.twig" as rowMacro %}
 
