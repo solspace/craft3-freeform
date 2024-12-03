@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { ajax } from '@lib/plugin/helpers/ajax';
 
 type ClientSecretResponse = {
   id: string;
@@ -23,14 +23,14 @@ const paymentIntents = {
   create: async (integration: string, form: HTMLFormElement) => {
     const formData = getFormData(form);
 
-    return axios.post<ClientSecretResponse>('/freeform/payments/stripe/payment-intents', formData, {
+    return ajax.post<ClientSecretResponse>('/freeform/payments/stripe/payment-intents', formData, {
       headers: { 'FF-STRIPE-INTEGRATION': integration },
     });
   },
   updateAmount: async (integration: string, form: HTMLFormElement, id: string): Promise<UpdateAmountResponse> => {
     const formData = getFormData(form);
 
-    const { data } = await axios.post<UpdateAmountResponse>(
+    const { data } = await ajax.post<UpdateAmountResponse>(
       `/freeform/payments/stripe/payment-intents/${id}/amount`,
       formData,
       { headers: { 'FF-STRIPE-INTEGRATION': integration } }
@@ -52,12 +52,10 @@ const customers = {
   update: async ({ integration, form, paymentIntentId }: UpdateProps) => {
     const formData = getFormData(form);
 
-    const { status } = await axios.post(
+    const { status } = await ajax.post(
       `/freeform/payments/stripe/payment-intents/${paymentIntentId}/customers`,
       formData,
-      {
-        headers: { 'FF-STRIPE-INTEGRATION': integration },
-      }
+      { headers: { 'FF-STRIPE-INTEGRATION': integration } }
     );
 
     return status;

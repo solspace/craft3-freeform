@@ -83,12 +83,14 @@ class PageButtons
         label: 'Back',
         icon: __DIR__.'/SectionIcons/back.svg',
     )]
+    #[VisibilityFilter('context.page.order !== 0')]
     #[Input\Boolean('Enable Back Button')]
     private bool $back = false;
 
     #[Translatable]
     #[Section('back')]
     #[VisibilityFilter('Boolean(buttons.back)')]
+    #[VisibilityFilter('context.page.order !== 0')]
     #[Input\Text('Label', placeholder: 'Back')]
     private string $backLabel = 'Back';
 

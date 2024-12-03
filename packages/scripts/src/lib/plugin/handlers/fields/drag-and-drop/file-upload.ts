@@ -1,8 +1,7 @@
 import type Freeform from '@components/front-end/plugin/freeform';
 import events from '@lib/plugin/constants/event-types';
+import { ajax, CancelToken } from '@lib/plugin/helpers/ajax';
 import { dispatchCustomEvent } from '@lib/plugin/helpers/event-handling';
-import type { AxiosProgressEvent } from 'axios';
-import axios from 'axios';
 import { filesize } from 'filesize';
 
 import { addFieldErrors } from './error-handling';
@@ -22,7 +21,7 @@ export const loadExistingUploads = (container: HTMLElement, freeform: Freeform):
 
     const baseUrl = container.getAttribute('data-base-url');
 
-    axios
+    ajax
       .post<FileMetadata[]>(`${baseUrl}/files`, formData, {
         headers: {
           'Freeform-Preflight': true,
@@ -45,7 +44,7 @@ export const loadExistingUploads = (container: HTMLElement, freeform: Freeform):
           const removeButton = previewContainer.querySelector<HTMLElement>('[data-remove-button]');
           removeButton.addEventListener('click', () => {
             if (confirm('Are you sure?')) {
-              axios
+              ajax
                 .post(`${baseUrl}/files/delete`, deleteFormData)
                 .then(() => {
                   previewZone.removeChild(previewContainer);
@@ -75,9 +74,9 @@ export const handleFileUpload = (
   previewZone: Element,
   freeform: Freeform
 ): Promise<void> => {
-  const { token, cancel } = axios.CancelToken.source();
+  const token = new CancelToken();
   const handleCancelRequest = () => {
-    cancel();
+    token.cancel();
   };
 
   const matches = file.name.match(/.(\w+)$/i);
@@ -109,11 +108,10 @@ export const handleFileUpload = (
 
   const baseUrl = container.getAttribute('data-base-url');
 
-  return axios
+  return ajax
     .post<FileMetadata>(`${baseUrl}/files/upload`, formData, {
-      headers: { 'content-type': 'multipart/form-data' },
       cancelToken: token,
-      onUploadProgress: (progress: AxiosProgressEvent) => {
+      onUploadProgress: (progress: ProgressEvent) => {
         const { total, loaded } = progress;
         const percent = Math.ceil(loaded / (total / 100));
 
@@ -136,7 +134,7 @@ export const handleFileUpload = (
       removeButton.removeEventListener('click', handleCancelRequest);
       removeButton.addEventListener('click', () => {
         if (confirm('Are you sure?')) {
-          axios
+          ajax
             .post(`${baseUrl}/files/delete`, deleteFormData)
             .then(() => {
               previewZone.removeChild(previewContainer);
@@ -152,7 +150,7 @@ export const handleFileUpload = (
       previewContainer.setAttribute('data-completed', '');
     })
     .catch((error) => {
-      if (axios.isCancel(error)) {
+      if (error.message === 'Request aborted') {
         previewZone.removeChild(previewContainer);
         dispatchChange(container);
         return;

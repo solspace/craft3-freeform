@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import config from '@config/freeform/freeform.config';
+import { pageSelecors } from '@editor/store/slices/layout/pages/pages.selectors';
 import type {
   GenericValue,
   VisibilityFilter,
@@ -10,12 +12,14 @@ export const useVisibility = (
   filters: VisibilityFilter[],
   values: GenericValue[]
 ): boolean => {
+  const page = useSelector(pageSelecors.current);
+
   return useMemo(() => {
     if (filters.length === 0) {
       return true;
     }
 
-    const context = { config };
+    const context = { config, page };
 
     try {
       return filterTest(filters, values, context);

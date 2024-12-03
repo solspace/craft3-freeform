@@ -1,6 +1,8 @@
 import React from 'react';
+import { Checkbox } from '@components/elements/checkbox/checkbox';
 import type { ColumnDescription } from '@components/form-controls/control-types/table/table.types';
 import type { Option as PropertyOption } from '@ff-client/types/properties';
+import classes from '@ff-client/utils/classes';
 import translate from '@ff-client/utils/translations';
 
 import {
@@ -39,11 +41,29 @@ export const TablePreview: React.FC<Props> = ({
               {option.label}
             </PreviewData>
             <PreviewData data-empty={translate('empty')}>
-              {option.value}
+              {renderPreview(option)}
             </PreviewData>
           </PreviewRow>
         ))}
       </PreviewTable>
     </PreviewWrapper>
   );
+};
+
+const renderPreview = (column: ColumnDescription): React.ReactNode => {
+  if (column.type === 'checkbox') {
+    return <Checkbox readOnly checked={!!column.checked} />;
+  }
+
+  if (column.type === 'select') {
+    return (
+      <div className={classes('small select')}>
+        <select disabled>
+          <option>{column.value}</option>
+        </select>
+      </div>
+    );
+  }
+
+  return <>{column.value}</>;
 };

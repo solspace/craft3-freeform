@@ -1,5 +1,24 @@
 # Solspace Freeform Changelog
 
+## 5.8.0 - Unreleased
+
+### Added
+- Added the ability to use Textareas and Radios inside a Table field.
+
+### Changed
+- Improved the usability of the Table field in the form builder.
+- Improved the usability of the Submit button layout settings to hide unnecessary options in the form builder.
+- Updated the sample formatting template assets to load as Asset Bundles to support Craft Cloud setups.
+- Optimized all front end Freeform scripts.
+    - Removed the `axios` dependency.
+    - Removed the `lodash` dependency.
+    - Removed the `core-js` polyfills.
+    - Scripts for Calculation fields now load seperately as `calculation.js` only if the field exists in the form being displayed.
+    - When using `freeform.loadScripts()` (for manually loading scripts) and Calculation fields, be sure to include the `field.calculation` option.
+
+### Fixed
+- Fixed a bug where multiple primary keys could be defined when MySQL has `sql_generate_invisible_primary_key` turned on.
+
 ## 5.7.4 - 2024-11-29
 
 ### Changed

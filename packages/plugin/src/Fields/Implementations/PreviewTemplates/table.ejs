@@ -162,71 +162,51 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <% tableLayout.forEach(function(column) { %>
-                <td class="text-cell <%= column.type %>-cell">
-                    <% if (column.type === 'select') { %>
-                        <div class="small select">
-                            <select>
-                                <% column.value.split(';').forEach(function(option) { %>
-                                    <option><%= option %></option>
+        <% for (var i = 1; i <= 3; i++ ) { %>
+            <tr>
+                <% tableLayout.forEach(function(column) { %>
+                    <td class="text-cell <%= column.type %>-cell">
+                        <% if (column.type === 'select') { %>
+                            <div class="small select">
+                                <select>
+                                    <% column.options.forEach(function(option) { %>
+                                        <option <%= column.value == option ? 'selected' : '' %>><%= option %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        <% } else if (column.type === 'checkbox') { %>
+                            <div class="checkbox-label">
+                                <input
+                                        type="checkbox"
+                                        class="checkbox"<%= !!column.checked ? 'checked="checked"' : '' %>
+                                />
+                                <label for=""></label>
+                            </div>
+                        <% } else if (column.type === 'radio') { %>
+                            <div>
+                                <% column.options.forEach(function(option) { %>
+                                    <div>
+                                        <input
+                                                type="radio"
+                                                name="<%= column.name %>"
+                                                <%= column.value == option ? 'checked="checked"' : '' %>
+                                        />
+                                        <label><%= option %></label>
+                                    </div>
                                 <% }); %>
-                            </select>
-                        </div>
-                    <% } else if (column.type === 'checkbox') { %>
-                        <div class="checkbox-label">
-                            <input type="checkbox" class="checkbox" checked="checked" />
-                            <label for=""></label>
-                        </div>
-                    <% } else { %>
-                        <input type="text" value="<% if (column.value.length > 0) { %><%= column.value %><% } else { %>Sample data<% } %>" />
-                    <% } %>
-                </td>
-            <% }); %>
-        </tr>
-        <tr>
-            <% tableLayout.forEach(function(column) { %>
-                <td class="text-cell <%= column.type %>-cell">
-                    <% if (column.type === 'select') { %>
-                        <div class="small select">
-                            <select>
-                                <% column.value.split(';').forEach(function(option) { %>
-                                    <option><%= option %></option>
-                                <% }); %>
-                            </select>
-                        </div>
-                    <% } else if (column.type === 'checkbox') { %>
-                        <div class="checkbox-label">
-                            <input type="checkbox" class="checkbox" />
-                            <label for=""></label>
-                        </div>
-                    <% } else { %>
-                        <input type="text" value="" />
-                    <% } %>
-                </td>
-            <% }); %>
-        </tr>
-        <tr>
-            <% tableLayout.forEach(function(column) { %>
-                <td class="text-cell <%= column.type %>-cell">
-                    <% if (column.type === 'select') { %>
-                        <div class="small select">
-                            <select>
-                                <% column.value.split(';').forEach(function(option) { %>
-                                    <option><%= option %></option>
-                                <% }); %>
-                            </select>
-                        </div>
-                    <% } else if (column.type === 'checkbox') { %>
-                        <div class="checkbox-label">
-                            <input type="checkbox" class="checkbox" />
-                            <label for=""></label>
-                        </div>
-                    <% } else { %>
-                        <input type="text" value="" />
-                    <% } %>
-                </td>
-            <% }); %>
-        </tr>
+                            </div>
+                        <% } else if (column.type === 'textarea') { %>
+                            <textarea placeholder="<%= column.placeholder %>"><%= column.value %></textarea>
+                        <% } else { %>
+                            <input
+                                    type="text"
+                                    value="<% if (column.value.length > 0) { %><%= column.value %><% } else { %>Sample data<% } %>"
+                                    placeholder="<%= column.placeholder %>"
+                            />
+                        <% } %>
+                    </td>
+                <% }); %>
+            </tr>
+        <% } %>
     </tbody>
 </table>

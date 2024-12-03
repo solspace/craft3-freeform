@@ -498,6 +498,10 @@ class FormsService extends BaseService implements FormHandlerInterface
             return;
         }
 
+        if (!$event->isGenerateTag()) {
+            return;
+        }
+
         $event->addScript($this->getSettingsService()->getPluginJsPath());
         $event->addStylesheet($this->getSettingsService()->getPluginCssPath());
     }
