@@ -39,6 +39,7 @@ return [
     'Display as list' => 'Visualizza come elenco',
     'Chart' => 'Grafico',
     'Manage' => 'Gestisci',
+    'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.' => 'Attualmente sono presenti <a href="{link}">{errors} errori registrati</a> nel log degli errori di Freeform.',
 
     // Form Builder // Universal
     'Forms' => 'Moduli',

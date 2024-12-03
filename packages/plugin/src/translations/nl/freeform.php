@@ -39,6 +39,7 @@ return [
     'Display as list' => 'Toon als lijst',
     'Chart' => 'Grafiek',
     'Manage' => 'Beheren',
+    'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.' => 'Er staan momenteel <a href="{link}">{errors} geregistreerde fouten</a> in het Freeform-foutenlogboek.',
 
     // Form Builder // Universal
     'Forms' => 'Formulieren',
