@@ -89,6 +89,8 @@ class ModalController extends BaseApiController
             return $event->getResponseData();
         }
 
+        Event::trigger(FormsController::class, FormsController::EVENT_AFTER_SAVE_FORM, $event);
+
         return $this->formTransformer->transform($event->getForm());
     }
 }

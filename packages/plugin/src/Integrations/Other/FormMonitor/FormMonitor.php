@@ -7,6 +7,8 @@ use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Input;
+use Solspace\Freeform\Form\Form;
+use Solspace\Freeform\Integrations\Other\FormMonitor\Transformers\FormMonitorFieldTransformer;
 use Solspace\Freeform\Library\Integrations\APIIntegration;
 
 #[Edition(Edition::PRO)]
@@ -35,14 +37,44 @@ class FormMonitor extends APIIntegration
         return $this;
     }
 
-    public function checkConnection(Client $client): bool
-    {
-        return true;
-    }
-
     public function getApiRootUrl(): string
     {
-        return 'https://api.formmonitor.com';
+        return 'https://api.formmonitor.com/v1';
+    }
+
+    public function checkConnection(Client $client): bool
+    {
+        try {
+            $response = $client->get('/me');
+
+            return 200 === $response->getStatusCode();
+        } catch (\Exception) {
+            return false;
+        }
+    }
+
+    public function sync(Client $client, Form $form, FormMonitorFieldTransformer $fieldTransformer): void
+    {
+        $serialized = [];
+        foreach ($form->getLayout()->getPages() as $page) {
+            $pageData = [];
+
+            foreach ($page->getRows() as $row) {
+                $rowData = [];
+
+                foreach ($row->getFields() as $field) {
+                    $rowData[] = $fieldTransformer->transform($field);
+                }
+
+                $pageData[] = $rowData;
+            }
+
+            $serialized[] = $pageData;
+        }
+
+        $endpoint = $this->getEndpoint('forms/'.$form->getId());
+
+        $client->put($endpoint, ['json' => $serialized]);
     }
 
     protected function getProcessableFields(string $category): array
