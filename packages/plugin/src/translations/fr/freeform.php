@@ -39,6 +39,7 @@ return [
     'Display as list' => 'Afficher en liste',
     'Chart' => 'Graphique',
     'Manage' => 'Gérer',
+    'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.' => 'Il y a actuellement <a href="{link}">{errors} erreurs enregistrées</a> dans le journal des erreurs Freeform.',
 
     // Form Builder // Universal
     'Forms' => 'Formulaires',
@@ -1090,7 +1091,6 @@ return [
     'Stats Digest Email' => 'E-mail récapitulatif des statistiques',
     "Send weekly or daily emails on the day specified (if using 'Weekly') to the email address(es) below. This is the same as the Developer one above, but only includes a snapshot of the previous period's performance." => "Envoyez des e-mails hebdomadaires ou quotidiens le jour spécifié (si vous utilisez 'Hebdomadaire') aux adresses e-mail ci-dessous. C'est la même chose que l'e-mail pour développeurs ci-dessus, mais il n'inclut qu'un aperçu des performances de la période précédente.",
     'Stats Digest Email Frequency' => 'Fréquence des e-mails récapitulatifs des statistiques',
-    "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning from the period before that date." => "Spécifiez à quelle fréquence et quels jours (le cas échéant) vous souhaitez recevoir les notifications par e-mail. La date choisie tentera d'envoyer une notification le matin de la période précédant cette date.",
     'Send Notifications on Live Environment only' => 'Envoyer les notifications uniquement sur l’environnement de production',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'Si ce paramètre est activé, Freeform n’enverra des e-mails récapitulatifs que lorsque l’environnement Craft est défini sur production.',
 

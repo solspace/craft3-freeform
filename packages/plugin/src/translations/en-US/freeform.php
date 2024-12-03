@@ -39,6 +39,7 @@ return [
     'Display as list' => 'Display as list',
     'Chart' => 'Chart',
     'Manage' => 'Manage',
+    'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.' => 'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.',
 
     // Form Builder // Universal
     'Forms' => 'Forms',
@@ -1090,7 +1091,6 @@ return [
     'Stats Digest Email' => 'Stats Digest Email',
     "Send weekly or daily emails on the day specified (if using 'Weekly') to the email address(es) below. This is the same as the Developer one above, but only includes a snapshot of the previous period's performance." => "Send weekly or daily emails on the day specified (if using 'Weekly') to the email address(es) below. This is the same as the Developer one above, but only includes a snapshot of the previous period's performance.",
     'Stats Digest Email Frequency' => 'Stats Digest Email Frequency',
-    "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning from the period before that date." => "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning from the period before that date.",
     'Send Notifications on Live Environment only' => 'Send Notifications on Live Environment only',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.',
 

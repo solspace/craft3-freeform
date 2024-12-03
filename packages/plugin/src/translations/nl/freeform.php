@@ -39,6 +39,7 @@ return [
     'Display as list' => 'Toon als lijst',
     'Chart' => 'Grafiek',
     'Manage' => 'Beheren',
+    'There are currently <a href="{link}">{errors} logged errors</a> in the Freeform error log.' => 'Er staan momenteel <a href="{link}">{errors} geregistreerde fouten</a> in het Freeform-foutenlogboek.',
 
     // Form Builder // Universal
     'Forms' => 'Formulieren',
@@ -1090,7 +1091,6 @@ return [
     'Stats Digest Email' => 'Statistiekoverzicht e-mail',
     "Send weekly or daily emails on the day specified (if using 'Weekly') to the email address(es) below. This is the same as the Developer one above, but only includes a snapshot of the previous period's performance." => "Stuur wekelijkse of dagelijkse e-mails op de aangegeven dag (als u 'Wekelijks' gebruikt) naar het/de e-mailadres(sen) hieronder. Dit is hetzelfde als dat van de ontwikkelaar hierboven, maar bevat alleen een momentopname van de prestaties van de vorige periode.",
     'Stats Digest Email Frequency' => 'Statistiekoverzicht e-mailfrequentie',
-    "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning from the period before that date." => "Geef aan hoe vaak en op welke dagen (indien van toepassing) u de e-mailmeldingen wilt ontvangen. De gekozen datum probeert 's ochtends een melding te sturen uit de periode vóór die datum.",
     'Send Notifications on Live Environment only' => 'Verstuur alleen meldingen in de live-omgeving',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'Als deze instelling is ingeschakeld, verzendt Freeform alleen Digest-e-mails als de Craft-omgeving op productie is gezet.',
 
