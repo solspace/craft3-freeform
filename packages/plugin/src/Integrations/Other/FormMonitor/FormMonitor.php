@@ -8,7 +8,7 @@ use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Integrations\Other\FormMonitor\Transformers\FormMonitorFieldTransformer;
+use Solspace\Freeform\Integrations\Other\FormMonitor\Transformers\ManifestTransformer;
 use Solspace\Freeform\Library\Integrations\APIIntegration;
 
 #[Edition(Edition::PRO)]
@@ -25,6 +25,14 @@ class FormMonitor extends APIIntegration
     #[Input\Hidden]
     private string $apiKey = '';
 
+    #[Flag(self::FLAG_INSTANCE_ONLY)]
+    #[Input\Text(
+        label: 'URL the Form Monitor should access to check the form',
+        instructions: 'This is the URL that Form Monitor will use to check the form. It should be a publicly accessible URL and contain the form.',
+        placeholder: 'https://example.com/contact-us',
+    )]
+    private string $testUrl = '';
+
     public function getApiKey(): string
     {
         return $this->apiKey;
@@ -35,6 +43,11 @@ class FormMonitor extends APIIntegration
         $this->apiKey = $apiKey;
 
         return $this;
+    }
+
+    public function getTestUrl(): string
+    {
+        return $this->getProcessedValue($this->testUrl);
     }
 
     public function getApiRootUrl(): string
@@ -53,28 +66,19 @@ class FormMonitor extends APIIntegration
         }
     }
 
-    public function sync(Client $client, Form $form, FormMonitorFieldTransformer $fieldTransformer): void
+    public function sendManifest(Client $client, Form $form, ManifestTransformer $transformer): void
     {
-        $serialized = [];
-        foreach ($form->getLayout()->getPages() as $page) {
-            $pageData = [];
-
-            foreach ($page->getRows() as $row) {
-                $rowData = [];
-
-                foreach ($row->getFields() as $field) {
-                    $rowData[] = $fieldTransformer->transform($field);
-                }
-
-                $pageData[] = $rowData;
-            }
-
-            $serialized[] = $pageData;
-        }
-
         $endpoint = $this->getEndpoint('forms/'.$form->getId());
 
-        $client->put($endpoint, ['json' => $serialized]);
+        $client->put(
+            $endpoint,
+            [
+                'json' => [
+                    'url' => $this->getTestUrl(),
+                    'manifest' => $transformer->transform($form),
+                ],
+            ]
+        );
     }
 
     protected function getProcessableFields(string $category): array
