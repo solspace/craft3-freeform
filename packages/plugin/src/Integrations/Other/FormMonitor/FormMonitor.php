@@ -69,16 +69,12 @@ class FormMonitor extends APIIntegration
     public function sendManifest(Client $client, Form $form, ManifestTransformer $transformer): void
     {
         $endpoint = $this->getEndpoint('forms/'.$form->getId());
+        $payload = [
+            'url' => $this->getTestUrl(),
+            'manifest' => $transformer->transform($form),
+        ];
 
-        $client->put(
-            $endpoint,
-            [
-                'json' => [
-                    'url' => $this->getTestUrl(),
-                    'manifest' => $transformer->transform($form),
-                ],
-            ]
-        );
+        $client->put($endpoint, ['json' => $payload]);
     }
 
     protected function getProcessableFields(string $category): array
