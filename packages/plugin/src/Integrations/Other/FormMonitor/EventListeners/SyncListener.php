@@ -9,7 +9,9 @@ use Solspace\Freeform\Events\Forms\PersistFormEvent;
 use Solspace\Freeform\Integrations\Other\FormMonitor\FormMonitor;
 use Solspace\Freeform\Integrations\Other\FormMonitor\Transformers\ManifestTransformer;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
+use Solspace\Freeform\Services\LoggerService;
 use yii\base\Event;
+use yii\web\BadRequestHttpException;
 
 class SyncListener extends FeatureBundle
 {
@@ -17,6 +19,7 @@ class SyncListener extends FeatureBundle
         private FormIntegrationsProvider $integrationsProvider,
         private IntegrationClientProvider $clientProvider,
         private ManifestTransformer $manifestTransformer,
+        private LoggerService $loggerService,
     ) {
         Event::on(
             FormsController::class,
@@ -35,6 +38,13 @@ class SyncListener extends FeatureBundle
 
         $client = $this->clientProvider->getAuthorizedClient($formMonitor);
 
-        $formMonitor->sendManifest($client, $form, $this->manifestTransformer);
+        try {
+            $formMonitor->sendManifest($client, $form, $this->manifestTransformer);
+        } catch (BadRequestHttpException $exception) {
+            $this->loggerService
+                ->getLogger('Form Monitor')
+                ->error($exception->getMessage())
+            ;
+        }
     }
 }
