@@ -4,7 +4,9 @@ namespace Solspace\Freeform\Bundles\Spam;
 
 use Solspace\Freeform\Elements\SpamSubmission;
 use Solspace\Freeform\Elements\Submission;
+use Solspace\Freeform\Events\Forms\SubmitEvent;
 use Solspace\Freeform\Events\Submissions\ProcessSubmissionEvent;
+use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use yii\base\Event;
 
@@ -12,6 +14,12 @@ class SpamBundle extends FeatureBundle
 {
     public function __construct()
     {
+        Event::on(
+            Form::class,
+            Form::EVENT_SUBMIT,
+            [$this, 'onFormSubmit']
+        );
+
         Event::on(
             Submission::class,
             Submission::EVENT_PROCESS_SUBMISSION,
@@ -22,6 +30,21 @@ class SpamBundle extends FeatureBundle
     public static function getPriority(): int
     {
         return 800;
+    }
+
+    public function onFormSubmit(SubmitEvent $event): void
+    {
+        $form = $event->getForm();
+        if (!$form->isMarkedAsSpam()) {
+            return;
+        }
+
+        $isSpamFolderEnabled = $this->plugin()->settings->isSpamFolderEnabled();
+        if ($isSpamFolderEnabled) {
+            return;
+        }
+
+        $event->isValid = false;
     }
 
     public function processSpamSubmission(ProcessSubmissionEvent $event): void
