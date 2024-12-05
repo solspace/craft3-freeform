@@ -30,9 +30,9 @@ class TableLayout implements \IteratorAggregate, \ArrayAccess
         string $label,
         string $value,
         string $type,
-        string $placeholder,
-        array $options,
-        bool $checked
+        string $placeholder = '',
+        array $options = [],
+        bool $checked = false,
     ): self {
         $column = new TableColumn();
         $column->label = $label;

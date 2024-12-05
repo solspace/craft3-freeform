@@ -17,6 +17,11 @@ if (fs.existsSync(path.resolve(__dirname, 'certs/key.pem'))) {
   };
 }
 
+const clientDir = path.resolve(
+  __dirname,
+  '../../../plugin/src/Resources/js/client'
+);
+
 module.exports = merge(baseConfig, {
   mode: 'development',
 
@@ -24,7 +29,7 @@ module.exports = merge(baseConfig, {
     filename: '[name].js',
     chunkFilename: '[name].js',
     publicPath: 'https://127.0.0.1:8080/',
-    path: path.resolve(__dirname, '../../../plugin/src/Resources/js/client'),
+    path: clientDir,
   },
 
   devServer: {
@@ -45,10 +50,7 @@ module.exports = merge(baseConfig, {
         'X-Requested-With, content-type, Authorization',
     },
     static: {
-      directory: path.resolve(
-        __dirname,
-        '../../../plugin/src/Resources/js/client'
-      ),
+      directory: clientDir,
     },
   },
 

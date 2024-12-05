@@ -90,7 +90,9 @@ abstract class AbstractExport implements ExportInterface
                 $field = null;
                 if ('dateCreated' === $fieldId) {
                     $date = new Carbon($value, 'UTC');
-                    $date->setTimezone($this->timezone);
+                    if ($this->timezone) {
+                        $date->setTimezone($this->timezone);
+                    }
 
                     $value = $date->toDateTimeString();
                 }
