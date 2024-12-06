@@ -11,7 +11,7 @@
 {% set crumbs = crumbs|default([
 	{ label: craft.freeform.name, url: url('freeform') },
 	{ label: "Forms"|t("freeform"), url: url('freeform/forms') },
-	{ label: submission.form.name, url: url('freeform/forms/' ~ submission.getForm().id) },
+	{ label: form.name, url: url('freeform/forms/' ~ form.id) },
 	{ label: "Submissions"|t('freeform'), url: url('freeform/submissions') },
 ]) %}
 
@@ -175,7 +175,7 @@
 				<label>{{ 'Form'|t('freeform') }}</label>
 			</div>
 			<div class="input ltr">
-				<span class="status green" style="background: {{ form.color }};"></span><a href="{{ url('freeform/submissions/&source=form%3A' ~ form.id) }}">{{ form.name }}</a>
+				<span class="status green" style="background: {{ form.color }};"></span><a href="{{ url('freeform/forms/' ~ form.id) }}">{{ form.name }}</a>
 			</div>
 		</div>
 
