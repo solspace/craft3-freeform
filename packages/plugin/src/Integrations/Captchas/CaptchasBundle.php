@@ -12,6 +12,7 @@ use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\Captchas\hCaptcha\hCaptcha;
 use Solspace\Freeform\Integrations\Captchas\ReCaptcha\ReCaptcha;
 use Solspace\Freeform\Integrations\Captchas\Turnstile\Turnstile;
+use Solspace\Freeform\Integrations\Other\FormMonitor\Providers\FormMonitorProvider;
 use Solspace\Freeform\Library\Attributes\Attributes;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\Integrations\Types\Captchas\CaptchaIntegrationInterface;
@@ -29,6 +30,7 @@ class CaptchasBundle extends FeatureBundle
     public function __construct(
         private FormIntegrationsProvider $formIntegrationsProvider,
         private SettingsService $settingsService,
+        private FormMonitorProvider $formMonitorProvider,
     ) {
         Event::on(
             Form::class,
@@ -85,6 +87,10 @@ class CaptchasBundle extends FeatureBundle
             return false;
         }
 
+        if ($this->formMonitorProvider->isRequestFromFormMonitor($form)) {
+            return false;
+        }
+
         $integrations = $this->getCaptchasForForm($form);
         if (!$integrations) {
             return false;
@@ -107,6 +113,9 @@ class CaptchasBundle extends FeatureBundle
         }
 
         $form = $event->getForm();
+        if ($this->formMonitorProvider->isRequestFromFormMonitor($form)) {
+            return;
+        }
 
         $integrations = $this->getCaptchasForForm($form);
         if (!$integrations) {
@@ -134,6 +143,10 @@ class CaptchasBundle extends FeatureBundle
 
         $form = $event->getForm();
         if (!$form->isLastPage()) {
+            return;
+        }
+
+        if ($this->formMonitorProvider->isRequestFromFormMonitor($form)) {
             return;
         }
 

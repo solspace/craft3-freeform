@@ -13,11 +13,14 @@ class ManifestTransformer
     public function transform(Form $form): object
     {
         $manifest = [
-            'id' => $form->getId(),
-            'uid' => $form->getUid(),
-            'name' => $form->getName(),
-            'handle' => $form->getHandle(),
-            'settings' => $form->getSettings()->toArray(),
+            'form' => [
+                'id' => $form->getId(),
+                'uid' => $form->getUid(),
+                'name' => $form->getName(),
+                'handle' => $form->getHandle(),
+                'settings' => $form->getSettings()->toArray(),
+            ],
+            'notifications' => [],
         ];
 
         $layout = [];
