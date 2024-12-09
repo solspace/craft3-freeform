@@ -1849,13 +1849,13 @@
 
 ## 3.3.0 - 2019-08-20
 
-> {warning} This update includes a large change to the Stripe Payments integration to support the [Strong Customer Authentication (SCA)](https://stripe.com/docs/strong-customer-authentication) changes to the Stripe API. Please read changelog carefully and review notes in the [Freeform Payments documentation](https://docs.solspace.com/craft/freeform/v3/api-integrations/payments/#strong-customer-authentication-sca) to see what possible breaking changes might affect your forms and/or form flow.
+> {warning} This update includes a large change to the Stripe Payments integration to support the [Strong Customer Authentication (SCA)](https://stripe.com/docs/strong-customer-authentication) changes to the Stripe API. Please read changelog carefully and review notes in the [Freeform Payments documentation](https://docs.solspace.com/craft/freeform/v3/integrations/stripe-payments/#strong-customer-authentication-sca) to see what possible breaking changes might affect your forms and/or form flow.
 
 ### Added
 - Added Notes feature for submissions. Allows you to add private notes when updating a submission inside the control panel.
 
 ### Changed
-- Updated the Stripe Payments integration to support [Strong Customer Authentication (SCA)](https://stripe.com/docs/strong-customer-authentication) changes to the Stripe API. The new EU rule comes into effect on September 14, 2019, so any site based in the EU or accepting payments from EU customers will be affected and need to update to Freeform 3.3+ in order to prevent payments from being declined. Due to some limitations with the API and making things work with Freeform, there are some new limitations that may be breaking changes to your form and/or form flow. Please refer to the [Freeform Payments documentation](https://docs.solspace.com/craft/freeform/v3/api-integrations/payments/#strong-customer-authentication-sca) for more information.
+- Updated the Stripe Payments integration to support [Strong Customer Authentication (SCA)](https://stripe.com/docs/strong-customer-authentication) changes to the Stripe API. The new EU rule comes into effect on September 14, 2019, so any site based in the EU or accepting payments from EU customers will be affected and need to update to Freeform 3.3+ in order to prevent payments from being declined. Due to some limitations with the API and making things work with Freeform, there are some new limitations that may be breaking changes to your form and/or form flow. Please refer to the [Freeform Payments documentation](https://docs.solspace.com/craft/freeform/v3/integrations/stripe-payments/#strong-customer-authentication-sca) for more information.
 
 ### Fixed
 - Fixed a bug where the Honeypot input field contained the "aria-hidden" attribute twice.
