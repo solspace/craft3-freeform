@@ -359,6 +359,7 @@ class ExportProfileModel extends Model
             ->innerJoin(StatusRecord::TABLE.' stat', 'stat.[[id]] = s.[[statusId]]')
             ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
             ->where(implode(' AND ', $conditions), $parameters)
+            ->andWhere(['s.[[isHidden]]' => false])
         ;
 
         if ($isCraft5) {
