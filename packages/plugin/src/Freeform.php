@@ -190,7 +190,7 @@ class Freeform extends Plugin
     const EDITION_LITE = 'lite';
     const EDITION_PRO = 'pro';
 
-    const PERMISSIONS_HELP_LINK = 'https://docs.solspace.com/craft/freeform/v3/setup/demo-templates.html';
+    const PERMISSIONS_HELP_LINK = 'https://docs.solspace.com/craft/freeform/v3/configuration/demo-templates/';
     const PERMISSION_NAMESPACE = 'Freeform';
 
     const VERSION_CACHE_KEY = 'freeform_version';
