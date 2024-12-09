@@ -14,6 +14,12 @@ class m241206_123733_AddIsHiddenToSubmissions extends Migration
                 'isHidden',
                 $this->boolean()->notNull()->defaultValue(false)
             );
+
+            $this->addColumn(
+                '{{%freeform_submissions}}',
+                'requestId',
+                $this->string(255)->null()
+            );
         }
 
         return true;
@@ -23,6 +29,7 @@ class m241206_123733_AddIsHiddenToSubmissions extends Migration
     {
         if ($this->db->columnExists('{{%freeform_submissions}}', 'isHidden')) {
             $this->dropColumn('{{%freeform_submissions}}', 'isHidden');
+            $this->dropColumn('{{%freeform_submissions}}', 'requestId');
         }
 
         return true;

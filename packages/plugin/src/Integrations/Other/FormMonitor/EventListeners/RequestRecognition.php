@@ -28,6 +28,8 @@ class RequestRecognition extends FeatureBundle
             return;
         }
 
-        $event->isValid = false;
+        $submission = $event->getSubmission();
+        $submission->isHidden = true;
+        $submission->requestId = $this->provider->getRequestId($form);
     }
 }

@@ -200,6 +200,7 @@ class Install extends StreamlinedInstallMigration
                 ->addField('ip', $this->string(46)->null())
                 ->addField('isSpam', $this->boolean()->defaultValue(false))
                 ->addField('isHidden', $this->boolean()->defaultValue(false))
+                ->addField('requestId', $this->string(255)->null())
                 ->addIndex(['incrementalId'], true)
                 ->addIndex(['token'], true)
                 ->addForeignKey('id', 'elements', 'id', ForeignKey::CASCADE)

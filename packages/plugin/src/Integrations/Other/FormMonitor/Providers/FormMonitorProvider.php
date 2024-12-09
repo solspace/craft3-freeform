@@ -9,6 +9,9 @@ use Solspace\Freeform\Integrations\Other\FormMonitor\FormMonitor;
 
 class FormMonitorProvider
 {
+    private const HEADER_FORM_ID = 'X-Form-Monitor-Form-Id';
+    private const HEADER_TOKEN = 'X-Form-Monitor-Token';
+    private const HEADER_REQUEST_ID = 'X-Form-Monitor-Request-Id';
     private null|bool|Request $request = null;
     private array $requestCache = [];
 
@@ -25,6 +28,15 @@ class FormMonitorProvider
         return $this->requestCache[$form->getId()];
     }
 
+    public function getRequestId(Form $form): ?string
+    {
+        if (!$this->isRequestFromFormMonitor($form)) {
+            return null;
+        }
+
+        return $this->getRequest()->getHeaders()->get(self::HEADER_REQUEST_ID);
+    }
+
     private function handleRequest(Form $form): bool
     {
         $request = $this->getRequest();
@@ -34,12 +46,12 @@ class FormMonitorProvider
 
         $headers = $request->getHeaders();
 
-        $formId = $headers->get('X-Form-Monitor-Form-Id');
+        $formId = $headers->get(self::HEADER_FORM_ID);
         if (!$formId || (int) $formId !== $form->getId()) {
             return false;
         }
 
-        $token = $headers->get('X-Form-Monitor-Token');
+        $token = $headers->get(self::HEADER_TOKEN);
         if (!$token) {
             return false;
         }
