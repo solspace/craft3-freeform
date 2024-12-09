@@ -22,8 +22,13 @@ use Solspace\Freeform\Library\Integrations\APIIntegration;
 class FormMonitor extends APIIntegration
 {
     #[Flag(self::FLAG_ENCRYPTED)]
+    #[Flag(self::FLAG_GLOBAL_PROPERTY)]
     #[Input\Hidden]
     private string $apiKey = '';
+
+    #[Flag(self::FLAG_GLOBAL_PROPERTY)]
+    #[Input\Hidden]
+    private string $requestToken = '';
 
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[Input\Text(
@@ -43,6 +48,16 @@ class FormMonitor extends APIIntegration
         $this->apiKey = $apiKey;
 
         return $this;
+    }
+
+    public function getRequestToken(): string
+    {
+        return $this->requestToken;
+    }
+
+    public function setRequestToken(string $requestToken): void
+    {
+        $this->requestToken = $requestToken;
     }
 
     public function getTestUrl(): string

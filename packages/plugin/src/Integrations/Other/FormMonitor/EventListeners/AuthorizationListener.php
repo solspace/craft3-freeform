@@ -76,6 +76,7 @@ class AuthorizationListener extends FeatureBundle
         } catch (\Exception $e) {
             $json = (object) [
                 'apiKey' => 'test-api-key',
+                'requestToken' => 'test-request-token',
             ];
         }
 
@@ -83,7 +84,12 @@ class AuthorizationListener extends FeatureBundle
             throw new IntegrationException('Failed to authorize Form Monitor: No API Key present.');
         }
 
+        if (!isset($json->requestToken)) {
+            throw new IntegrationException('Failed to authorize Form Monitor: No Request Token present.');
+        }
+
         $integration->setApiKey($json->apiKey);
+        $integration->setRequestToken($json->requestToken);
 
         $model = $event->getModel();
         $this->integrationsService->save($model, $integration);
