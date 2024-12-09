@@ -468,7 +468,7 @@
 
 ## 4.0.0 - 2022-08-05
 
-> {warning} This is a larger and more complex update than usual, and there's a higher chance of a failed update attempt happening. Please ensure you have a recent database backup, and we recommend you test the update on a local/staging environment before updating your production server. Please follow the [Upgrading from Freeform 3.x guide](https://docs.solspace.com/craft/freeform/v4/setup/updating-freeform-3.html).
+> {warning} This is a larger and more complex update than usual, and there's a higher chance of a failed update attempt happening. Please ensure you have a recent database backup, and we recommend you test the update on a local/staging environment before updating your production server. Please follow the [Upgrading from Freeform 3.x guide](https://docs.solspace.com/craft/freeform/v4/setup/updating-freeform-3/).
 
 ### Added
 - Added compatibility with Craft 4.x.
@@ -1796,7 +1796,7 @@
 ### Changed
 - Updated File Upload fields to now allow custom subfolder paths. You can also dynamically build subfolder paths with `form.handle`, etc.
 - Updated the Users Element Connection to allow assigning users to multiple user groups.
-- Updated Freeform to show an error message if the old Freeform Pro 2.x plugin (which should be uninstalled) is still installed after an upgrade from Freeform 2.x to 3.x. Please follow the [Upgrading from Freeform 2.x guide](https://docs.solspace.com/craft/freeform/v3/setup/updating-freeform-2.html) for proper upgrading from 2.x to 3.x.
+- Updated Freeform to show an error message if the old Freeform Pro 2.x plugin (which should be uninstalled) is still installed after an upgrade from Freeform 2.x to 3.x. Please follow the [Upgrading from Freeform 2.x guide](https://docs.solspace.com/craft/freeform/v3/setup/updating-freeform-2/) for proper upgrading from 2.x to 3.x.
 - Adjusted the Craft element toolbar in CP Submissions index to no longer include Export button (as Freeform includes other and better export options, and this approach would not work correctly).
 
 ### Fixed
@@ -2012,7 +2012,7 @@
 
 ## 3.0.0 - 2019-06-11
 
-> {warning} This is a larger and more complex update than usual, and there's a higher chance of a failed update attempt happening. Please ensure you have a recent database backup, and we recommend you test the update on a local/staging environment before updating your production server. [Please follow the upgrading guide available here](https://docs.solspace.com/craft/freeform/v3/setup/updating-freeform-2.html)!
+> {warning} This is a larger and more complex update than usual, and there's a higher chance of a failed update attempt happening. Please ensure you have a recent database backup, and we recommend you test the update on a local/staging environment before updating your production server. [Please follow the upgrading guide available here](https://docs.solspace.com/craft/freeform/v3/setup/updating-freeform-2/)!
 
 ### Added
 - Added support for editing submissions (Pro).
