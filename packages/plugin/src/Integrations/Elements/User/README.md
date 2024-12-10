@@ -1,5 +1,5 @@
 # Setup Guide
-This integration allows you to map Freeform submission data to [Craft User](https://craftcms.com/docs/4.x/users.html), essentially creating a powerful [User Registration form](https://docs.solspace.com/craft/freeform/v5/guides/user-registration-forms/).
+This integration allows you to map Freeform submission data to [Craft User](https://craftcms.com/docs/4.x/users.html), essentially creating a powerful [User Registration form](https://docs.solspace.com/craft/freeform/v5/guides/speciality-forms/user-registration/).
 
 <span class="note warning"><b>Important:</b> This feature requires a <b>Craft Pro</b> license in order to work, as Users are a Craft Pro feature.</span>
 
