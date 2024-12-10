@@ -158,6 +158,7 @@ class Install extends StreamlinedInstallMigration
                 ->addField('type', $this->string(50)->notNull())
                 ->addField('category', $this->string(50))
                 ->addField('required', $this->boolean()->defaultValue(false))
+                ->addField('options', $this->json())
                 ->addIndex(['type'])
                 ->addIndex(['mailingListId', 'category'])
                 ->addForeignKey('mailingListId', 'freeform_email_marketing_lists', 'id', ForeignKey::CASCADE),
@@ -170,6 +171,7 @@ class Install extends StreamlinedInstallMigration
                 ->addField('type', $this->string(50)->notNull())
                 ->addField('category', $this->string(50))
                 ->addField('required', $this->boolean()->defaultValue(false))
+                ->addField('options', $this->json())
                 ->addIndex(['type'])
                 ->addIndex(['integrationId', 'category'])
                 ->addForeignKey('integrationId', 'freeform_integrations', 'id', ForeignKey::CASCADE),
