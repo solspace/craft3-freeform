@@ -4,7 +4,7 @@ namespace Solspace\Freeform\migrations;
 
 use craft\db\Migration;
 
-class m241104_091432_AddOptionsToIntegrationFields extends Migration
+class m241210_054218_AddOptionColumnFixForIntegrations extends Migration
 {
     public function safeUp(): bool
     {
