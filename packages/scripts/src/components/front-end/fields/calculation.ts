@@ -119,11 +119,15 @@ const attachCalculations = (input: HTMLInputElement) => {
     const inputElement = input.form.querySelector<HTMLInputElement | HTMLSelectElement>(
       `input[name="${variable}"], select[name="${variable}"]`
     );
-    if (inputElement) {
-      variables[variable] = extractValue(inputElement);
-      return variables[variable] !== '';
+
+    if (!inputElement) {
+      return false;
     }
-    return false;
+
+    const value = extractValue(inputElement);
+    variables[variable] = value;
+
+    return value !== null && value !== '';
   });
 
   if (areDefaultValuesSet) {
