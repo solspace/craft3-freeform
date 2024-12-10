@@ -1,5 +1,19 @@
 # Solspace Freeform Changelog
 
+## 5.8.1 - 2024-12-10
+
+### Added
+- Added Italian translation.
+
+### Changed
+- Changed the _English_ translation from `en-US` to `en`.
+
+### Fixed
+- Fixed a bug where spammy submissions were still being saved to the database when the Spam Folder was disabled.
+- Fixed a bug where fresh installs between 5.7.0 and 5.8.0 were missing a new `options` column in the `freeform_email_marketing_fields` and `freeform_crm_fields` database tables. Added a migration for affected installs.
+- Fixed a bug where the form name link on the CP submission details page was not linked correctly.
+- Fixed a bug where translations for the Error Log notice were missing.
+
 ## 5.8.0 - 2024-12-03
 
 ### Added
