@@ -4,8 +4,13 @@ import ExpressionLanguage from 'expression-language';
 const getVariablesPattern = /field:([a-zA-Z0-9_]+)/g;
 const expressionLanguage = new ExpressionLanguage();
 
-const extractValue = (element: HTMLInputElement | HTMLSelectElement): string | number | boolean => {
+const extractValue = (element: HTMLInputElement | HTMLSelectElement): string | number | boolean | null => {
   const value = element.value;
+
+  // Return null if the value is an empty string
+  if (value === '') {
+    return null;
+  }
 
   if (element.type === 'number') {
     return Number(value);
@@ -42,7 +47,7 @@ const attachCalculations = (input: HTMLInputElement) => {
       return;
     }
 
-    const isAllValuesFilled = Object.values(variables).every((value) => value !== '');
+    const isAllValuesFilled = Object.values(variables).every((value) => value !== null && value !== '');
     if (!isAllValuesFilled) {
       return;
     }
@@ -108,6 +113,22 @@ const attachCalculations = (input: HTMLInputElement) => {
       });
     }
   });
+
+  // Trigger initial calculation if all values are present
+  const areDefaultValuesSet = Object.keys(variables).every((variable) => {
+    const inputElement = input.form.querySelector<HTMLInputElement | HTMLSelectElement>(
+      `input[name="${variable}"], select[name="${variable}"]`
+    );
+    if (inputElement) {
+      variables[variable] = extractValue(inputElement);
+      return variables[variable] !== '';
+    }
+    return false;
+  });
+
+  if (areDefaultValuesSet) {
+    handleCalculation();
+  }
 };
 
 const registerCalculationInputs = async (container: HTMLElement) => {
