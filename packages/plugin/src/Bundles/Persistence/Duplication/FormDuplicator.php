@@ -2,12 +2,18 @@
 
 namespace Solspace\Freeform\Bundles\Persistence\Duplication;
 
+use craft\db\Query;
+use craft\db\Table;
 use craft\helpers\StringHelper;
+use craft\records\UserPermission;
+use craft\records\UserPermission_User;
+use craft\records\UserPermission_UserGroup;
 use Solspace\Freeform\Attributes\Property\Input\Field;
 use Solspace\Freeform\Attributes\Property\Input\Special\Properties\FieldMapping;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Fields\Implementations\Pro\GroupField;
 use Solspace\Freeform\Form\Managers\ContentManager;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Helpers\StringHelper as FreeformStringHelper;
 use Solspace\Freeform\Notifications\Types\Conditional\Conditional;
@@ -83,6 +89,7 @@ class FormDuplicator
         $this->cloneNotifications($id, $form);
         $this->cloneRules($id, $form);
         $this->cloneIntegrations($id, $form);
+        $this->updatePermissions($id, $form);
 
         $form = $this->formsService->getFormById($form->id);
 
@@ -399,6 +406,65 @@ class FormDuplicator
 
             $clone->metadata = json_encode($metadata);
             $clone->save();
+        }
+    }
+
+    private function updatePermissions(int $id, FormRecord $form): void
+    {
+        $userId = \Craft::$app->user->getIdentity()->id;
+        $permissions = [
+            Freeform::PERMISSION_SUBMISSIONS_MANAGE,
+            Freeform::PERMISSION_FORMS_MANAGE,
+        ];
+
+        foreach ($permissions as $permissionName) {
+            $name = strtolower($permissionName.':'.$id);
+            $newName = strtolower($permissionName.':'.$form->id);
+
+            $permissionId = (int) (new Query())
+                ->select('id')
+                ->from(Table::USERPERMISSIONS)
+                ->where(['name' => $name])
+                ->scalar()
+            ;
+
+            $groupIds = (new Query())
+                ->select('groupId')
+                ->from(Table::USERPERMISSIONS_USERGROUPS)
+                ->where(['permissionId' => $permissionId])
+                ->column()
+            ;
+
+            $userPermissionId = (new Query())
+                ->select('id')
+                ->from(Table::USERPERMISSIONS_USERS)
+                ->where([
+                    'permissionId' => $permissionId,
+                    'userId' => $userId,
+                ])
+                ->scalar()
+            ;
+
+            $permission = UserPermission::find()->where(['name' => $newName])->one();
+            if (!$permission) {
+                $permission = new UserPermission();
+                $permission->name = $newName;
+                $permission->save();
+            }
+
+            if ($userPermissionId) {
+                $userPermission = new UserPermission_User();
+                $userPermission->userId = $userId;
+                $userPermission->permissionId = $permission->id;
+                $userPermission->save();
+            } else {
+                foreach ($groupIds as $groupId) {
+                    $groupPermission = new UserPermission_UserGroup();
+                    $groupPermission->groupId = $groupId;
+                    $groupPermission->permissionId = $permission->id;
+                    $groupPermission->save();
+                }
+            }
         }
     }
 
