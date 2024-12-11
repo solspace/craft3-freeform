@@ -67,6 +67,7 @@ class AdminNotifications extends FeatureBundle
                     'postedData' => $postedData,
                     'recipients' => $recipients,
                     'template' => $template,
+                    'notificationType' => Admin::class,
                 ])
             );
         }

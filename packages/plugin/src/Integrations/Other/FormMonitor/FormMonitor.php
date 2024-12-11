@@ -67,16 +67,17 @@ class FormMonitor extends APIIntegration
 
     public function getApiRootUrl(): string
     {
-        return 'https://api.formmonitor.com/v1';
+        return 'https://api.leftip.com/v1';
+        // return 'https://api.formmonitor.com/v1';
     }
 
     public function checkConnection(Client $client): bool
     {
         try {
-            $response = $client->get('/me');
+            $response = $client->get($this->getEndpoint('/me'));
 
             return 200 === $response->getStatusCode();
-        } catch (\Exception) {
+        } catch (\Exception $exception) {
             return false;
         }
     }

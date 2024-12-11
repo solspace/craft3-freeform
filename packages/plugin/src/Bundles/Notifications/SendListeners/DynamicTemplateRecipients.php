@@ -78,6 +78,7 @@ class DynamicTemplateRecipients extends FeatureBundle
                 'postedData' => $postedData,
                 'recipients' => $recipientCollection,
                 'template' => $notificationTemplate,
+                'notificationType' => 'DynamicTemplate',
             ])
         );
     }

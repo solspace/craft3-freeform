@@ -77,6 +77,7 @@ class EmailRecipientNotifications extends FeatureBundle
                     'postedData' => $postedData,
                     'recipients' => $recipientCollection,
                     'template' => $notificationTemplate,
+                    'notificationType' => EmailField::class,
                 ])
             );
         }

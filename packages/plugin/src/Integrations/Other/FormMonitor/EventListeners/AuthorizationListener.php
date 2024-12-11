@@ -56,28 +56,21 @@ class AuthorizationListener extends FeatureBundle
 
         $client = new Client();
 
-        try {
-            $response = $client->post(
-                $integration->getApiRootUrl().'/handshake',
-                [
-                    'json' => [
-                        'url' => \Craft::$app->getSites()->getPrimarySite()->baseUrl,
-                        'key' => $licenseKey,
-                    ],
-                ]
-            );
+        $response = $client->post(
+            $integration->getApiRootUrl().'/handshake',
+            [
+                'json' => [
+                    'url' => \Craft::$app->getSites()->getPrimarySite()->baseUrl,
+                    'key' => $licenseKey,
+                ],
+            ]
+        );
 
-            $body = (string) $response->getBody();
-            $json = json_decode($body);
+        $body = (string) $response->getBody();
+        $json = json_decode($body);
 
-            if (201 !== $response->getStatusCode()) {
-                throw new IntegrationException('Failed to authorize Form Monitor: '.$body);
-            }
-        } catch (\Exception $e) {
-            $json = (object) [
-                'apiKey' => 'test-api-key',
-                'requestToken' => 'test-request-token',
-            ];
+        if (201 !== $response->getStatusCode()) {
+            throw new IntegrationException('Failed to authorize Form Monitor: '.$body);
         }
 
         if (!isset($json->apiKey)) {
