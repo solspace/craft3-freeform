@@ -29,7 +29,9 @@ class FileRemovalOnSubmissionDelete extends FeatureBundle
 
             if (\is_array($value)) {
                 foreach ($value as $id) {
-                    \Craft::$app->elements->deleteElementById($id);
+                    if (\is_int($id)) {
+                        \Craft::$app->elements->deleteElementById($id);
+                    }
                 }
             }
         }

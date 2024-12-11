@@ -408,11 +408,13 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
 
             $assetIds = array_unique($assetIds);
             foreach ($assetIds as $assetId) {
-                \Craft::$app->elements->deleteElementById(
-                    $assetId,
-                    hardDelete: true,
-                );
-                ++$deletedAssets;
+                if (\is_int($assetId)) {
+                    \Craft::$app->elements->deleteElementById(
+                        $assetId,
+                        hardDelete: true,
+                    );
+                    ++$deletedAssets;
+                }
             }
         }
 
