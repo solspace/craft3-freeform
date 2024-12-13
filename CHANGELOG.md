@@ -1,5 +1,11 @@
 # Solspace Freeform Changelog
 
+## 5.8.2 - 2024-12-11
+
+### Fixed
+- Fixed a bug where a user with individual form permissions would not have access to a form they just duplicated.
+- Fixed a bug where the automatic purging of old submissions queue job could fail if an empty string was passed for an asset.
+
 ## 5.8.1 - 2024-12-10
 
 ### Added
