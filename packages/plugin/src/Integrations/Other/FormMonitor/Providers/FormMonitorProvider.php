@@ -2,10 +2,13 @@
 
 namespace Solspace\Freeform\Integrations\Other\FormMonitor\Providers;
 
+use craft\db\Query;
 use craft\web\Request;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\Other\FormMonitor\FormMonitor;
+use Solspace\Freeform\Records\Form\FormIntegrationRecord;
+use Solspace\Freeform\Records\IntegrationRecord;
 
 class FormMonitorProvider
 {
@@ -35,6 +38,24 @@ class FormMonitorProvider
         }
 
         return $this->getRequest()->getHeaders()->get(self::HEADER_REQUEST_ID);
+    }
+
+    public function isFormMonitorEnabled(): bool
+    {
+        try {
+            return (bool) (new Query())
+                ->select('fi.[[id]]')
+                ->from(FormIntegrationRecord::TABLE.' fi')
+                ->innerJoin(IntegrationRecord::TABLE.' i', 'i.[[id]] = fi.[[integrationId]]')
+                ->where([
+                    'fi.[[enabled]]' => true,
+                    'i.[[class]]' => FormMonitor::class,
+                ])
+                ->count()
+            ;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     private function handleRequest(Form $form): bool

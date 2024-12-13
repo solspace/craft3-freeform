@@ -17,6 +17,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import '../config';
 
+import { FormMonitor } from './app/pages/form-monitor/form-monitor';
+import { FMTests } from './app/pages/form-monitor/form-monitor.tests';
 import { Form, Forms } from './app/pages/forms';
 import { ImportExport } from './app/pages/import-export';
 import { ExportFreeform } from './app/pages/import-export/export/views/freeform/freeform';
@@ -94,6 +96,10 @@ root.render(
                               element={<LimitedUsersDetail />}
                             />
                             <Route index element={<LimitedUsers />} />
+                          </Route>
+                          <Route path="form-monitor">
+                            <Route index element={<FormMonitor />} />
+                            <Route path=":formId/tests" element={<FMTests />} />
                           </Route>
                         </Route>
                       </Routes>

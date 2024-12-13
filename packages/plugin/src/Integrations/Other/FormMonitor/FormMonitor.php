@@ -82,6 +82,14 @@ class FormMonitor extends APIIntegration
         }
     }
 
+    public function fetchTests(Client $client, Form $form, array $options = []): array
+    {
+        $endpoint = $this->getEndpoint('/forms/'.$form->getId().'/tests');
+        $response = $client->get($endpoint, ['query' => $options]);
+
+        return json_decode((string) $response->getBody(), true);
+    }
+
     public function sendManifest(Client $client, Form $form, ManifestTransformer $transformer): void
     {
         $endpoint = $this->getEndpoint('forms/'.$form->getId());

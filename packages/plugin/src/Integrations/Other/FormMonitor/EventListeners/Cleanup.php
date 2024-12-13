@@ -2,20 +2,17 @@
 
 namespace Solspace\Freeform\Integrations\Other\FormMonitor\EventListeners;
 
-use craft\db\Query;
 use craft\helpers\Queue;
-use Solspace\Freeform\Integrations\Other\FormMonitor\FormMonitor;
 use Solspace\Freeform\Integrations\Other\FormMonitor\Jobs\FormMonitorCleanupJob;
+use Solspace\Freeform\Integrations\Other\FormMonitor\Providers\FormMonitorProvider;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
-use Solspace\Freeform\Records\Form\FormIntegrationRecord;
-use Solspace\Freeform\Records\IntegrationRecord;
 
 class Cleanup extends FeatureBundle
 {
     private const CLEANUP_KEY = 'form-monitor-cleanup';
     private const CLEANUP_TTL = 60 * 60 * 24; // 1 day
 
-    public function __construct()
+    public function __construct(private FormMonitorProvider $formMonitorProvider)
     {
         $plugin = $this->plugin();
 
@@ -24,22 +21,7 @@ class Cleanup extends FeatureBundle
             return;
         }
 
-        try {
-            $hasFormMonitorEnabled = (bool) (new Query())
-                ->select('fi.[[id]]')
-                ->from(FormIntegrationRecord::TABLE.' fi')
-                ->innerJoin(IntegrationRecord::TABLE.' i', 'i.[[id]] = fi.[[integrationId]]')
-                ->where([
-                    'fi.[[enabled]]' => true,
-                    'i.[[class]]' => FormMonitor::class,
-                ])
-                ->count()
-            ;
-        } catch (\Exception $e) {
-            $hasFormMonitorEnabled = false;
-        }
-
-        if (!$hasFormMonitorEnabled) {
+        if (!$this->formMonitorProvider->isFormMonitorEnabled()) {
             return;
         }
 
