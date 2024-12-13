@@ -8,7 +8,7 @@ class Tailwind3Bundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/tailwind-3';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/tailwind-3';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];

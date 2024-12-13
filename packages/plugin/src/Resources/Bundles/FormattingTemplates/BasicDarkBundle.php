@@ -8,7 +8,7 @@ class BasicDarkBundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/basic-dark';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/basic-dark';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];

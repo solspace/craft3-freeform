@@ -8,7 +8,7 @@ class ConversationalBundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/conversational';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/conversational';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];
