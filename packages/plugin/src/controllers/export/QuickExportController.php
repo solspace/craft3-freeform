@@ -13,6 +13,7 @@ use Solspace\Freeform\Library\Helpers\EncryptionHelper;
 use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Records\Pro\ExportSettingRecord;
+use Solspace\Freeform\Records\StatusRecord;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
@@ -98,6 +99,10 @@ class QuickExportController extends BaseController
                 ];
                 $fieldSetting['ip'] = [
                     'label' => 'IP Address',
+                    'checked' => true,
+                ];
+                $fieldSetting['status'] = [
+                    'label' => 'Status',
                     'checked' => true,
                 ];
                 $fieldSetting['dateCreated'] = [
@@ -229,6 +234,7 @@ class QuickExportController extends BaseController
                 $fieldName = $fieldId;
                 $fieldName = match ($fieldName) {
                     'title' => $isCraft5 ? 'es.[[title]]' : 'c.[['.$fieldName.']]',
+                    'status' => 'stat.[[name]] as status',
                     'cc_status' => 'p.[[status]] as cc_status',
                     'cc_amount' => 'p.[[amount]] as cc_amount',
                     'cc_currency' => 'p.[[currency]] as cc_currency',
@@ -244,6 +250,7 @@ class QuickExportController extends BaseController
             ->select($searchableFields)
             ->from(Submission::TABLE.' s')
             ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
+            ->innerJoin(StatusRecord::TABLE.' stat', 'stat.[[id]] = s.[[statusId]]')
             ->where(['s.[[formId]]' => $form->getId()])
             ->andWhere(['s.[[isSpam]]' => $isSpam])
         ;
