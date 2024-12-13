@@ -71,6 +71,7 @@ class ElementsController extends BaseApiController
             $elements[] = \Craft::$app->elements->getElementById($elementId, siteId: $site->id);
         }
 
+        $elements = array_filter($elements);
         $elements = array_map(
             fn (ElementInterface $element) => [
                 'id' => $element->id,
