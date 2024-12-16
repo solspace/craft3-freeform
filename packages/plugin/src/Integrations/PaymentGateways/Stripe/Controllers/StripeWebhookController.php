@@ -31,7 +31,8 @@ class StripeWebhookController extends BaseStripeController
         $json = json_decode($payload, false);
         $header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? null;
 
-        $hash = $json->data->object->metadata->hash;
+        $hash = $json->data->object->subscription_details->metadata->hash ?? $json->data->object->metadata->hash;
+
         [, $integration] = $this->getRequestItems($hash);
         $secret = $integration->getWebhookSecret();
 
