@@ -1,5 +1,14 @@
 # Solspace Freeform Changelog
 
+## 5.8.3 - 2024-12-16
+
+### Fixed
+- Fixed a bug where the initial field value wasn't used in the Calculation field.
+- Fixed an issue where the resource URLs for sample formatting templates were not fully compatible with Craft Cloud sites.
+- Fixed a bug where **Status** was not available in Quick Export.
+- Fixed issues with the Stripe webhook.
+- Fixed a bug where the form builder **Usage in Elements** tab was not always loading correctly.
+
 ## 5.8.2 - 2024-12-11
 
 ### Fixed
