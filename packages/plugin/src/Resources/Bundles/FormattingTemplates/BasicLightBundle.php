@@ -8,7 +8,7 @@ class BasicLightBundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/basic-light';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/basic-light';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];

@@ -8,7 +8,7 @@ class FlexboxBundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/flexbox';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/flexbox';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];
