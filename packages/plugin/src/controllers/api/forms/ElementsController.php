@@ -40,14 +40,19 @@ class ElementsController extends BaseApiController
 
         $conditions = ['or'];
         foreach ($fieldUids as $uuid) {
-            $conditions[] = new Expression(
-                match ($driver) {
-                    'mysql' => "JSON_UNQUOTE(JSON_EXTRACT([[es.content]], '$.\"{$uuid}\"')) = :formId",
-                    'pgsql' => '[[es.content]]->>:uuid = :formId',
-                    default => throw new \RuntimeException("Unsupported driver: {$driver}"),
-                },
-                [':uuid' => $uuid, ':formId' => $id]
-            );
+            if ('mysql' === $driver) {
+                $conditions[] = new Expression(
+                    "JSON_UNQUOTE(JSON_EXTRACT([[es.content]], '$.\"{$uuid}\"')) = :formId",
+                    [':formId' => $id]
+                );
+            } elseif ('pgsql' === $driver) {
+                $conditions[] = new Expression(
+                    '[[es.content]]->>:uuid = :formId',
+                    [':uuid' => $uuid, ':formId' => (string) $id]
+                );
+            } else {
+                throw new \RuntimeException("Unsupported driver: {$driver}");
+            }
         }
 
         $elementIds = (new Query())
