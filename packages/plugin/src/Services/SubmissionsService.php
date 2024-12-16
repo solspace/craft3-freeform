@@ -33,6 +33,7 @@ use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Database\SubmissionHandlerInterface;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
+use Solspace\Freeform\Records\FormRecord;
 use Twig\Markup;
 use yii\base\Event;
 
@@ -117,6 +118,16 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
      */
     public function getSubmissionCountByForm(bool $isSpam = false, ?Carbon $rangeStart = null, ?Carbon $rangeEnd = null): array
     {
+        $isSpamFolderEnabled = $this->getSettingsService()->isSpamFolderEnabled();
+        if ($isSpam && !$isSpamFolderEnabled) {
+            return (new Query())
+                ->select('spamBlockCount')
+                ->from(FormRecord::TABLE)
+                ->indexBy('id')
+                ->column()
+            ;
+        }
+
         $submissions = Submission::TABLE;
         $query = (new Query())
             ->select(["COUNT({$submissions}.[[id]]) as [[submissionCount]]"])
@@ -398,11 +409,13 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
 
             $assetIds = array_unique($assetIds);
             foreach ($assetIds as $assetId) {
-                \Craft::$app->elements->deleteElementById(
-                    $assetId,
-                    hardDelete: true,
-                );
-                ++$deletedAssets;
+                if (\is_int($assetId)) {
+                    \Craft::$app->elements->deleteElementById(
+                        $assetId,
+                        hardDelete: true,
+                    );
+                    ++$deletedAssets;
+                }
             }
         }
 

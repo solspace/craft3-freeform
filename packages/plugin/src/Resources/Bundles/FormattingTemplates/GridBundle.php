@@ -8,7 +8,7 @@ class GridBundle extends AssetBundle
 {
     public function init(): void
     {
-        $this->sourcePath = '@freeform-formatting-templates/grid';
+        $this->sourcePath = '@Solspace/Freeform/templates/_templates/formatting/grid';
 
         $this->js = ['_main.js'];
         $this->css = ['_main.css'];

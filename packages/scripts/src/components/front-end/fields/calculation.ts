@@ -4,8 +4,13 @@ import ExpressionLanguage from 'expression-language';
 const getVariablesPattern = /field:([a-zA-Z0-9_]+)/g;
 const expressionLanguage = new ExpressionLanguage();
 
-const extractValue = (element: HTMLInputElement | HTMLSelectElement): string | number | boolean => {
+const extractValue = (element: HTMLInputElement | HTMLSelectElement): string | number | boolean | null => {
   const value = element.value;
+
+  // Return null if the value is an empty string
+  if (value === '') {
+    return null;
+  }
 
   if (element.type === 'number') {
     return Number(value);
@@ -28,7 +33,7 @@ const attachCalculations = (input: HTMLInputElement) => {
 
   // Get calculation logic & decimal count
   const calculationsLogic = calculations.replace(getVariablesPattern, (_, variable) => variable);
-  const decimalCount = decimal ?? Number(decimal);
+  const decimalCount = decimal ? Number(decimal) : null;
 
   // Get variables
   const variables: Record<string, string | number | boolean> = {};
@@ -42,13 +47,13 @@ const attachCalculations = (input: HTMLInputElement) => {
       return;
     }
 
-    const isAllValuesFilled = Object.values(variables).every((value) => value !== '');
+    const isAllValuesFilled = Object.values(variables).every((value) => value !== null && value !== '');
     if (!isAllValuesFilled) {
       return;
     }
 
     let result = expressionLanguage.evaluate(calculationsLogic, variables);
-    result = decimalCount ? result.toFixed(decimalCount) : result;
+    result = decimalCount !== null ? result.toFixed(decimalCount) : result;
 
     const updateInputValue = (value: string | number) => {
       input.value = value.toString();
@@ -57,7 +62,6 @@ const attachCalculations = (input: HTMLInputElement) => {
 
     if (input.type !== 'hidden') {
       updateInputValue(result);
-
       return;
     }
 
@@ -72,42 +76,79 @@ const attachCalculations = (input: HTMLInputElement) => {
   };
 
   Object.keys(variables).forEach((variable) => {
-    const inputElements = input.form.querySelectorAll(`input[name="${variable}"], select[name="${variable}"]`);
+    const inputElements = input.form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      `input[name="${variable}"], select[name="${variable}"]`
+    );
     if (inputElements.length === 0) {
       return;
     }
 
-    const element = inputElements[0] as HTMLInputElement | HTMLSelectElement;
-
-    const updateVariables = () => {
-      variables[variable] = extractValue(element);
-    };
-
-    const updateVariablesAndCalculate = () => {
-      updateVariables();
-      handleCalculation();
-    };
-
-    updateVariables(); // Initial update
-
-    if (element instanceof HTMLInputElement) {
-      element.addEventListener('input', updateVariablesAndCalculate);
-    } else if (element instanceof HTMLSelectElement) {
-      element.addEventListener('change', updateVariablesAndCalculate);
-    }
-
-    // Handling other input elements (if any)
-    if (inputElements.length > 1) {
-      inputElements.forEach((element) => {
-        if (element !== element && element instanceof HTMLInputElement) {
-          element.addEventListener('click', () => {
-            variables[variable] = extractValue(element);
-            handleCalculation();
-          });
+    inputElements.forEach((element) => {
+      const updateVariables = () => {
+        if (element instanceof HTMLInputElement) {
+          if (element.type === 'radio' && !element.checked) {
+            return;
+          }
+          variables[variable] = extractValue(element);
+        } else if (element instanceof HTMLSelectElement) {
+          variables[variable] = extractValue(element);
         }
-      });
-    }
+      };
+
+      const updateVariablesAndCalculate = () => {
+        updateVariables();
+        handleCalculation();
+      };
+
+      updateVariables(); // Initial update
+
+      if (element instanceof HTMLInputElement) {
+        if (element.type === 'radio') {
+          element.addEventListener('change', updateVariablesAndCalculate);
+        } else {
+          element.addEventListener('input', updateVariablesAndCalculate);
+        }
+      } else if (element instanceof HTMLSelectElement) {
+        element.addEventListener('change', updateVariablesAndCalculate);
+      }
+    });
   });
+
+  // Trigger initial calculation if all values are present
+  const areDefaultValuesSet = Object.keys(variables).every((variable) => {
+    const inputElements = input.form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      `input[name="${variable}"], select[name="${variable}"]`
+    );
+
+    if (inputElements.length === 0) {
+      return false; // No matching inputs found for the variable
+    }
+
+    let value: string | number | boolean | null = null;
+
+    inputElements.forEach((element) => {
+      if (element instanceof HTMLInputElement) {
+        if (element.type === 'radio') {
+          if (element.checked) {
+            value = extractValue(element);
+          }
+        } else {
+          value = extractValue(element);
+        }
+      } else if (element instanceof HTMLSelectElement) {
+        value = extractValue(element);
+      }
+    });
+
+    variables[variable] = value;
+
+    // Ensure the variable has a non-null, non-empty value
+    return value !== null && value !== '';
+  });
+
+  if (areDefaultValuesSet) {
+    handleCalculation();
+  }
 };
 
 const registerCalculationInputs = async (container: HTMLElement) => {

@@ -1,5 +1,34 @@
 # Solspace Freeform Changelog
 
+## 5.8.3 - 2024-12-16
+
+### Fixed
+- Fixed a bug where the initial field value wasn't used in the Calculation field.
+- Fixed an issue where the resource URLs for sample formatting templates were not fully compatible with Craft Cloud sites.
+- Fixed a bug where **Status** was not available in Quick Export.
+- Fixed issues with the Stripe webhook.
+- Fixed a bug where the form builder **Usage in Elements** tab was not always loading correctly.
+
+## 5.8.2 - 2024-12-11
+
+### Fixed
+- Fixed a bug where a user with individual form permissions would not have access to a form they just duplicated.
+- Fixed a bug where the automatic purging of old submissions queue job could fail if an empty string was passed for an asset.
+
+## 5.8.1 - 2024-12-10
+
+### Added
+- Added Italian translation.
+
+### Changed
+- Changed the _English_ translation from `en-US` to `en`.
+
+### Fixed
+- Fixed a bug where spammy submissions were still being saved to the database when the Spam Folder was disabled.
+- Fixed a bug where fresh installs between 5.7.0 and 5.8.0 were missing a new `options` column in the `freeform_email_marketing_fields` and `freeform_crm_fields` database tables. Added a migration for affected installs.
+- Fixed a bug where the form name link on the CP submission details page was not linked correctly.
+- Fixed a bug where translations for the Error Log notice were missing.
+
 ## 5.8.0 - 2024-12-03
 
 ### Added

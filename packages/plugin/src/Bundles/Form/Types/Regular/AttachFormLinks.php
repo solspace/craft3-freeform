@@ -21,6 +21,11 @@ class AttachFormLinks extends FeatureBundle
                 $form = $event->getForm();
                 $data = $event->getFormData();
 
+                static $isSpamEnabled;
+                if (null === $isSpamEnabled) {
+                    $isSpamEnabled = Freeform::getInstance()->settings->isSpamFolderEnabled();
+                }
+
                 $canManageForm = PermissionHelper::checkPermission(Freeform::PERMISSION_FORMS_MANAGE);
                 if (!$canManageForm) {
                     $canManageForm = PermissionHelper::checkPermission(
@@ -77,7 +82,7 @@ class AttachFormLinks extends FeatureBundle
                 $event->add(
                     $spam,
                     'spam',
-                    $canManageSubmissions ? UrlHelper::cpUrl('freeform/spam?source=form:'.$form->getId()) : null,
+                    $isSpamEnabled && $canManageSubmissions ? UrlHelper::cpUrl('freeform/spam?source=form:'.$form->getId()) : null,
                     'linkList',
                     $spamCount,
                 );

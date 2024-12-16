@@ -46,9 +46,9 @@ class TableTransformerTest extends TestCase
         $output = (new TableTransformer())->reverseTransform($value);
 
         $expected = [
-            ['label' => 'Col 1', 'value' => 'one', 'type' => 'string'],
-            ['label' => 'Col 2', 'value' => 'two', 'type' => 'checkbox'],
-            ['label' => 'Col 3', 'value' => 'three;four;five', 'type' => 'select'],
+            ['label' => 'Col 1', 'value' => 'one', 'type' => 'string', 'placeholder' => '', 'options' => [], 'checked' => false],
+            ['label' => 'Col 2', 'value' => 'two', 'type' => 'checkbox', 'placeholder' => '', 'options' => [], 'checked' => false],
+            ['label' => 'Col 3', 'value' => 'three;four;five', 'type' => 'select', 'placeholder' => '', 'options' => [], 'checked' => false],
         ];
 
         $this->assertEquals($expected, $output);

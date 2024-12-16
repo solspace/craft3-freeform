@@ -37,7 +37,7 @@ class FormsController extends BaseController
     {
         PermissionHelper::requirePermission(Freeform::PERMISSION_FORMS_ACCESS);
 
-        $translations = include __DIR__.'/../translations/en-US/freeform.php';
+        $translations = include __DIR__.'/../translations/en/freeform.php';
         $translations = array_keys($translations);
 
         $this->view->registerAssetBundle(FreeformClientBundle::class);
