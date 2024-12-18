@@ -5,10 +5,10 @@ namespace Solspace\Freeform\Elements\Actions;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportCsv;
 
 class ExportCSVAction extends ElementAction
 {

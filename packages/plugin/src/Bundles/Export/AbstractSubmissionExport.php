@@ -1,43 +1,38 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export;
 
 use Carbon\Carbon;
+use Solspace\Freeform\Bundles\Backup\DTO\Submission;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Events\PrepareExportColumnEvent;
+use Solspace\Freeform\Bundles\Export\Objects\Column;
+use Solspace\Freeform\Bundles\Export\Objects\Row;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
+use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Interfaces\MultiValueInterface;
 use Solspace\Freeform\Fields\Interfaces\OptionsInterface;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
-use Solspace\Freeform\Library\Export\Objects\Column;
-use Solspace\Freeform\Library\Export\Objects\Row;
+use yii\base\Event;
 
-abstract class AbstractExport implements ExportInterface
+abstract class AbstractSubmissionExport implements SubmissionExportInterface
 {
-    /** @var Row[] */
-    private array $rows;
-
     private ?string $timezone;
-    private bool $removeNewLines;
-    private bool $exportLabels;
-    private bool $handlesAsNames;
 
     public function __construct(
         private Form $form,
-        array $submissionData,
-        ?ExportSettings $settings = null
+        private SubmissionQuery $query,
+        private FieldDescriptorCollection $fieldDescriptors,
+        private ?ExportSettings $settings = null
     ) {
         if (null === $settings) {
             $settings = new ExportSettings();
         }
 
         $this->timezone = $settings->getTimezone();
-
-        $this->removeNewLines = $settings->isRemoveNewlines();
-        $this->exportLabels = $settings->isExportLabels();
-        $this->handlesAsNames = $settings->isHandlesAsNames();
-
-        $this->rows = $this->parseSubmissionDataIntoRows($submissionData);
     }
 
     public function getForm(): Form
@@ -45,22 +40,59 @@ abstract class AbstractExport implements ExportInterface
         return $this->form;
     }
 
-    /**
-     * @return Row[]
-     */
-    public function getRows(): array
+    public function getFieldDescriptors(): FieldDescriptorCollection
     {
-        return $this->rows;
+        return $this->fieldDescriptors;
     }
 
-    public function isRemoveNewLines(): bool
+    public function getSettings(): ?ExportSettings
     {
-        return $this->removeNewLines;
+        return $this->settings;
     }
 
-    public function isHandlesAsNames(): bool
+    protected function getQuery(): SubmissionQuery
     {
-        return $this->handlesAsNames;
+        return $this->query;
+    }
+
+    protected function getRowBatch(int $size = 100): \Generator
+    {
+        $query = $this->getQuery();
+
+        /** @var Submission[] $elements */
+        foreach ($query->batch($size) as $elements) {
+            $rows = [];
+            foreach ($elements as $element) {
+                $columns = [];
+                $index = 0;
+                foreach ($this->getFieldDescriptors() as $descriptor) {
+                    $value = $element->{$descriptor->getId()};
+                    if ($value instanceof FieldInterface) {
+                        $value = $value->getValue();
+                    }
+
+                    $event = new PrepareExportColumnEvent(
+                        $this,
+                        $descriptor,
+                        $element,
+                        $value,
+                        $index++,
+                    );
+
+                    Event::trigger(
+                        SubmissionExportInterface::class,
+                        SubmissionExportInterface::EVENT_PREPARE_EXPORT_COLUMN,
+                        $event
+                    );
+
+                    $columns[$event->getKey()] = $event->getValue();
+                }
+
+                $rows[] = $columns;
+            }
+
+            yield $rows;
+        }
     }
 
     /**

@@ -1,10 +1,11 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export\Implementations\Text;
 
+use Solspace\Freeform\Bundles\Export\AbstractSubmissionExport;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 
-class ExportText extends AbstractExport
+class ExportText extends AbstractSubmissionExport
 {
     public static function getLabel(): string
     {
@@ -24,7 +25,7 @@ class ExportText extends AbstractExport
     public function export(): string
     {
         $output = '';
-        foreach ($this->getRows() as $rowIndex => $row) {
+        foreach ($this->getRowBatch() as $rowIndex => $row) {
             foreach ($row as $column) {
                 $value = $column->getValue();
                 if (\is_array($value) || \is_object($value)) {

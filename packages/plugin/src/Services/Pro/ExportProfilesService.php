@@ -3,6 +3,14 @@
 namespace Solspace\Freeform\Services\Pro;
 
 use craft\db\Query;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
+use Solspace\Freeform\Bundles\Export\Implementations\Excel\ExportExcel;
+use Solspace\Freeform\Bundles\Export\Implementations\Json\ExportJson;
+use Solspace\Freeform\Bundles\Export\Implementations\Text\ExportText;
+use Solspace\Freeform\Bundles\Export\Implementations\Xml\ExportXml;
+use Solspace\Freeform\Bundles\Export\SubmissionExportInterface;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Events\Export\Profiles\DeleteEvent;
 use Solspace\Freeform\Events\Export\Profiles\RegisterExporterEvent;
 use Solspace\Freeform\Events\Export\Profiles\SaveEvent;
@@ -10,12 +18,6 @@ use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportCsv;
-use Solspace\Freeform\Library\Export\ExportExcel;
-use Solspace\Freeform\Library\Export\ExportInterface;
-use Solspace\Freeform\Library\Export\ExportJson;
-use Solspace\Freeform\Library\Export\ExportText;
-use Solspace\Freeform\Library\Export\ExportXml;
 use Solspace\Freeform\Models\Pro\ExportProfileModel;
 use Solspace\Freeform\Records\Pro\ExportProfileRecord;
 use yii\base\Component;
@@ -247,7 +249,7 @@ class ExportProfilesService extends Component
         );
     }
 
-    public function createExporter(string $type, Form $form, array $data): ExportInterface
+    public function createExporter(string $type, Form $form, SubmissionQuery $query, FieldDescriptorCollection $fieldDescriptors): SubmissionExportInterface
     {
         $exporters = $this->getExporters();
         if (!isset($exporters[$type])) {
@@ -256,10 +258,10 @@ class ExportProfilesService extends Component
 
         $class = $exporters[$type];
 
-        return new $class($form, $data, $this->getExportSettings());
+        return new $class($form, $query, $fieldDescriptors, $this->getExportSettings());
     }
 
-    public function export(ExportInterface $exporter, Form $form)
+    public function export(SubmissionExportInterface $exporter, Form $form)
     {
         $fileName = \sprintf(
             '%s submissions %s.%s',

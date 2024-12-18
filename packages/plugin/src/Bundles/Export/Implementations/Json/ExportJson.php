@@ -1,8 +1,10 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export\Implementations\Json;
 
-class ExportJson extends AbstractExport
+use Solspace\Freeform\Bundles\Export\AbstractSubmissionExport;
+
+class ExportJson extends AbstractSubmissionExport
 {
     public static function getLabel(): string
     {
@@ -22,7 +24,7 @@ class ExportJson extends AbstractExport
     public function export(): string
     {
         $output = [];
-        foreach ($this->getRows() as $row) {
+        foreach ($this->getRowBatch() as $row) {
             $rowData = [];
             foreach ($row as $column) {
                 $rowData[$column->getHandle()] = $column->getValue();

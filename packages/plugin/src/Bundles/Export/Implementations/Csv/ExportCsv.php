@@ -1,12 +1,14 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export\Implementations\Csv;
 
+use Solspace\Freeform\Bundles\Export\AbstractSubmissionExport;
+use Solspace\Freeform\Bundles\Export\Interfaces\StringValueExportInterface;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 
-class ExportCsv extends AbstractExport
+class ExportCsv extends AbstractSubmissionExport implements StringValueExportInterface
 {
     public static function getLabel(): string
     {
@@ -23,33 +25,45 @@ class ExportCsv extends AbstractExport
         return 'csv';
     }
 
-    public function export()
+    public function export(): mixed
     {
-        if (empty($this->getRows())) {
+        $columnLabels = $this->prepareColumnLabels();
+        if (empty($columnLabels)) {
             return '';
         }
 
-        $output = [];
-        foreach ($this->getValuesAsArray() as $row) {
-            $rowData = [];
-            foreach ($row as $value) {
-                if ($value) {
-                    $rowData[] = '"'.str_replace('"', '""', $value).'"';
-                } else {
-                    $rowData[] = null;
-                }
+        $output = [$this->prepareColumnLabels()];
+        foreach ($this->getRowBatch() as $rows) {
+            foreach ($rows as $row) {
+                $this->handleRow($row, $output);
+                $output[] = StringHelper::implodeRecursively(',', $row);
             }
-
-            $output[] = StringHelper::implodeRecursively(',', $rowData);
         }
 
+        // dd($output);
+
         return StringHelper::implodeRecursively("\n", $output);
+        //        $output = [];
+        //        foreach ($this->getValuesAsArray() as $row) {
+        //            $rowData = [];
+        //            foreach ($row as $value) {
+        //                if ($value) {
+        //                    $rowData[] = '"'.str_replace('"', '""', $value).'"';
+        //                } else {
+        //                    $rowData[] = null;
+        //                }
+        //            }
+        //
+        //            $output[] = StringHelper::implodeRecursively(',', $rowData);
+        //        }
+        //
+        //        return StringHelper::implodeRecursively("\n", $output);
     }
 
     protected function getValuesAsArray(): array
     {
         $output = [];
-        foreach ($this->getRows() as $rowIndex => $row) {
+        foreach ($this->getRowBatch() as $rowIndex => $row) {
             if (0 === $rowIndex) {
                 $labels = [];
                 foreach ($row as $column) {
@@ -110,6 +124,36 @@ class ExportCsv extends AbstractExport
         }
 
         return $output;
+    }
+
+    private function handleRow(array $row, array $output): void {}
+
+    private function prepareColumnLabels(): string
+    {
+        $form = $this->getForm();
+        $descriptors = $this->getFieldDescriptors();
+
+        $labels = [];
+        foreach ($descriptors as $descriptor) {
+            $field = $form->get($descriptor->getId());
+            if (!is_numeric($descriptor->getId()) || !$field) {
+                $labels[] = $descriptor->getLabel();
+
+                continue;
+            }
+
+            if ($field instanceof TableField) {
+                foreach ($field->getTableLayout() as $layout) {
+                    $labels[] = $layout->label ?? '-';
+                }
+            } else {
+                $labels[] = $this->getSettings()->isHandlesAsNames() ? $field->getHandle() : $field->getLabel();
+            }
+        }
+
+        $labels = array_map(fn ($label) => '"'.$label.'"', $labels);
+
+        return StringHelper::implodeRecursively(',', $labels);
     }
 
     private function extractTableRow(int $rowIndex, array $tableValues, TableField $field): array

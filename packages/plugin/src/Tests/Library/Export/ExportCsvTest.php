@@ -4,13 +4,17 @@ namespace Solspace\Freeform\Tests\Library\Export;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
+use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
+use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\Fields\Properties\Table\TableLayout;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
-use Solspace\Freeform\Library\Export\ExportCsv;
 
 /**
  * @internal
@@ -19,17 +23,11 @@ use Solspace\Freeform\Library\Export\ExportCsv;
  */
 class ExportCsvTest extends TestCase
 {
-    /** @var Form|MockObject */
-    private $formMock;
-
-    /** @var MockObject|TableField */
-    private $tableField1Mock;
-
-    /** @var MockObject|TableField */
-    private $tableField2Mock;
-
-    /** @var MockObject|TextField */
-    private $textFieldMock;
+    private Form|MockObject $formMock;
+    private MockObject|SubmissionQuery $queryMock;
+    private MockObject|TableField $tableField1Mock;
+    private MockObject|TableField $tableField2Mock;
+    private MockObject|TextField $textFieldMock;
 
     protected function setUp(): void
     {
@@ -86,21 +84,43 @@ class ExportCsvTest extends TestCase
         ;
 
         $this->formMock = $this->createMock(Form::class);
+        $this->queryMock = $this->createMock(SubmissionQuery::class);
     }
 
     public function testEmptyExport()
     {
-        $exporter = new ExportCsv($this->formMock, []);
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, new FieldDescriptorCollection());
 
         $this->assertEmpty($exporter->export());
     }
 
     public function testExportBasicRows()
     {
-        $exporter = new ExportCsv($this->formMock, [
-            ['id' => 1, 'dateCreated' => '2019-01-01 08:00:00'],
-            ['id' => 2, 'dateCreated' => '2019-01-01 09:20:00'],
-        ]);
+        $descriptors = (new FieldDescriptorCollection())
+            ->add(new FieldDescriptor('id', 'ID'))
+            ->add(new FieldDescriptor('dateCreated', 'Date Created'))
+        ;
+
+        $testData = [
+            ['id' => 1, 'dateCreated' => new \DateTime('2019-01-01 08:00:00')],
+            ['id' => 2, 'dateCreated' => new \DateTime('2019-01-01 09:20:00')],
+        ];
+
+        $submissions = [];
+        foreach ($testData as $data) {
+            $mock = $this->createMock(Submission::class);
+            $mock->method('__get')->willReturnCallback(fn ($name) => $testData[0][$name]);
+
+            $submissions[] = $mock;
+        }
+
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors);
+
+        $this
+            ->queryMock
+            ->method('batch')
+            ->willReturn($submissions)
+        ;
 
         $expected = <<<'EXPECTED'
             "ID","Date Created"

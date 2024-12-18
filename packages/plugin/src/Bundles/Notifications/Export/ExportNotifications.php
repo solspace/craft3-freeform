@@ -91,7 +91,7 @@ class ExportNotifications extends FeatureBundle
             $message = $mailer->compileMessage($template, $variables);
             $message->setTo($mailer->processRecipients($recipients));
 
-            $data = $profile->getSubmissionData();
+            $data = $profile->getQuery();
 
             $key = EncryptionHelper::getKey($form->getUid());
             $data = EncryptionHelper::decryptExportData($key, $data);

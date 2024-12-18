@@ -4,11 +4,11 @@ namespace Solspace\Freeform\Tests\Library\Export;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Solspace\Freeform\Bundles\Export\Implementations\Xml\ExportXml;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\Fields\Properties\Table\TableLayout;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Library\Export\ExportXml;
 
 /**
  * @internal

@@ -1,11 +1,12 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export\Implementations\Xml;
 
+use Solspace\Freeform\Bundles\Export\AbstractSubmissionExport;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Interfaces\MultiValueInterface;
 
-class ExportXml extends AbstractExport
+class ExportXml extends AbstractSubmissionExport
 {
     public static function getLabel(): string
     {
@@ -26,7 +27,7 @@ class ExportXml extends AbstractExport
     {
         $xml = new \SimpleXMLElement('<root/>');
 
-        foreach ($this->getRows() as $row) {
+        foreach ($this->getRowBatch() as $row) {
             $submission = $xml->addChild('submission');
 
             foreach ($row as $column) {

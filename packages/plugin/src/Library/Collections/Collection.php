@@ -10,6 +10,9 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     /** @var T[] */
     protected array $items;
 
+    /** @var null|callable */
+    protected $keySelector;
+
     /**
      * @param T[] $items
      */
@@ -24,6 +27,10 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     public function add($item, mixed $key = null): self
     {
         $this->validate($item);
+
+        if (null === $key && \is_callable($this->keySelector)) {
+            $key = ($this->keySelector)($item);
+        }
 
         if (null !== $key) {
             $this->items[$key] = $item;
@@ -45,6 +52,11 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     public function get(mixed $key, mixed $defaultValue = null): mixed
     {
         return $this->items[$key] ?? $defaultValue;
+    }
+
+    public function has(mixed $key): bool
+    {
+        return isset($this->items[$key]);
     }
 
     /**

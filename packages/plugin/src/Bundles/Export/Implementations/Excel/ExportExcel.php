@@ -1,10 +1,11 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export\Implementations\Excel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 
 class ExportExcel extends ExportCsv
 {

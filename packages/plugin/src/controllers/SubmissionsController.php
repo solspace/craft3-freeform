@@ -15,6 +15,7 @@ namespace Solspace\Freeform\controllers;
 
 use craft\helpers\ArrayHelper;
 use craft\records\Asset;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Assets\RegisterEvent;
 use Solspace\Freeform\Events\Submissions\UpdateEvent;
@@ -24,7 +25,6 @@ use Solspace\Freeform\Form\Layout\Page;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\SpamReason;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportCsv;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Records\SubmissionNoteRecord;
 use Solspace\Freeform\Records\UnfinalizedFileRecord;

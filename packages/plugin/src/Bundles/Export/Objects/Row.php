@@ -1,6 +1,6 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export\Objects;
+namespace Solspace\Freeform\Bundles\Export\Objects;
 
 use Solspace\Freeform\Fields\Interfaces\MultiDimensionalValueInterface;
 

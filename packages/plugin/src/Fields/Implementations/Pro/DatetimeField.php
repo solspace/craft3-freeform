@@ -219,6 +219,11 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
         };
     }
 
+    public function getValueAsString(): string
+    {
+        return $this->getValue();
+    }
+
     public function getInitialValue(): string
     {
         return $this->initialValue;
