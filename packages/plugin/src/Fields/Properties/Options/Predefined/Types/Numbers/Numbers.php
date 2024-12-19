@@ -36,7 +36,7 @@ class Numbers implements PredefinedSourceTypeInterface
         $collection = new OptionCollection();
 
         $first = $this->first ?? 0;
-        $last = $this->last ?? 20;
+        $last = $this->second ?? 20;
         $step = $this->step ?: 1;
 
         foreach (range($first, $last, $step) as $i) {
