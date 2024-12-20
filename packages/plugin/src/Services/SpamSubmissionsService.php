@@ -36,7 +36,7 @@ class SpamSubmissionsService extends SubmissionsService implements SpamSubmissio
     public function allowSpamSubmission(SpamSubmission $submission): bool
     {
         $submission->isSpam = false;
-        \Craft::$app->elements->saveElement($submission);
+        \Craft::$app->elements->saveElement($submission, false, false);
 
         // HACK: this is dirty, but I wasn't able to find better way to
         //      quickly convert SpamSubmission to Submission
