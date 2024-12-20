@@ -255,10 +255,19 @@ class QuickExportController extends BaseController
             ->andWhere(['s.[[isSpam]]' => $isSpam])
         ;
 
+        $siteId = \Craft::$app->getSites()->getCurrentSite()->id;
         if ($isCraft5) {
-            $query->innerJoin('{{%elements_sites}} es', 'es.[[elementId]] = s.[[id]]');
+            $query->innerJoin(
+                '{{%elements_sites}} es',
+                'es.[[elementId]] = s.[[id]] AND es.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
         } else {
-            $query->innerJoin('{{%content}} c', 'c.[[elementId]] = s.[[id]]');
+            $query->innerJoin(
+                '{{%content}} c',
+                'c.[[elementId]] = s.[[id]] AND c.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
         }
 
         // TODO: reimplement with payments
