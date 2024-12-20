@@ -831,7 +831,6 @@ let retries = 0;
 let timeout: ReturnType<typeof setTimeout>;
 
 const runObserver = () => {
-  console.log('Running freeform observer');
   if (retries > 25) {
     console.warn('Freeform observer timed out');
     return clearTimeout(timeout);
