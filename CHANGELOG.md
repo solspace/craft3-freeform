@@ -1,5 +1,14 @@
 # Solspace Freeform Changelog
 
+## 5.8.4 - 2024-12-23
+
+### Fixed
+- Fixed a bug where sites using the multi-site feature would see multiple copies of submissions when using Quick Export.
+- Fixed a bug where allowing spam submissions could error when using multi-sites.
+- Fixed a bug where the _Last Number_ for the **Numbers** predefined option would always be `20`.
+- Fixed a bug where the `m241126_113656_UpdateTableLayoutProperties.php` migration could error about undefined array keys.
+- Fixed a bug where the Freeform observer started before the document was ready.
+
 ## 5.8.3 - 2024-12-16
 
 ### Fixed

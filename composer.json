@@ -1,7 +1,7 @@
 {
   "name": "solspace/craft-freeform",
   "description": "The most reliable form builder that's ready for wherever your project takes you.",
-  "version": "5.8.3",
+  "version": "5.8.4",
   "type": "craft-plugin",
   "authors": [
     {
