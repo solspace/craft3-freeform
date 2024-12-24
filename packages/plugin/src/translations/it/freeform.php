@@ -433,7 +433,7 @@ return [
     'Do not map this field' => 'Non mappare questo campo',
     'No data present' => 'Nessun dato presente',
     'Twig code' => 'Codice Twig',
-    'Freeform field' => 'Campo libero',
+    'Freeform field' => 'Campo Freeform',
     'No integrations found' => 'Nessuna integrazione trovata',
     'To add an integration, click the button below' => 'Per aggiungere un’integrazione, clicca il pulsante qui sotto',
     'Add integration' => 'Aggiungi integrazione',
@@ -1211,7 +1211,7 @@ return [
     'Project Key' => 'Chiave progetto',
     'Enter the project key for the Jira project you want to interact with. If left empty, it will be auto-populated with the first available project key of your account.' => 'Inserisci la chiave del progetto Jira con cui vuoi interagire. Se lasciato vuoto, verrà compilato automaticamente con la prima chiave di progetto disponibile del tuo account.',
     'Mapping' > 'Mappatura',
-    'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Seleziona i campi in formato libero da mappare sui campi Jira Issue applicabili.',
+    'Select the Freeform fields to be mapped to the applicable Jira Issue fields.' => 'Seleziona i campi in Freeform da mappare sui campi Jira Issue applicabili.',
 
     // Integrations // CRM // Salesforce
     'Leads' => 'Leads',
@@ -1230,7 +1230,7 @@ return [
     'Task Due Date' => 'Data di scadenza dell’attività',
     "Enter a relative textual date string for the Due Date of the newly created Task (e.g. '2 days')." => "Inserisci una stringa di data testuale relativa alla data di scadenza dell'attività appena creata (ad esempio '2 giorni').",
     'Lead Mapping' => 'Mappatura lead',
-    'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Seleziona i campi in formato libero da mappare ai campi Lead Salesforce applicabili.',
+    'Select the Freeform fields to be mapped to the applicable Salesforce Lead fields.' => 'Seleziona i campi in Freeform da mappare ai campi Lead Salesforce applicabili.',
     'Opportunities' => 'Opportunità',
     'Map to Opportunities' => 'Mappa su opportunità',
     'Map submission data to create Opportunities in Salesforce.' => 'Mappatura dei dati di invio per creare opportunità in Salesforce.',
@@ -1241,7 +1241,7 @@ return [
     'Stage Name' => 'Nome fase',
     "Enter the Stage Name the newly created Opportunity should be assigned to (e.g. 'Prospecting')." => "Inserisci il nome della fase a cui assegnare l’opportunità appena creata (ad esempio 'Prospezione').",
     'Opportunity Mapping' => 'Mappatura opportunità',
-    'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Seleziona i campi in formato libero da mappare ai campi Opportunità Salesforce applicabili.',
+    'Select the Freeform fields to be mapped to the applicable Salesforce Opportunity fields.' => 'Seleziona i campi in Freeform da mappare ai campi Opportunità Salesforce applicabili.',
     'Accounts' => 'Conti',
     'Map to Accounts' => 'Mappatura su conti',
     'Map submission data to create Accounts in Salesforce.' => 'Mappatura dei dati di invio per creare account in Salesforce.',
@@ -1250,7 +1250,7 @@ return [
     'Append Checkboxes field values on Account update' => 'Aggiungi i valori dei campi delle caselle di controllo all’aggiornamento dell’account',
     'If an Account already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Account in Salesforce instead of replacing the existing options.' => 'Se un account esiste già in Salesforce, abilitando questa opzione verranno aggiunti ulteriori valori del campo Caselle di controllo all’account in Salesforce invece di sostituire le opzioni esistenti.',
     'Account Mapping' => 'Mappatura account',
-    'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Seleziona i campi in formato libero da mappare sui campi dell’account Salesforce applicabili.',
+    'Select the Freeform fields to be mapped to the applicable Salesforce Account fields.' => 'Seleziona i campi in Freeform da mappare sui campi dell’account Salesforce applicabili.',
     'Contacts' => 'Contatti',
     'Map to Contacts' => 'Mappa su contatti',
     'Map submission data to create Contacts in Salesforce.' => 'Mappatura dei dati di invio per creare contatti in Salesforce.',
@@ -1261,7 +1261,7 @@ return [
     'Append Checkboxes field values on Contact update' => 'Aggiungi i valori dei campi delle caselle di controllo all’aggiornamento dei contatti',
     'If a Contact already exists in Salesforce, enabling this option will add additional Checkboxes field values to the Contact in Salesforce instead of replacing the existing options.' => 'Se un contatto esiste già in Salesforce, abilitando questa opzione verranno aggiunti ulteriori valori del campo Caselle di controllo al contatto in Salesforce invece di sostituire le opzioni esistenti.',
     'Contact Mapping' => 'Mappatura contatti',
-    'Select the Freeform fields to be mapped to the applicable Salesforce Contact fields.' => 'Seleziona i campi in formato libero da mappare sui campi Contatto Salesforce applicabili.',
+    'Select the Freeform fields to be mapped to the applicable Salesforce Contact fields.' => 'Seleziona i campi in Freeform da mappare sui campi Contatto Salesforce applicabili.',
 
     // Integrations // Captchas
     'Captchas' => 'Captchas',
@@ -1405,11 +1405,12 @@ return [
 
     // Install Welcome
     'Welcome' => 'Benvenuto',
-    'Freeform installed successfully!' => 'Freeform installato con successo!',
-    'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.' => 'Grazie per aver scelto Freeform! Craft installerà l’edizione Express gratuita per impostazione predefinita. Se desideri massimizzare la tua esperienza, assicurati di passare manualmente la versione a Lite o Pro. Di seguito sono riportati alcuni collegamenti utili per iniziare.',
+    'Awesome! Freeform is successfully installed!' => 'Eccezionale! Freeform è stato installato con successo!',
+    "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!" => 'Grazie per aver scelto Freeform! Craft ti configurerà automaticamente con l’edizione Express gratuita. Se non vedi l’ora di esplorare ancora più funzionalità, valuta la possibilità di passare all’edizione Lite o Pro! Di seguito abbiamo incluso alcuni collegamenti utili per iniziare. Godere!',
     'Create Forms' => 'Crea moduli',
     'Install Demo' => 'Installa demo',
-    'Configure Freeform' => 'Configura forma libera',
+    'Getting Started' => 'Guida introduttiva',
+    'Configure Freeform' => 'Configura Freeform',
 
     // Front End Form Errors // Forms
     'Sorry, there was an error submitting the form. Please try again.' => 'Siamo spiacenti, si è verificato un errore durante l’invio del modulo. Per favore riprova.',
@@ -1437,7 +1438,7 @@ return [
     'Could not send successful payment notification' => 'Impossibile inviare la notifica di pagamento riuscito',
     'Could not send failed payment notification' => 'Impossibile inviare la notifica di pagamento non riuscito',
     'Missing submissions ID in payment details' => 'ID invii mancanti nei dettagli del pagamento',
-    'Event is not linked to freeform submission' => 'L’evento non è collegato all’invio in formato libero',
+    'Event is not linked to Freeform submission' => 'L’evento non è collegato all’invio in Freeform',
 
     // Craft Queue Jobs
     'Freeform: Processing Integrations' => 'Freeform: Integrazioni di elaborazione',

@@ -149,6 +149,6 @@ class WebhooksController extends BaseController
             return null;
         }
 
-        throw new HttpException(400, Freeform::t('Event is not linked to freeform submission'));
+        throw new HttpException(400, Freeform::t('Event is not linked to Freeform submission'));
     }
 }

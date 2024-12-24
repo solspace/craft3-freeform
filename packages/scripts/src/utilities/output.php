@@ -147,7 +147,7 @@ return [
   '{count} Responses' => '{count} Responses',
   '{count} questions' => '{count} questions',
   'Surveys' => 'Surveys',
-  'Freeform installed successfully!' => 'Freeform installed successfully!',
+  'Awesome! Freeform is successfully installed!' => 'Awesome! Freeform is successfully installed!',
   'Create Forms' => 'Create Forms',
   'Install Demo' => 'Install Demo',
   'Configure Freeform' => 'Configure Freeform',
