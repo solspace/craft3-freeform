@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.8.5 - 2024-12-27
+
+### Fixed
+- Fixed a bug where sites using the multi-site feature would see multiple copies of submissions when using the Export Profiles feature.
+
 ## 5.8.4 - 2024-12-23
 
 ### Fixed
