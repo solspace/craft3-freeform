@@ -33,7 +33,9 @@ export const Welcome: React.FC = () => {
           <CheckIcon />
         </InstallIcon>
         <InstallText style={installed.text}>
-          <span>{translate('Awesome! Freeform is successfully installed!')}</span>
+          <span>
+            {translate('Awesome! Freeform is successfully installed!')}
+          </span>
         </InstallText>
       </InstallWrapper>
 
