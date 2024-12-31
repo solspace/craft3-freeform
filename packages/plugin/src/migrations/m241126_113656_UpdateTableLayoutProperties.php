@@ -29,21 +29,24 @@ class m241126_113656_UpdateTableLayoutProperties extends Migration
                     continue;
                 }
 
-                if ('select' === $row['type']) {
-                    $tableLayout[$index]['options'] = explode(';', $row['value']);
+                $type = $row['type'] ?? '';
+                $value = $row['value'] ?? '';
+
+                if ('select' === $type) {
+                    $tableLayout[$index]['options'] = explode(';', $value);
                     $tableLayout[$index]['value'] = $tableLayout[$index]['options'][0] ?? '';
                 } else {
                     $tableLayout[$index]['options'] = [];
                 }
 
-                if ('checkbox' === $row['type']) {
-                    $tableLayout[$index]['value'] = (bool) $row['value'];
+                if ('checkbox' === $type) {
+                    $tableLayout[$index]['value'] = (bool) $value;
                 }
 
                 $tableLayout[$index]['placeholder'] = '';
 
-                if ('checkbox' === $row['type']) {
-                    $tableLayout[$index]['checked'] = (bool) $row['value'];
+                if ('checkbox' === $type) {
+                    $tableLayout[$index]['checked'] = (bool) $value;
                 } else {
                     $tableLayout[$index]['checked'] = false;
                 }

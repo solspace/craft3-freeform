@@ -1405,10 +1405,11 @@ return [
 
     // Install Welcome
     'Welcome' => 'Welcome',
-    'Freeform installed successfully!' => 'Freeform installed successfully!',
-    'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.' => 'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.',
+    'Awesome! Freeform is successfully installed!' => 'Awesome! Freeform is successfully installed!',
+    "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!" => "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!",
     'Create Forms' => 'Create Forms',
     'Install Demo' => 'Install Demo',
+    'Getting Started' => 'Getting Started',
     'Configure Freeform' => 'Configure Freeform',
 
     // Front End Form Errors // Forms
@@ -1437,7 +1438,7 @@ return [
     'Could not send successful payment notification' => 'Could not send successful payment notification',
     'Could not send failed payment notification' => 'Could not send failed payment notification',
     'Missing submissions ID in payment details' => 'Missing submissions ID in payment details',
-    'Event is not linked to freeform submission' => 'Event is not linked to freeform submission',
+    'Event is not linked to Freeform submission' => 'Event is not linked to Freeform submission',
 
     // Craft Queue Jobs
     'Freeform: Processing Integrations' => 'Freeform: Processing Integrations',

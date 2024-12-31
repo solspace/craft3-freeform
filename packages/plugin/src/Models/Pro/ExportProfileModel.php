@@ -362,10 +362,19 @@ class ExportProfileModel extends Model
             ->andWhere(['s.[[isHidden]]' => false])
         ;
 
+        $siteId = \Craft::$app->sites->currentSite->id;
         if ($isCraft5) {
-            $command->innerJoin('{{%elements_sites}} es', 'es.[[elementId]] = s.[[id]]');
+            $command->innerJoin(
+                '{{%elements_sites}} es',
+                'es.[[elementId]] = s.[[id]] AND es.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
         } else {
-            $command->innerJoin('{{%content}} c', 'c.[[elementId]] = s.[[id]]');
+            $command->innerJoin(
+                '{{%content}} c',
+                'c.[[elementId]] = s.[[id]] AND c.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
         }
 
         if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {
