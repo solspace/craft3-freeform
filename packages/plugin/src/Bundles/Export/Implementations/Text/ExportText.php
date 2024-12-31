@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Bundles\Export\Implementations\Text;
 
 use Solspace\Freeform\Bundles\Export\AbstractSubmissionExport;
+use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 
 class ExportText extends AbstractSubmissionExport
@@ -22,22 +23,27 @@ class ExportText extends AbstractSubmissionExport
         return 'txt';
     }
 
-    public function export(): string
+    public function export($resource): void
     {
-        $output = '';
-        foreach ($this->getRowBatch() as $rowIndex => $row) {
+        foreach ($this->getRowBatch() as $row) {
             foreach ($row as $column) {
-                $value = $column->getValue();
-                if (\is_array($value) || \is_object($value)) {
-                    $value = StringHelper::implodeRecursively(', ', (array) $value);
+                if ($column instanceof FieldInterface) {
+                    $value = $column->getValueAsString();
+                } else {
+                    $value = $column;
+                    if ($value instanceof \DateTime) {
+                        $value = $value->format('Y-m-d H:i:s');
+                    }
+
+                    if (\is_array($value) || \is_object($value)) {
+                        $value = StringHelper::implodeRecursively(', ', (array) $value);
+                    }
                 }
 
-                $output .= $column->getHandle().': '.$value."\n";
+                fwrite($resource, $column->getHandle().': '.$value."\n");
             }
 
-            $output .= "\n";
+            fwrite($resource, "\n");
         }
-
-        return $output;
     }
 }

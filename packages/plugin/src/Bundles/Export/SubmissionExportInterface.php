@@ -2,18 +2,18 @@
 
 namespace Solspace\Freeform\Bundles\Export;
 
+use craft\elements\db\ElementQueryInterface;
 use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
-use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
 
 interface SubmissionExportInterface
 {
-    public const EVENT_PREPARE_EXPORT_COLUMN = 'prepare-export-column';
+    public const EVENT_PREPARE_EXPORT_VALUE = 'prepare-export-value';
 
     public function __construct(
         Form $form,
-        SubmissionQuery $query,
+        ElementQueryInterface $query,
         FieldDescriptorCollection $fieldDescriptors,
         ExportSettings $settings
     );
@@ -24,5 +24,7 @@ interface SubmissionExportInterface
 
     public function getFileExtension(): string;
 
-    public function export(): mixed;
+    public function getSettings(): ExportSettings;
+
+    public function export($resource): void;
 }

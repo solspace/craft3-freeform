@@ -3,12 +3,13 @@
 namespace Solspace\Freeform\Bundles\Export;
 
 use Carbon\Carbon;
+use craft\base\ElementInterface;
+use craft\elements\db\ElementQueryInterface;
 use Solspace\Freeform\Bundles\Backup\DTO\Submission;
 use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
-use Solspace\Freeform\Bundles\Export\Events\PrepareExportColumnEvent;
+use Solspace\Freeform\Bundles\Export\Events\PrepareExportValueEvent;
 use Solspace\Freeform\Bundles\Export\Objects\Column;
 use Solspace\Freeform\Bundles\Export\Objects\Row;
-use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
@@ -23,16 +24,16 @@ abstract class AbstractSubmissionExport implements SubmissionExportInterface
     private ?string $timezone;
 
     public function __construct(
-        private Form $form,
-        private SubmissionQuery $query,
-        private FieldDescriptorCollection $fieldDescriptors,
+        private readonly Form $form,
+        private readonly ElementQueryInterface $query,
+        private readonly FieldDescriptorCollection $fieldDescriptors,
         private ?ExportSettings $settings = null
     ) {
         if (null === $settings) {
-            $settings = new ExportSettings();
+            $this->settings = new ExportSettings();
         }
 
-        $this->timezone = $settings->getTimezone();
+        $this->timezone = $this->settings->getTimezone();
     }
 
     public function getForm(): Form
@@ -45,16 +46,19 @@ abstract class AbstractSubmissionExport implements SubmissionExportInterface
         return $this->fieldDescriptors;
     }
 
-    public function getSettings(): ?ExportSettings
+    public function getSettings(): ExportSettings
     {
         return $this->settings;
     }
 
-    protected function getQuery(): SubmissionQuery
+    protected function getQuery(): ElementQueryInterface
     {
         return $this->query;
     }
 
+    /**
+     * @return Column[][][]|\Generator
+     */
     protected function getRowBatch(int $size = 100): \Generator
     {
         $query = $this->getQuery();
@@ -62,30 +66,28 @@ abstract class AbstractSubmissionExport implements SubmissionExportInterface
         /** @var Submission[] $elements */
         foreach ($query->batch($size) as $elements) {
             $rows = [];
+
+            /** @var ElementInterface $element */
             foreach ($elements as $element) {
-                $columns = [];
                 $index = 0;
+                $columns = [];
                 foreach ($this->getFieldDescriptors() as $descriptor) {
                     $value = $element->{$descriptor->getId()};
-                    if ($value instanceof FieldInterface) {
-                        $value = $value->getValue();
+                    $field = $value instanceof FieldInterface ? $value : null;
+
+                    if ($field) {
+                        $value = $field->getValue();
                     }
 
-                    $event = new PrepareExportColumnEvent(
-                        $this,
-                        $descriptor,
-                        $element,
-                        $value,
+                    $event = new PrepareExportValueEvent($this, $descriptor, $element, $field, $value);
+                    Event::trigger($this, self::EVENT_PREPARE_EXPORT_VALUE, $event);
+
+                    $columns[] = new Column(
                         $index++,
+                        $descriptor,
+                        $field,
+                        $event->getValue(),
                     );
-
-                    Event::trigger(
-                        SubmissionExportInterface::class,
-                        SubmissionExportInterface::EVENT_PREPARE_EXPORT_COLUMN,
-                        $event
-                    );
-
-                    $columns[$event->getKey()] = $event->getValue();
                 }
 
                 $rows[] = $columns;

@@ -2,19 +2,20 @@
 
 namespace Solspace\Freeform\Bundles\Export\Events;
 
-use craft\base\Event;
 use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
 use Solspace\Freeform\Bundles\Export\SubmissionExportInterface;
 use Solspace\Freeform\Elements\Submission;
+use Solspace\Freeform\Fields\FieldInterface;
+use yii\base\Event;
 
-class PrepareExportColumnEvent extends Event
+class PrepareExportValueEvent extends Event
 {
     public function __construct(
-        private SubmissionExportInterface $exporter,
-        private FieldDescriptor $fieldDescriptor,
-        private Submission $submission,
+        private readonly SubmissionExportInterface $exporter,
+        private readonly FieldDescriptor $descriptor,
+        private readonly Submission $submission,
+        private readonly ?FieldInterface $field,
         private mixed $value,
-        private mixed $key,
     ) {
         parent::__construct();
     }
@@ -24,14 +25,19 @@ class PrepareExportColumnEvent extends Event
         return $this->exporter;
     }
 
-    public function getFieldDescriptor(): FieldDescriptor
+    public function getDescriptor(): FieldDescriptor
     {
-        return $this->fieldDescriptor;
+        return $this->descriptor;
     }
 
     public function getSubmission(): Submission
     {
         return $this->submission;
+    }
+
+    public function getField(): ?FieldInterface
+    {
+        return $this->field;
     }
 
     public function getValue(): mixed
@@ -42,15 +48,5 @@ class PrepareExportColumnEvent extends Event
     public function setValue(mixed $value): void
     {
         $this->value = $value;
-    }
-
-    public function getKey(): mixed
-    {
-        return $this->key;
-    }
-
-    public function setKey(mixed $key): void
-    {
-        $this->key = $key;
     }
 }

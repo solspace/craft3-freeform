@@ -23,7 +23,7 @@ class ExportXml extends AbstractSubmissionExport
         return 'xml';
     }
 
-    public function export(): string
+    public function export($resource): void
     {
         $xml = new \SimpleXMLElement('<root/>');
 
@@ -68,7 +68,7 @@ class ExportXml extends AbstractSubmissionExport
             }
         }
 
-        return $this->formatXml($xml);
+        // return $this->formatXml($xml);
     }
 
     protected function formatXml(\SimpleXMLElement $element): string

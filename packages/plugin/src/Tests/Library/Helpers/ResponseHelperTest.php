@@ -38,7 +38,7 @@ class ResponseHelperTest extends TestCase
             ->method('set')
             ->willReturnCallback(
                 function (string $key, string $value) use ($matcher) {
-                    match ($matcher->getInvocationCount()) {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals('default-src *', $value),
                         2 => $this->assertEquals(
                             'default-src *; script-src https://test.com https://com.com',

@@ -3,7 +3,6 @@
 namespace Solspace\Freeform\Bundles\Export\Implementations\Excel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 
@@ -24,10 +23,7 @@ class ExportExcel extends ExportCsv
         return 'xlsx';
     }
 
-    /**
-     * @throws Exception
-     */
-    public function export(): bool|string
+    public function export($resource): void
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -36,14 +32,6 @@ class ExportExcel extends ExportCsv
         ob_start();
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
-
-        $content = ob_get_contents();
-
-        if (ob_get_length() > 0) {
-            ob_end_clean();
-        }
-
-        return $content;
+        $writer->save($resource);
     }
 }

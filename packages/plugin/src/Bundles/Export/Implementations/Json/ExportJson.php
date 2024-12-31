@@ -21,18 +21,17 @@ class ExportJson extends AbstractSubmissionExport
         return 'json';
     }
 
-    public function export(): string
+    public function export($resource): void
     {
+        // TODO: implement
         $output = [];
         foreach ($this->getRowBatch() as $row) {
             $rowData = [];
-            foreach ($row as $column) {
-                $rowData[$column->getHandle()] = $column->getValue();
+            foreach ($row as $key => $column) {
+                $rowData[$key] = $column;
             }
 
             $output[] = $rowData;
         }
-
-        return json_encode($output, \JSON_PRETTY_PRINT);
     }
 }
