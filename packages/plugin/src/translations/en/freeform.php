@@ -1403,6 +1403,12 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox.",
     'Enable limited users functionality.' => 'Enable limited users functionality.',
 
+    // GraphQL
+    'View all forms' => 'View all forms',
+    'View "{formName}" form' => 'View "{formName}" form',
+    'Create submissions for all forms' => 'Create submissions for all forms',
+    'Create submissions for form "{formName}"' => 'Create submissions for form "{formName}"',
+
     // Install Welcome
     'Welcome' => 'Welcome',
     'Awesome! Freeform is successfully installed!' => 'Awesome! Freeform is successfully installed!',
