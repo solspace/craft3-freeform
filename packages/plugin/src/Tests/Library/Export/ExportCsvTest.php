@@ -2,102 +2,23 @@
 
 namespace Solspace\Freeform\Tests\Library\Export;
 
-use craft\helpers\App;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
-use Solspace\Freeform\Bundles\Export\EventListeners\ConvertValuesToString;
-use Solspace\Freeform\Bundles\Export\EventListeners\NewLineRemoval;
 use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
-use Solspace\Freeform\Elements\Db\SubmissionQuery;
-use Solspace\Freeform\Elements\Submission;
-use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\Fields\Properties\Table\TableLayout;
-use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
 
-/**
- * @internal
- *
- * @coversNothing
- */
-class ExportCsvTest extends TestCase
+#[CoversClass(ExportCsv::class)]
+class ExportCsvTest extends BaseExportTestingCase
 {
-    private Form|MockObject $formMock;
-    private MockObject|SubmissionQuery $queryMock;
-    private MockObject|TableField $tableField1Mock;
-    private MockObject|TableField $tableField2Mock;
-    private MockObject|TextField $textFieldMock;
-    private $resourceMock;
-
-    protected function setUp(): void
-    {
-        $this->tableField1Mock = $this->generateField(
-            TableField::class,
-            [
-                'getTableLayout' => new TableLayout([
-                    ['label' => 'T1C1'],
-                    ['label' => 'T1C2'],
-                    ['label' => 'T1C3'],
-                ]),
-                'getLabel' => 'Table One',
-                'getHandle' => 'table1',
-            ]
-        );
-
-        $this->tableField2Mock = $this->generateField(
-            TableField::class,
-            [
-                'getTableLayout' => new TableLayout([
-                    ['label' => 'T2C1'],
-                    ['label' => 'T2C2'],
-                    ['label' => 'T2C3'],
-                    ['label' => 'T2C4'],
-                    ['label' => 'T2C5'],
-                ]),
-                'getLabel' => 'Table Two',
-                'getHandle' => 'table2',
-            ]
-        );
-
-        $this->textFieldMock = $this->generateField(
-            TextField::class,
-            [
-                'getLabel' => 'First Name',
-                'getHandle' => 'firstName',
-            ]
-        );
-
-        $this->formMock = $this->createMock(Form::class);
-        $this->formMock->method('get')
-            ->willReturnCallback(
-                fn (string $handle) => match ($handle) {
-                    'table1' => $this->tableField1Mock,
-                    'table2' => $this->tableField2Mock,
-                    'firstName' => $this->textFieldMock,
-                    default => null,
-                }
-            )
-        ;
-
-        $this->queryMock = $this->createMock(SubmissionQuery::class);
-
-        $this->resourceMock = fopen('php://memory', 'w+');
-        $this->assertNotFalse($this->resourceMock);
-
-        new ConvertValuesToString();
-        new NewLineRemoval();
-    }
-
     public function testEmptyExport()
     {
         $exporter = new ExportCsv($this->formMock, $this->queryMock, new FieldDescriptorCollection());
         $exporter->export($this->resourceMock);
-
         $this->assertEmpty($this->getOutput());
     }
 
@@ -113,7 +34,6 @@ class ExportCsvTest extends TestCase
             ['id' => 2, 'dateCreated' => new \DateTime('2019-01-01 09:20:00')],
         ]);
 
-        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors);
         $expected = <<<'EXPECTED'
             ID,"Date Created"
             1,"2019-01-01 08:00:00"
@@ -121,8 +41,8 @@ class ExportCsvTest extends TestCase
 
             EXPECTED;
 
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors);
         $exporter->export($this->resourceMock);
-
         $this->assertSame($expected, $this->getOutput());
     }
 
@@ -135,13 +55,54 @@ class ExportCsvTest extends TestCase
             ->add(new FieldDescriptor('table2', 'Table Field 2'))
         ;
 
+        $this->formMock->method('get')
+            ->willReturnCallback(
+                fn (string $handle) => match ($handle) {
+                    'table1' => $this->generateField(
+                        TableField::class,
+                        [
+                            'getTableLayout' => new TableLayout([
+                                ['label' => 'T1C1'],
+                                ['label' => 'T1C2'],
+                                ['label' => 'T1C3'],
+                            ]),
+                            'getLabel' => 'Table One',
+                            'getHandle' => 'table1',
+                        ]
+                    ),
+                    'table2' => $this->generateField(
+                        TableField::class,
+                        [
+                            'getTableLayout' => new TableLayout([
+                                ['label' => 'T2C1'],
+                                ['label' => 'T2C2'],
+                                ['label' => 'T2C3'],
+                                ['label' => 'T2C4'],
+                                ['label' => 'T2C5'],
+                            ]),
+                            'getLabel' => 'Table Two',
+                            'getHandle' => 'table2',
+                        ]
+                    ),
+                    'firstName' => $this->generateField(
+                        TextField::class,
+                        [
+                            'getLabel' => 'First Name',
+                            'getHandle' => 'firstName',
+                        ]
+                    ),
+                    default => null,
+                }
+            )
+        ;
+
         $this->generateSubmissions([
             [
                 'id' => 1,
                 'table1' => $this->generateField(
                     TableField::class,
                     [
-                        'getTableLayout' => $this->tableField1Mock->getTableLayout(),
+                        'getTableLayout' => $this->formMock->get('table1')->getTableLayout(),
                         'getValue' => [['one', 'two', 'three'], ['four', 'five', ''], ['', 'six', '']],
                     ]
                 ),
@@ -152,7 +113,7 @@ class ExportCsvTest extends TestCase
                 'table2' => $this->generateField(
                     TableField::class,
                     [
-                        'getTableLayout' => $this->tableField2Mock->getTableLayout(),
+                        'getTableLayout' => $this->formMock->get('table2')->getTableLayout(),
                         'getValue' => [['r1c1', 'r1c2', 'r1c3', 'r1c4', 'r1c5'], ['r2c1', 'r2c2', 'r2c3', 'r2c4', 'r2c5']],
                     ]
                 ),
@@ -162,7 +123,7 @@ class ExportCsvTest extends TestCase
                 'table1' => $this->generateField(
                     TableField::class,
                     [
-                        'getTableLayout' => $this->tableField1Mock->getTableLayout(),
+                        'getTableLayout' => $this->formMock->get('table1')->getTableLayout(),
                         'getValue' => [['some', 'value', '']],
                     ]
                 ),
@@ -173,7 +134,7 @@ class ExportCsvTest extends TestCase
                 'table2' => $this->generateField(
                     TableField::class,
                     [
-                        'getTableLayout' => $this->tableField2Mock->getTableLayout(),
+                        'getTableLayout' => $this->formMock->get('table2')->getTableLayout(),
                         'getValue' => [
                             ['r1c1', 'r1c2', 'r1c3', 'r1c4', 'r1c5'],
                             ['r2c1', 'r2c2', 'r2c3', 'r2c4', 'r2c5'],
@@ -185,12 +146,6 @@ class ExportCsvTest extends TestCase
                 ),
             ],
         ]);
-
-        $exporter = new ExportCsv(
-            $this->formMock,
-            $this->queryMock,
-            $descriptors,
-        );
 
         $expected = <<<'EXPECTED'
             ID,T1C1,T1C2,T1C3,"First Name",T2C1,T2C2,T2C3,T2C4,T2C5
@@ -205,8 +160,12 @@ class ExportCsvTest extends TestCase
 
             EXPECTED;
 
+        $exporter = new ExportCsv(
+            $this->formMock,
+            $this->queryMock,
+            $descriptors,
+        );
         $exporter->export($this->resourceMock);
-
         $this->assertSame($expected, $this->getOutput());
     }
 
@@ -249,16 +208,6 @@ class ExportCsvTest extends TestCase
             ],
         ]);
 
-        $settings = new ExportSettings();
-        $settings->setRemoveNewlines(true);
-
-        $exporter = new ExportCsv(
-            $this->formMock,
-            $this->queryMock,
-            $descriptors,
-            $settings,
-        );
-
         $expected = <<<'EXPECTED'
             ID,Textarea
             1,"some text containing newlines"
@@ -266,8 +215,9 @@ class ExportCsvTest extends TestCase
 
             EXPECTED;
 
+        $settings = (new ExportSettings())->setRemoveNewlines(true);
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors, $settings);
         $exporter->export($this->resourceMock);
-
         $this->assertSame($expected, $this->getOutput());
     }
 
@@ -310,12 +260,6 @@ class ExportCsvTest extends TestCase
             ],
         ]);
 
-        $exporter = new ExportCsv(
-            $this->formMock,
-            $this->queryMock,
-            $descriptors,
-        );
-
         $expected = <<<'EXPECTED'
             ID,Textarea
             1,"some text
@@ -329,8 +273,8 @@ class ExportCsvTest extends TestCase
 
             EXPECTED;
 
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors);
         $exporter->export($this->resourceMock);
-
         $this->assertSame($expected, $this->getOutput());
     }
 
@@ -373,16 +317,6 @@ class ExportCsvTest extends TestCase
             ],
         ]);
 
-        $settings = new ExportSettings();
-        $settings->setHandlesAsNames(true);
-
-        $exporter = new ExportCsv(
-            $this->formMock,
-            $this->queryMock,
-            $descriptors,
-            $settings,
-        );
-
         $expected = <<<'EXPECTED'
             id,texty
             1,"some text"
@@ -390,59 +324,9 @@ class ExportCsvTest extends TestCase
 
             EXPECTED;
 
+        $settings = (new ExportSettings())->setHandlesAsNames(true);
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors, $settings);
         $exporter->export($this->resourceMock);
-
         $this->assertSame($expected, $this->getOutput());
-    }
-
-    private function getOutput(): string
-    {
-        rewind($this->resourceMock);
-        $output = stream_get_contents($this->resourceMock);
-        fclose($this->resourceMock);
-
-        return $output;
-    }
-
-    private function generateSubmissions(array $data): void
-    {
-        $submissions = array_map(
-            function (array $row) {
-                $mock = $this->createMock(Submission::class);
-                App::configure($mock, $row);
-
-                $callback = function ($fieldId) use ($row) {
-                    return $row[$fieldId] ?? null;
-                };
-
-                $mock
-                    ->method('__get')
-                    ->willReturnCallback($callback)
-                ;
-
-                return $mock;
-            },
-            $data
-        );
-
-        $this
-            ->queryMock
-            ->method('batch')
-            ->willReturn([$submissions])
-        ;
-    }
-
-    private function generateField(string $class, array $stubs): FieldInterface|MockObject
-    {
-        $mock = $this->createMock($class);
-
-        foreach ($stubs as $method => $value) {
-            $mock
-                ->method($method)
-                ->willReturn($value)
-            ;
-        }
-
-        return $mock;
     }
 }

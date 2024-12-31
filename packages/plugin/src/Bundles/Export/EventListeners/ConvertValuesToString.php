@@ -40,8 +40,6 @@ class ConvertValuesToString extends FeatureBundle
             if (!$field instanceof TableField) {
                 $value = $field->getValueAsString();
             }
-        } elseif ($value instanceof \DateTime) {
-            $value = $value->format('Y-m-d H:i:s');
         } elseif (\is_array($value) || \is_object($value)) {
             $value = StringHelper::implodeRecursively(', ', (array) $value);
         }

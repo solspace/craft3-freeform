@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\DataObjects;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\DataObjects\DisabledFunctionality;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(DisabledFunctionality::class)]
 class DisabledFunctionalityTest extends TestCase
 {
     public function testConstructingFromFalseBool()

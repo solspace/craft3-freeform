@@ -23,15 +23,31 @@ class ExportJson extends AbstractSubmissionExport
 
     public function export($resource): void
     {
-        // TODO: implement
-        $output = [];
-        foreach ($this->getRowBatch() as $row) {
-            $rowData = [];
-            foreach ($row as $key => $column) {
-                $rowData[$key] = $column;
-            }
+        fwrite($resource, "[\n");
 
-            $output[] = $rowData;
+        foreach ($this->getRowBatch() as $rows) {
+            foreach ($rows as $index => $columns) {
+                $row = [];
+                foreach ($columns as $column) {
+                    $value = $column->getValue();
+                    if ($value instanceof \DateTime) {
+                        $value = $value->format('Y-m-d H:i:s');
+                    }
+
+                    $row[$column->getDescriptor()->getId()] = $value;
+                }
+
+                $json = json_encode($row, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT);
+                $json = preg_replace('/^/m', '    ', $json);
+
+                fwrite($resource, $json);
+                if ($index < \count($rows) - 1) {
+                    fwrite($resource, ',');
+                }
+                fwrite($resource, "\n");
+            }
         }
+
+        fwrite($resource, "]\n");
     }
 }

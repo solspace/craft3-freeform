@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Collections;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Collections\Collection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Collection::class)]
 class CollectionTest extends TestCase
 {
     public function testChecksForImplementation()

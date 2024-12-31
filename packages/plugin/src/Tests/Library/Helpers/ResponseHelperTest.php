@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\ResponseHelper;
 use yii\web\HeaderCollection;
 use yii\web\Response;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ResponseHelper::class)]
 class ResponseHelperTest extends TestCase
 {
     private ResponseHelper $responseHelper;
