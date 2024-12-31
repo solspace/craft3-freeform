@@ -124,7 +124,7 @@ class GraphQLBundle extends FeatureBundle
 
                 $mutations = [];
                 $mutations[$submissionsCategory.'.all:create'] = [
-                    'label' => Freeform::t('Create all submissions'),
+                    'label' => Freeform::t('Create submissions for all forms'),
                 ];
 
                 foreach ($forms as $form) {

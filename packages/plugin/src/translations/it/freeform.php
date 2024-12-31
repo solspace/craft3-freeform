@@ -1403,6 +1403,12 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Se desideri consentire agli utenti l’accesso solo ad alcuni moduli, seleziona quelli qui. Queste selezioni verranno sovrascritte dalla casella di controllo 'Gestisci tutti i moduli'.",
     'Enable limited users functionality.' => 'Abilita funzionalità per utenti limitati.',
 
+    // GraphQL
+    'View all forms' => 'Visualizza tutti i moduli',
+    'View "{formName}" form' => 'Visualizza il modulo "{formName}"',
+    'Create submissions for all forms' => 'Crea invii per tutti i moduli',
+    'Create submissions for form "{formName}"' => 'Crea invii per il modulo "{formName}"',
+
     // Install Welcome
     'Welcome' => 'Benvenuto',
     'Awesome! Freeform is successfully installed!' => 'Eccezionale! Freeform è stato installato con successo!',

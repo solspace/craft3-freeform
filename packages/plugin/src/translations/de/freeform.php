@@ -1403,6 +1403,12 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Wenn Sie Benutzern Zugriff nur auf bestimmte Formulare gewähren möchten, aktivieren Sie hier die entsprechenden. Diese Auswahlen werden durch das Kontrollkästchen 'Alle Formulare verwalten' überschrieben.",
     'Enable limited users functionality.' => 'Eingeschränkte Benutzerfunktionalität aktivieren.',
 
+    // GraphQL
+    'View all forms' => 'Alle Formulare anzeigen',
+    'View "{formName}" form' => 'Formular "{formName}" anzeigen',
+    'Create submissions for all forms' => 'Erstellen Sie Einreichungen für alle Formulare',
+    'Create submissions for form "{formName}"' => 'Einreichungen für Formular "{formName}" erstellen',
+
     // Install Welcome
     'Welcome' => 'Willkommen',
     'Awesome! Freeform is successfully installed!' => 'Eindrucksvoll! Freeform wurde erfolgreich installiert!',

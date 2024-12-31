@@ -1403,6 +1403,12 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Als u gebruikers toegang wilt geven tot slechts enkele formulieren, vink dan de formulieren hier aan. Deze selecties worden overschreven door het selectievakje 'Alle formulieren beheren'.",
     'Enable limited users functionality.' => 'Schakel beperkte gebruikersfunctionaliteit in.',
 
+    // GraphQL
+    'View all forms' => 'Bekijk alle formulieren',
+    'View "{formName}" form' => 'Bekijk het formulier "{formName}"',
+    'Create submissions for all forms' => 'Maak inzendingen voor alle formulieren',
+    'Create submissions for form "{formName}"' => 'Inzendingen maken voor formulier "{formName}"',
+
     // Install Welcome
     'Welcome' => 'Welkom',
     'Awesome! Freeform is successfully installed!' => 'Geweldig! Freeform is succesvol geïnstalleerd!',
