@@ -46,6 +46,32 @@ class ExportCsvTest extends BaseExportTestingCase
         $this->assertSame($expected, $this->getOutput());
     }
 
+    public function testUnusedDescriptors()
+    {
+        $descriptors = (new FieldDescriptorCollection())
+            ->add(new FieldDescriptor('id', 'ID'))
+            ->add(new FieldDescriptor('title', 'Title', false))
+            ->add(new FieldDescriptor('dateCreated', 'Date Created'))
+            ->add(new FieldDescriptor('text', 'Text', false))
+        ;
+
+        $this->generateSubmissions([
+            ['id' => 1, 'title' => 'title', 'dateCreated' => new \DateTime('2019-01-01 08:00:00'), 'text' => 'text'],
+            ['id' => 2, 'title' => 'title', 'dateCreated' => new \DateTime('2019-01-01 09:20:00'), 'text' => 'text'],
+        ]);
+
+        $expected = <<<'EXPECTED'
+            ID,"Date Created"
+            1,"2019-01-01 08:00:00"
+            2,"2019-01-01 09:20:00"
+
+            EXPECTED;
+
+        $exporter = new ExportCsv($this->formMock, $this->queryMock, $descriptors);
+        $exporter->export($this->resourceMock);
+        $this->assertSame($expected, $this->getOutput());
+    }
+
     public function testExportTableRows()
     {
         $descriptors = (new FieldDescriptorCollection())

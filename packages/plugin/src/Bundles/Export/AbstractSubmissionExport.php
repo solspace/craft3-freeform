@@ -72,6 +72,10 @@ abstract class AbstractSubmissionExport implements SubmissionExportInterface
                 $index = 0;
                 $columns = [];
                 foreach ($this->getFieldDescriptors() as $descriptor) {
+                    if (!$descriptor->isUsed()) {
+                        continue;
+                    }
+
                     $value = $element->{$descriptor->getId()};
                     $field = $value instanceof FieldInterface ? $value : null;
 

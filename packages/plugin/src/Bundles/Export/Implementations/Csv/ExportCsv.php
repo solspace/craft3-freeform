@@ -31,7 +31,7 @@ class ExportCsv extends AbstractSubmissionExport implements StringValueExportInt
             return;
         }
 
-        fputcsv($resource, $columnLabels);
+        $this->writeToFile($resource, $columnLabels);
 
         foreach ($this->getRowBatch() as $rows) {
             foreach ($rows as $columns) {
@@ -51,7 +51,7 @@ class ExportCsv extends AbstractSubmissionExport implements StringValueExportInt
                     }
                 }
 
-                fputcsv($resource, $values);
+                $this->writeToFile($resource, $values);
 
                 if ($extraRows) {
                     for ($i = 1; $i <= $extraRows; ++$i) {
@@ -73,11 +73,16 @@ class ExportCsv extends AbstractSubmissionExport implements StringValueExportInt
                             }
                         }
 
-                        fputcsv($resource, $values);
+                        $this->writeToFile($resource, $values);
                     }
                 }
             }
         }
+    }
+
+    protected function writeToFile($resource, array $values): void
+    {
+        fputcsv($resource, $values);
     }
 
     private function extractTableRow(int $rowIndex, array $tableValues, TableField $field): array
@@ -102,6 +107,10 @@ class ExportCsv extends AbstractSubmissionExport implements StringValueExportInt
 
         $labels = [];
         foreach ($descriptors as $descriptor) {
+            if (!$descriptor->isUsed()) {
+                continue;
+            }
+
             $field = $form->get($descriptor->getId());
             if (!$field) {
                 $labels[] = $isHandlesAsNames ? $descriptor->getId() : $descriptor->getLabel();

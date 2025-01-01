@@ -13,9 +13,11 @@
 
 namespace Solspace\Freeform\controllers;
 
-use craft\helpers\ArrayHelper;
 use craft\records\Asset;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
 use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
+use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Assets\RegisterEvent;
 use Solspace\Freeform\Events\Submissions\UpdateEvent;
@@ -72,68 +74,42 @@ class SubmissionsController extends BaseController
         );
     }
 
-    public function actionExport()
+    public function actionExport(): void
     {
         $this->requirePostRequest();
+        $exportProfilesService = $this->getExportProfileService();
 
         $submissionIds = \Craft::$app->request->post('submissionIds');
         $submissionIds = explode(',', $submissionIds);
 
-        /** @var Submission[] $submissions */
-        $submissions = Submission::find()->id($submissionIds)->all();
-
-        if (!$submissions) {
+        /** @var SubmissionQuery $query */
+        $query = Submission::find()->id($submissionIds);
+        if (!$query->count()) {
             throw new FreeformException(Freeform::t('No submissions found'));
         }
 
-        $data = [];
+        /** @var Submission $submission */
+        $submission = $query->one();
+        $form = $submission->getForm();
 
-        foreach ($submissions as $submission) {
-            $form = $submission->getForm();
+        $this->checkPermissions($form);
 
-            $canManage = PermissionHelper::checkPermission(Freeform::PERMISSION_SUBMISSIONS_MANAGE);
-            $canManageSpecific = PermissionHelper::checkPermission(
-                PermissionHelper::prepareNestedPermission(
-                    Freeform::PERMISSION_SUBMISSIONS_MANAGE,
-                    $form->getId()
-                )
-            );
+        $fieldDescriptors = (new FieldDescriptorCollection())
+            ->add(new FieldDescriptor('id', 'ID'))
+            ->add(new FieldDescriptor('title', 'Title'))
+            ->add(new FieldDescriptor('ip', 'IP Address'))
+            ->add(new FieldDescriptor('dateCreated', 'Date Created'))
+            ->add(new FieldDescriptor('status', 'Status'))
+            ->add(new FieldDescriptor('userId', 'Author'))
+        ;
 
-            $canRead = PermissionHelper::checkPermission(Freeform::PERMISSION_SUBMISSIONS_READ);
-            $canReadSpecific = PermissionHelper::checkPermission(
-                PermissionHelper::prepareNestedPermission(
-                    Freeform::PERMISSION_SUBMISSIONS_READ,
-                    $form->getId()
-                )
-            );
-
-            if (!$canRead && !$canReadSpecific && !$canManage && !$canManageSpecific) {
-                throw new ForbiddenHttpException('User is not permitted to perform this action');
-            }
-
-            $fields = $submission->getFieldCollection();
-
-            $submission = ArrayHelper::toArray($submission);
-
-            foreach ($fields as $field) {
-                $submission[$field->getHandle()] = $field->getValue();
-            }
-
-            $data[] = $submission;
+        foreach ($submission->getFieldCollection() as $field) {
+            $fieldDescriptors->add(new FieldDescriptor($field->getId(), $field->getLabel()));
         }
 
-        foreach ($data as &$row) {
-            foreach ($row as &$value) {
-                if (\is_array($value)) {
-                    $value = json_encode($value);
-                }
-            }
-        }
+        $exporter = new ExportCsv($form, $query, $fieldDescriptors, $exportProfilesService->getExportSettings());
 
-        $exporter = new ExportCsv($form, $data, $this->getExportProfileService()->getExportSettings());
-        $fileName = \sprintf('%s submissions %s.csv', $form->getName(), date('Y-m-d H:i', time()));
-
-        $this->getExportProfileService()->outputFile($exporter->export(), $fileName, $exporter->getMimeType());
+        $exportProfilesService->export($exporter, $form);
     }
 
     public function actionEdit(int $id): Response
@@ -298,6 +274,29 @@ class SubmissionsController extends BaseController
     protected function getTemplateBasePath(): string
     {
         return self::TEMPLATE_BASE_PATH;
+    }
+
+    private function checkPermissions(Form $form): void
+    {
+        $canManage = PermissionHelper::checkPermission(Freeform::PERMISSION_SUBMISSIONS_MANAGE);
+        $canManageSpecific = PermissionHelper::checkPermission(
+            PermissionHelper::prepareNestedPermission(
+                Freeform::PERMISSION_SUBMISSIONS_MANAGE,
+                $form->getId()
+            )
+        );
+
+        $canRead = PermissionHelper::checkPermission(Freeform::PERMISSION_SUBMISSIONS_READ);
+        $canReadSpecific = PermissionHelper::checkPermission(
+            PermissionHelper::prepareNestedPermission(
+                Freeform::PERMISSION_SUBMISSIONS_READ,
+                $form->getId()
+            )
+        );
+
+        if (!$canRead && !$canReadSpecific && !$canManage && !$canManageSpecific) {
+            throw new ForbiddenHttpException('User is not permitted to perform this action');
+        }
     }
 
     private function removeStaleAssets(Submission $submission, array $post = [])

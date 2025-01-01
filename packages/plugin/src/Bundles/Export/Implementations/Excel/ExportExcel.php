@@ -3,11 +3,15 @@
 namespace Solspace\Freeform\Bundles\Export\Implementations\Excel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
 
 class ExportExcel extends ExportCsv
 {
+    private Worksheet $sheet;
+    private int $row = 1;
+
     public static function getLabel(): string
     {
         return 'Excel';
@@ -26,12 +30,19 @@ class ExportExcel extends ExportCsv
     public function export($resource): void
     {
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->fromArray($this->getValuesAsArray());
+        $this->sheet = $spreadsheet->getActiveSheet();
 
-        ob_start();
+        parent::export($resource);
 
         $writer = new Xlsx($spreadsheet);
         $writer->save($resource);
+    }
+
+    protected function writeToFile($resource, array $values): void
+    {
+        $this->sheet->fromArray(
+            $values,
+            startCell: 'A'.$this->row++,
+        );
     }
 }

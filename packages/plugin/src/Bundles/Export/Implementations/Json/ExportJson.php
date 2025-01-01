@@ -25,8 +25,11 @@ class ExportJson extends AbstractSubmissionExport
     {
         fwrite($resource, "[\n");
 
+        $total = $this->getQuery()->count();
+        $count = 0;
+
         foreach ($this->getRowBatch() as $rows) {
-            foreach ($rows as $index => $columns) {
+            foreach ($rows as $columns) {
                 $row = [];
                 foreach ($columns as $column) {
                     $value = $column->getValue();
@@ -34,14 +37,16 @@ class ExportJson extends AbstractSubmissionExport
                         $value = $value->format('Y-m-d H:i:s');
                     }
 
-                    $row[$column->getDescriptor()->getId()] = $value;
+                    $handle = $column->getField()?->getHandle() ?? $column->getDescriptor()->getId();
+
+                    $row[$handle] = $value;
                 }
 
                 $json = json_encode($row, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT);
                 $json = preg_replace('/^/m', '    ', $json);
 
                 fwrite($resource, $json);
-                if ($index < \count($rows) - 1) {
+                if (++$count < $total) {
                     fwrite($resource, ',');
                 }
                 fwrite($resource, "\n");

@@ -54,6 +54,40 @@ class ExportXmlTest extends BaseExportTestingCase
         $this->assertSame($expected, $this->getOutput());
     }
 
+    public function testUnusedDescriptors()
+    {
+        $descriptors = (new FieldDescriptorCollection())
+            ->add(new FieldDescriptor('id', 'ID'))
+            ->add(new FieldDescriptor('title', 'Title', false))
+            ->add(new FieldDescriptor('dateCreated', 'Date Created'))
+            ->add(new FieldDescriptor('text', 'Text', false))
+        ;
+
+        $this->generateSubmissions([
+            ['id' => 1, 'title' => 'title', 'dateCreated' => new \DateTime('2019-01-01 08:00:00'), 'text' => 'text'],
+            ['id' => 2, 'title' => 'title', 'dateCreated' => new \DateTime('2019-01-01 09:20:00'), 'text' => 'text'],
+        ]);
+
+        $expected = <<<'EXPECTED'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <root>
+             <submission>
+              <id label="ID">1</id>
+              <dateCreated label="Date Created">2019-01-01 08:00:00</dateCreated>
+             </submission>
+             <submission>
+              <id label="ID">2</id>
+              <dateCreated label="Date Created">2019-01-01 09:20:00</dateCreated>
+             </submission>
+            </root>
+
+            EXPECTED;
+
+        $exporter = new ExportXml($this->formMock, $this->queryMock, $descriptors);
+        $exporter->export($this->resourceMock);
+        $this->assertSame($expected, $this->getOutput());
+    }
+
     public function testExportTableRows()
     {
         $descriptors = (new FieldDescriptorCollection())

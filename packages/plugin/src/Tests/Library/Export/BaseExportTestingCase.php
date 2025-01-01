@@ -67,6 +67,12 @@ abstract class BaseExportTestingCase extends TestCase
             ->method('batch')
             ->willReturn([$submissions])
         ;
+
+        $this
+            ->queryMock
+            ->method('count')
+            ->willReturn(\count($submissions))
+        ;
     }
 
     protected function generateField(string $class, array $stubs): FieldInterface|MockObject

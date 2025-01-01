@@ -3,11 +3,6 @@
 <phpunit
         bootstrap="packages/plugin/src/Tests/_bootstrap.php"
         colors="false"
-        displayDetailsOnTestsThatTriggerDeprecations="true"
-        displayDetailsOnTestsThatTriggerErrors="true"
-        displayDetailsOnTestsThatTriggerNotices="true"
-        displayDetailsOnTestsThatTriggerWarnings="true"
-        displayDetailsOnPhpunitDeprecations="true"
 >
     <testsuites>
         <testsuite name="Unit Tests">
