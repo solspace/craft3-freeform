@@ -827,5 +827,26 @@ const observer = new MutationObserver((mutations) => {
   });
 });
 
-// Start the observer
-observer.observe(document.body, { childList: true, subtree: true });
+let retries = 0;
+let timeout: ReturnType<typeof setTimeout>;
+
+const runObserver = () => {
+  if (retries > 25) {
+    console.warn('Freeform observer timed out');
+    return clearTimeout(timeout);
+  }
+
+  // Start the observer
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true });
+  } else {
+    retries++;
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(runObserver, 50);
+  }
+};
+
+runObserver();

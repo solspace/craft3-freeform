@@ -472,8 +472,8 @@ return [
     'Entries' => 'Inzendingen',
     'Entry Type' => 'Invoertype',
     'Select an entry type' => 'Selecteer een invoertype',
-    'Select the Freeform fields to be mapped to the applicable Entry attributes' => 'Selecteer de vrije-vormvelden die moeten worden toegewezen aan de toepasselijke Entry-attributen',
-    'Select the Freeform fields to be mapped to the applicable custom Entry fields' => 'Selecteer de vrije-vormvelden die moeten worden toegewezen aan de toepasselijke aangepaste invoervelden',
+    'Select the Freeform fields to be mapped to the applicable Entry attributes' => 'Selecteer de Freeform die moeten worden toegewezen aan de toepasselijke Entry-attributen',
+    'Select the Freeform fields to be mapped to the applicable custom Entry fields' => 'Selecteer de Freeform die moeten worden toegewezen aan de toepasselijke aangepaste invoervelden',
 
     // Form Builder // Integrations // Captchas
     'Only load Captcha scripts once the user interacts with the form' => 'Laad alleen Captcha-scripts zodra de gebruiker interactie heeft met het formulier',
@@ -800,7 +800,7 @@ return [
     'Import completed successfully!' => 'Import succesvol voltooid!',
 
     // Settings // General
-    'Freeform settings saved.' => 'Vrije vorminstellingen opgeslagen.',
+    'Freeform settings saved.' => 'Freeform-instellingen opgeslagen.',
     'General Settings' => 'Algemene instellingen',
     'Control Panel' => 'Controlepaneel',
     'Custom Plugin Name' => 'Aangepaste plug-innaam',
@@ -1112,7 +1112,7 @@ return [
     'Server Checks' => 'Servercontroles',
     'Statistics' => 'Statistieken',
     'Integrations' => 'Integraties',
-    'Freeform Configuration' => 'Vrije vormconfiguratie',
+    'Freeform Configuration' => 'Freeform-configuratie',
     'Form Types' => 'Formuliertypen',
     'Modules' => 'Modulen',
 
@@ -1403,13 +1403,20 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Als u gebruikers toegang wilt geven tot slechts enkele formulieren, vink dan de formulieren hier aan. Deze selecties worden overschreven door het selectievakje 'Alle formulieren beheren'.",
     'Enable limited users functionality.' => 'Schakel beperkte gebruikersfunctionaliteit in.',
 
+    // GraphQL
+    'View all forms' => 'Bekijk alle formulieren',
+    'View "{formName}" form' => 'Bekijk het formulier "{formName}"',
+    'Create submissions for all forms' => 'Maak inzendingen voor alle formulieren',
+    'Create submissions for form "{formName}"' => 'Inzendingen maken voor formulier "{formName}"',
+
     // Install Welcome
     'Welcome' => 'Welkom',
-    'Freeform installed successfully!' => 'Freeform succesvol geïnstalleerd!',
-    'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.' => 'Bedankt dat u voor Freeform hebt gekozen! Craft installeert standaard de gratis Express-editie. Als u uw ervaring wilt maximaliseren, zorg er dan voor dat u de editie handmatig overschakelt naar Lite of Pro. Hieronder vindt u een aantal nuttige links om u op weg te helpen.',
+    'Awesome! Freeform is successfully installed!' => 'Geweldig! Freeform is succesvol geïnstalleerd!',
+    "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!" => 'Bedankt dat je voor Freeform hebt gekozen! Craft zorgt ervoor dat u automatisch de gratis Express-editie krijgt. Als je graag nog meer functies wilt ontdekken, overweeg dan om over te stappen naar de Lite- of Pro-editie! We hebben hieronder enkele nuttige links opgenomen om u op weg te helpen. Genieten!',
     'Create Forms' => 'Formulieren maken',
     'Install Demo' => 'Demo installeren',
-    'Configure Freeform' => 'Vrije vorm configureren',
+    'Getting Started' => 'Handleiding Aan de slag',
+    'Configure Freeform' => 'Configureer Freeform',
 
     // Front End Form Errors // Forms
     'Sorry, there was an error submitting the form. Please try again.' => 'Sorry, er is een fout opgetreden bij het verzenden van het formulier. Probeer het opnieuw.',
@@ -1437,7 +1444,7 @@ return [
     'Could not send successful payment notification' => 'Kan geen succesvolle betalingsmelding verzenden',
     'Could not send failed payment notification' => 'Kan mislukte betalingsmelding niet verzenden',
     'Missing submissions ID in payment details' => 'Ontbrekende inzendings-ID in betalingsgegevens',
-    'Event is not linked to freeform submission' => 'Evenement is niet gekoppeld aan inzending in vrije vorm',
+    'Event is not linked to Freeform submission' => 'Evenement is niet gekoppeld aan inzending in Freeform',
 
     // Craft Queue Jobs
     'Freeform: Processing Integrations' => 'Freeform: Integraties verwerken',

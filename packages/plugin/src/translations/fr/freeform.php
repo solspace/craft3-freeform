@@ -1403,12 +1403,19 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Si vous souhaitez donner aux utilisateurs l'accès à seulement certains formulaires, cochez-les ici. Ces sélections seront remplacées par la case à cocher 'Gérer tous les formulaires'.",
     'Enable limited users functionality.' => 'Activer la fonctionnalité des utilisateurs limités.',
 
+    // GraphQL
+    'View all forms' => 'Voir tous les formulaires',
+    'View "{formName}" form' => 'Afficher le formulaire "{formName}"',
+    'Create submissions for all forms' => 'Créer des soumissions pour tous les formulaires',
+    'Create submissions for form "{formName}"' => 'Créer des soumissions pour le formulaire "{formName}"',
+
     // Install Welcome
     'Welcome' => 'Bienvenue',
-    'Freeform installed successfully!' => 'Freeform a été installé avec succès !',
-    'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.' => 'Merci d’avoir choisi Freeform ! Craft installera l’édition Express gratuite par défaut. Si vous souhaitez maximiser votre expérience, assurez-vous de passer manuellement à l’édition Lite ou Pro. Voici quelques liens utiles pour vous aider à démarrer.',
+    'Awesome! Freeform is successfully installed!' => 'Génial! Freeform est installé avec succès!',
+    "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!" => 'Merci d’avoir choisi Freeform! Craft vous configurera automatiquement avec l’édition Express gratuite. Si vous avez hâte d’explorer encore plus de fonctionnalités, envisagez de passer à l’édition Lite ou Pro! Nous avons inclus quelques liens utiles ci-dessous pour vous aider à démarrer. Apprécier!',
     'Create Forms' => 'Créer des formulaires',
     'Install Demo' => 'Installer la démo',
+    'Getting Started' => 'Guide de démarrage',
     'Configure Freeform' => 'Configurer Freeform',
 
     // Front End Form Errors // Forms
@@ -1437,7 +1444,7 @@ return [
     'Could not send successful payment notification' => 'Impossible d’envoyer la notification de paiement réussi',
     'Could not send failed payment notification' => 'Impossible d’envoyer la notification de paiement échoué',
     'Missing submissions ID in payment details' => 'ID de contribution manquant dans les détails du paiement',
-    'Event is not linked to freeform submission' => 'L’événement n’est pas lié à une contribution Freeform',
+    'Event is not linked to Freeform submission' => 'L’événement n’est pas lié à une contribution Freeform',
 
     // Craft Queue Jobs
     'Freeform: Processing Integrations' => 'Freeform : Traitement des intégrations',

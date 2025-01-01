@@ -1403,12 +1403,19 @@ return [
     "If you'd like to give users access to only some forms, check off the ones here. These selections will be overridden by the 'Manage All Forms' checkbox." => "Wenn Sie Benutzern Zugriff nur auf bestimmte Formulare gewähren möchten, aktivieren Sie hier die entsprechenden. Diese Auswahlen werden durch das Kontrollkästchen 'Alle Formulare verwalten' überschrieben.",
     'Enable limited users functionality.' => 'Eingeschränkte Benutzerfunktionalität aktivieren.',
 
+    // GraphQL
+    'View all forms' => 'Alle Formulare anzeigen',
+    'View "{formName}" form' => 'Formular "{formName}" anzeigen',
+    'Create submissions for all forms' => 'Erstellen Sie Einreichungen für alle Formulare',
+    'Create submissions for form "{formName}"' => 'Einreichungen für Formular "{formName}" erstellen',
+
     // Install Welcome
     'Welcome' => 'Willkommen',
-    'Freeform installed successfully!' => 'Freeform erfolgreich installiert!',
-    'Thank you for choosing Freeform! Craft will install the free Express edition by default. If you wish to maximize your experience, be sure to manually switch the edition to Lite or Pro. Below are a few helpful links to get you started.' => 'Vielen Dank, dass Sie sich für Freeform entschieden haben! Craft installiert standardmäßig die kostenlose Express-Edition. Wenn Sie das Beste aus Freeform herausholen möchten, wechseln Sie manuell zur Lite- oder Pro-Edition. Hier sind ein paar hilfreiche Links für den Einstieg.',
+    'Awesome! Freeform is successfully installed!' => 'Eindrucksvoll! Freeform wurde erfolgreich installiert!',
+    "Thanks for choosing Freeform! Craft will automatically set you up with the free Express edition. If you're excited to explore even more features, consider switching to the Lite or Pro edition! We've included some helpful links below to get you started. Enjoy!" => 'Vielen Dank, dass Sie sich für Freeform entschieden haben! Craft richtet Sie automatisch mit der kostenlosen Express-Edition ein. Wenn Sie noch mehr Funktionen entdecken möchten, sollten Sie einen Wechsel zur Lite- oder Pro-Edition in Betracht ziehen! Wir haben unten einige hilfreiche Links eingefügt, um Ihnen den Einstieg zu erleichtern. Genießen!',
     'Create Forms' => 'Formulare erstellen',
     'Install Demo' => 'Demo installieren',
+    'Getting Started' => 'Leitfaden für den Einstieg',
     'Configure Freeform' => 'Freeform konfigurieren',
 
     // Front End Form Errors // Forms
@@ -1437,7 +1444,7 @@ return [
     'Could not send successful payment notification' => 'Erfolgreiche Zahlungsbenachrichtigung konnte nicht gesendet werden',
     'Could not send failed payment notification' => 'Fehlgeschlagene Zahlungsbenachrichtigung konnte nicht gesendet werden',
     'Missing submissions ID in payment details' => 'Einsendungs-ID in den Zahlungsdetails fehlt',
-    'Event is not linked to freeform submission' => 'Ereignis ist nicht mit Freeform-Einsendung verknüpft',
+    'Event is not linked to Freeform submission' => 'Ereignis ist nicht mit Freeform-Einsendung verknüpft',
 
     // Craft Queue Jobs
     'Freeform: Processing Integrations' => 'Freeform: Verarbeite Integrationen',

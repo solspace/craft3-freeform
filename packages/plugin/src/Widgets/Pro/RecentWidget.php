@@ -36,7 +36,7 @@ class RecentWidget extends AbstractWidget implements ExtraWidgetInterface
 
     public static function icon(): string
     {
-        return __DIR__.'/../../icon-mask.svg';
+        return '@freeform/icon-mask.svg';
     }
 
     public function init(): void

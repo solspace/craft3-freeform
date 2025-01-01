@@ -220,7 +220,6 @@ class ExportProfileModel extends Model
                 };
             }
         }
-
         if ($this->limit) {
             $query->limit($this->limit);
         }
