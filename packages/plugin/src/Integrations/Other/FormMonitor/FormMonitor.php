@@ -7,6 +7,8 @@ use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Input;
+use Solspace\Freeform\Attributes\Property\Validators\Required;
+use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\Other\FormMonitor\Transformers\ManifestTransformer;
 use Solspace\Freeform\Library\Integrations\APIIntegration;
@@ -38,6 +40,14 @@ class FormMonitor extends APIIntegration
     )]
     private string $testUrl = '';
 
+    #[Required]
+    #[Input\Text(
+        label: 'Error Notification Email',
+        instructions: 'Email address to receive notifications about the form.',
+        placeholder: 'notices@example.com',
+    )]
+    private string $email = '';
+
     public function getApiKey(): string
     {
         return $this->apiKey;
@@ -65,6 +75,11 @@ class FormMonitor extends APIIntegration
         return $this->getProcessedValue($this->testUrl);
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
     public function getApiRootUrl(): string
     {
         return 'https://api.leftip.com/v1';
@@ -82,6 +97,39 @@ class FormMonitor extends APIIntegration
         }
     }
 
+    public function acknowledgeSubmission(Client $client, Form $form, Submission $submission, string $requestId): void
+    {
+        $isSuccessful = !$form->hasErrors() && $submission->getId();
+        $errors = [];
+
+        if (!$isSuccessful) {
+            $fieldErrors = [];
+            foreach ($form->getLayout()->getFields() as $field) {
+                if ($field->hasErrors()) {
+                    $fieldErrors[$field->getHandle()] = $field->getErrors();
+                }
+            }
+
+            $errors = [
+                'fields' => $fieldErrors,
+                'form' => $form->getErrors(),
+            ];
+        }
+
+        $endpoint = $this->getEndpoint('/submissions/acknowledgement');
+        $client->post(
+            $endpoint,
+            [
+                'json' => [
+                    'requestId' => $requestId,
+                    'submissionId' => $submission->getId(),
+                    'status' => $isSuccessful ? 'success' : 'fail',
+                    'errors' => $errors,
+                ],
+            ]
+        );
+    }
+
     public function fetchTests(Client $client, Form $form, array $options = []): array
     {
         $endpoint = $this->getEndpoint('/forms/'.$form->getId().'/tests');
@@ -95,6 +143,7 @@ class FormMonitor extends APIIntegration
         $endpoint = $this->getEndpoint('forms/'.$form->getId());
         $payload = [
             'url' => $this->getTestUrl(),
+            'email' => $this->getEmail(),
             'manifest' => $transformer->transform($form),
         ];
 

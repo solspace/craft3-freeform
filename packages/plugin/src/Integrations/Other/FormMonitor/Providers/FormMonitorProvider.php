@@ -58,6 +58,11 @@ class FormMonitorProvider
         }
     }
 
+    public function getFormMonitor(Form $form): ?FormMonitor
+    {
+        return $this->integrationsProvider->getFirstForForm($form, FormMonitor::class);
+    }
+
     private function handleRequest(Form $form): bool
     {
         $request = $this->getRequest();
@@ -77,7 +82,7 @@ class FormMonitorProvider
             return false;
         }
 
-        $formMonitor = $this->integrationsProvider->getFirstForForm($form, FormMonitor::class);
+        $formMonitor = $this->getFormMonitor($form);
         if (!$formMonitor) {
             return false;
         }
