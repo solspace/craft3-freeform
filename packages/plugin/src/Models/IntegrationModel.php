@@ -15,9 +15,11 @@ namespace Solspace\Freeform\Models;
 
 use craft\base\Model;
 use craft\helpers\UrlHelper;
+use Monolog\Logger;
 use Solspace\Freeform\Attributes\Property\Property;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
+use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Exceptions\Integrations\IntegrationNotFoundException;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 use Solspace\Freeform\Library\Integrations\IntegrationInterface;
@@ -72,6 +74,16 @@ class IntegrationModel extends Model
         $typeProvider = \Craft::$container->get(IntegrationTypeProvider::class);
         $type = $typeProvider->getTypeDefinition($className);
 
+        $logCategory = \craft\helpers\StringHelper::toKebabCase($type->getNameWithVersion());
+        $logger = Freeform::getInstance()
+            ->logger
+            ->getLogger(
+                $logCategory,
+                'freeform-integrations.log',
+                Logger::DEBUG
+            )
+        ;
+
         $object = new $className(
             $this->id,
             $this->uid,
@@ -79,6 +91,7 @@ class IntegrationModel extends Model
             $this->handle ?? '',
             $this->name ?? '',
             $type,
+            $logger,
         );
 
         $propertyProvider = \Craft::$container->get(PropertyProvider::class);

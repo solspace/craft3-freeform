@@ -88,18 +88,18 @@ class FreeformLogger
 
     private static array $loggers = [];
 
-    public static function getInstance(string $category): LoggerInterface
+    public static function getInstance(string $category, ?string $fileName = null, ?int $level = null): LoggerInterface
     {
         if (!isset(self::$loggers[$category])) {
-            self::$loggers[$category] = LoggerFactory::getOrCreateFileLogger($category, self::getLogfilePath());
+            self::$loggers[$category] = LoggerFactory::getOrCreateFileLogger($category, self::getLogfilePath($fileName), $level);
         }
 
         return self::$loggers[$category];
     }
 
-    public static function getLogfilePath(): string
+    public static function getLogfilePath(?string $fileName = 'freeform.log'): string
     {
-        return \Craft::$app->path->getLogPath().'/freeform.log';
+        return \Craft::$app->path->getLogPath().'/'.$fileName;
     }
 
     public static function getColor(string $level): string
