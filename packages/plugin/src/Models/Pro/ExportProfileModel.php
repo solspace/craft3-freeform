@@ -178,12 +178,12 @@ class ExportProfileModel extends Model
 
         $dateRangeStart = $this->getDateRangeStart();
         if ($dateRangeStart) {
-            $query->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($dateRangeStart)]);
+            $query->andWhere(['>=', $table.'.[[dateCreated]]', Db::prepareDateForDb($dateRangeStart)]);
         }
 
         $dateRangeEnd = $this->getDateRangeEnd();
         if ($dateRangeEnd) {
-            $query->andWhere(['<=', 'dateCreated', Db::prepareDateForDb($dateRangeEnd)]);
+            $query->andWhere(['<=', $table.'.[[dateCreated]]', Db::prepareDateForDb($dateRangeEnd)]);
         }
 
         if ($this->filters) {
