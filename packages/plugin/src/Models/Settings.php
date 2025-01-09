@@ -184,6 +184,7 @@ class Settings extends Model
 
     /** @var int */
     public $purgableUnfinalizedAssetAgeInMinutes;
+    public bool $purgeAssets = true;
 
     /** @var bool */
     public $spamFolderEnabled;
