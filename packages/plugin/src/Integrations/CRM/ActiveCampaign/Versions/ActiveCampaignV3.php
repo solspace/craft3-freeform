@@ -216,17 +216,15 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
         }
 
         if (!$this->account) {
+            $this->logger->debug('No Account mapping found');
+
             return;
         }
 
         try {
             $response = $client->post(
                 $this->getEndpoint('/accounts'),
-                [
-                    'json' => [
-                        'account' => $this->account,
-                    ],
-                ],
+                ['json' => ['account' => $this->account]],
             );
 
             $this->triggerAfterResponseEvent(self::CATEGORY_ACCOUNT, $response);
@@ -235,6 +233,8 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
             if (isset($json->account)) {
                 $this->accountId = $json->account->id;
+                $this->logger->info('New Account created', ['id' => $this->accountId]);
+                $this->logger->debug('With Mapping', $this->account);
             }
         } catch (\Exception $exception) {
             if (422 === $exception->getCode()) {
@@ -245,11 +245,14 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
                 foreach ($json->accounts as $account) {
                     if (!empty($this->account['name']) && strtolower($account->name) === strtolower($this->account['name'])) {
                         $this->accountId = $account->id;
+                        $this->logger->debug('Account already exists', ['id' => $account->id]);
 
                         break;
                     }
                 }
             } else {
+                $this->logger->debug('Account creation failed', ['exception' => $exception->getMessage()]);
+
                 throw $exception;
             }
         }
@@ -262,6 +265,8 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
         }
 
         if (!$this->contact) {
+            $this->logger->debug('No Contact mapping found');
+
             return;
         }
 
@@ -274,17 +279,14 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
         $response = $client->post(
             $this->getEndpoint('/contact/sync'),
-            [
-                'json' => [
-                    'contact' => $this->contact,
-                ],
-            ],
+            ['json' => ['contact' => $this->contact]],
         );
 
         $json = json_decode($response->getBody(), false);
 
         if (isset($json->contact)) {
             $this->contactId = $json->contact->id;
+            $this->logger->info('New Contact created', ['id' => $this->contactId]);
         }
 
         if ($this->accountId) {
@@ -293,12 +295,10 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
             $client->post(
                 $this->getEndpoint('/accountContacts'),
-                [
-                    'json' => [
-                        'accountContact' => $this->contact,
-                    ],
-                ],
+                ['json' => ['accountContact' => $this->contact]],
             );
+
+            $this->logger->info('Contact linked to Account', ['contact' => $this->contactId, 'account' => $this->accountId]);
         }
 
         foreach ($this->contactProps as $prop) {
@@ -306,11 +306,7 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
             $client->post(
                 $this->getEndpoint('/fieldValues'),
-                [
-                    'json' => [
-                        'fieldValue' => $prop,
-                    ],
-                ],
+                ['json' => ['fieldValue' => $prop]],
             );
         }
 
@@ -331,6 +327,8 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
             ]
         );
 
+        $this->logger->info('Contact added to List', ['contact' => $this->contactId, 'list' => $listId]);
+
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT, $response);
     }
 
@@ -341,6 +339,8 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
         }
 
         if (!$this->deal) {
+            $this->logger->debug('No Deal mapping found');
+
             return;
         }
 
@@ -365,16 +365,14 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
         $response = $client->post(
             $this->getEndpoint('/deals'),
-            [
-                'json' => [
-                    'deal' => $this->deal,
-                ],
-            ],
+            ['json' => ['deal' => $this->deal]],
         );
 
         $json = json_decode((string) $response->getBody(), false);
 
         if (isset($json->deal)) {
+            $this->logger->info('New Deal created', ['id' => $json->deal->id]);
+
             $dealId = $json->deal->id;
 
             foreach ($this->dealProps as $prop) {
@@ -382,11 +380,7 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
 
                 $response = $client->post(
                     $this->getEndpoint('/dealCustomFieldData'),
-                    [
-                        'json' => [
-                            'dealCustomFieldDatum' => $prop,
-                        ],
-                    ],
+                    ['json' => ['dealCustomFieldDatum' => $prop]],
                 );
 
                 $this->triggerAfterResponseEvent(self::CATEGORY_DEAL, $response);

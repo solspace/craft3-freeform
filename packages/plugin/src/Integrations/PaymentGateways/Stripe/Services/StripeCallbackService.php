@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Integrations\PaymentGateways\Stripe\Services;
 
 use craft\helpers\UrlHelper;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Integrations\PaymentGateways\Events\UpdateMetadataEvent;
 use Solspace\Freeform\Integrations\PaymentGateways\Stripe\Fields\StripeField;
@@ -15,7 +16,10 @@ use yii\base\Event;
 
 class StripeCallbackService
 {
-    public function __construct(private SubmissionsService $submissionsService) {}
+    public function __construct(
+        private SubmissionsService $submissionsService,
+        private IntegrationLoggerProvider $loggerProvider,
+    ) {}
 
     public function handleSavedForm(
         Form $form,
@@ -24,6 +28,9 @@ class StripeCallbackService
         PaymentIntent $paymentIntent,
         ?SavedFormRecord $savedForm,
     ): bool {
+        $logger = $this->loggerProvider->getLogger($integration);
+        $logger->debug('Handling saved form', ['form' => $form->getHandle(), 'paymentIntent' => $paymentIntent->id]);
+
         $stripe = $integration->getStripeClient();
         $payment = PaymentRecord::findOne([
             'fieldId' => $field->getId(),
@@ -32,6 +39,8 @@ class StripeCallbackService
         ]);
 
         if (!$payment && $savedForm) {
+            $logger->debug('Handling saved form with payment intent');
+
             $savedForm->delete();
 
             $payload = json_decode(
@@ -53,6 +62,8 @@ class StripeCallbackService
             $type = null !== $paymentIntent->invoice ? 'subscription' : 'payment';
 
             if (!$form->getSubmission()->id) {
+                $logger->debug('Submission not found', ['form' => $form->getHandle(), 'paymentIntent' => $paymentIntent->id]);
+
                 return false;
             }
 
@@ -64,9 +75,13 @@ class StripeCallbackService
             $payment->type = $type;
             $payment->currency = $paymentIntent->currency;
             $payment->amount = $paymentIntent->amount;
+
+            $logger->debug('Payment record created');
         }
 
         if (!$payment) {
+            $logger->debug('Payment record not found. Exiting.');
+
             return false;
         }
 
@@ -81,6 +96,8 @@ class StripeCallbackService
 
             $paymentMethod = $paymentIntent->last_payment_error->payment_method;
             $metadata['error'] = $error;
+
+            $logger->debug('Payment error', ['error' => $error]);
         } elseif ($paymentIntent->payment_method) {
             $paymentMethod = $paymentIntent->payment_method;
         }
@@ -92,6 +109,8 @@ class StripeCallbackService
 
             $metadata['type'] = $paymentMethod->type;
             $metadata['details'] = $paymentMethod->{$paymentMethod->type}->toArray();
+
+            $logger->debug('Payment method found', ['paymentMethod' => $paymentMethod->id]);
         }
 
         $planName = $paymentIntent?->invoice?->subscription?->plan?->product?->name ?? null;
@@ -99,10 +118,14 @@ class StripeCallbackService
             $metadata['planName'] = $planName;
             $metadata['interval'] = $paymentIntent?->invoice?->subscription?->plan?->interval ?? null;
             $metadata['frequency'] = $paymentIntent?->invoice?->subscription?->plan?->interval_count ?? null;
+
+            $logger->debug('Subscription plan found', ['planName' => $planName, 'interval' => $metadata['interval'], 'frequency' => $metadata['frequency']]);
         }
 
         $payment->metadata = $metadata;
         $payment->save();
+
+        $logger->debug('Payment record saved', ['id' => $payment->id]);
 
         if ($savedForm) {
             $submissionMetadata = [
@@ -111,6 +134,8 @@ class StripeCallbackService
 
             $event = new UpdateMetadataEvent($form, $integration, $submissionMetadata);
             Event::trigger(Stripe::class, Stripe::EVENT_AFTER_UPDATE_PAYMENT_METADATA, $event);
+
+            $logger->debug('Stripe payment metadata updated', ['submissionMetadata' => $submissionMetadata]);
 
             if ($paymentIntent?->invoice?->subscription) {
                 $stripe->subscriptions->update(

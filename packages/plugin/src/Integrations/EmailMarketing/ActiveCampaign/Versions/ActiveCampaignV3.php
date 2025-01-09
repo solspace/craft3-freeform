@@ -67,23 +67,31 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
             if (!$optInValue) {
+                $this->logger->debug('Opt-in field used but not chosen. Skipping.');
+
                 return;
             }
         }
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
@@ -121,6 +129,8 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
         $json = json_decode((string) $response->getBody());
 
         $contactId = $json->contact->id;
+        $this->logger->info('New Contact created', ['id' => $contactId]);
+        $this->logger->debug('With Mapping', $mapping);
 
         unset($mapping['firstName'], $mapping['lastName'], $mapping['phone']);
 

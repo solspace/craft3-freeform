@@ -172,8 +172,12 @@ class hCaptcha extends BaseIntegration implements CaptchaIntegrationInterface
 
         $errors = $this->getValidationErrors($form);
         if (empty($errors)) {
+            $this->logger->debug('hCaptcha validation passed');
+
             return;
         }
+
+        $this->logger->debug('hCaptcha validation failed', ['errors' => $errors]);
 
         $behavior = $this->getFailureBehavior();
         if (self::BEHAVIOR_DISPLAY_ERROR === $behavior) {

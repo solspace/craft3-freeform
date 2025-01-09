@@ -66,11 +66,15 @@ class CampaignV2 extends BaseCampaignIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
@@ -82,12 +86,16 @@ class CampaignV2 extends BaseCampaignIntegration
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
             if (!$optInValue) {
+                $this->logger->debug('Opt-in field used but not chosen. Skipping.');
+
                 return;
             }
         }
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
@@ -105,6 +113,9 @@ class CampaignV2 extends BaseCampaignIntegration
                 'Freeform',
                 $source,
             );
+
+            $this->logger->info('New Contact created and subscribed', ['email' => $email]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             $contact = Campaign::$plugin->contacts->getContactByEmail($email);
             if (null === $contact) {
@@ -127,6 +138,9 @@ class CampaignV2 extends BaseCampaignIntegration
                         $pendingContact,
                         $mailingListElement,
                     );
+
+                    $this->logger->info('New Contact created and verification email sent', ['email' => $email]);
+                    $this->logger->debug('With Mapping', $mapping);
                 }
             } elseif (\Craft::$app->getElements()->saveElement($contact)) {
                 Campaign::$plugin->forms->subscribeContact(
@@ -135,6 +149,9 @@ class CampaignV2 extends BaseCampaignIntegration
                     'Freeform',
                     $source,
                 );
+
+                $this->logger->info('New Contact created and subscribed', ['email' => $email]);
+                $this->logger->debug('With Mapping', $mapping);
             }
         }
     }

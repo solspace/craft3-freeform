@@ -68,7 +68,6 @@ class CampaignMonitorV33 extends BaseCampaignMonitorIntegration
     public function getApiRootUrl(): string
     {
         $url = 'https://api.createsend.com';
-
         $url = rtrim($url, '/');
 
         return $url.'/api/'.self::API_VERSION;
@@ -77,16 +76,21 @@ class CampaignMonitorV33 extends BaseCampaignMonitorIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
+            $this->logger->debug('Opt-in field used but not chosen. Skipping.');
             if (!$optInValue) {
                 return;
             }
@@ -94,15 +98,15 @@ class CampaignMonitorV33 extends BaseCampaignMonitorIntegration
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
         $email = strtolower($email);
-
         $customFields = [];
 
         $mapping = $this->processMapping($form, $this->customMapping, self::CATEGORY_CUSTOM);
-
         foreach ($mapping as $key => $value) {
             if ('Name' === $key) {
                 continue;
@@ -137,6 +141,8 @@ class CampaignMonitorV33 extends BaseCampaignMonitorIntegration
                 ],
             ],
         );
+
+        $this->logger->info('New Contact created', ['email' => $email]);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CUSTOM, $response);
     }

@@ -212,8 +212,12 @@ class ReCaptcha extends BaseIntegration implements CaptchaIntegrationInterface
 
         $errors = $this->getValidationErrors($form);
         if (empty($errors)) {
+            $this->logger->debug('reCAPTCHA validation passed');
+
             return;
         }
+
+        $this->logger->debug('reCAPTCHA validation failed', ['errors' => $errors]);
 
         $behavior = $this->getFailureBehavior();
         if (self::BEHAVIOR_DISPLAY_ERROR === $behavior) {

@@ -318,8 +318,6 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
     public function push(Form $form, Client $client): void
     {
-        $this->logger->info('===> Pushing data to Salesforce', ['form' => $form->getHandle()]);
-
         $this->processLeads($form, $client);
         $this->processAccounts($form, $client);
         $this->processContacts($form, $client);
@@ -389,6 +387,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             );
 
             $this->logger->info('Lead updated', ['id' => $leadId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $json] = $this->getJsonResponse(
                 $client->post(
@@ -399,6 +398,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
             $leadId = $json->id;
             $this->logger->info('New Lead created', ['id' => $leadId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForLeads) {
@@ -509,6 +509,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
             $this->accountId = $accountRecord->Id;
             $this->logger->info('Existing Account updated', ['id' => $accountRecord->Id]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             $mapping = $this->triggerPushEvent(self::CATEGORY_ACCOUNT, $mapping);
 
@@ -520,6 +521,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             $json = json_decode((string) $response->getBody());
             $this->accountId = $json->id;
             $this->logger->info('New Account created', ['id' => $this->accountId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForAccounts && $this->accountId) {
@@ -617,6 +619,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             );
 
             $this->logger->info('Existing Contact updated', ['id' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $json] = $this->getJsonResponse(
                 $client->post(
@@ -627,6 +630,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
             $contactId = $json->id;
             $this->logger->info('New Contact created', ['id' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForContacts && $contactId) {
@@ -670,6 +674,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         );
 
         $this->logger->info('New Opportunity created', ['id' => $json->id]);
+        $this->logger->debug('With Mapping', $mapping);
 
         if ($this->filesForOpportunities) {
             $this->linkFilesTo($json->id, $form, $client);
@@ -722,6 +727,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 ));
 
                 $this->logger->info('Task created for existing Contact', ['contactId' => $contact->Id, 'taskId' => $json->id]);
+                $this->logger->debug('With Mapping', $payload);
 
                 return 201 === $response->getStatusCode();
             }
