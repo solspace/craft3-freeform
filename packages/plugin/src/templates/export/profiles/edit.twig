@@ -83,7 +83,7 @@
         <div id="date-range" class="field {{ profile.dateRange != 'custom' ? 'hidden' }}">
             {{ forms.textField({
                 label: "Range Start"|t('freeform'),
-                instructions: "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'."|t('freeform'),
+                instructions: "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'."|t('freeform'),
                 name: 'rangeStart',
                 value: profile.rangeStart,
                 errors: profile.getErrors('rangeStart'),
@@ -91,7 +91,7 @@
 
             {{ forms.textField({
                 label: "Range End"|t('freeform'),
-                instructions: "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'."|t('freeform'),
+                instructions: "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'."|t('freeform'),
                 name: 'rangeEnd',
                 value: profile.rangeEnd,
                 errors: profile.getErrors('rangeEnd'),

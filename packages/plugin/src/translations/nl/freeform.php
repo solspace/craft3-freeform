@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -168,7 +168,7 @@ return [
     'Used to separate date values.' => 'Gebruikt om datumwaarden te scheiden.',
     'Minimum date' => 'Minimumdatum',
     'Maximum date' => 'Maximumdatum',
-    "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc." => "Je kunt 'nu', 'vandaag', '5 dagen geleden', '2024-01-01 20:00:00', enz. gebruiken.",
+    "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc." => "Je kunt 'nu', 'vandaag', '5 dagen geleden', '2025-01-01 20:00:00', enz. gebruiken.",
     'Time Settings' => 'Tijdinstellingen',
     '24h clock' => '24-uurs klok',
     'Clock Separator' => 'Klokscheidingsteken',
@@ -718,9 +718,9 @@ return [
     'Last 30 days' => 'Afgelopen 30 dagen',
     'Last 365 days' => 'Afgelopen 365 dagen',
     'Range Start' => 'Bereikstart',
-    "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Voer het begin van de periode in. Geef een exacte datum op (bijvoorbeeld '01-09-2020') of gebruik iets relatiefs, zoals '15 dagen geleden'. Standaard is 'vandaag'.",
+    "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Voer het begin van de periode in. Geef een exacte datum op (bijvoorbeeld '01-09-2025') of gebruik iets relatiefs, zoals '15 dagen geleden'. Standaard is 'vandaag'.",
     'Range End' => 'Bereikeinde',
-    "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Voer het einde van de periode in. Geef een exacte datum op (bijvoorbeeld '30-09-2020') of gebruik iets relatiefs, zoals '15 dagen geleden'. Standaard is 'vandaag'.",
+    "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Voer het einde van de periode in. Geef een exacte datum op (bijvoorbeeld '30-09-2025') of gebruik iets relatiefs, zoals '15 dagen geleden'. Standaard is 'vandaag'.",
     'Maximum number of submissions to fetch.' => 'Maximum aantal inzendingen om op te halen.',
     'Fields to export' => 'Velden om te exporteren',
     'Specify the fields you wish to export and their order.' => 'Geef de velden op die u wilt exporteren en hun volgorde.',
@@ -761,7 +761,7 @@ return [
     "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning." => "Geef aan hoe vaak en op welke dagen (indien van toepassing) u de e-mailmeldingen wilt ontvangen. De gekozen datum probeert 's ochtends een melding te sturen.",
     'Emails to Notify' => 'E-mails om op de hoogte te stellen',
     'Enter the email address(es) that should be notified. If more than one, enter each one on a new line.' => 'Vul de e-mailadres(sen) in die op de hoogte moeten worden gesteld. Als er meer dan één is, voer ze dan allemaal op een nieuwe regel in.',
-    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2022-01-01.csv</code>"). The extension will be added automatically.' => 'De bestandsnaam die moet worden gegenereerd voor de export. U kunt hier de objecten <code>form</code>, <code>profile</code> en <code>date</code> als Twig-sjabloon gebruiken om uw bestand een naam te geven. (bijvoorbeeld <code>"{{ form.handle }}-{{ date.toDateString }}"</code> wat een bestandsnaam zou genereren van "<code>een-vorm-handle-2022-01-01.csv< /code>"). De extensie wordt automatisch toegevoegd.',
+    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2025-01-01.csv</code>"). The extension will be added automatically.' => 'De bestandsnaam die moet worden gegenereerd voor de export. U kunt hier de objecten <code>form</code>, <code>profile</code> en <code>date</code> als Twig-sjabloon gebruiken om uw bestand een naam te geven. (bijvoorbeeld <code>"{{ form.handle }}-{{ date.toDateString }}"</code> wat een bestandsnaam zou genereren van "<code>een-vorm-handle-2022-01-01.csv< /code>"). De extensie wordt automatisch toegevoegd.',
     'Email Subject' => 'E-mailonderwerp',
     'Email Message' => 'E-mailbericht',
     'The text content of the email notification.' => 'De tekstinhoud van de e-mailmelding.',
