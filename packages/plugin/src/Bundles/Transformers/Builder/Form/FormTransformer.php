@@ -140,12 +140,14 @@ class FormTransformer
         $chartData = $this->chartsService->getMinimalSubmissionChartData($formIds);
         $submissions = $this->submissionsService->getSubmissionCountByForm();
         $spamSubmissions = $this->submissionsService->getSubmissionCountByForm(true);
+        $savedSubmissions = $this->submissionsService->getSavedSubmissionCountByForm();
 
         foreach ($forms as $form) {
             $form->chartData = $chartData[$form->id] ?? [];
             $form->counters = [
                 'submissions' => $submissions[$form->id] ?? 0,
                 'spam' => $spamSubmissions[$form->id] ?? 0,
+                'saved' => $savedSubmissions[$form->id] ?? 0,
             ];
         }
 

@@ -34,6 +34,7 @@ use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Database\SubmissionHandlerInterface;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Records\FormRecord;
+use Solspace\Freeform\Records\SavedFormRecord;
 use Twig\Markup;
 use yii\base\Event;
 
@@ -154,6 +155,17 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
         }
 
         return $query->column();
+    }
+
+    public function getSavedSubmissionCountByForm(): array
+    {
+        return (new Query())
+            ->select('COUNT(*)')
+            ->from(SavedFormRecord::TABLE)
+            ->groupBy('formId')
+            ->indexBy('formId')
+            ->column()
+        ;
     }
 
     public function handleSubmission(Form $form): void
