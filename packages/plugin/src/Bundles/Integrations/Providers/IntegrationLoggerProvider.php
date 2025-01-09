@@ -8,9 +8,23 @@ use Psr\Log\LoggerInterface;
 use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Integrations\IntegrationInterface;
+use Solspace\Freeform\Models\Settings;
+use Solspace\Freeform\Services\SettingsService;
 
 class IntegrationLoggerProvider
 {
+    private int $level;
+
+    public function __construct(
+        SettingsService $settingsService
+    ) {
+        $this->level = match ($settingsService->getSettingsModel()->loggingLevel) {
+            Settings::LOGGING_LEVEL_INFO => Logger::INFO,
+            Settings::LOGGING_LEVEL_DEBUG => Logger::DEBUG,
+            default => Logger::ERROR,
+        };
+    }
+
     public function getLogger(IntegrationInterface|Type $integration): LoggerInterface
     {
         if ($integration instanceof IntegrationInterface) {
@@ -26,7 +40,7 @@ class IntegrationLoggerProvider
             ->getLogger(
                 $logCategory,
                 'freeform-integrations.log',
-                Logger::DEBUG
+                $this->level
             )
         ;
     }
