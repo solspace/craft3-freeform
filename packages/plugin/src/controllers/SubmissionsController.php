@@ -55,10 +55,8 @@ class SubmissionsController extends BaseController
         $registerAssetsEvent = new RegisterEvent(\Craft::$app->view);
         $this->trigger(self::EVENT_REGISTER_INDEX_ASSETS, $registerAssetsEvent);
 
-        if (Freeform::getInstance()->isPro()) {
-            if (PermissionHelper::checkPermission(Freeform::PERMISSION_ACCESS_QUICK_EXPORT)) {
-                \Craft::$app->view->registerAssetBundle(ExportButtonBundle::class);
-            }
+        if (PermissionHelper::checkPermission(Freeform::PERMISSION_ACCESS_QUICK_EXPORT)) {
+            \Craft::$app->view->registerAssetBundle(ExportButtonBundle::class);
         }
 
         $forms = $this->getFormsService()->getAllForms();
