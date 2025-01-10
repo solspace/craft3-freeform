@@ -10,14 +10,15 @@ const setSelected = (element: HTMLLIElement, selected: boolean): void => {
   }
 };
 
-export const useSidebarSelect = (index: number): void => {
+export const useSidebarSelect = (urlPart: string): void => {
   const navItems = document.querySelectorAll<HTMLLIElement>(
     '#nav-freeform > ul > li'
   );
 
   useEffect(() => {
-    navItems.forEach((item, i) => {
-      setSelected(item, i === index);
+    navItems.forEach((item) => {
+      const url = item.querySelector('a.sidebar-action')?.getAttribute('href');
+      setSelected(item, url?.includes(urlPart));
     });
 
     return () => {
@@ -27,5 +28,5 @@ export const useSidebarSelect = (index: number): void => {
 
       setSelected(navItems[0], true);
     };
-  }, [index]);
+  }, [urlPart]);
 };

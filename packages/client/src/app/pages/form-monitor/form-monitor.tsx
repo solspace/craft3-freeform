@@ -12,7 +12,7 @@ import { FormMonitorWrapper } from './form-monitor.styles';
 
 export const FormMonitor: React.FC = () => {
   const isPro = config.editions.isAtLeast(Edition.Pro);
-  useSidebarSelect(5);
+  useSidebarSelect('freeform/form-monitor');
 
   const { data: forms, isFetching: isFetchingForms } = useQueryFormsWithStats();
   const { data: formIds, isFetching: isFetchingFormids } = useFMForms();

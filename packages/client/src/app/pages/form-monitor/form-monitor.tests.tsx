@@ -39,7 +39,7 @@ export const FMTests: React.FC = () => {
   const { data: forms } = useQueryFormsWithStats();
   const { data, isFetching } = useFMFormTestsQuery(Number(formId));
 
-  useSidebarSelect(5);
+  useSidebarSelect('freeform/form-monitor');
 
   return (
     <FormMonitorWrapper>
