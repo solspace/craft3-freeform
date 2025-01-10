@@ -103,7 +103,7 @@
             instructions: "Maximum number of submissions to fetch."|t('freeform'),
             id: 'limit',
             name: 'limit',
-            size: 3,
+            size: 8,
             value: profile.limit,
             errors: profile.getErrors('limit'),
         }) }}
@@ -125,20 +125,20 @@
                     <th>{{ 'Field Name'|t('freeform') }}</th>
                     </thead>
                     <tbody>
-                    {% for fieldId, fieldData in profile.fieldSettings %}
+                    {% for field in profile.fieldDescriptors %}
                         <tr>
                             <td class="thin">
                                 <a class="move icon" title="{{ 'Reorder'|t('app') }}"></a>
                             </td>
                             <td width="50">
                                 {{ forms.lightswitchField({
-                                    name: 'fieldSettings[' ~ fieldId ~ '][checked]',
-                                    on: fieldData.checked
+                                    name: 'fieldSettings[' ~ field.id ~ '][checked]',
+                                    on: field.used
                                 }) }}
                             </td>
                             <td>
-                                {{ fieldData.label }}
-                                <input type="hidden" name="fieldSettings[{{ fieldId }}][label]" value="{{ fieldData.label }}" />
+                                {{ field.label }}
+                                <input type="hidden" name="fieldSettings[{{ field.id }}][label]" value="{{ field.label }}" />
                             </td>
                         </tr>
                     {% endfor %}
@@ -175,9 +175,9 @@
                             <td width="50">
                                 <div class="select">
                                     <select name="filters[{{ iterator }}][field]">
-                                        {% for fieldId, fieldData in profile.fieldSettings %}
-                                            <option value="{{ fieldId }}"{{ fieldId == filter.field ? ' selected' }}>
-                                                {{ fieldData.label }}
+                                        {% for field in profile.fieldDescriptors %}
+                                            <option value="{{ field.id }}"{{ field.id == filter.field ? ' selected' }}>
+                                                {{ field.label }}
                                             </option>
                                         {% endfor %}
                                     </select>
@@ -208,8 +208,8 @@
                             <td width="50">
                                 <div class="select">
                                     <select name="filters[__iterator__][field]">
-                                        {% for fieldId, fieldData in profile.fieldSettings %}
-                                            <option value="{{ fieldId }}">{{ fieldData.label }}</option>
+                                        {% for field in profile.fieldDescriptors %}
+                                            <option value="{{ field.id }}">{{ field.label }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

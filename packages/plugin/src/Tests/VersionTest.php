@@ -2,28 +2,17 @@
 
 namespace Solspace\Freeform\Tests;
 
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversFunction('version_compare')]
 class VersionTest extends TestCase
 {
-    public function versionDataProvider(): array
-    {
-        return [
-            ['1.8.2', '<'],
-            ['2.0.0-dev', '='],
-            ['2.0.0-alpha.1', '>'],
-            ['2.0.0-beta.1', '>'],
-        ];
-    }
-
-    /**
-     * @dataProvider versionDataProvider
-     */
+    #[TestWith(['1.8.2', '<'])]
+    #[TestWith(['2.0.0-dev', '='])]
+    #[TestWith(['2.0.0-alpha.1', '>'])]
+    #[TestWith(['2.0.0-beta.1', '>'])]
     public function testVersions(string $version, string $operator)
     {
         $this->assertTrue(version_compare($version, '2.0.0-dev', $operator));

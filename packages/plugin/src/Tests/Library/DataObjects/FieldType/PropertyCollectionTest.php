@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Library\DataObjects\FieldType;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\PropertyCollection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(PropertyCollection::class)]
 class PropertyCollectionTest extends TestCase
 {
     public function testRemovesOneFlagged()

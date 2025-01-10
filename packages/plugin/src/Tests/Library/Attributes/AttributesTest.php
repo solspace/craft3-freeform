@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Attributes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Attributes\Attributes;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Attributes::class)]
 class AttributesTest extends TestCase
 {
     public function testGathersAttributes()

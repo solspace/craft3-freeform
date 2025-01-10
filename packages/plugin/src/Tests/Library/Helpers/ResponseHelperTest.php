@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\ResponseHelper;
 use yii\web\HeaderCollection;
 use yii\web\Response;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ResponseHelper::class)]
 class ResponseHelperTest extends TestCase
 {
     private ResponseHelper $responseHelper;
@@ -38,7 +35,7 @@ class ResponseHelperTest extends TestCase
             ->method('set')
             ->willReturnCallback(
                 function (string $key, string $value) use ($matcher) {
-                    match ($matcher->getInvocationCount()) {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals('default-src *', $value),
                         2 => $this->assertEquals(
                             'default-src *; script-src https://test.com https://com.com',

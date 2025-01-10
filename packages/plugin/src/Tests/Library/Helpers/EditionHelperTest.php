@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\EditionHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(EditionHelper::class)]
 class EditionHelperTest extends TestCase
 {
     public function testIsAtLeast()

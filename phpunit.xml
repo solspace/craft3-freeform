@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<phpunit bootstrap="packages/plugin/src/Tests/_bootstrap.php" colors="false">
+<phpunit
+        bootstrap="packages/plugin/src/Tests/_bootstrap.php"
+        colors="false"
+>
     <testsuites>
         <testsuite name="Unit Tests">
             <directory>packages/plugin/src/Tests</directory>

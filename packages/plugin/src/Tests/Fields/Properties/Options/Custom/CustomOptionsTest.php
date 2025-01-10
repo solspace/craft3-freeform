@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Fields\Properties\Options\Custom;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Implementations\Options\OptionsTransformer;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Fields\Properties\Options\Custom\Custom;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(OptionsTransformer::class)]
 class CustomOptionsTest extends TestCase
 {
     private PropertyProvider $propertyProvider;
