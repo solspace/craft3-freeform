@@ -67,7 +67,10 @@ export const FMTests: React.FC = () => {
                 <tr key={test.id}>
                   <td className="no-break">#{test.id}</td>
                   <td className="no-break" title={test.dateCompleted}>
-                    {format(parseISO(test.dateCompleted), 'do MMM yyyy')}
+                    {format(
+                      parseISO(test.dateCompleted || test.dateAttempted),
+                      'do MMM yyyy'
+                    )}
                   </td>
                   <td>
                     <Link to={`/forms/${form.id}`}>{form.name}</Link>

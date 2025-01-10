@@ -63,7 +63,7 @@ export const StatusBadge = styled.div`
   color: ${colors.white};
   background-color: ${colors.teal500};
 
-  &.status-fail {
+  &.status-failed {
     background-color: ${colors.red500};
   }
 `;
