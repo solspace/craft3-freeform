@@ -60,7 +60,7 @@ class FormFieldType extends Field
             $allowedIds = $freeform->forms->getAllFormIds();
         }
 
-        if ($this->forms !== '*' && \is_array($this->forms)) {
+        if ('*' !== $this->forms && \is_array($this->forms)) {
             $allowedIds = array_intersect($this->forms, $allowedIds);
         }
 
