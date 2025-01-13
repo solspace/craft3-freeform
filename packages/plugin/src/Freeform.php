@@ -489,17 +489,16 @@ class Freeform extends Plugin
     // TODO: move into a feature bundle
     private function initFieldTypes(): void
     {
+        if ($this->edition()->isBelow(self::EDITION_LITE)) {
+            return;
+        }
+
         Event::on(
             Fields::class,
             Fields::EVENT_REGISTER_FIELD_TYPES,
             function (RegisterComponentTypesEvent $event) {
-                if ($this->edition()->isAtLeast(self::EDITION_LITE)) {
-                    $event->types[] = FormFieldType::class;
-                }
-
-                if ($this->edition()->isAtLeast(self::EDITION_PRO)) {
-                    $event->types[] = SubmissionFieldType::class;
-                }
+                $event->types[] = FormFieldType::class;
+                $event->types[] = SubmissionFieldType::class;
             }
         );
     }
