@@ -23,7 +23,7 @@ use Solspace\Freeform\Fields\Implementations\Pro\WebsiteField;
 use Solspace\Freeform\Fields\Implementations\RadiosField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Implementations\TextField;
-use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Categories\Categories;
+use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Assets\Assets;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Entries\Entries;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\OptionTypesProvider;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Users\Users;
@@ -94,8 +94,8 @@ class LimitedUsersDefaults
                                 ->setChildren([
                                     (new Toggles('types', 'Allowed Types'))
                                         ->setValues([
+                                            Assets::class,
                                             Entries::class,
-                                            Categories::class,
                                             Users::class,
                                         ])
                                         ->setOptions($this->getElementTypes()),
@@ -114,7 +114,7 @@ class LimitedUsersDefaults
                                         ])
                                         ->setOptions($this->getPredefinedTypes()),
                                 ]),
-                            new Boolean('convert', 'Convert to Custom Values (for Element and Predefined populators)'),
+                            new Boolean('convert', 'Convert to Custom Values'),
                         ]),
                 ]),
             (new Group('notifications', 'Notifications'))
