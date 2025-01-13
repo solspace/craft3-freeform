@@ -1,5 +1,13 @@
 # Solspace Freeform Changelog
 
+## 5.8.6 - 2025-01-08
+
+### Fixed
+- Fixed a bug where mouse clicks were not affecting Conditional Rules on Number fields (e.g. up/down arrows).
+- Fixed a bug where the _Usage in Elements_ tab in the form builder was crashing when no Freeform Form fields existed.
+- Fixed a conflict issue with a CSS class in the control panel.
+- Fixed a bug where some basic translations for GraphQL permission settings were missing.
+
 ## 5.8.5 - 2024-12-27
 
 ### Fixed

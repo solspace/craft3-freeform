@@ -2,18 +2,16 @@
 
 namespace Solspace\Freeform\controllers\export;
 
-use craft\db\Query;
-use craft\db\Table;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
 use Solspace\Freeform\Controllers\BaseController;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Helpers\EncryptionHelper;
 use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Records\Pro\ExportSettingRecord;
-use Solspace\Freeform\Records\StatusRecord;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
@@ -172,6 +170,7 @@ class QuickExportController extends BaseController
 
         $isCraft5 = version_compare(\Craft::$app->version, '5.0.0-alpha', '>=');
         $settings = $this->getExportSettings();
+        $exportProfilesService = $this->getExportProfileService();
 
         $formId = \Craft::$app->request->post('form_id');
         $exportType = \Craft::$app->request->post('export_type');
@@ -205,96 +204,39 @@ class QuickExportController extends BaseController
 
         $fieldData = $exportFields[$form->getId()];
 
-        // TODO: reimplement with payments
-
-        // $paymentProperties = $form->getPaymentProperties();
-        // $hasPaymentSingles = PaymentProperties::PAYMENT_TYPE_SINGLE === $paymentProperties->getPaymentType();
-        // $hasPaymentSubscriptions = !$hasPaymentSingles && null !== $paymentProperties->getPaymentType();
-
         $settings->setting = $exportFields;
         $settings->save();
 
-        $searchableFields = [];
-        foreach ($fieldData as $fieldId => $data) {
-            $isChecked = $data['checked'];
+        $collection = new FieldDescriptorCollection();
 
-            if (!(bool) $isChecked) {
-                continue;
-            }
+        foreach ($fieldData as $fieldId => $data) {
+            $label = $data['label'];
+            $isChecked = $data['checked'];
 
             if (is_numeric($fieldId)) {
                 $field = $form->get($fieldId);
-                if ($field) {
-                    $fieldName = Submission::getFieldColumnName($field);
-                    $fieldHandle = $field->getHandle();
-
-                    $searchableFields[] = "[[sc.{$fieldName}]] as {$fieldHandle}";
+                if (!$field) {
+                    continue;
                 }
-            } else {
-                $fieldName = $fieldId;
-                $fieldName = match ($fieldName) {
-                    'title' => $isCraft5 ? 'es.[[title]]' : 'c.[['.$fieldName.']]',
-                    'status' => 'stat.[[name]] as status',
-                    'cc_status' => 'p.[[status]] as cc_status',
-                    'cc_amount' => 'p.[[amount]] as cc_amount',
-                    'cc_currency' => 'p.[[currency]] as cc_currency',
-                    'cc_card' => 'p.[[last4]] as cc_card',
-                    default => 's.[['.$fieldName.']]',
-                };
 
-                $searchableFields[] = $fieldName;
+                $label = $field->getLabel();
             }
+
+            $collection->add(
+                new FieldDescriptor(
+                    $fieldId,
+                    $label,
+                    $isChecked,
+                )
+            );
         }
 
-        $query = (new Query())
-            ->select($searchableFields)
-            ->from(Submission::TABLE.' s')
-            ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
-            ->innerJoin(StatusRecord::TABLE.' stat', 'stat.[[id]] = s.[[statusId]]')
-            ->where(['s.[[formId]]' => $form->getId()])
-            ->andWhere(['s.[[isSpam]]' => $isSpam])
+        $query = Submission::find()
+            ->formId($form->getId())
+            ->isSpam($isSpam)
         ;
 
-        $siteId = \Craft::$app->getSites()->getCurrentSite()->id;
-        if ($isCraft5) {
-            $query->innerJoin(
-                '{{%elements_sites}} es',
-                'es.[[elementId]] = s.[[id]] AND es.[[siteId]] = :siteId',
-                ['siteId' => $siteId]
-            );
-        } else {
-            $query->innerJoin(
-                '{{%content}} c',
-                'c.[[elementId]] = s.[[id]] AND c.[[siteId]] = :siteId',
-                ['siteId' => $siteId]
-            );
-        }
-
-        // TODO: reimplement with payments
-
-        // if ($hasPaymentSingles) {
-        //     $query->leftJoin('{{%freeform_payments_payments}} p', 'p.[[submissionId]] = s.[[id]]');
-        // } elseif ($hasPaymentSubscriptions) {
-        //     $query->leftJoin('{{%freeform_payments_subscriptions}} p', 'p.[[submissionId]] = s.[[id]]');
-        // }
-
-        if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {
-            $elements = Table::ELEMENTS;
-            $query->innerJoin(
-                $elements.' e',
-                'e.[[id]] = s.[[id]] AND e.[[dateDeleted]] IS NULL'
-            );
-        }
-
-        $data = $query->all();
-
-        $key = EncryptionHelper::getKey($form->getUid());
-        $data = EncryptionHelper::decryptExportData($key, $data);
-
-        $exportProfilesService = $this->getExportProfileService();
-
-        $exporter = $exportProfilesService->createExporter($exportType, $form, $data);
-
+        $exporter = $exportProfilesService->createExporter($exportType, $form, $query, $collection);
         $exportProfilesService->export($exporter, $form);
     }
 

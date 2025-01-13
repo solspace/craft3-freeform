@@ -38,6 +38,10 @@ class ElementsController extends BaseApiController
             $this->_getCustomFieldElements($layout, $fieldUids);
         }
 
+        if (empty($fieldUids)) {
+            return $this->asJson([]);
+        }
+
         $conditions = ['or'];
         foreach ($fieldUids as $uuid) {
             if ('mysql' === $driver) {

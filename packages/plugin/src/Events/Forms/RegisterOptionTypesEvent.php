@@ -2,7 +2,7 @@
 
 namespace Solspace\Freeform\Events\Forms;
 
-use Solspace\Freeform\Fields\Properties\Options\Elements\Types\BaseOptionProvider;
+use Solspace\Freeform\Fields\Properties\Options\OptionTypeProviderInterface;
 use yii\base\Event;
 
 class RegisterOptionTypesEvent extends Event
@@ -12,7 +12,7 @@ class RegisterOptionTypesEvent extends Event
         parent::__construct();
     }
 
-    public function addType(BaseOptionProvider $type): self
+    public function addType(OptionTypeProviderInterface $type): self
     {
         $this->types[] = $type;
 

@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -188,6 +188,7 @@ class Settings extends Model
 
     /** @var int */
     public $purgableUnfinalizedAssetAgeInMinutes;
+    public bool $purgeAssets = true;
 
     /** @var bool */
     public $spamFolderEnabled;

@@ -96,7 +96,7 @@ class RuleHandler implements FreeformHandler {
         return;
       }
 
-      let listener: string;
+      let listener: string | string[];
       switch (element.tagName) {
         case 'TEXTAREA':
         case 'INPUT':
@@ -109,6 +109,9 @@ class RuleHandler implements FreeformHandler {
             case 'radio':
             case 'checkbox':
               listener = 'change';
+              break;
+            case 'number':
+              listener = ['keyup', 'change'];
               break;
 
             default:
@@ -139,9 +142,11 @@ class RuleHandler implements FreeformHandler {
           rules.fields.filter((r) => r !== rule).forEach((r) => this.applyRule(r));
         };
 
+      const listeners: string[] = !Array.isArray(listener) ? [listener] : listener;
+
       // Attach event listeners
       combinedRules.forEach((rule) => {
-        element.addEventListener(listener, callback(rule));
+        listeners.forEach((listener) => element.addEventListener(listener, callback(rule)));
       });
     });
 

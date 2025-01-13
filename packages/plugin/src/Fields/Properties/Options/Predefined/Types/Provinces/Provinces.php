@@ -42,7 +42,7 @@ class Provinces implements PredefinedSourceTypeInterface
 
     public function getName(): string
     {
-        return 'Provinces';
+        return 'Canadian Provinces';
     }
 
     public function generateOptions(): OptionCollection

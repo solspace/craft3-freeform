@@ -4,7 +4,6 @@ namespace Solspace\Freeform\Integrations\Captchas\ReCaptcha;
 
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
-use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Flag;
 use Solspace\Freeform\Attributes\Property\Input;
 use Solspace\Freeform\Attributes\Property\Middleware;
@@ -35,8 +34,6 @@ class ReCaptcha extends BaseIntegration implements CaptchaIntegrationInterface
     public const BEHAVIOR_DISPLAY_ERROR = 'display-error';
     public const BEHAVIOR_SEND_TO_SPAM = 'send-to-spam';
 
-    #[Edition(Edition::PRO)]
-    #[Edition(Edition::LITE)]
     #[Flag(self::FLAG_AS_HIDDEN_IN_INSTANCE)]
     #[Input\Select(
         label: 'Captcha Type',

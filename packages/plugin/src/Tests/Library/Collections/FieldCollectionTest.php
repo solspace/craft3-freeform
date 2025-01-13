@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Tests\Library\Collections;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\CheckboxField;
@@ -9,11 +10,7 @@ use Solspace\Freeform\Fields\Implementations\HiddenField;
 use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\Library\Collections\FieldCollection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(FieldCollection::class)]
 class FieldCollectionTest extends TestCase
 {
     public function testCanIterateOverFields()
