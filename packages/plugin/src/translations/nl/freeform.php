@@ -705,6 +705,7 @@ return [
     'Profiles' => 'Profielen',
     'Export Profiles' => 'Profielen exporteren',
     'No export profiles found' => 'Geen exportprofielen gevonden',
+    'Upgrade to the Lite or Pro edition of Freeform to get access to Export Profiles.' => 'Upgrade naar de Lite- of Pro-editie van Freeform om toegang te krijgen tot exportprofielen.',
     'Export' => 'Exporteren',
     'New Export Profile' => 'Nieuw exportprofiel',
     'Create a new Export Profile' => 'Maak een nieuw exportprofiel',
