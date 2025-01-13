@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Events\Forms;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Events\Forms\PersistFormEvent;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(PersistFormEvent::class)]
 class PersistFormEventTest extends TestCase
 {
     public function testAddErrorsToResponse()

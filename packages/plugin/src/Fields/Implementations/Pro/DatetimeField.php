@@ -54,7 +54,7 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
 
     #[Input\Text(
         label: 'Initial value',
-        instructions: "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc.",
+        instructions: "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc.",
     )]
     protected string $initialValue = '';
 
@@ -141,7 +141,7 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
     #[VisibilityFilter('["both", "date"].includes(properties.dateTimeType)')]
     #[Input\Text(
         label: 'Minimum date',
-        instructions: "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc.",
+        instructions: "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc.",
     )]
     protected ?string $minDate = null;
 
@@ -149,7 +149,7 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
     #[VisibilityFilter('["both", "date"].includes(properties.dateTimeType)')]
     #[Input\Text(
         label: 'Maximum date',
-        instructions: "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc.",
+        instructions: "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc.",
     )]
     protected ?string $maxDate = null;
 
@@ -217,6 +217,11 @@ class DatetimeField extends AbstractField implements PlaceholderInterface, Datet
             self::DATETIME_TYPE_DATE => 'date',
             self::DATETIME_TYPE_TIME => 'time',
         };
+    }
+
+    public function getValueAsString(): string
+    {
+        return $this->getValue();
     }
 
     public function getInitialValue(): string
