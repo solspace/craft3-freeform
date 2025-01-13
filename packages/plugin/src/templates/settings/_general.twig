@@ -208,7 +208,7 @@
 
     <div id="purge-assets" class="field {{ not settings.purgeAssets ? 'hidden' }}">
         {{ forms.selectField({
-            label: "Purge Unfinalized Asset Files"|t('freeform'),
+            label: "Time to Wait Before Purging Assets"|t('freeform'),
             instructions: "Select how long Freeform should keep unfinalized asset files before purging."|t('freeform'),
             name: "settings[purgableUnfinalizedAssetAgeInMinutes]",
             value: settings.purgableUnfinalizedAssetAgeInMinutes,
