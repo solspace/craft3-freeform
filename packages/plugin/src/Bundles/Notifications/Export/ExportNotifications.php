@@ -10,7 +10,6 @@ use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Helpers\EncryptionHelper;
 use Solspace\Freeform\Notifications\Components\Recipients\RecipientCollection;
 use Solspace\Freeform\Records\NotificationLogRecord;
 use Solspace\Freeform\Records\NotificationTemplateRecord;
@@ -91,20 +90,23 @@ class ExportNotifications extends FeatureBundle
             $message = $mailer->compileMessage($template, $variables);
             $message->setTo($mailer->processRecipients($recipients));
 
-            $data = $profile->getSubmissionData();
-
-            $key = EncryptionHelper::getKey($form->getUid());
-            $data = EncryptionHelper::decryptExportData($key, $data);
-
-            $exporter = $exportService->createExporter($notification->fileType, $form, $data);
+            $exporter = $exportService->createExporter(
+                $notification->fileType,
+                $form,
+                $profile->getQuery(),
+                $profile->getFieldDescriptors()
+            );
 
             $fileName = $mailer->renderString(
                 $notification->fileName ?? '',
                 $variables
             );
 
+            $exportFile = tmpfile();
+            $exporter->export($exportFile);
+
             $message->attachContent(
-                $exporter->export(),
+                $exportFile,
                 [
                     'fileName' => $fileName.'.'.$exporter->getFileExtension(),
                     'contentType' => $exporter->getMimeType(),

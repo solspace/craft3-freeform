@@ -1,43 +1,39 @@
 <?php
 
-namespace Solspace\Freeform\Library\Export;
+namespace Solspace\Freeform\Bundles\Export;
 
 use Carbon\Carbon;
+use craft\base\ElementInterface;
+use craft\elements\db\ElementQueryInterface;
+use Solspace\Freeform\Bundles\Backup\DTO\Submission;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Events\PrepareExportValueEvent;
+use Solspace\Freeform\Bundles\Export\Objects\Column;
+use Solspace\Freeform\Bundles\Export\Objects\Row;
+use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Interfaces\MultiValueInterface;
 use Solspace\Freeform\Fields\Interfaces\OptionsInterface;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
-use Solspace\Freeform\Library\Export\Objects\Column;
-use Solspace\Freeform\Library\Export\Objects\Row;
+use yii\base\Event;
 
-abstract class AbstractExport implements ExportInterface
+abstract class AbstractSubmissionExport implements SubmissionExportInterface
 {
-    /** @var Row[] */
-    private array $rows;
-
     private ?string $timezone;
-    private bool $removeNewLines;
-    private bool $exportLabels;
-    private bool $handlesAsNames;
 
     public function __construct(
-        private Form $form,
-        array $submissionData,
-        ?ExportSettings $settings = null
+        private readonly Form $form,
+        private readonly ElementQueryInterface $query,
+        private readonly FieldDescriptorCollection $fieldDescriptors,
+        private ?ExportSettings $settings = null
     ) {
         if (null === $settings) {
-            $settings = new ExportSettings();
+            $this->settings = new ExportSettings();
         }
 
-        $this->timezone = $settings->getTimezone();
-
-        $this->removeNewLines = $settings->isRemoveNewlines();
-        $this->exportLabels = $settings->isExportLabels();
-        $this->handlesAsNames = $settings->isHandlesAsNames();
-
-        $this->rows = $this->parseSubmissionDataIntoRows($submissionData);
+        $this->timezone = $this->settings->getTimezone();
     }
 
     public function getForm(): Form
@@ -45,22 +41,64 @@ abstract class AbstractExport implements ExportInterface
         return $this->form;
     }
 
+    public function getFieldDescriptors(): FieldDescriptorCollection
+    {
+        return $this->fieldDescriptors;
+    }
+
+    public function getSettings(): ExportSettings
+    {
+        return $this->settings;
+    }
+
+    protected function getQuery(): ElementQueryInterface
+    {
+        return $this->query;
+    }
+
     /**
-     * @return Row[]
+     * @return Column[][][]|\Generator
      */
-    public function getRows(): array
+    protected function getRowBatch(int $size = 100): \Generator
     {
-        return $this->rows;
-    }
+        $query = $this->getQuery();
 
-    public function isRemoveNewLines(): bool
-    {
-        return $this->removeNewLines;
-    }
+        /** @var Submission[] $elements */
+        foreach ($query->batch($size) as $elements) {
+            $rows = [];
 
-    public function isHandlesAsNames(): bool
-    {
-        return $this->handlesAsNames;
+            /** @var ElementInterface $element */
+            foreach ($elements as $element) {
+                $index = 0;
+                $columns = [];
+                foreach ($this->getFieldDescriptors() as $descriptor) {
+                    if (!$descriptor->isUsed()) {
+                        continue;
+                    }
+
+                    $value = $element->{$descriptor->getId()};
+                    $field = $value instanceof FieldInterface ? $value : null;
+
+                    if ($field) {
+                        $value = $field->getValue();
+                    }
+
+                    $event = new PrepareExportValueEvent($this, $descriptor, $element, $field, $value);
+                    Event::trigger($this, self::EVENT_PREPARE_EXPORT_VALUE, $event);
+
+                    $columns[] = new Column(
+                        $index++,
+                        $descriptor,
+                        $field,
+                        $event->getValue(),
+                    );
+                }
+
+                $rows[] = $columns;
+            }
+
+            yield $rows;
+        }
     }
 
     /**

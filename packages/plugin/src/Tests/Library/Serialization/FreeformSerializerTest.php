@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Tests\Library\Serialization;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Collections\Collection;
 use Solspace\Freeform\Library\Serialization\FreeformSerializer;
@@ -9,11 +10,7 @@ use Solspace\Freeform\Library\Serialization\Normalizers\CustomNormalizerInterfac
 use Solspace\Freeform\Library\Serialization\Normalizers\IdentificationNormalizer;
 use Solspace\Freeform\Library\Serialization\Normalizers\IdentificatorInterface;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(FreeformSerializer::class)]
 class FreeformSerializerTest extends TestCase
 {
     public function testCollectionToArray()

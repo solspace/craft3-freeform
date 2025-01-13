@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -168,7 +168,7 @@ return [
     'Used to separate date values.' => 'Wird verwendet, um Datumswerte zu trennen.',
     'Minimum date' => 'Mindestdatum',
     'Maximum date' => 'Maximales Datum',
-    "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc." => "Sie können 'jetzt', 'heute', 'vor 5 Tagen', '2024-01-01 20:00:00' usw. verwenden.",
+    "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc." => "Sie können 'jetzt', 'heute', 'vor 5 Tagen', '2025-01-01 20:00:00' usw. verwenden.",
     'Time Settings' => 'Uhrzeiteinstellungen',
     '24h clock' => '24-Stunden-Uhr',
     'Clock Separator' => 'Uhrzeiteinheit-Trennzeichen',
@@ -705,6 +705,7 @@ return [
     'Profiles' => 'Profile',
     'Export Profiles' => 'Export-Profile',
     'No export profiles found' => 'Keine Export-Profile gefunden',
+    'Upgrade to the Lite or Pro edition of Freeform to get access to Export Profiles.' => 'Führen Sie ein Upgrade auf die Lite- oder Pro-Edition von Freeform durch, um Zugriff auf Exportprofile zu erhalten.',
     'Export' => 'Exportieren',
     'New Export Profile' => 'Neues Export-Profil',
     'Create a new Export Profile' => 'Ein neues Export-Profil erstellen',
@@ -718,9 +719,9 @@ return [
     'Last 30 days' => 'Letzte 30 Tage',
     'Last 365 days' => 'Letzte 365 Tage',
     'Range Start' => 'Bereichsbeginn',
-    "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Geben Sie den Beginn des Zeitraums ein. Geben Sie ein genaues Datum an (z.B. '2020-09-01') oder verwenden Sie etwas Relatives wie 'vor 15 Tagen'. Standard ist 'heute'.",
+    "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Geben Sie den Beginn des Zeitraums ein. Geben Sie ein genaues Datum an (z.B. '2025-09-01') oder verwenden Sie etwas Relatives wie 'vor 15 Tagen'. Standard ist 'heute'.",
     'Range End' => 'Bereichsende',
-    "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Geben Sie das Ende des Zeitraums ein. Geben Sie ein genaues Datum an (z.B. '2020-09-30') oder verwenden Sie etwas Relatives wie 'vor 15 Tagen'. Standard ist 'heute'.",
+    "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Geben Sie das Ende des Zeitraums ein. Geben Sie ein genaues Datum an (z.B. '2025-09-30') oder verwenden Sie etwas Relatives wie 'vor 15 Tagen'. Standard ist 'heute'.",
     'Maximum number of submissions to fetch.' => 'Maximale Anzahl der abzurufenden Einreichungen.',
     'Fields to export' => 'Zu exportierende Felder',
     'Specify the fields you wish to export and their order.' => 'Geben Sie die Felder an, die Sie exportieren möchten, und deren Reihenfolge.',
@@ -761,7 +762,7 @@ return [
     "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning." => 'Geben Sie an, wie oft und an welchen Tagen (falls zutreffend) Sie die E-Mail-Benachrichtigungen erhalten möchten. Das gewählte Datum wird versuchen, eine Benachrichtigung am Morgen zu senden.',
     'Emails to Notify' => 'Zu benachrichtigende E-Mails',
     'Enter the email address(es) that should be notified. If more than one, enter each one on a new line.' => 'Geben Sie die E-Mail-Adresse(n) ein, die benachrichtigt werden sollen. Wenn es mehr als eine ist, geben Sie jede in eine neue Zeile ein.',
-    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2022-01-01.csv</code>"). The extension will be added automatically.' => 'Der Dateiname, der für den Export generiert wird. Sie können die Objekte <code>form</code>, <code>profile</code> und <code>date</code> als Twig-Vorlage verwenden, um Ihre Datei zu benennen. (z.B. <code>"{{ form.handle }}-{{ date.toDateString }}"</code>, was einen Dateinamen wie "<code>some-form-handle-2022-01-01.csv</code>" erzeugen würde). Die Erweiterung wird automatisch hinzugefügt.',
+    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2025-01-01.csv</code>"). The extension will be added automatically.' => 'Der Dateiname, der für den Export generiert wird. Sie können die Objekte <code>form</code>, <code>profile</code> und <code>date</code> als Twig-Vorlage verwenden, um Ihre Datei zu benennen. (z.B. <code>"{{ form.handle }}-{{ date.toDateString }}"</code>, was einen Dateinamen wie "<code>some-form-handle-2025-01-01.csv</code>" erzeugen würde). Die Erweiterung wird automatisch hinzugefügt.',
     'Email Subject' => 'E-Mail-Betreff',
     'Email Message' => 'E-Mail-Nachricht',
     'The text content of the email notification.' => 'Der Textinhalt der E-Mail-Benachrichtigung.',
@@ -860,7 +861,9 @@ return [
     '120 days' => '120 Tage',
     '180 days' => '180 Tage',
     '365 days' => '365 Tage',
-    'Purge Unfinalized Asset Files' => 'Unfinalisierte Asset-Dateien löschen',
+    'Automatically Purge Unfinalized Assets' => 'Nicht abgeschlossene Assets automatisch löschen',
+    'Enable this to have Freeform automatically purge unfinalized asset files after a specified period of time.' => 'Aktivieren Sie diese Option, damit Freeform nicht finalisierte Asset-Dateien nach einem bestimmten Zeitraum automatisch bereinigt.',
+    'Time to Wait Before Purging Assets' => 'Es ist Zeit, mit der Bereinigung von Vermögenswerten zu warten',
     'Select how long Freeform should keep unfinalized asset files before purging.' => 'Wählen Sie, wie lange Freeform unfinalisierte Asset-Dateien aufbewahren soll, bevor sie gelöscht werden.',
     '1 hour' => '1 Stunde',
     '2 hours' => '2 Stunden',

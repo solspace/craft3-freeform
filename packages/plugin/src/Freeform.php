@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -635,8 +635,9 @@ class Freeform extends Plugin
         }
 
         $queuePriority = $this->settings->getQueuePriority();
+        $purgeAssetsEnabled = $this->settings->getSettingsModel()->purgeAssets;
         $assetAge = $this->settings->getPurgableUnfinalizedAssetAgeInMinutes();
-        if ($assetAge > 0) {
+        if ($purgeAssetsEnabled && $assetAge > 0) {
             Queue::push(new PurgeUnfinalizedAssetsJob(['age' => $assetAge]), $queuePriority);
         }
 
