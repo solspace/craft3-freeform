@@ -1348,7 +1348,11 @@ return [
     'Replace Next Empty Row' => 'Vervang volgende lege rij',
 
     // Element Types
+    'Freeform Form' => 'Freeform-formulier',
     'Select a form' => 'Selecteer een formulier',
+    'Available Forms' => 'Beschikbare formulieren',
+    'Select which forms should be available for selection.' => 'Selecteer welke formulieren beschikbaar moeten zijn voor selectie.',
+    'Freeform Submissions' => 'Freeform-inzendingen',
     'Add a submission' => 'Voeg een inzending toe',
 
     // Dashboard Widgets

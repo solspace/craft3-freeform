@@ -1348,7 +1348,11 @@ return [
     'Replace Next Empty Row' => 'Remplacer la prochaine ligne vide',
 
     // Element Types
+    'Freeform Form' => 'Formulaire Freeform',
     'Select a form' => 'Sélectionner un formulaire',
+    'Available Forms' => 'Formulaires disponibles',
+    'Select which forms should be available for selection.' => 'Sélectionnez les formulaires qui doivent être disponibles pour la sélection.',
+    'Freeform Submissions' => 'Soumissions Freeform',
     'Add a submission' => 'Ajouter une contribution',
 
     // Dashboard Widgets

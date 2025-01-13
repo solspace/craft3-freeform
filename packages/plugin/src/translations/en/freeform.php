@@ -1348,7 +1348,11 @@ return [
     'Replace Next Empty Row' => 'Replace Next Empty Row',
 
     // Element Types
+    'Freeform Form' => 'Freeform Form',
     'Select a form' => 'Select a form',
+    'Available Forms' => 'Available Forms',
+    'Select which forms should be available for selection.' => 'Select which forms should be available for selection.',
+    'Freeform Submissions' => 'Freeform Submissions',
     'Add a submission' => 'Add a submission',
 
     // Dashboard Widgets

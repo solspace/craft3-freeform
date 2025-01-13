@@ -1348,7 +1348,11 @@ return [
     'Replace Next Empty Row' => 'Sostituisci riga vuota successiva',
 
     // Element Types
+    'Freeform Form' => 'Modulo Freeform',
     'Select a form' => 'Seleziona un modulo',
+    'Available Forms' => 'Moduli disponibili',
+    'Select which forms should be available for selection.' => 'Seleziona quali moduli devono essere disponibili per la selezione.',
+    'Freeform Submissions' => 'Invii a Freeform',
     'Add a submission' => 'Aggiungi una presentazione',
 
     // Dashboard Widgets

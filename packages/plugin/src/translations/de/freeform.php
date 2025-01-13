@@ -1348,7 +1348,11 @@ return [
     'Replace Next Empty Row' => 'Nächste leere Zeile ersetzen',
 
     // Element Types
+    'Freeform Form' => 'Freeform-Formular',
     'Select a form' => 'Formular auswählen',
+    'Available Forms' => 'Verfügbare Formulare',
+    'Select which forms should be available for selection.' => 'Wählen Sie aus, welche Formulare zur Auswahl stehen sollen.',
+    'Freeform Submissions' => 'Freeform-Einreichungen',
     'Add a submission' => 'Einsendung hinzufügen',
 
     // Dashboard Widgets
