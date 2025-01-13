@@ -127,7 +127,7 @@ class FormFieldType extends Field
 
         return Cp::checkboxSelectFieldHtml([
             'label' => Freeform::t('Available Forms'),
-            'instructions' => Freeform::t('Select which forms should be available for selection'),
+            'instructions' => Freeform::t('Select which forms should be available for selection.'),
             'name' => 'forms',
             'showAllOption' => true,
             'values' => $this->forms,
