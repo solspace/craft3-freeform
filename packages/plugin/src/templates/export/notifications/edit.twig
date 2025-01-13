@@ -108,7 +108,7 @@
 
         {{ forms.textField({
             label: "File Name"|t('freeform'),
-            instructions: "The file name to be generated for the export. You can use the `form`, `profile` and `date` objects as a Twig template here to name your file. (e.g. `\"{{ form.handle }}-{{ date.toDateString }}\"` which would generate a filename of \"`some-form-handle-2022-01-01.csv`\"). The extension will be added automatically."|t('freeform'),
+            instructions: "The file name to be generated for the export. You can use the `form`, `profile` and `date` objects as a Twig template here to name your file. (e.g. `\"{{ form.handle }}-{{ date.toDateString }}\"` which would generate a filename of \"`some-form-handle-2025-01-01.csv`\"). The extension will be added automatically."|t('freeform'),
             name: 'fileName',
             placeholder: '{{ form.handle }}-{{ date.toDateString }}',
             value: notification.fileName ?? '{{ form.handle }}-{{ date.toDateString }}',

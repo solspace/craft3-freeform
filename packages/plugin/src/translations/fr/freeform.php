@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -168,7 +168,7 @@ return [
     'Used to separate date values.' => 'Utilisé pour séparer les valeurs de date.',
     'Minimum date' => 'Date minimale',
     'Maximum date' => 'Date maximale',
-    "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc." => "Vous pouvez utiliser 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc.",
+    "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc." => "Vous pouvez utiliser 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc.",
     'Time Settings' => 'Paramètres de l’heure',
     '24h clock' => 'Horloge 24h',
     'Clock Separator' => 'Séparateur d’horloge',
@@ -705,6 +705,7 @@ return [
     'Profiles' => 'Profils',
     'Export Profiles' => 'Profils d’exportation',
     'No export profiles found' => 'Aucun profil d’exportation trouvé',
+    'Upgrade to the Lite or Pro edition of Freeform to get access to Export Profiles.' => 'Passez à l’édition Lite ou Pro de Freeform pour accéder aux profils d’exportation.',
     'Export' => 'Exporter',
     'New Export Profile' => 'Nouveau profil d’exportation',
     'Create a new Export Profile' => 'Créer un nouveau profil d’exportation',
@@ -718,9 +719,9 @@ return [
     'Last 30 days' => '30 derniers jours',
     'Last 365 days' => '365 derniers jours',
     'Range Start' => 'Début de la plage',
-    "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Entrez le début de la période. Spécifiez une date exacte (par exemple '2020-09-01') ou utilisez quelque chose de relatif comme '15 jours avant'. La valeur par défaut est 'aujourd'hui'.",
+    "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Entrez le début de la période. Spécifiez une date exacte (par exemple '2025-09-01') ou utilisez quelque chose de relatif comme '15 jours avant'. La valeur par défaut est 'aujourd'hui'.",
     'Range End' => 'Fin de la plage',
-    "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Entrez la fin de la période. Spécifiez une date exacte (par exemple '2020-09-30') ou utilisez quelque chose de relatif comme '15 jours avant'. La valeur par défaut est 'aujourd'hui'.",
+    "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Entrez la fin de la période. Spécifiez une date exacte (par exemple '2025-09-30') ou utilisez quelque chose de relatif comme '15 jours avant'. La valeur par défaut est 'aujourd'hui'.",
     'Maximum number of submissions to fetch.' => 'Nombre maximum de contributions à récupérer.',
     'Fields to export' => 'Champs à exporter',
     'Specify the fields you wish to export and their order.' => 'Spécifiez les champs que vous souhaitez exporter et leur ordre.',
@@ -761,7 +762,7 @@ return [
     "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning." => "Spécifiez à quelle fréquence et quels jours (le cas échéant) vous souhaitez recevoir les notifications par e-mail. La date choisie tentera d'envoyer une notification le matin.",
     'Emails to Notify' => 'E-mails à notifier',
     'Enter the email address(es) that should be notified. If more than one, enter each one on a new line.' => 'Entrez la ou les adresses e-mail à notifier. Si plusieurs, saisissez chacune sur une nouvelle ligne.',
-    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2022-01-01.csv</code>"). The extension will be added automatically.' => 'Le nom du fichier à générer pour l’exportation. Vous pouvez utiliser les objets <code>form</code>, <code>profile</code> et <code>date</code> comme modèle Twig ici pour nommer votre fichier. (par exemple <code>"{{ form.handle }}-{{ date.toDateString }}"</code> qui générerait un nom de fichier "<code>some-form-handle-2022-01-01.csv</code>"). L’extension sera ajoutée automatiquement.',
+    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2025-01-01.csv</code>"). The extension will be added automatically.' => 'Le nom du fichier à générer pour l’exportation. Vous pouvez utiliser les objets <code>form</code>, <code>profile</code> et <code>date</code> comme modèle Twig ici pour nommer votre fichier. (par exemple <code>"{{ form.handle }}-{{ date.toDateString }}"</code> qui générerait un nom de fichier "<code>some-form-handle-2025-01-01.csv</code>"). L’extension sera ajoutée automatiquement.',
     'Email Subject' => 'Sujet de l’e-mail',
     'Email Message' => 'Message de l’e-mail',
     'The text content of the email notification.' => 'Le contenu texte de la notification par e-mail.',

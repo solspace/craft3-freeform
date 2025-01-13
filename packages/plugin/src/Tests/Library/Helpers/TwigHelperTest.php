@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\TwigHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(TwigHelper::class)]
 class TwigHelperTest extends TestCase
 {
     public function testIsTwigValue()

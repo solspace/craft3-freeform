@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Integrations\Other\Google\GoogleSheets\Utilities;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Integrations\Other\Google\GoogleSheets\Utilities\SheetsHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(SheetsHelper::class)]
 class SheetsHelperTest extends TestCase
 {
     public function testGetColumnLetter()

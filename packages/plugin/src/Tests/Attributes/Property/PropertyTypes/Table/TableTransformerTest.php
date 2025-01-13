@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Attributes\Property\PropertyTypes\Table;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Implementations\Table\TableTransformer;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Properties\Table\TableLayout;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(TableTransformer::class)]
 class TableTransformerTest extends TestCase
 {
     public function testTransform()
