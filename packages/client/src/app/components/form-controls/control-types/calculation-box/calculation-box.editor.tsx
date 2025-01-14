@@ -4,7 +4,7 @@ import { PreviewEditor } from '@components/form-controls/preview/previewable-com
 import type { CalculationProperty } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
 import type Tagify from '@yaireo/tagify';
-import { MixedTags } from '@yaireo/tagify/dist/react.tagify';
+import { MixedTags } from '@yaireo/tagify/dist/react.tagify.jsx';
 
 import {
   CalculationBoxWrapper,

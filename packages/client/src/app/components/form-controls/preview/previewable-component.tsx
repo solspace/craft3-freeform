@@ -68,7 +68,7 @@ export const PreviewableComponent: React.FC<Props> = ({
   // Call after-edit callbacks when the editor is being closed
   useEffect(() => {
     if (isEditing === false) {
-      onAfterEdit && onAfterEdit();
+      onAfterEdit?.();
     }
   }, [isEditing]);
 
@@ -93,7 +93,7 @@ export const PreviewableComponent: React.FC<Props> = ({
       <PreviewContainer
         onClick={() => {
           setIsEditing(true);
-          onEdit && onEdit();
+          onEdit?.();
         }}
       >
         {preview}

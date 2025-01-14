@@ -60,7 +60,7 @@ const createXhrRequest: CreateXhrRequest = (method, url, resolve, reject, option
     let data = xhr.response;
     try {
       data = JSON.parse(xhr.response);
-    } catch (error) {
+    } catch {
       // Do nothing
     }
 
