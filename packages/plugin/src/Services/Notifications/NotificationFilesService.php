@@ -123,7 +123,7 @@ class NotificationFilesService extends BaseService implements NotificationsServi
             $presetAssets = '';
         }
 
-        $pdfTemplateIds = $record->getPdfTemplateIds();
+        $pdfTemplateIds = $record->getPdfTemplateIdList();
         if (\is_array($pdfTemplateIds)) {
             $pdfTemplateIds = implode(',', $pdfTemplateIds);
         } else {
