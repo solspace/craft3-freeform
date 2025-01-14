@@ -11,9 +11,9 @@ use Solspace\Freeform\Library\Logging\Readers\LineLogReader;
 
 class LoggerService extends BaseService
 {
-    public function getLogger(string $category): LoggerInterface
+    public function getLogger(string $category, ?string $fileName = null, ?int $level = null): LoggerInterface
     {
-        return FreeformLogger::getInstance($category);
+        return FreeformLogger::getInstance($category, $fileName, $level);
     }
 
     public function getLogReader(): LineLogReader

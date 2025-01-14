@@ -82,6 +82,19 @@
         placeholder: "Leave empty to use the Craft default of 1024."|t('freeform'),
     }) }}
 
+    {{ forms.selectField({
+        label: "Integration Logging Level"|t('freeform'),
+        instructions: "Set the logging level for integrations as desired. 'Errors' logs only errors, 'Info' logs information about which integrations processed which mapped objects, and 'Debug' logs all processes occurring within integrations, which is useful for setup and debugging."|t('freeform'),
+        name: "settings[loggingLevel]",
+        value: settings.loggingLevel,
+        errors: settings.errors("loggingLevel"),
+        options: {
+            error: "Errors (recommended)"|t('freeform'),
+            info: "Info"|t('freeform'),
+            debug: "Debug"|t('freeform'),
+        },
+    }) }}
+
     <hr>
 
     <h2>{{ "Element Field Type"|t('freeform') }}</h2>
@@ -228,6 +241,10 @@
                 20160: "2 weeks"|t("freeform"),
             }
         }) }}
+    </div>
+
+    <div id="logging-level-warning" class="hidden">
+        {{- "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data."|t('freeform') -}}
     </div>
 
 {% endblock %}

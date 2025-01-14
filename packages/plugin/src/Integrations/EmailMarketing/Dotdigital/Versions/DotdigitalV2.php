@@ -47,7 +47,6 @@ class DotdigitalV2 extends BaseDotdigitalIntegration
     public function getApiRootUrl(): string
     {
         $url = $this->getApiUrl();
-
         $url = rtrim($url, '/');
 
         return $url.'/'.self::API_VERSION;
@@ -56,23 +55,31 @@ class DotdigitalV2 extends BaseDotdigitalIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
             if (!$optInValue) {
+                $this->logger->debug('Opt-in field used but not chosen. Skipping.');
+
                 return;
             }
         }
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
@@ -97,6 +104,9 @@ class DotdigitalV2 extends BaseDotdigitalIntegration
             $this->getEndpoint('/address-books/'.$listId.'/contacts'),
             ['json' => $contactData],
         );
+
+        $this->logger->info('New Contact created', ['email' => $email]);
+        $this->logger->debug('With Mapping', $contactDataMapping);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT_DATA, $response);
     }

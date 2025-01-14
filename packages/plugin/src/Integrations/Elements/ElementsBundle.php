@@ -4,6 +4,8 @@ namespace Solspace\Freeform\Integrations\Elements;
 
 use Solspace\Freeform\Bundles\Integrations\Elements\ElementFieldMappingHelper;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Forms\ValidationEvent;
 use Solspace\Freeform\Events\Integrations\ElementIntegrations\ConnectEvent;
@@ -24,6 +26,8 @@ class ElementsBundle extends FeatureBundle
     public function __construct(
         private FormIntegrationsProvider $integrationsProvider,
         private ElementFieldMappingHelper $mappingHelper,
+        private IntegrationTypeProvider $typeProvider,
+        private IntegrationLoggerProvider $loggerProvider,
     ) {
         Event::on(
             IntegrationsService::class,
@@ -68,6 +72,7 @@ class ElementsBundle extends FeatureBundle
         $integrations = $this->getElementIntegrations($form);
         foreach ($integrations as $integration) {
             $element = $integration->buildElement($form);
+            $logger = $this->loggerProvider->getLogger($integration);
 
             $event = new ValidateEvent($form, $integration, $element);
             Event::trigger(
@@ -77,6 +82,8 @@ class ElementsBundle extends FeatureBundle
             );
 
             if (!$event->isValid) {
+                $logger->debug('Element integration validation skipped', ['form' => $form->getHandle()]);
+
                 continue;
             }
 
@@ -90,6 +97,7 @@ class ElementsBundle extends FeatureBundle
 
             if ($element->hasErrors()) {
                 $this->mappingHelper->attachErrors($form, $element, $integration);
+                $logger->debug('Element integration validation failed', ['form' => $form->getHandle(), 'errors' => $element->getErrors()]);
             }
         }
     }
@@ -109,6 +117,7 @@ class ElementsBundle extends FeatureBundle
         $integrations = $this->getElementIntegrations($form);
         foreach ($integrations as $integration) {
             $element = $integration->buildElement($form);
+            $logger = $this->loggerProvider->getLogger($integration);
             $integration->onBeforeConnect($form, $element);
 
             $event = new ConnectEvent($form, $integration, $element);
@@ -125,6 +134,7 @@ class ElementsBundle extends FeatureBundle
             $isSaved = \Craft::$app->elements->saveElement($element, true, true, true);
             if (!$isSaved) {
                 $errors = $element->getErrors();
+                $logger->debug('Element integration failed to save', ['form' => $form->getHandle(), 'errors' => $errors]);
                 foreach ($errors as $fieldErrors) {
                     $form->addErrors($fieldErrors);
                 }
@@ -140,6 +150,8 @@ class ElementsBundle extends FeatureBundle
                 ElementIntegrationInterface::EVENT_AFTER_CONNECT,
                 $event
             );
+
+            $logger->debug('Element integration saved', ['form' => $form->getHandle(), 'elementId' => $element->id]);
 
             Event::on(
                 MailerService::class,

@@ -49,5 +49,8 @@ class Generic extends WebhookIntegration
 
         $client = new Client();
         $client->post($this->getUrl(), ['json' => $json]);
+
+        $this->logger->info('Webhook triggered', ['form' => $form->getHandle(), 'submission' => $submission->id]);
+        $this->logger->debug('With Payload', $json);
     }
 }

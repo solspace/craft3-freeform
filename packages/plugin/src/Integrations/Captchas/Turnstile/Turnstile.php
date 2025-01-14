@@ -151,8 +151,12 @@ class Turnstile extends BaseIntegration implements CaptchaIntegrationInterface
     {
         $errors = $this->getValidationErrors($form);
         if (empty($errors)) {
+            $this->logger->debug('Turnstile Captcha validation passed');
+
             return;
         }
+
+        $this->logger->debug('Turnstile Captcha validation failed', $errors);
 
         $behavior = $this->getFailureBehavior();
         if (self::BEHAVIOR_DISPLAY_ERROR === $behavior) {

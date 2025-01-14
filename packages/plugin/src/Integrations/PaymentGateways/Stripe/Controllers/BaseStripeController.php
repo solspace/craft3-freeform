@@ -17,6 +17,8 @@ abstract class BaseStripeController extends BaseApiController
      */
     protected function getRequestItems(?string $hash = null): array
     {
+        $logger = $this->getLoggerService()->getLogger('Stripe');
+
         if (!$hash) {
             $hash = $this->request->getHeaders()->get('FF-STRIPE-INTEGRATION');
             if (!$hash) {
@@ -25,6 +27,8 @@ abstract class BaseStripeController extends BaseApiController
         }
 
         if (!$hash) {
+            $logger->warning('Did not find integration hash in the request.');
+
             throw new NotFoundHttpException('Integration not found');
         }
 
@@ -36,6 +40,8 @@ abstract class BaseStripeController extends BaseApiController
 
         $form = $this->getFormsService()->getFormById($formId);
         if (!$form) {
+            $logger->warning('Could not find Form from the request', ['formId' => $formId]);
+
             throw new NotFoundHttpException('Form not found');
         }
 
@@ -54,12 +60,16 @@ abstract class BaseStripeController extends BaseApiController
         }
 
         if (null === $integration) {
+            $logger->warning('Could not find Integration from the request', ['integrationId' => $integrationId]);
+
             throw new NotFoundHttpException('Integration not found');
         }
 
         /** @var StripeField $field */
         $field = $form->getLayout()->getFields()->get($fieldId);
         if (null === $field) {
+            $logger->warning('Could not find Stripe Form Field from the request', ['fieldId' => $fieldId]);
+
             throw new NotFoundHttpException('Field Not Found');
         }
 

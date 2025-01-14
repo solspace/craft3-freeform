@@ -143,23 +143,31 @@ class MailchimpV3 extends BaseMailchimpIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
             if (!$optInValue) {
+                $this->logger->debug('Opt-in field used but not chosen. Skipping.');
+
                 return;
             }
         }
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
@@ -235,6 +243,9 @@ class MailchimpV3 extends BaseMailchimpIntegration
                 $this->getEndpoint('/lists/'.$listId.'/members/'.$emailHash),
                 ['json' => $memberData],
             );
+
+            $this->logger->info('New Contact created', ['email' => $email]);
+            $this->logger->debug('With Mapping', $memberData);
 
             $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT, $response);
         } catch (RequestException $exception) {
