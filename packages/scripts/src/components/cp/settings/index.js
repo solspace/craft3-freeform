@@ -72,6 +72,27 @@ $(() => {
 
   scriptInsertLocation.trigger('change');
 
+  const loggingLevel = $('select[name="settings[loggingLevel]"]');
+  const loggingLevelWarningText = $('#logging-level-warning').text();
+  loggingLevel.on({
+    change: function () {
+      const value = $(this).val();
+      const parent = $(this).parents('.field:first');
+
+      if (value === 'info' || value === 'debug') {
+        const warning = document.createElement('div');
+        warning.classList.add('warning', 'with-icon');
+        warning.innerText = loggingLevelWarningText;
+
+        parent.append(warning);
+      } else {
+        parent.find('.warning.with-icon').remove();
+      }
+    },
+  });
+
+  loggingLevel.trigger('change');
+
   const filesDirectory = $('#files-directory');
   const templateDefault = $('#template-default');
   $('#storage-type').on({

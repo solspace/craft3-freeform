@@ -84,12 +84,12 @@
 
     {{ forms.selectField({
         label: "Integration Logging Level"|t('freeform'),
-        instructions: "Set the desired logging level for integrations. 'Errors' logs only errors. 'Info' logs info about which integrations processed which mapped objects. 'Debug' logs all of the processes that happen within integrations, useful when setting up integrations and debugging them (Should not be used in production as the logs might contain sensitive data)."|t('freeform'),
+        instructions: "Set the logging level for integrations as desired. 'Errors' logs only errors, 'Info' logs information about which integrations processed which mapped objects, and 'Debug' logs all processes occurring within integrations, which is useful for setup and debugging."|t('freeform'),
         name: "settings[loggingLevel]",
         value: settings.loggingLevel,
         errors: settings.errors("loggingLevel"),
         options: {
-            error: "Errors"|t('freeform'),
+            error: "Errors (recommended)"|t('freeform'),
             info: "Info"|t('freeform'),
             debug: "Debug"|t('freeform'),
         },
@@ -241,6 +241,10 @@
                 20160: "2 weeks"|t("freeform"),
             }
         }) }}
+    </div>
+
+    <div id="logging-level-warning" class="hidden">
+        {{- "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data."|t('freeform') -}}
     </div>
 
 {% endblock %}
