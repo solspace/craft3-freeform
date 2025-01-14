@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 import type { GenericValue } from '@ff-client/types/properties';
 
 const urlParams = new URLSearchParams(window.location.search);

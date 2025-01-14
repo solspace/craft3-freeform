@@ -27,7 +27,7 @@ export const useFormGroupsMutation = (
     variables: UpdateFormGroup,
     context: unknown
   ) => {
-    originalOnSuccess && originalOnSuccess(data, variables, context);
+    originalOnSuccess?.(data, variables, context);
     queryClient.invalidateQueries(QKGroups.all(getCurrentHandleWithFallback()));
   };
 
