@@ -1,0 +1,31 @@
+{% do field.setParameters({
+    attributes: {
+        container: {
+            class: [
+                field.oneLine ? "input-group-one-line"
+            ]
+        }
+    }
+}) %}
+
+{{ field.renderContainerOpeningTag }}
+
+    {{ field.renderLabel }}
+    {{ field.renderInstructions }}
+    {% for index, option in field.options %}
+        <div class="flex items-center mb-1">
+            <input type="checkbox"
+                    name="{{ field.handle }}[]"
+                    value="{{ option.value }}"
+                    id="{{ field.idAttribute }}-{{ index }}"
+                    class="{{ field.attributes.input.get("class") }}{{ field.hasErrors ? ' border-red-500' }}"
+                    {{ option.value in field.value ? "checked" }}
+            />
+            <label for="{{ field.idAttribute }}-{{ index }}" class="ml-2 font-normal text-zinc-300">
+                {{ option.label|t('freeform')|raw }}
+            </label>
+        </div>
+    {% endfor %}
+    {{ field.renderErrors }}
+
+{{ field.renderContainerClosingTag }}

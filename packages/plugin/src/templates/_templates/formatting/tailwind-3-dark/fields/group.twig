@@ -1,0 +1,10 @@
+{% import "freeform/_templates/formatting/tailwind-3-dark/_row.twig" as rowMacro %}
+
+{{ field.renderContainerOpeningTag }}
+
+    {{ field.renderLabel }}
+    {{ field.renderInstructions }}
+
+    {{ rowMacro.render(field.layout, form) }}
+
+{{ field.renderContainerClosingTag }}
