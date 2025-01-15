@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.8.7 - 2025-01-15
+
+### Fixed
+- Fixed a bug where the PDF Templates feature could error in the form builder and notification templates area for some users.
+
 ## 5.8.6 - 2025-01-08
 
 ### Fixed
