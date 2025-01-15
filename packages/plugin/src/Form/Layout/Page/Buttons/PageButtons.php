@@ -239,7 +239,7 @@ class PageButtons
 
     public function isBack(): bool
     {
-        return $this->back;
+        return 0 === $this->getPage()->getIndex() ? false : $this->back;
     }
 
     public function getBackLabel(): string
