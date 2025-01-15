@@ -15,6 +15,7 @@ import type {
   ConfigurationProps,
 } from '../../options.types';
 import type { OptionTypeProvider } from '../sources.types';
+import config from '@config/freeform/freeform.config';
 
 type Props = ConfigurationProps<ConfigurableOptionsConfiguration> & {
   typeProviderQuery: () => UseQueryResult<OptionTypeProvider[]>;
@@ -122,7 +123,7 @@ export const ConfigurableOptions: React.FC<Props> = ({
             />
           );
         })}
-      {typeClass && (
+      {typeClass && config.limitations.can('layout.options.convert') && (
         <ControlWrapper className="spacing-small">
           <Button
             className="btn small"
