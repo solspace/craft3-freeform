@@ -5,6 +5,7 @@ import { Control } from '@components/form-controls/control';
 import { ControlWrapper } from '@components/form-controls/control.styles';
 import { Button } from '@components/form-controls/control-types/options/options.styles';
 import { FlexColumn } from '@components/layout/blocks/flex';
+import config from '@config/freeform/freeform.config';
 import type { GenericValue } from '@ff-client/types/properties';
 import { PropertyType } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
@@ -15,7 +16,6 @@ import type {
   ConfigurationProps,
 } from '../../options.types';
 import type { OptionTypeProvider } from '../sources.types';
-import config from '@config/freeform/freeform.config';
 
 type Props = ConfigurationProps<ConfigurableOptionsConfiguration> & {
   typeProviderQuery: () => UseQueryResult<OptionTypeProvider[]>;
