@@ -215,7 +215,7 @@ class NotificationTemplateRecord extends ActiveRecord
         return null;
     }
 
-    public function getPdfTemplateIds(): array
+    public function getPdfTemplateIdList(): array
     {
         if (\is_array($this->pdfTemplateIds)) {
             return $this->pdfTemplateIds;
