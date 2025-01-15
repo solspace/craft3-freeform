@@ -124,11 +124,7 @@ class NotificationFilesService extends BaseService implements NotificationsServi
         }
 
         $pdfTemplateIds = $record->getPdfTemplateIdList();
-        if (\is_array($pdfTemplateIds)) {
-            $pdfTemplateIds = implode(',', $pdfTemplateIds);
-        } else {
-            $pdfTemplateIds = '';
-        }
+        $pdfTemplateIds = implode(',', $pdfTemplateIds);
 
         $output = "{# subject: {$record->getSubject()} #}".\PHP_EOL;
         $output .= "{# fromEmail: {$record->getFromEmail()} #}".\PHP_EOL;
