@@ -144,17 +144,19 @@ class ExportXmlTest extends BaseExportTestingCase
                 'table1' => $this->generateField(
                     TableField::class,
                     [
+                        'getHandle' => 'table1',
                         'getTableLayout' => $this->formMock->get('table1')->getTableLayout(),
                         'getValue' => [['one', 'two', 'three'], ['four', 'five', ''], ['', 'six', '']],
                     ]
                 ),
                 'firstName' => $this->generateField(
                     TextField::class,
-                    ['getValue' => 'Some Name']
+                    ['getHandle' => 'firstName', 'getValue' => 'Some Name']
                 ),
                 'table2' => $this->generateField(
                     TableField::class,
                     [
+                        'getHandle' => 'table2',
                         'getTableLayout' => $this->formMock->get('table2')->getTableLayout(),
                         'getValue' => [['r1c1', 'r1c2', 'r1c3', 'r1c4', 'r1c5'], ['r2c1', 'r2c2', 'r2c3', 'r2c4', 'r2c5']],
                     ]
@@ -165,17 +167,19 @@ class ExportXmlTest extends BaseExportTestingCase
                 'table1' => $this->generateField(
                     TableField::class,
                     [
+                        'getHandle' => 'table1',
                         'getTableLayout' => $this->formMock->get('table1')->getTableLayout(),
                         'getValue' => [['some', 'value', '']],
                     ]
                 ),
                 'firstName' => $this->generateField(
                     TextField::class,
-                    ['getValue' => 'Other Name']
+                    ['getHandle' => 'firstName', 'getValue' => 'Other Name']
                 ),
                 'table2' => $this->generateField(
                     TableField::class,
                     [
+                        'getHandle' => 'table2',
                         'getTableLayout' => $this->formMock->get('table2')->getTableLayout(),
                         'getValue' => [
                             ['r1c1', 'r1c2', 'r1c3', 'r1c4', 'r1c5'],
