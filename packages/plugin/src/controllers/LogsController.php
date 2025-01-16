@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\controllers;
 
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Resources\Bundles\LogBundle;
@@ -27,10 +28,6 @@ class LogsController extends BaseController
         );
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     */
     public function actionError(): Response
     {
         $logReader = $this->getLoggerService()->getLogReader();
@@ -47,11 +44,22 @@ class LogsController extends BaseController
         );
     }
 
-    /**
-     * @throws BadRequestHttpException
-     * @throws ForbiddenHttpException
-     * @throws Exception
-     */
+    public function actionIntegrations(): Response
+    {
+        $logReader = $this->getLoggerService()->getLogReader(IntegrationLoggerProvider::LOG_FILE);
+
+        $this->getLoggerService()->registerJsTranslations($this->view);
+
+        \Craft::$app->view->registerAssetBundle(LogBundle::class);
+
+        return $this->renderTemplate(
+            'freeform/logs/error',
+            [
+                'logReader' => $logReader,
+            ]
+        );
+    }
+
     public function actionClear(): Response
     {
         $this->requirePostRequest();
