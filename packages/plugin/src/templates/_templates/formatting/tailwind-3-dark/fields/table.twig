@@ -1,0 +1,23 @@
+{% set tableColumnCount = field.tableLayout|length %}
+
+{{ field.render({
+    tableAttributes: {
+        table: { class: "table" },
+        row: { class: "table-row" },
+        column: { class: [
+            tableColumnCount in [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] ? "w-1/" ~ tableColumnCount,
+            tableColumnCount == 1 ? "w-full",
+            "table-col pb-1"
+        ] },
+        label: { class: [
+            "text-left"
+        ] },
+        input: { class: [ field.attributes.input.get("class"), "mr-5 w-11/12 block" ] },
+        textarea: { class: [ field.attributes.input.get("class"), "mr-5" ] },
+        dropdown: { class: [ field.attributes.input.get("class"), "mr-5 w-11/12 block" ] },
+        checkbox: { class: [ field.attributes.input.get("class"), "w-4 h-4 text-blue-600 bg-zinc-100 border-zinc-300 rounded" ] },
+        radios: { class: [ field.attributes.input.get("class"), "w-4 h-4 text-blue-600 bg-zinc-100 border-zinc-300 rounded mr-2 font-normal text-zinc-600", "freeform-table-radios" ] },
+        removeButton: { class: "bg-red-500 hover:bg-red-700 text-white font-normal py-1 px-3 rounded" },
+        addButton: { class: "bg-green-500 hover:bg-green-700 text-white font-normal py-1 px-3 rounded mt-2" },
+    },
+}) }}

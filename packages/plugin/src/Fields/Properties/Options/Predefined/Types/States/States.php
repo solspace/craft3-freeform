@@ -32,7 +32,7 @@ class States implements PredefinedSourceTypeInterface
 
     public function getName(): string
     {
-        return 'States';
+        return 'USA States';
     }
 
     public function generateOptions(): OptionCollection

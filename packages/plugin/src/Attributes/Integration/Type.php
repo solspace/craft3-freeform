@@ -36,6 +36,11 @@ class Type
         return $this->name;
     }
 
+    public function getNameWithVersion(): string
+    {
+        return trim($this->name.' '.$this->version);
+    }
+
     public function getReadmeContent(): ?string
     {
         if ($this->readme && file_exists($this->readme)) {

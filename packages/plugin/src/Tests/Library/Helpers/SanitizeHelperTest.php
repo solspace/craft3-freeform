@@ -2,14 +2,12 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\SanitizeHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(SanitizeHelper::class)]
 class SanitizeHelperTest extends TestCase
 {
     public function testSanitizesString()
@@ -68,25 +66,13 @@ class SanitizeHelperTest extends TestCase
         $this->assertEquals($sanitized, SanitizeHelper::recursiveHtmlSpecialChars($obj));
     }
 
-    public function sanitizeDataProvider()
-    {
-        return [
-            ['', ''],
-            ['"test" in some.var', '"test" in some.var'],
-            ['some.craft = "test"', 'some.craft = "test"'],
-            ['craft.submissions', 'submissions'],
-            ['some.craft = "test" and craft.submit', 'some.craft = "test"craft.submit'],
-            ['some.craft = "test"|test(craft.submit)', 'some.craft = "test"|testsubmit)'],
-            ['some.craft = "test"|craft', 'some.craft = "test"'],
-        ];
-    }
-
-    /**
-     * @dataProvider sanitizeDataProvider
-     *
-     * @param mixed $condition
-     * @param mixed $expected
-     */
+    #[TestWith(['', ''])]
+    #[TestWith(['"test" in some.var', '"test" in some.var'])]
+    #[TestWith(['some.craft = "test"', 'some.craft = "test"'])]
+    #[TestWith(['craft.submissions', 'submissions'])]
+    #[TestWith(['some.craft = "test" and craft.submit', 'some.craft = "test"craft.submit'])]
+    #[TestWith(['some.craft = "test"|test(craft.submit)', 'some.craft = "test"|testsubmit)'])]
+    #[TestWith(['some.craft = "test"|craft', 'some.craft = "test"'])]
     public function testSanitize($condition, $expected)
     {
         $this->assertSame($expected, SanitizeHelper::cleanUpTwigCondition($condition));

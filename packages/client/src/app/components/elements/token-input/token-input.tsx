@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import Tags from '@yaireo/tagify/dist/react.tagify';
+import type Tagify from '@yaireo/tagify';
+import Tags from '@yaireo/tagify/dist/react.tagify.jsx';
 
 import { TokenInputWrapper } from './token-input.styles';
 

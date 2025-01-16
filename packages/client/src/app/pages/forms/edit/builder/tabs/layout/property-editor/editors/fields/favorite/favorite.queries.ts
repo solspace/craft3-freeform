@@ -82,7 +82,7 @@ export const useFavoritesUpdateMutation = (
     variables: FavoritesPayload,
     context: unknown
   ) => {
-    originalOnSuccess && originalOnSuccess(data, variables, context);
+    originalOnSuccess?.(data, variables, context);
     queryClient.invalidateQueries(QKFavorites.all);
   };
 
@@ -106,7 +106,7 @@ export const useFavoritesDeleteMutation = (
     variables: number,
     context: unknown
   ) => {
-    originalOnSuccess && originalOnSuccess(data, variables, context);
+    originalOnSuccess?.(data, variables, context);
 
     const favoriteId = variables;
     queryClient.setQueryData(QKFavorites.all, (oldData: FieldFavorite[]) =>

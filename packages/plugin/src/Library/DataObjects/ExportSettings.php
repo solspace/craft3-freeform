@@ -35,7 +35,7 @@ class ExportSettings
         return $this;
     }
 
-    public function getTimezone()
+    public function getTimezone(): ?string
     {
         return $this->timezone;
     }

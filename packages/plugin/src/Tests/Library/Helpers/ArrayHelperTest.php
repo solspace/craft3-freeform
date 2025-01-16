@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\ArrayHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ArrayHelper::class)]
 class ArrayHelperTest extends TestCase
 {
     public function testSome(): void

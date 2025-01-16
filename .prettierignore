@@ -4,3 +4,5 @@ lerna.json
 node_modules
 vendor
 packages/plugin/
+
+/.nx/workspace-data

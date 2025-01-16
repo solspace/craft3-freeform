@@ -52,7 +52,10 @@ class EmailMarketingService extends IntegrationsService
         $client = $this->clientProvider->getAuthorizedClient($integration);
 
         if ($refresh || empty($existingRecords)) {
+            $logger = $this->loggerProvider->getLogger($integration);
+
             $lists = $integration->fetchLists($client);
+            $logger->debug(\sprintf('Fetched %d Lists', \count($lists)));
 
             $newRecords = [];
 
@@ -119,7 +122,10 @@ class EmailMarketingService extends IntegrationsService
 
         if ($refresh || empty($existingRecords)) {
             $client = $this->clientProvider->getAuthorizedClient($integration);
+            $logger = $this->loggerProvider->getLogger($integration);
+
             $fields = $integration->fetchFields($list, $category, $client);
+            $logger->debug(\sprintf('Fetched %d Fields', \count($fields)), ['category' => $category]);
 
             $usedHandles = [];
             $newFields = [];

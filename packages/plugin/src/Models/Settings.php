@@ -64,6 +64,10 @@ class Settings extends Model
     public const SAVE_FORM_TTL = 30;
     public const SAVE_FORM_SESSION_LIMIT = 10;
 
+    public const LOGGING_LEVEL_ERROR = 'error';
+    public const LOGGING_LEVEL_INFO = 'info';
+    public const LOGGING_LEVEL_DEBUG = 'debug';
+
     /** @var string */
     public $pluginName;
 
@@ -184,6 +188,7 @@ class Settings extends Model
 
     /** @var int */
     public $purgableUnfinalizedAssetAgeInMinutes;
+    public bool $purgeAssets = true;
 
     /** @var bool */
     public $spamFolderEnabled;
@@ -261,24 +266,16 @@ class Settings extends Model
     public $bypassSpamCheckOnLoggedInUsers;
 
     public ?int $queuePriority = null;
-
     public array $hiddenFieldTypes = [];
-
     public array $surveys = [];
-
     public bool $allowDashesInFieldHandles = false;
-
     public bool $sitesEnabled = false;
-
     public string $defaultFromEmail = "{{ craft.app.projectConfig.get('email.fromEmail') }}";
-
     public string $defaultFromName = "{{ craft.app.projectConfig.get('email.fromName') }}";
-
     public Defaults $defaults;
-
     public bool $useQueueForEmailNotifications = false;
-
     public bool $useQueueForIntegrations = false;
+    public string $loggingLevel = self::LOGGING_LEVEL_ERROR;
 
     /**
      * Settings constructor.

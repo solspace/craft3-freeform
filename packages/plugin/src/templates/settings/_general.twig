@@ -82,6 +82,19 @@
         placeholder: "Leave empty to use the Craft default of 1024."|t('freeform'),
     }) }}
 
+    {{ forms.selectField({
+        label: "Integration Logging Level"|t('freeform'),
+        instructions: "Set the logging level for integrations as desired. 'Errors' logs only errors, 'Info' logs information about which integrations processed which mapped objects, and 'Debug' logs all processes occurring within integrations, which is useful for setup and debugging."|t('freeform'),
+        name: "settings[loggingLevel]",
+        value: settings.loggingLevel,
+        errors: settings.errors("loggingLevel"),
+        options: {
+            error: "Errors (recommended)"|t('freeform'),
+            info: "Info"|t('freeform'),
+            debug: "Debug"|t('freeform'),
+        },
+    }) }}
+
     <hr>
 
     <h2>{{ "Element Field Type"|t('freeform') }}</h2>
@@ -197,26 +210,41 @@
 
     {% endif %}
 
-    {{ forms.selectField({
-        label: "Purge Unfinalized Asset Files"|t('freeform'),
-        instructions: "Select how long Freeform should keep unfinalized asset files before purging."|t('freeform'),
-        name: "settings[purgableUnfinalizedAssetAgeInMinutes]",
-        value: settings.purgableUnfinalizedAssetAgeInMinutes,
-        errors: settings.getErrors("purgableUnfinalizedAssetAgeInMinutes"),
-        id: "purgableUnfinalizedAssetAgeInMinutes",
-        options: {
-            60: "1 hour"|t("freeform"),
-            120: "2 hours"|t("freeform"),
-            180: "3 hours (recommended)"|t("freeform"),
-            240: "4 hours"|t("freeform"),
-            480: "8 hours"|t("freeform"),
-            720: "12 hours"|t("freeform"),
-            1440: "24 hours"|t("freeform"),
-            2880: "48 hours"|t("freeform"),
-            4320: "72 hours"|t("freeform"),
-            10080: "1 week"|t("freeform"),
-            20160: "2 weeks"|t("freeform"),
-        }
+    {{ forms.lightswitchField({
+        label: "Automatically Purge Unfinalized Assets"|t('freeform'),
+        instructions: "Enable this to have Freeform automatically purge unfinalized asset files after a specified period of time."|t('freeform'),
+        name: "settings[purgeAssets]",
+        on: settings.purgeAssets,
+        toggle: "purge-assets",
+        errors: settings.errors("purgeAssets"),
     }) }}
+
+    <div id="purge-assets" class="field {{ not settings.purgeAssets ? 'hidden' }}">
+        {{ forms.selectField({
+            label: "Time to Wait Before Purging Assets"|t('freeform'),
+            instructions: "Select how long Freeform should keep unfinalized asset files before purging."|t('freeform'),
+            name: "settings[purgableUnfinalizedAssetAgeInMinutes]",
+            value: settings.purgableUnfinalizedAssetAgeInMinutes,
+            errors: settings.getErrors("purgableUnfinalizedAssetAgeInMinutes"),
+            id: "purgableUnfinalizedAssetAgeInMinutes",
+            options: {
+                60: "1 hour"|t("freeform"),
+                120: "2 hours"|t("freeform"),
+                180: "3 hours (recommended)"|t("freeform"),
+                240: "4 hours"|t("freeform"),
+                480: "8 hours"|t("freeform"),
+                720: "12 hours"|t("freeform"),
+                1440: "24 hours"|t("freeform"),
+                2880: "48 hours"|t("freeform"),
+                4320: "72 hours"|t("freeform"),
+                10080: "1 week"|t("freeform"),
+                20160: "2 weeks"|t("freeform"),
+            }
+        }) }}
+    </div>
+
+    <div id="logging-level-warning" class="hidden">
+        {{- "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data."|t('freeform') -}}
+    </div>
 
 {% endblock %}

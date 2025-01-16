@@ -11,14 +11,14 @@ use Solspace\Freeform\Library\Logging\Readers\LineLogReader;
 
 class LoggerService extends BaseService
 {
-    public function getLogger(string $category): LoggerInterface
+    public function getLogger(string $category, ?string $fileName = null, ?int $level = null): LoggerInterface
     {
-        return FreeformLogger::getInstance($category);
+        return FreeformLogger::getInstance($category, $fileName, $level);
     }
 
-    public function getLogReader(): LineLogReader
+    public function getLogReader(?string $fileName = null): LineLogReader
     {
-        return new LineLogReader(FreeformLogger::getLogfilePath());
+        return new LineLogReader(FreeformLogger::getLogfilePath($fileName));
     }
 
     public function registerJsTranslations(View $view): void

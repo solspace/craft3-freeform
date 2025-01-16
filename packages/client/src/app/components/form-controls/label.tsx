@@ -46,7 +46,7 @@ const FormLabel: React.FC<Props> = ({
                 translate('Are you sure you want to remove the translation?')
               )
             ) {
-              removeTranslation && removeTranslation();
+              removeTranslation?.();
             }
           }}
         >

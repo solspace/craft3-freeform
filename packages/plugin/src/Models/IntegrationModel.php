@@ -17,6 +17,7 @@ use craft\base\Model;
 use craft\helpers\UrlHelper;
 use Solspace\Freeform\Attributes\Property\Property;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Library\Exceptions\Integrations\IntegrationNotFoundException;
 use Solspace\Freeform\Library\Helpers\StringHelper;
@@ -70,7 +71,10 @@ class IntegrationModel extends Model
         }
 
         $typeProvider = \Craft::$container->get(IntegrationTypeProvider::class);
+        $loggerProvider = \Craft::$container->get(IntegrationLoggerProvider::class);
+
         $type = $typeProvider->getTypeDefinition($className);
+        $logger = $loggerProvider->getLogger($type);
 
         $object = new $className(
             $this->id,
@@ -79,6 +83,7 @@ class IntegrationModel extends Model
             $this->handle ?? '',
             $this->name ?? '',
             $type,
+            $logger,
         );
 
         $propertyProvider = \Craft::$container->get(PropertyProvider::class);

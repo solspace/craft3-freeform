@@ -635,8 +635,9 @@ class Freeform extends Plugin
         }
 
         $queuePriority = $this->settings->getQueuePriority();
+        $purgeAssetsEnabled = $this->settings->getSettingsModel()->purgeAssets;
         $assetAge = $this->settings->getPurgableUnfinalizedAssetAgeInMinutes();
-        if ($assetAge > 0) {
+        if ($purgeAssetsEnabled && $assetAge > 0) {
             Queue::push(new PurgeUnfinalizedAssetsJob(['age' => $assetAge]), $queuePriority);
         }
 

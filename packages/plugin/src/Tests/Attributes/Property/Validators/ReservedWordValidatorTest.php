@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Attributes\Property\Validators;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Validators\ReservedWord;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ReservedWord::class)]
 class ReservedWordValidatorTest extends TestCase
 {
     public function testValidOnNonReservedWord()

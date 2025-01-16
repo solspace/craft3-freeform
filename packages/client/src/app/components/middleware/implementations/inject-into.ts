@@ -31,7 +31,7 @@ const injectInto: MiddlewareImplementation<string, Args> = (
     targetValue = camelCase(targetValue);
   }
 
-  updateCallback && updateCallback(target, targetValue);
+  updateCallback?.(target, targetValue);
 
   return value;
 };

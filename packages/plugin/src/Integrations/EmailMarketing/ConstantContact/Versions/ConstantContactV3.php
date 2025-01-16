@@ -68,7 +68,6 @@ class ConstantContactV3 extends BaseConstantContactIntegration
     public function getApiRootUrl(): string
     {
         $url = 'https://api.cc.email';
-
         $url = rtrim($url, '/');
 
         return $url.'/'.self::API_VERSION;
@@ -77,32 +76,38 @@ class ConstantContactV3 extends BaseConstantContactIntegration
     public function push(Form $form, Client $client): void
     {
         if (!$this->mailingList || !$this->emailField) {
+            $this->logger->debug('Mailing list or email field not set. Skipping.');
+
             return;
         }
 
         $listId = $this->mailingList->getResourceId();
         if (!$listId) {
+            $this->logger->debug('Mailing list ID not set. Skipping.');
+
             return;
         }
 
         if ($this->optInField) {
             $optInValue = $form->get($this->optInField->getUid())->getValue();
             if (!$optInValue) {
+                $this->logger->debug('Opt-in field used but not chosen. Skipping.');
+
                 return;
             }
         }
 
         $email = $form->get($this->emailField->getUid())->getValue();
         if (!$email) {
+            $this->logger->debug('Email field empty. Skipping.');
+
             return;
         }
 
         $email = strtolower($email);
-
         $contactData = [];
 
         $mapping = $this->processMapping($form, $this->contactCustomMapping, self::CATEGORY_CONTACT_CUSTOM);
-
         foreach ($mapping as $key => $value) {
             if (preg_match('/^street_address_(.*)/', $key, $matches)) {
                 if (empty($contactData['street_address'])) {
@@ -141,6 +146,9 @@ class ConstantContactV3 extends BaseConstantContactIntegration
             $this->getEndpoint('/contacts/sign_up_form'),
             ['json' => $contactData],
         );
+
+        $this->logger->info('New Contact created', ['email' => $email]);
+        $this->logger->debug('With Mapping', $contactData);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT_CUSTOM, $response);
     }
