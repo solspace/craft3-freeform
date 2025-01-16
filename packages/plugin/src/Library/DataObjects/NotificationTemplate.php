@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -56,7 +56,7 @@ class NotificationTemplate implements IdentificatorInterface
 
         $template->id = $record->id ?? $record->filepath;
         $template->uid = $record->uid ?? $record->filepath;
-        $template->pdfTemplateIds = $record->getPdfTemplateIds();
+        $template->pdfTemplateIds = $record->getPdfTemplateIdList();
         $template->handle = $record->handle;
         $template->name = $record->name;
         $template->description = $record->description;

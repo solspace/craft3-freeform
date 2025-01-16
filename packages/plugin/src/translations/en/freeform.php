@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -168,7 +168,7 @@ return [
     'Used to separate date values.' => 'Used to separate date values.',
     'Minimum date' => 'Minimum date',
     'Maximum date' => 'Maximum date',
-    "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc." => "You can use 'now', 'today', '5 days ago', '2024-01-01 20:00:00', etc.",
+    "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc." => "You can use 'now', 'today', '5 days ago', '2025-01-01 20:00:00', etc.",
     'Time Settings' => 'Time Settings',
     '24h clock' => '24h clock',
     'Clock Separator' => 'Clock Separator',
@@ -718,9 +718,9 @@ return [
     'Last 30 days' => 'Last 30 days',
     'Last 365 days' => 'Last 365 days',
     'Range Start' => 'Range Start',
-    "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Enter the beginning of the time period. Specify an exact date (e.g. '2020-09-01') or use something relative like '15 days ago'. Default is 'today'.",
+    "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'." => "Enter the beginning of the time period. Specify an exact date (e.g. '2025-09-01') or use something relative like '15 days ago'. Default is 'today'.",
     'Range End' => 'Range End',
-    "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Enter the end of the time period. Specify an exact date (e.g. '2020-09-30') or use something relative like '15 days ago'. Default is 'today'.",
+    "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'." => "Enter the end of the time period. Specify an exact date (e.g. '2025-09-30') or use something relative like '15 days ago'. Default is 'today'.",
     'Maximum number of submissions to fetch.' => 'Maximum number of submissions to fetch.',
     'Fields to export' => 'Fields to export',
     'Specify the fields you wish to export and their order.' => 'Specify the fields you wish to export and their order.',
@@ -761,7 +761,7 @@ return [
     "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning." => "Specify how often and which days (if applicable) you'd like to receive the email notifications. The chosen date will attempt to send a notification in the morning.",
     'Emails to Notify' => 'Emails to Notify',
     'Enter the email address(es) that should be notified. If more than one, enter each one on a new line.' => 'Enter the email address(es) that should be notified. If more than one, enter each one on a new line.',
-    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2022-01-01.csv</code>"). The extension will be added automatically.' => 'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2022-01-01.csv</code>"). The extension will be added automatically.',
+    'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2025-01-01.csv</code>"). The extension will be added automatically.' => 'The file name to be generated for the export. You can use the <code>form</code>, <code>profile</code> and <code>date</code> objects as a Twig template here to name your file. (e.g. <code>"{{ form.handle }}-{{ date.toDateString }}"</code> which would generate a filename of "<code>some-form-handle-2025-01-01.csv</code>"). The extension will be added automatically.',
     'Email Subject' => 'Email Subject',
     'Email Message' => 'Email Message',
     'The text content of the email notification.' => 'The text content of the email notification.',

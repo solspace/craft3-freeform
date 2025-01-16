@@ -4,7 +4,7 @@
  * Freeform for Craft CMS.
  *
  * @author        Solspace, Inc.
- * @copyright     Copyright (c) 2008-2024, Solspace, Inc.
+ * @copyright     Copyright (c) 2008-2025, Solspace, Inc.
  *
  * @see           https://docs.solspace.com/craft/freeform
  *
@@ -215,7 +215,7 @@ class NotificationTemplateRecord extends ActiveRecord
         return null;
     }
 
-    public function getPdfTemplateIds(): array
+    public function getPdfTemplateIdList(): array
     {
         if (\is_array($this->pdfTemplateIds)) {
             return $this->pdfTemplateIds;
