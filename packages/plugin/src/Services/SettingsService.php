@@ -300,6 +300,8 @@ class SettingsService extends BaseService
             'statuses',
             'pdf-templates',
             'error-log',
+            'integrations-log',
+            'email-log',
             'diagnostics',
             'integrations/email-marketing',
             'integrations/crm',
