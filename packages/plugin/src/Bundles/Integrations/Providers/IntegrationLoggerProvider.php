@@ -13,6 +13,8 @@ use Solspace\Freeform\Services\SettingsService;
 
 class IntegrationLoggerProvider
 {
+    public const LOG_FILE = 'freeform-integrations.log';
+
     private int $level;
 
     public function __construct(
@@ -39,7 +41,7 @@ class IntegrationLoggerProvider
             ->logger
             ->getLogger(
                 $logCategory,
-                'freeform-integrations.log',
+                self::LOG_FILE,
                 $this->level
             )
         ;

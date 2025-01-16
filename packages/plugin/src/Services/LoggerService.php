@@ -16,9 +16,9 @@ class LoggerService extends BaseService
         return FreeformLogger::getInstance($category, $fileName, $level);
     }
 
-    public function getLogReader(): LineLogReader
+    public function getLogReader(?string $fileName = null): LineLogReader
     {
-        return new LineLogReader(FreeformLogger::getLogfilePath());
+        return new LineLogReader(FreeformLogger::getLogfilePath($fileName));
     }
 
     public function registerJsTranslations(View $view): void

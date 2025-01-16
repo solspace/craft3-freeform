@@ -76,8 +76,8 @@ class FreeformLogger
     ];
 
     private static array $levelColorMap = [
-        'DEBUG' => '#CCCCCC',
-        'INFO' => '#6c757d',
+        'DEBUG' => '#6c757d',
+        'INFO' => '#0284c7',
         'NOTICE' => '#28a745',
         'WARNING' => '#ffc107',
         'ERROR' => '#dc3545',
@@ -97,9 +97,9 @@ class FreeformLogger
         return self::$loggers[$category];
     }
 
-    public static function getLogfilePath(?string $fileName = 'freeform.log'): string
+    public static function getLogfilePath(?string $fileName): string
     {
-        return \Craft::$app->path->getLogPath().'/'.$fileName;
+        return \Craft::$app->path->getLogPath().'/'.($fileName ?? 'freeform.log');
     }
 
     public static function getColor(string $level): string
