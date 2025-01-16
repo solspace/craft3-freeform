@@ -260,9 +260,10 @@ class SettingsService extends BaseService
             'integrations/other' => ['title' => Freeform::t('Other')],
             'hdalerts' => ['heading' => Freeform::t('Reliability')],
             'notices-and-alerts' => ['title' => Freeform::t('Notices & Alerts')],
-            'error-log' => ['title' => Freeform::t('Error Log <span class="badge">{count}</span>', ['count' => $errorCount])],
-            'integrations-log' => ['title' => Freeform::t('Integrations Log <span class="badge">{count}</span>', ['count' => $integrationsCount])],
             'diagnostics' => ['title' => Freeform::t('Diagnostics')],
+            'hdlogs' => ['heading' => Freeform::t('Logs')],
+            'error-log' => ['title' => Freeform::t('Errors <span class="badge">{count}</span>', ['count' => $errorCount])],
+            'integrations-log' => ['title' => Freeform::t('Integrations <span class="badge">{count}</span>', ['count' => $integrationsCount])],
         ];
 
         if (!$this->isAllowAdminEdit()) {

@@ -76,8 +76,8 @@ class FreeformLogger
     ];
 
     private static array $levelColorMap = [
-        'DEBUG' => '#CCCCCC',
-        'INFO' => '#6c757d',
+        'DEBUG' => '#6c757d',
+        'INFO' => '#0284c7',
         'NOTICE' => '#28a745',
         'WARNING' => '#ffc107',
         'ERROR' => '#dc3545',
