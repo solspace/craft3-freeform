@@ -43,6 +43,10 @@ class ExportXml extends AbstractSubmissionExport
                     $handle = $column->getDescriptor()->getId();
                     $label = $column->getDescriptor()->getLabel();
 
+                    if ($field) {
+                        $handle = $field->getHandle();
+                    }
+
                     $xml->startElement($handle);
 
                     if ($field instanceof MultiValueInterface) {

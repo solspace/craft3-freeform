@@ -145,7 +145,7 @@ class ProfilesController extends BaseController
 
         \Craft::$app->session->setError(Freeform::t('Export Profile not saved.'));
 
-        return $this->renderEditForm($profile, $profile->name);
+        return $this->renderEditForm($profile, $profile->name ?? '');
     }
 
     public function actionDelete(): Response
