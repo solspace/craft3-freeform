@@ -1501,6 +1501,7 @@ return [
 
     // Front End Form Errors // Fields
     'This field is required' => 'Questo campo è obbligatorio',
+    'One or more required field columns are missing a value' => 'In una o più colonne dei campi obbligatori manca un valore',
     '{email} is not a valid email address' => '{email} non è un indirizzo email valido',
     'Variable "{variable}" is missing a value' => 'Nella variabile "{variabile}" manca un valore',
     'Incorrectly calculated value' => 'Valore calcolato in modo errato',

@@ -83,7 +83,7 @@ class TableValidation extends FeatureBundle
         foreach ($value as $rowIndex => $row) {
             foreach ($requiredColumnIndexes as $columnIndex) {
                 if (empty($row[$columnIndex])) {
-                    $field->addError(Freeform::t('Missing is required column values.'));
+                    $field->addError(Freeform::t('One or more required field columns are missing a value'));
 
                     break;
                 }
