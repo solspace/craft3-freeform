@@ -157,7 +157,7 @@
     <thead>
         <tr>
             <% tableLayout.forEach(function(column) { %>
-                <th><%= column.label %></th>
+                <th class="<%= column.required ? 'required' : '' %>"><%= column.label %></th>
             <% }); %>
         </tr>
     </thead>

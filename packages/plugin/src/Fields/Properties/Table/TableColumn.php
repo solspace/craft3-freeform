@@ -10,4 +10,5 @@ class TableColumn
     public array $options = [];
     public string $placeholder = '';
     public bool $checked = false;
+    public bool $required = false;
 }

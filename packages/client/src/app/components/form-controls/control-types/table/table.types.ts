@@ -5,4 +5,5 @@ export type ColumnDescription = {
   placeholder?: string;
   options?: string[];
   checked?: boolean;
+  required?: boolean;
 };
