@@ -62,7 +62,7 @@
             </table>
         {% else %}
             <div class="zilch">
-                {{ "Everything appears to be okay right now! No errors were found."|t("freeform") }}
+                {{ (title == "Error Log" ? "Everything appears to be okay right now! No errors were found." : "No log items were found.")|t("freeform") }}
             </div>
         {% endif %}
 

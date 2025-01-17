@@ -1132,12 +1132,16 @@ return [
     'Send Notifications on Live Environment only' => 'Verstuur alleen meldingen in de live-omgeving',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'Als deze instelling is ingeschakeld, verzendt Freeform alleen Digest-e-mails als de Craft-omgeving op productie is gezet.',
 
-    // Settings // Error Log
-    'Error Log' => 'Foutenlog',
-    'Error Log <span class="badge">{count}</span>' => 'Foutenlog <span class="badge">{count}</span>',
+    // Settings // Logs
+    'Logs' => 'Logboeken',
+    'Errors <span class="badge">{count}</span>' => 'Fouten <span class="badge">{count}</span>',
+    'Integrations <span class="badge">{count}</span>' => 'Integraties <span class="badge">{count}</span>',
+    'Error Log' => 'Foutenlogboek',
+    'Integrations Log' => 'Integratieslogboek',
     'Clear' => 'Wissen',
-    'Are you sure you want to clear error logs?' => 'Weet u zeker dat u de foutlogboeken wilt wissen?',
+    'Are you sure you want to clear this log?' => 'Weet u zeker dat u dit logboek wilt wissen?',
     'Everything appears to be okay right now! No errors were found.' => 'Alles lijkt op dit moment in orde te zijn! Er zijn geen fouten gevonden.',
+    'No log items were found.' => 'Er zijn geen logitems gevonden.',
     'Level' => 'Niveau',
     'Details' => 'Details',
 

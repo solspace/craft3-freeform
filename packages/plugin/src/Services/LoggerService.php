@@ -24,7 +24,7 @@ class LoggerService extends BaseService
     public function registerJsTranslations(View $view): void
     {
         $view->registerTranslations(Freeform::TRANSLATION_CATEGORY, [
-            'Are you sure you want to clear the Error log?',
+            'Are you sure you want to clear this log?',
         ]);
     }
 

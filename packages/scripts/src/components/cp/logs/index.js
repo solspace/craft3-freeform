@@ -6,7 +6,7 @@
       event.stopPropagation();
       event.preventDefault();
 
-      const msg = 'Are you sure you want to clear error logs?';
+      const msg = 'Are you sure you want to clear this log?';
       if (!confirm(msg)) {
         return false;
       }
