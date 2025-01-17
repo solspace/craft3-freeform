@@ -1501,6 +1501,7 @@ return [
 
     // Front End Form Errors // Fields
     'This field is required' => 'Dit veld is verplicht',
+    'One or more required field columns are missing a value' => 'In een of meer verplichte veldkolommen ontbreekt een waarde',
     '{email} is not a valid email address' => '{email} is geen geldig e-mailadres',
     'Variable "{variable}" is missing a value' => 'Variabele "{variabele}" mist een waarde',
     'Incorrectly calculated value' => 'Verkeerd berekende waarde',

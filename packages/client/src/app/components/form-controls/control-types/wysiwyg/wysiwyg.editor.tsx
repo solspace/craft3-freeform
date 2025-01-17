@@ -7,7 +7,7 @@ import {
 
 import { QuillEditorWrapper } from './wysiwyg.editor.styles';
 
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 
 type Props = {
   value: string;

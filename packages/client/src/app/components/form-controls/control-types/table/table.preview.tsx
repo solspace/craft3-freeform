@@ -37,7 +37,10 @@ export const TablePreview: React.FC<Props> = ({
             key={index}
             data-title={getColumnTypeLabel(types, option.type)}
           >
-            <PreviewData data-empty={translate('empty')}>
+            <PreviewData
+              data-empty={translate('empty')}
+              className={classes(option.required && 'required')}
+            >
               {option.label}
             </PreviewData>
             <PreviewData data-empty={translate('empty')}>
