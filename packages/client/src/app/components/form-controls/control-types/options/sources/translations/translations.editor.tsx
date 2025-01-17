@@ -12,7 +12,7 @@ import type { Field } from '@editor/store/slices/layout/fields';
 import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import type { Property } from '@ff-client/types/properties';
 import translate from '@ff-client/utils/translations';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import type { Option, OptionsConfiguration } from '../../options.types';
 

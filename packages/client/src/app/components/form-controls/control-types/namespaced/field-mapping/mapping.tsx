@@ -6,7 +6,7 @@ import type { ControlType } from '@components/form-controls/types';
 import type { FieldMappingProperty } from '@ff-client/types/properties';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import RefreshIcon from './icons/refresh.svg';
 import { FieldMappingController } from './mapping.controller';

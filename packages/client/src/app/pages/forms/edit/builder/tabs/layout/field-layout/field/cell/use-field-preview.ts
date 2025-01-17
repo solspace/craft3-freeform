@@ -4,7 +4,7 @@ import type { Field } from '@editor/store/slices/layout/fields';
 import { useTranslations } from '@editor/store/slices/translations/translations.hooks';
 import type { PropertyValueCollection } from '@ff-client/types/fields';
 import { type FieldType } from '@ff-client/types/fields';
-import template from 'lodash.template';
+import { template } from 'lodash';
 
 export const useFieldPreview = (
   field?: Field,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Checkbox } from '@components/elements/checkbox/checkbox';
 import type { FileTemplate } from '@ff-client/app/pages/import-export/import/import.types';
 import classes from '@ff-client/utils/classes';
-import kebabCase from 'lodash.kebabcase';
+import { kebabCase } from 'lodash';
 
 import {
   BlockItem,

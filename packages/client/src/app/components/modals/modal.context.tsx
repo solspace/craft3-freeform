@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { GenericValue } from '@ff-client/types/properties';
 import classes from '@ff-client/utils/classes';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import { Modal } from './modal';
 import { useAnimateModals, useAnimateOverlay } from './modal.animations';

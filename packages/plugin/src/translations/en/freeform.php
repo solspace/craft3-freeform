@@ -1132,12 +1132,16 @@ return [
     'Send Notifications on Live Environment only' => 'Send Notifications on Live Environment only',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.',
 
-    // Settings // Error Log
+    // Settings // Logs
+    'Logs' => 'Logs',
+    'Errors <span class="badge">{count}</span>' => 'Errors <span class="badge">{count}</span>',
+    'Integrations <span class="badge">{count}</span>' => 'Integrations <span class="badge">{count}</span>',
     'Error Log' => 'Error Log',
-    'Error Log <span class="badge">{count}</span>' => 'Error Log <span class="badge">{count}</span>',
+    'Integrations Log' => 'Integrations Log',
     'Clear' => 'Clear',
-    'Are you sure you want to clear error logs?' => 'Are you sure you want to clear error logs?',
+    'Are you sure you want to clear this log?' => 'Are you sure you want to clear this log?',
     'Everything appears to be okay right now! No errors were found.' => 'Everything appears to be okay right now! No errors were found.',
+    'No log items were found.' => 'No log items were found.',
     'Level' => 'Level',
     'Details' => 'Details',
 
