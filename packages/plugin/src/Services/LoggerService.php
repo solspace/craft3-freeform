@@ -28,9 +28,9 @@ class LoggerService extends BaseService
         ]);
     }
 
-    public function clearLogs(): void
+    public function clearLogs(?string $filePath = null): void
     {
-        $logFilePath = FreeformLogger::getLogfilePath();
+        $logFilePath = FreeformLogger::getLogfilePath($filePath);
 
         if (file_exists($logFilePath)) {
             FileHelper::unlink($logFilePath);

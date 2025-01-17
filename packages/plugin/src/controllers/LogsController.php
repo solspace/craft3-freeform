@@ -52,17 +52,23 @@ class LogsController extends BaseController
             'freeform/logs/error',
             [
                 'logReader' => $logReader,
+                'category' => 'integrations',
             ]
         );
     }
 
-    public function actionClear(): Response
+    public function actionClear(?string $category = null): Response
     {
         $this->requirePostRequest();
 
         PermissionHelper::requirePermission(Freeform::PERMISSION_SETTINGS_ACCESS);
 
-        $this->getLoggerService()->clearLogs();
+        $fileName = match ($category) {
+            'integrations' => IntegrationLoggerProvider::LOG_FILE,
+            default => null,
+        };
+
+        $this->getLoggerService()->clearLogs($fileName);
 
         if (\Craft::$app->request->getIsAjax()) {
             return $this->asJson(['success' => true]);
