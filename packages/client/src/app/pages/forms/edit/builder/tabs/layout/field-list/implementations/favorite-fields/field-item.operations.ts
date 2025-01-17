@@ -1,6 +1,6 @@
 import type { FieldFavorite } from '@ff-client/types/fields';
 import type { FieldType } from '@ff-client/types/fields';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const cloneFieldTypeFromFavorite = (
   favorite: FieldFavorite,
