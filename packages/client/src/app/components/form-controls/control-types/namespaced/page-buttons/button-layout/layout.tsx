@@ -5,7 +5,7 @@ import type { ControlType } from '@components/form-controls/types';
 import type { Page } from '@editor/builder/types/layout';
 import type { PageButtonsLayoutProperty } from '@ff-client/types/properties';
 import classes from '@ff-client/utils/classes';
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'lodash';
 
 import BackIcon from './icons/back.svg';
 import SaveIcon from './icons/save.svg';

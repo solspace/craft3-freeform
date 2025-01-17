@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import { SiteCrumb } from './breadcrumbs.site';
 import type { Breadcrumb } from './breadcrumbs.types';
