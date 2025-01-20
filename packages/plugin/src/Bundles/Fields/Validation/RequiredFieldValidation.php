@@ -4,6 +4,7 @@ namespace Solspace\Freeform\Bundles\Fields\Validation;
 
 use Solspace\Freeform\Events\Fields\ValidateEvent;
 use Solspace\Freeform\Fields\FieldInterface;
+use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Fields\Interfaces\FileUploadInterface;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
@@ -30,6 +31,10 @@ class RequiredFieldValidation extends FeatureBundle
         }
 
         if ($field instanceof FileUploadInterface) {
+            return;
+        }
+
+        if ($field instanceof TableField) {
             return;
         }
 

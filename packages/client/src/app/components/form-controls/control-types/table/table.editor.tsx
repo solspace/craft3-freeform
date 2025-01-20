@@ -136,6 +136,7 @@ export const TableEditor: React.FC<Props> = ({
                 </Cell>
                 <Cell title={translate('Mark this column as required?')} $tiny>
                   <Checkbox
+                    checked={column.required}
                     onClick={() => {
                       updateValue(
                         updateColumn(
