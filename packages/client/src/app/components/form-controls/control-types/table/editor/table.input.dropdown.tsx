@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Input } from '../table.editor.styles';
 
@@ -13,9 +13,11 @@ export const TableDropdownEditor: React.FC<TableEditorProps> = ({
   column,
   onUpdate,
 }) => {
-  if (!column?.options) {
-    onUpdate({ ...column, options: [''] });
-  }
+  useEffect(() => {
+    if (!column?.options.length) {
+      onUpdate({ ...column, options: [''] });
+    }
+  }, [column, onUpdate]);
 
   return (
     <div>
