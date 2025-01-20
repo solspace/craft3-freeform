@@ -14,7 +14,7 @@ class TableTransformerTest extends TestCase
     public function testTransform()
     {
         $value = [
-            ['label' => 'Col 1', 'value' => 'one', 'type' => 'string', 'required' => true],
+            ['label' => 'Col 1', 'value' => 'one', 'type' => 'text', 'required' => true],
             ['label' => 'Col 2', 'value' => 'two', 'type' => 'checkbox', 'checked' => true],
             ['label' => 'Col 3', 'value' => 'three', 'type' => 'select', 'options' => ['one', 'two', 'three']],
         ];
@@ -62,7 +62,7 @@ class TableTransformerTest extends TestCase
             [
                 'label' => 'Col 1',
                 'value' => 'one',
-                'type' => 'string',
+                'type' => 'text',
                 'placeholder' => 'Enter Text',
                 'options' => [],
                 'checked' => false,
