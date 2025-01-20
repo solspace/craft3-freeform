@@ -73,7 +73,9 @@ class TableValidation extends FeatureBundle
         $value = $field->getValue();
         $isSomeFilled = ArrayHelper::someRecursive($value, fn ($item) => !empty($item));
         if (!$isSomeFilled) {
-            $field->addError(Freeform::t('This field is required'));
+            $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
+
+            $field->addError($message);
         }
     }
 
@@ -100,7 +102,9 @@ class TableValidation extends FeatureBundle
         foreach ($value as $row) {
             foreach ($requiredColumnIndexes as $columnIndex) {
                 if (empty($row[$columnIndex])) {
-                    $field->addError(Freeform::t('One or more required field columns are missing a value'));
+                    $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
+
+                    $field->addError(Freeform::t($message));
 
                     break;
                 }
