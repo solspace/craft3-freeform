@@ -22,6 +22,12 @@ class TableValidation extends FeatureBundle
         Event::on(
             FieldInterface::class,
             FieldInterface::EVENT_VALIDATE,
+            [$this, 'validateRequired']
+        );
+
+        Event::on(
+            FieldInterface::class,
+            FieldInterface::EVENT_VALIDATE,
             [$this, 'validateRequiredColumns']
         );
     }
@@ -53,6 +59,42 @@ class TableValidation extends FeatureBundle
             );
 
             $field->addError($message);
+        }
+    }
+
+    public function validateRequired(ValidateEvent $event): void
+    {
+        $field = $event->getField();
+        if (!$field instanceof TableField) {
+            return;
+        }
+
+        $layout = $field->getTableLayout();
+        $requiredColumnIndexes = [];
+        foreach ($layout as $index => $column) {
+            if ($column->required) {
+                $requiredColumnIndexes[] = $index;
+            }
+        }
+
+        // If there are any required columns defined, skip this validation
+        // it will be taken care of in the column check
+        if (0 !== \count($requiredColumnIndexes)) {
+            return;
+        }
+
+        $value = $field->getValue();
+        if (empty($value)) {
+            return;
+        }
+
+        // filter out all empty values recursively
+        $filteredValue = array_filter($value, function ($row) {
+            return !empty(array_filter($row));
+        });
+
+        if (empty($filteredValue)) {
+            $field->addError(Freeform::t('This field is required'));
         }
     }
 
