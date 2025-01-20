@@ -409,7 +409,13 @@ class DiagnosticsService extends BaseService
                 ),
                 new DiagnosticItem(
                     'Spam Protection Behavior : <b>{{ value }}</b>',
-                    $this->getSummary()->statistics->spam->spamProtectionBehavior
+                    Freeform::t(
+                        match ($this->getSummary()->statistics->spam->spamProtectionBehavior) {
+                            Settings::PROTECTION_DISPLAY_ERRORS => 'Display Errors',
+                            Settings::PROTECTION_SIMULATE_SUCCESS => 'Simulate Success',
+                            Settings::PROTECTION_RELOAD_FORM => 'Reload Form',
+                        }
+                    )
                 ),
                 new DiagnosticItem(
                     'Bypass All Spam Checks for Logged in Users: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
