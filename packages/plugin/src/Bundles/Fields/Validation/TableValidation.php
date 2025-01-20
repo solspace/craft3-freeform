@@ -7,6 +7,7 @@ use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
+use Solspace\Freeform\Library\Helpers\ArrayHelper;
 use yii\base\Event;
 
 class TableValidation extends FeatureBundle
@@ -69,32 +70,12 @@ class TableValidation extends FeatureBundle
             return;
         }
 
-        $layout = $field->getTableLayout();
-        $requiredColumnIndexes = [];
-        foreach ($layout as $index => $column) {
-            if ($column->required) {
-                $requiredColumnIndexes[] = $index;
-            }
-        }
-
-        // If there are any required columns defined, skip this validation
-        // it will be taken care of in the column check
-        if (0 !== \count($requiredColumnIndexes)) {
-            return;
-        }
-
         $value = $field->getValue();
-        if (empty($value)) {
-            return;
-        }
+        $isSomeFilled = ArrayHelper::someRecursive($value, fn ($item) => !empty($item));
+        if (!$isSomeFilled) {
+            $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
 
-        // filter out all empty values recursively
-        $filteredValue = array_filter($value, function ($row) {
-            return !empty(array_filter($row));
-        });
-
-        if (empty($filteredValue)) {
-            $field->addError(Freeform::t('This field is required'));
+            $field->addError($message);
         }
     }
 
@@ -102,11 +83,6 @@ class TableValidation extends FeatureBundle
     {
         $field = $event->getField();
         if (!$field instanceof TableField) {
-            return;
-        }
-
-        $value = $field->getValue();
-        if (empty($value)) {
             return;
         }
 
@@ -122,10 +98,13 @@ class TableValidation extends FeatureBundle
             return;
         }
 
-        foreach ($value as $rowIndex => $row) {
+        $value = $field->getValue();
+        foreach ($value as $row) {
             foreach ($requiredColumnIndexes as $columnIndex) {
                 if (empty($row[$columnIndex])) {
-                    $field->addError(Freeform::t('One or more required field columns are missing a value'));
+                    $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
+
+                    $field->addError(Freeform::t($message));
 
                     break;
                 }

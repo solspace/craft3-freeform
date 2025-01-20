@@ -39,7 +39,7 @@ class TableField extends AbstractField implements MultiValueInterface, MultiDime
 
     public const EVENT_COMPILE_TABLE_ATTRIBUTES = 'compile-table-attributes';
 
-    public const COLUMN_TYPE_STRING = 'string';
+    public const COLUMN_TYPE_STRING = 'text';
     public const COLUMN_TYPE_DROPDOWN = 'select';
     public const COLUMN_TYPE_CHECKBOX = 'checkbox';
     public const COLUMN_TYPE_RADIO = 'radio';
