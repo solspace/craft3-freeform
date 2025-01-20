@@ -390,6 +390,10 @@ class DiagnosticsService extends BaseService
                         'interval' => $this->getSummary()->statistics->settings->purgeInterval,
                     ],
                 ),
+                new DiagnosticItem(
+                    'Site-Aware Forms: <b>{{ value.enabled ? "Enabled" : "Disabled" }}</b>',
+                    ['enabled' => $this->getSettingsService()->getSettingsModel()->sitesEnabled],
+                ),
             ],
             'Spam Controls' => [
                 new DiagnosticItem(
@@ -515,6 +519,10 @@ class DiagnosticsService extends BaseService
                             ]
                         ),
                     ]
+                ),
+                new DiagnosticItem(
+                    'Integration Logging Level: <b>{{ value.level }}</b>',
+                    ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
                 ),
             ],
         ];
