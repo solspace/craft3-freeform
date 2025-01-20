@@ -408,7 +408,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Spam Protection Behavior : <b>{{ value }}</b>',
+                    'Spam Protection Behavior: <b>{{ value }}</b>',
                     Freeform::t(
                         match ($this->getSummary()->statistics->spam->spamProtectionBehavior) {
                             Settings::PROTECTION_DISPLAY_ERRORS => 'Display Errors',
