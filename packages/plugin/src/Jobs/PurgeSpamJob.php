@@ -17,6 +17,6 @@ class PurgeSpamJob extends BaseJob
 
     protected function defaultDescription(): ?string
     {
-        return Freeform::t('Freeform: Purging Old Spam Submissions ('.$this->age.')');
+        return Freeform::t('Freeform: Purging Old Spam Submissions');
     }
 }
