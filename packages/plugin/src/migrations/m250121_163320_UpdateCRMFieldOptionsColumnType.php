@@ -3,7 +3,6 @@
 namespace Solspace\Freeform\migrations;
 
 use craft\db\Migration;
-use craft\db\Query;
 
 class m250121_163320_UpdateCRMFieldOptionsColumnType extends Migration
 {
@@ -18,21 +17,6 @@ class m250121_163320_UpdateCRMFieldOptionsColumnType extends Migration
             'options',
             $this->longText()
         );
-
-        $results = (new Query())
-            ->select(['options'])
-            ->from('{{%freeform_crm_fields}}')
-            ->indexBy('id')
-            ->column()
-        ;
-
-        foreach ($results as $id => $options) {
-            $this->update(
-                '{{%freeform_crm_fields}}',
-                ['options' => json_encode($options)],
-                ['id' => $id],
-            );
-        }
 
         return true;
     }
