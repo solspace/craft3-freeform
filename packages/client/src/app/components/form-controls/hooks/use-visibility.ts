@@ -25,7 +25,8 @@ export const useVisibility = (
       return filterTest(filters, values, context);
     } catch (error) {
       console.error(
-        `Failed to evaluate visibility expression: ${filters.join(' && ')}`
+        `Failed to evaluate visibility expression: ${filters.join(' && ')}`,
+        error
       );
 
       return false;

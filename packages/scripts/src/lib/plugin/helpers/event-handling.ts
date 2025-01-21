@@ -55,9 +55,11 @@ const handleListeners: Handler = (method, { type, elements, callback, options })
 
   Array.from(elementArray).forEach((element) => {
     typeArray.forEach((type) => {
-      method === 'add'
-        ? element.addEventListener(type, callback, options)
-        : element.removeEventListener(type, callback, options);
+      if (method === 'add') {
+        element.addEventListener(type, callback, options);
+      } else {
+        element.removeEventListener(type, callback, options);
+      }
     });
   });
 };

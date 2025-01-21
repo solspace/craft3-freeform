@@ -2,14 +2,12 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\StringHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(StringHelper::class)]
 class StringHelperTest extends TestCase
 {
     public function testIncrementStringWithNoNumber()
@@ -44,29 +42,17 @@ class StringHelperTest extends TestCase
         );
     }
 
-    public function separatedValuesProvider(): array
-    {
-        return [
-            ['one two three', ['one', 'two', 'three']],
-            ["one\ntwo\n\rthree", ['one', 'two', 'three']],
-            ['one,two,three', ['one', 'two', 'three']],
-            ['one,two "three four"', ['one', 'two', '"three four"']],
-            ["one 'two three' four", ['one', "'two three'", 'four']],
-            ["one 'two \"three' four", ['one', '\'two "three\'', 'four']],
-            ['one@goog"le#.-=!?+_: test', ['one@goog"le#.-=!?+_:', 'test']],
-            ['one;two;three', ['one', 'two', 'three']],
-            ['one,two,three', ['one', 'two', 'three']],
-            ['one|two|three', ['one', 'two', 'three']],
-            ['one,| two|;three', ['one', 'two', 'three']],
-        ];
-    }
-
-    /**
-     * @dataProvider separatedValuesProvider
-     *
-     * @param mixed $input
-     * @param mixed $expected
-     */
+    #[TestWith(['one two three', ['one', 'two', 'three']])]
+    #[TestWith(["one\ntwo\n\rthree", ['one', 'two', 'three']])]
+    #[TestWith(['one,two,three', ['one', 'two', 'three']])]
+    #[TestWith(['one,two "three four"', ['one', 'two', '"three four"']])]
+    #[TestWith(["one 'two three' four", ['one', "'two three'", 'four']])]
+    #[TestWith(["one 'two \"three' four", ['one', '\'two "three\'', 'four']])]
+    #[TestWith(['one@goog"le#.-=!?+_: test', ['one@goog"le#.-=!?+_:', 'test']])]
+    #[TestWith(['one;two;three', ['one', 'two', 'three']])]
+    #[TestWith(['one,two,three', ['one', 'two', 'three']])]
+    #[TestWith(['one|two|three', ['one', 'two', 'three']])]
+    #[TestWith(['one,| two|;three', ['one', 'two', 'three']])]
     public function testExtractSeparatedValues($input, $expected)
     {
         $result = StringHelper::extractSeparatedValues($input);

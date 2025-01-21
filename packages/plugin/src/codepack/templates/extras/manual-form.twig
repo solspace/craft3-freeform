@@ -95,21 +95,21 @@
 
             {# The submit buttons will no longer be automatically inserted by Freeform with `disable: ["submitButtons"]` #}
 
-            {# We need to set the `page` variable from the `form.pages.current` in order for this to work #}
-            {% set page = form.pages.current %}
+            {# We need to set the `button` variable from `form.currentPage.buttons` in order for this to work #}
+            {% set button = form.currentPage.buttons %}
 
-            {# Complete buttons can be rendered with `page.buttons.renderSubmit`, etc, but for maximum control, you can just get the properties attributes only #}
-            <button {{ page.buttons.submitRenderProps({ 'data-optional': 'attributes here' }) }}>
-                Submit
+            {# Complete buttons can be rendered with `button.renderSubmit`, etc, but for maximum control, you can just get the properties attributes only #}
+            <button {{ button.submitRenderProps({ 'data-optional': 'attributes here' }) }}>
+                {{ button.submitLabel|raw }}
             </button>
-            {% if form.pages.current.buttons.back %}
-                <button {{ page.buttons.backRenderProps }}>
-                    Back
+            {% if button.back %}
+                <button {{ button.backRenderProps }}>
+                    {{ button.backLabel|raw }}
                 </button>
             {% endif %}
-            {% if form.pages.current.buttons.save %}
-                <button {{ page.buttons.saveRenderProps }}>
-                    Save
+            {% if button.save %}
+                <button {{ button.saveRenderProps }}>
+                    {{ button.saveLabel|raw }}
                 </button>
             {% endif %}
 

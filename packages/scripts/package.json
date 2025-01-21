@@ -6,7 +6,7 @@
     "build": "npm run clean && NODE_ENV=production npm run compile",
     "watch": "webpack --watch",
     "clean": "rm -rf ../plugin/src/Resources/js/scripts",
-    "lint": "eslint -c .eslintrc.json .",
+    "lint": "eslint .",
     "compile": "webpack",
     "test": ""
   },

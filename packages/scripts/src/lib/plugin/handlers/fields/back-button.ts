@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 import Freeform from '@components/front-end/plugin/freeform';
 import type { FreeformHandler } from 'types/form';
 

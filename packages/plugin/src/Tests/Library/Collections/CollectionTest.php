@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Collections;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Collections\Collection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Collection::class)]
 class CollectionTest extends TestCase
 {
     public function testChecksForImplementation()
@@ -88,5 +85,25 @@ class CollectionTest extends TestCase
 
         $this->assertCount(5, $filtered);
         $this->assertNotSame($collection, $filtered);
+    }
+
+    public function testKeySelector()
+    {
+        $collection = new class extends Collection {
+            public function __construct(array $items = [])
+            {
+                parent::__construct($items);
+                $this->keySelector = fn ($item) => $item->id;
+            }
+        };
+
+        $collection->add((object) ['id' => 151, 'name' => 'One']);
+        $collection->add((object) ['id' => 262, 'name' => 'Two']);
+        $collection->add((object) ['id' => 373, 'name' => 'Three']);
+
+        $this->assertCount(3, $collection);
+        $this->assertSame('One', $collection->get(151)->name);
+        $this->assertSame('Two', $collection->get(262)->name);
+        $this->assertSame('Three', $collection->get(373)->name);
     }
 }

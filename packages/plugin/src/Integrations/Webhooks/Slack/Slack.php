@@ -50,5 +50,8 @@ class Slack extends WebhookIntegration
 
         $client = new Client();
         $client->post($this->getUrl(), ['json' => ['text' => $message]]);
+
+        $this->logger->info('Slack webhook triggered', ['form' => $form->getHandle(), 'submission' => $submission->id]);
+        $this->logger->debug('With Payload', ['text' => $message]);
     }
 }

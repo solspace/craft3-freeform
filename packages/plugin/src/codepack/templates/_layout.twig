@@ -20,13 +20,17 @@
 {%- endif -%}
 
 <!doctype html>
-<html lang="en"{% if pageTemplate == "bootstrap-5-dark" %} data-bs-theme="dark"{% endif %}>
+<html lang="en"
+{%- if pageTemplate in ["basic-dark", "bootstrap-5-dark", "tailwind-3-dark", "conversational"] %}
+ data-theme="dark"
+{%- endif -%}
+{%- if pageTemplate == "bootstrap-5-dark" %} data-bs-theme="dark"{%- endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>{{ pageTitle ? "Freeform Demo | " ~ pageTitle : "Freeform Demo" }}</title>
     <!-- Set Dark or Light Mode -->
-    {% if pageTemplate in ["basic-dark", "bootstrap-5-dark", "conversational"] %}
+    {% if pageTemplate in ["basic-dark", "bootstrap-5-dark", "tailwind-3-dark", "conversational"] %}
         {% set colorMode = "dark" %}
     {% else %}
         {% set colorMode = "light" %}
@@ -43,13 +47,13 @@
             <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.8.1/dist/js/foundation.min.js" crossorigin="anonymous"></script>
         {% endif %}
         <!-- Is this a Tailwind template -->
-        {% if pageTemplate == "tailwind-3" %}
+        {% if pageTemplate in ["tailwind-3", "tailwind-3-dark"] %}
             <script src="https://cdn.tailwindcss.com/3.3.3"></script>
         {% endif %}
     {% endif %}
     <style>
         :root {
-            --page-bg: #{% if colorMode == "dark" %}212529{% else %}ffffff{% endif %};
+            --page-bg: #{% if colorMode == "dark" %}1f2226{% else %}ffffff{% endif %};
             --page-text: #{% if colorMode == "dark" %}dfdfdf{% else %}4e4e4e{% endif %};
             --nav-text: #{% if colorMode == "dark" %}959595{% else %}8a8a8a{% endif %};
             --nav-bg: {% if colorMode == "dark" %}rgb(19,22,24,0.85){% else %}rgb(232,232,232,0.85){% endif %};
@@ -214,7 +218,7 @@
                     {{ pageTemplate ? pageTemplate|title|replace({'-':' '}) : 'Select a template...' }}
                 </span>
                 <div class="freeform-nav-dropdown-content">
-                {% for pageTemplate in (["basic-light", "basic-dark", "basic-floating-labels", "conversational", "multipage-all-fields", "divider", "grid", "flexbox", "divider", "bootstrap-5", "bootstrap-5-dark", "bootstrap-5-floating-labels", "tailwind-3", "foundation-6"]) -%}
+                {% for pageTemplate in (["basic-light", "basic-dark", "basic-floating-labels", "conversational", "multipage-all-fields", "divider", "grid", "flexbox", "divider", "bootstrap-5", "bootstrap-5-dark", "bootstrap-5-floating-labels", "tailwind-3", "tailwind-3-dark", "foundation-6"]) -%}
                     {{ _self.pageTemplateItem(pageTemplate, formHandle) }}
                 {%- endfor %}
                 </div>
@@ -267,7 +271,7 @@
                     {{ "sample template"|t('freeform') }}
                 </span>
                 <div class="freeform-nav-dropdown-content">
-                {% for pageTemplate in (["basic-light", "basic-dark", "basic-floating-labels", "conversational", "multipage-all-fields", "divider", "grid", "flexbox", "divider", "bootstrap-5", "bootstrap-5-dark", "bootstrap-5-floating-labels", "tailwind-3", "foundation-6"]) -%}
+                {% for pageTemplate in (["basic-light", "basic-dark", "basic-floating-labels", "conversational", "multipage-all-fields", "divider", "grid", "flexbox", "divider", "bootstrap-5", "bootstrap-5-dark", "bootstrap-5-floating-labels", "tailwind-3", "tailwind-3-dark", "foundation-6"]) -%}
                     {{ _self.pageTemplateItem(pageTemplate, formHandle) }}
                 {%- endfor %}
                 </div>

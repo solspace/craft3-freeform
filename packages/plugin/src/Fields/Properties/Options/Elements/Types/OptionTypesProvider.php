@@ -38,7 +38,7 @@ class OptionTypesProvider
         $event = new RegisterOptionTypesEvent($types);
         Event::trigger(self::class, self::EVENT_REGISTER_ELEMENT_TYPES, $event);
 
-        return $types;
+        return $event->getTypes();
     }
 
     public function getPredefinedTypes(): array
@@ -59,6 +59,6 @@ class OptionTypesProvider
         $event = new RegisterOptionTypesEvent($types);
         Event::trigger(self::class, self::EVENT_REGISTER_PREDEFINED_TYPES, $event);
 
-        return $types;
+        return $event->getTypes();
     }
 }

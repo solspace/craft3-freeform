@@ -265,7 +265,7 @@ class SessionContext
             return [null, null, null];
         }
 
-        $hash = RequestHelper::post(self::KEY_HASH);
+        $hash = RequestHelper::post(self::KEY_HASH, '');
         $hash = htmlspecialchars($hash);
 
         $parts = explode('-', $hash);

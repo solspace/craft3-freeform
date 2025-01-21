@@ -21,6 +21,7 @@ use craft\errors\UploadFailedException;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Assets;
 use craft\helpers\Assets as AssetsHelper;
+use craft\helpers\Db;
 use craft\helpers\FileHelper;
 use craft\helpers\UrlHelper;
 use craft\models\Volume;
@@ -391,8 +392,6 @@ class FilesService extends BaseService implements FileUploadHandlerInterface
     /**
      * Remove all unfinalized assets which are older than the TTL
      * specified in settings.
-     *
-     * @throws Throwable
      */
     public function cleanUpUnfinalizedAssets(int $ageInMinutes): int
     {
@@ -404,40 +403,43 @@ class FilesService extends BaseService implements FileUploadHandlerInterface
             return 0;
         }
 
-        $date = new \DateTime("-{$ageInMinutes} minutes");
-        $date->setTimezone(new \DateTimeZone('UTC'));
-        $assetIds = (new Query())
-            ->select(['assetId'])
-            ->from(UnfinalizedFileRecord::TABLE)
-            ->where(
-                '{{%freeform_unfinalized_files}}.[[dateCreated]] < :now',
-                ['now' => $date->format(\DATE_ATOM)]
-            )
-            ->column()
-        ;
+        $mutex = \Craft::$app->getMutex();
 
         $deletedAssets = 0;
-        if (!empty($assetIds)) {
-            foreach ($assetIds as $assetId) {
-                try {
-                    $asset = \Craft::$app->assets->getAssetById($assetId);
-                    if ($asset && \Craft::$app->elements->deleteElement($asset)) {
-                        ++$deletedAssets;
-                    }
-                } catch (\Exception $e) {
-                }
+        if ($mutex->acquire(self::CLEANUP_CACHE_KEY, 30)) {
+            try {
+                $date = new \DateTime("-{$ageInMinutes} minutes");
+                $date->setTimezone(new \DateTimeZone('UTC'));
 
-                try {
-                    \Craft::$app->db
-                        ->createCommand()
-                        ->delete(
-                            UnfinalizedFileRecord::TABLE,
-                            ['assetId' => $assetId]
-                        )
-                        ->execute()
-                    ;
-                } catch (\Exception $e) {
+                $assetIds = (new Query())
+                    ->select(['assetId'])
+                    ->from(UnfinalizedFileRecord::TABLE)
+                    ->where(['<', '{{%freeform_unfinalized_files}}.[[dateCreated]]', Db::prepareDateForDb($date)])
+                    ->column()
+                ;
+
+                $query = (new Query())
+                    ->select(['assetId'])
+                    ->from(UnfinalizedFileRecord::TABLE)
+                    ->where(['<', '{{%freeform_unfinalized_files}}.[[dateCreated]]', Db::prepareDateForDb($date)])
+                    ->getRawSql()
+                ;
+
+                foreach ($assetIds as $assetId) {
+                    try {
+                        $isDeleted = \Craft::$app
+                            ->getElements()
+                            ->deleteElementById($assetId, Asset::class, hardDelete: true)
+                        ;
+
+                        if ($isDeleted) {
+                            ++$deletedAssets;
+                        }
+                    } catch (\Exception) {
+                    }
                 }
+            } finally {
+                $mutex->release(self::CLEANUP_CACHE_KEY);
             }
         }
 

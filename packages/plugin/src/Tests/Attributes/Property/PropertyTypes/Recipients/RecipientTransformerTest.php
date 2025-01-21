@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Attributes\Property\PropertyTypes\Recipients;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Implementations\Notifications\Recipients\RecipientTransformer;
 use Solspace\Freeform\Notifications\Components\Recipients\Recipient;
 use Solspace\Freeform\Notifications\Components\Recipients\RecipientCollection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(RecipientTransformer::class)]
 class RecipientTransformerTest extends TestCase
 {
     public function testTransformsArrayOfRecipientsIntoCollection()

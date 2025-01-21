@@ -121,7 +121,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       callback: (event) => {
         if (event.key === 'Enter') {
           const value = findValueByShadowIndex(filteredOptions, focusIndex);
-          onChange && onChange(value);
+          onChange?.(value);
           setOpen(false);
         }
       },
@@ -146,7 +146,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   const onOptionClick = useCallback(
     (value: string) => {
-      onChange && onChange(value);
+      onChange?.(value);
       setOpen(false);
     },
     [onChange]

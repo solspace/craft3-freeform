@@ -4,19 +4,20 @@
 {% set selectedSubnavItem = "errors" %}
 
 {% set segment3 = craft.app.request.getSegment(3) %}
+{% set category = category|default('') %}
 
 {% set crumbs = [
     { label: craft.freeform.name, url: url("freeform") },
     { label: "Settings"|t("freeform"), url: url("freeform/settings") },
-    { label: "Reliability"|t("freeform"), url: url("freeform/settings" ~ "/" ~ segment3) },
+    { label: "Logs"|t("freeform"), url: url("freeform/settings" ~ "/" ~ segment3) },
 ] %}
 
-{% set title = "Error Log"|t('freeform') %}
+{% set title = segment3|title|replace({'-': " "})|t('freeform') %}
 
 {% block actionButton %}
 
     <div class="buttons">
-        <a href="{{ url('freeform/logs/clear') }}" class="btn submit icon clear-logs">
+        <a href="{{ url(('freeform/logs/clear/'~category)|trim('/')) }}" class="btn submit icon clear-logs">
             {{ "Clear"|t('freeform') }}
         </a>
     </div>
@@ -61,7 +62,7 @@
             </table>
         {% else %}
             <div class="zilch">
-                {{ "Everything appears to be okay right now! No errors were found."|t("freeform") }}
+                {{ (title == "Error Log" ? "Everything appears to be okay right now! No errors were found." : "No log items were found.")|t("freeform") }}
             </div>
         {% endif %}
 

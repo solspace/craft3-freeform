@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Checkbox } from '@components/elements/checkbox/checkbox';
 import { HelpText } from '@components/elements/help-text';
 import type { UpdateValue } from '@components/form-controls';
 import {
@@ -132,6 +133,20 @@ export const TableEditor: React.FC<Props> = ({
                   {renderCellEditor(column, (col: ColumnDescription) =>
                     updateValue(updateColumn(rowIndex, col, columns))
                   )}
+                </Cell>
+                <Cell title={translate('Mark this column as required?')} $tiny>
+                  <Checkbox
+                    checked={column.required}
+                    onChange={() => {
+                      updateValue(
+                        updateColumn(
+                          rowIndex,
+                          { ...column, required: !column.required },
+                          columns
+                        )
+                      );
+                    }}
+                  />
                 </Cell>
                 {columns.length > 1 && (
                   <>

@@ -225,6 +225,8 @@ class ZohoV2 extends BaseZohoIntegration
     private function processLeads(Form $form, Client $client): void
     {
         if (!$this->mapLeads) {
+            $this->logger->debug('No Leads mapped, skipping.');
+
             return;
         }
 
@@ -246,12 +248,17 @@ class ZohoV2 extends BaseZohoIntegration
 
         $json = json_decode((string) $response->getBody(), true);
 
+        $this->logger->info('New Lead created', ['id' => $json?->data?->id]);
+        $this->logger->debug('With Mapping', $mapping);
+
         $this->processZohoResponseError($json);
     }
 
     private function processAccount(Form $form, Client $client): void
     {
         if (!$this->mapAccount) {
+            $this->logger->debug('No Account mapped, skipping.');
+
             return;
         }
 
@@ -280,12 +287,16 @@ class ZohoV2 extends BaseZohoIntegration
             $data = $json['data'][0];
 
             $this->accountId = $data['details']['id'];
+            $this->logger->info('New Account created', ['id' => $this->accountId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
     }
 
     private function processContact(Form $form, Client $client): void
     {
         if (!$this->mapContact) {
+            $this->logger->debug('No Contact mapped, skipping.');
+
             return;
         }
 
@@ -316,12 +327,16 @@ class ZohoV2 extends BaseZohoIntegration
             $data = $json['data'][0];
 
             $this->contactId = $data['details']['id'];
+            $this->logger->info('New Contact created', ['id' => $this->contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
     }
 
     private function processDeals(Form $form, Client $client): void
     {
         if (!$this->mapDeals) {
+            $this->logger->debug('No Deals mapped, skipping.');
+
             return;
         }
 
@@ -352,6 +367,8 @@ class ZohoV2 extends BaseZohoIntegration
             $data = $json['data'][0];
 
             $this->dealId = $data['details']['id'];
+            $this->logger->info('New Deal created', ['id' => $this->dealId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->dealId && $this->contactId) {

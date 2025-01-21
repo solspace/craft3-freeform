@@ -15,6 +15,7 @@ namespace Solspace\Freeform\Library\Integrations;
 
 use craft\helpers\App;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Events\Integrations\IntegrationResponseEvent;
 use yii\base\Event;
@@ -28,6 +29,7 @@ abstract class BaseIntegration implements IntegrationInterface
         private string $handle,
         private string $name,
         private Type $typeDefinition,
+        protected LoggerInterface $logger,
     ) {}
 
     public function getId(): ?int

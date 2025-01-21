@@ -2,53 +2,45 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\ComparisonHelper;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 class ComparisonHelperTest extends TestCase
 {
-    public function textDataProvider(): array
-    {
-        return [
-            ['(so$^me@*.com', '(so$^me@gmail.com', false],
-            ['some*string', 'some  string', true],
-            ['viagr*', 'viagra very more text', true],
-            ['viagr*', 'some viagra1! text', true],
-            ['viagr*', 'shviagra1!', false],
-            ['viagr*', 'this long string contains viagra1! in it', true],
-            ['viagr*', 'sviagra', false],
-            ['vi*ra', 'viagra', true],
-            ['vi*ra', 'viagarana ra', true],
-            ['some@*.com', 'some@gmail.com', true],
-            ['some@*.com', 'some@hotmail.com', true],
-            ['some@*.com', 'some@gmail.ru', false],
-            ['[some@*.com', '[some@gmail.com', false],
-            ['[some@*.com', 'some@gmail.com', false],
-            ['"Beautiful girls"', 'beautiful', false],
-            ['"Beautiful girls"', 'girls', false],
-            ['"Beautiful girls"', 'beautiful girls', true],
-            ['"Beautiful girls"', 'flowers are beautiful', false],
-            ['"Beautiful girls"', 'beautiful girls', true],
-            ['"Beautiful girls"', 'too many beautiful girls', true],
-            ['"Beautiful girls"', 'are there any beautiful girls in here', true],
-            ['*@mail.me', 'some@mail.me', true],
-            ['some@*.me', 'some@mail.me', true],
-            ['some@mail.*', 'some@mail.me', true],
-            ['+974', '974', true],
-            ['+974', '+974', true],
-            ['b*brides', 'bestbrides', true],
-            ['*charming*', 'charmingdate', true],
-        ];
-    }
-
-    /**
-     * @dataProvider textDataProvider
-     */
+    #[TestWith(['(so$^me@*.com', '(so$^me@gmail.com', false])]
+    #[TestWith(['some*string', 'some  string', true])]
+    #[TestWith(['viagr*', 'viagra very more text', true])]
+    #[TestWith(['viagr*', 'some viagra1! text', true])]
+    #[TestWith(['viagr*', 'shviagra1!', false])]
+    #[TestWith(['viagr*', 'this long string contains viagra1! in it', true])]
+    #[TestWith(['viagr*', 'sviagra', false])]
+    #[TestWith(['vi*ra', 'viagra', true])]
+    #[TestWith(['vi*ra', 'viagarana ra', true])]
+    #[TestWith(['some@*.com', 'some@gmail.com', true])]
+    #[TestWith(['some@*.com', 'some@hotmail.com', true])]
+    #[TestWith(['some@*.com', 'some@gmail.ru', false])]
+    #[TestWith(['[some@*.com', '[some@gmail.com', false])]
+    #[TestWith(['[some@*.com', 'some@gmail.com', false])]
+    #[TestWith(['"Beautiful girls"', 'beautiful', false])]
+    #[TestWith(['"Beautiful girls"', 'girls', false])]
+    #[TestWith(['"Beautiful girls"', 'beautiful girls', true])]
+    #[TestWith(['"Beautiful girls"', 'flowers are beautiful', false])]
+    #[TestWith(['"Beautiful girls"', 'beautiful girls', true])]
+    #[TestWith(['"Beautiful girls"', 'too many beautiful girls', true])]
+    #[TestWith(['"Beautiful girls"', 'are there any beautiful girls in here', true])]
+    #[TestWith(['*@mail.me', 'some@mail.me', true])]
+    #[TestWith(['some@*.me', 'some@mail.me', true])]
+    #[TestWith(['some@mail.*', 'some@mail.me', true])]
+    #[TestWith(['+974', '974', true])]
+    #[TestWith(['+974', '+974', true])]
+    #[TestWith(['b*brides', 'bestbrides', true])]
+    #[TestWith(['*charming*', 'charmingdate', true])]
     public function testTextMatchesWildcardPattern(string $pattern, string $string, bool $expectedResult)
     {
         $result = ComparisonHelper::stringContainsWildcardKeyword($pattern, $string);
@@ -66,29 +58,20 @@ class ComparisonHelperTest extends TestCase
         );
     }
 
-    public function wordDataProvider(): array
-    {
-        return [
-            ['(so$^me@*.com', '(so$^me@gmail.com', true],
-            ['some*string', 'some  string', true],
-            ['viagr*', 'viagra very more text', true],
-            ['viagr*', 'viagra1! text', true],
-            ['viagr*', 'shviagra1!', false],
-            ['viagr*', 'this long string contains viagra1! in it', false],
-            ['viagr*', 'sviagra', false],
-            ['vi*ra', 'viagra', true],
-            ['vi*ra', 'viagarana ra', true],
-            ['some@*.com', 'some@gmail.com', true],
-            ['some@*.com', 'some@hotmail.com', true],
-            ['some@*.com', 'some@gmail.ru', false],
-            ['[some@*.com', '[some@gmail.com', true],
-            ['[some@*.com', 'some@gmail.com', false],
-        ];
-    }
-
-    /**
-     * @dataProvider wordDataProvider
-     */
+    #[TestWith(['(so$^me@*.com', '(so$^me@gmail.com', true])]
+    #[TestWith(['some*string', 'some  string', true])]
+    #[TestWith(['viagr*', 'viagra very more text', true])]
+    #[TestWith(['viagr*', 'viagra1! text', true])]
+    #[TestWith(['viagr*', 'shviagra1!', false])]
+    #[TestWith(['viagr*', 'this long string contains viagra1! in it', false])]
+    #[TestWith(['viagr*', 'sviagra', false])]
+    #[TestWith(['vi*ra', 'viagra', true])]
+    #[TestWith(['vi*ra', 'viagarana ra', true])]
+    #[TestWith(['some@*.com', 'some@gmail.com', true])]
+    #[TestWith(['some@*.com', 'some@hotmail.com', true])]
+    #[TestWith(['some@*.com', 'some@gmail.ru', false])]
+    #[TestWith(['[some@*.com', '[some@gmail.com', true])]
+    #[TestWith(['[some@*.com', 'some@gmail.com', false])]
     public function testWordMatchesWildcardPattern(string $pattern, string $string, bool $expectedResult)
     {
         $result = ComparisonHelper::stringMatchesWildcard($pattern, $string);

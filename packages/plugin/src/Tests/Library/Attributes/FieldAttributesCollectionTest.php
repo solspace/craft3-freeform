@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Attributes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Attributes\FieldAttributesCollection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(FieldAttributesCollection::class)]
 class FieldAttributesCollectionTest extends TestCase
 {
     public function testBuildFromArray()

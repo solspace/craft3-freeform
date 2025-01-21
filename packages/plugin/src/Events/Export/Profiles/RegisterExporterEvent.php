@@ -2,17 +2,17 @@
 
 namespace Solspace\Freeform\Events\Export\Profiles;
 
+use Solspace\Freeform\Bundles\Export\SubmissionExportInterface;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportInterface;
 use yii\base\Event;
 
 class RegisterExporterEvent extends Event
 {
-    /** @var ExportInterface[] */
+    /** @var SubmissionExportInterface[] */
     private $exporters = [];
 
     /**
-     * @return ExportInterface[]
+     * @return SubmissionExportInterface[]
      */
     public function getExporters(): array
     {
@@ -26,8 +26,8 @@ class RegisterExporterEvent extends Event
     public function addExporter(string $key, string $class): self
     {
         $reflection = new \ReflectionClass($class);
-        if (!$reflection->implementsInterface(ExportInterface::class)) {
-            throw new FreeformException('Registered exporter does not implement '.ExportInterface::class);
+        if (!$reflection->implementsInterface(SubmissionExportInterface::class)) {
+            throw new FreeformException('Registered exporter does not implement '.SubmissionExportInterface::class);
         }
 
         $this->exporters[$key] = $class;

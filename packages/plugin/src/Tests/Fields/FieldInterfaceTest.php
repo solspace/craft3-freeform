@@ -2,15 +2,12 @@
 
 namespace Solspace\Freeform\Tests\Fields;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Fields\Implementations\DropdownField;
 use Solspace\Freeform\Form\Form;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(DropdownField::class)]
 class FieldInterfaceTest extends TestCase
 {
     public function testImplementations()

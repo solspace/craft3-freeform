@@ -1,7 +1,6 @@
 import type Freeform from '@components/front-end/plugin/freeform';
 import type { FreeformHandler } from 'types/form';
 
-/* eslint-disable no-undef */
 class DatePicker implements FreeformHandler {
   loadedLocales: Record<string, HTMLScriptElement> = {};
   freeform: Freeform;

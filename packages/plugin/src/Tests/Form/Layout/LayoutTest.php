@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Tests\Form\Layout;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Bundles\Translations\TranslationProvider;
@@ -10,11 +11,7 @@ use Solspace\Freeform\Form\Layout\FormLayout;
 use Solspace\Freeform\Form\Layout\Layout;
 use Solspace\Freeform\Form\Layout\Page;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Layout::class)]
 class LayoutTest extends TestCase
 {
     private PropertyProvider $propertyProvider;

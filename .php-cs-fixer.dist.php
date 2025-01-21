@@ -21,6 +21,7 @@ return (new PhpCsFixer\Config())
         'single_trait_insert_per_statement' => true,
         'ternary_to_null_coalescing' => true,
         'multiline_whitespace_before_semicolons' => ['strategy' => 'new_line_for_chained_calls'],
+        'php_unit_internal_class' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder)

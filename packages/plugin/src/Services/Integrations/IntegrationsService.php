@@ -19,6 +19,8 @@ use Solspace\Freeform\Attributes\Property\Property;
 use Solspace\Freeform\Attributes\Property\TransformerInterface;
 use Solspace\Freeform\Bundles\Attributes\Property\PropertyProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationClientProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Events\Integrations\DeleteEvent;
 use Solspace\Freeform\Events\Integrations\FailedRequestEvent;
 use Solspace\Freeform\Events\Integrations\RegisterIntegrationTypesEvent;
@@ -49,6 +51,8 @@ class IntegrationsService extends BaseService
     public function __construct(
         $config,
         protected IntegrationClientProvider $clientProvider,
+        protected IntegrationTypeProvider $typeProvider,
+        protected IntegrationLoggerProvider $loggerProvider,
         private PropertyProvider $propertyProvider,
     ) {
         parent::__construct($config);
@@ -512,8 +516,11 @@ class IntegrationsService extends BaseService
             }
 
             $client = $this->clientProvider->getAuthorizedClient($integration);
+            $type = $integration->getTypeDefinition();
+            $logger = $this->loggerProvider->getLogger($integration);
 
             try {
+                $logger->info('===> Pushing data to '.$type->shortName, ['form' => $form->getHandle()]);
                 $integration->push($form, $client);
             } catch (\Exception $exception) {
                 $event = new FailedRequestEvent($form, $integration, $exception);

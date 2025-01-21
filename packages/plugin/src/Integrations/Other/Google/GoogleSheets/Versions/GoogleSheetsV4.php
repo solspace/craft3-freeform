@@ -46,6 +46,8 @@ class GoogleSheetsV4 extends BaseGoogleSheetsIntegration
             $names[] = $sheet->properties->title;
         }
 
+        $this->logger->debug('Retrieved sheet names', ['names' => $names]);
+
         return $names;
     }
 
@@ -95,5 +97,8 @@ class GoogleSheetsV4 extends BaseGoogleSheetsIntegration
 
         $url = $this->getEndpoint("spreadsheets/{$spreadsheetId}/values/{$sheet}!{$range}:append?{$query}");
         $client->post($url, ['json' => ['values' => [$values]]]);
+
+        $this->logger->info('Pushed data to Google Sheets');
+        $this->logger->debug('With Data', ['spreadsheetId' => $spreadsheetId, 'sheet' => $sheet, 'range' => $range, 'values' => $values]);
     }
 }

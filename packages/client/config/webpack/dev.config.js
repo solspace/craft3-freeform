@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const ReactRefreshTypeScript = require('react-refresh-typescript');
+const ReactRefreshTypeScript = require('react-refresh-typescript').default;
 
 const { merge } = require('webpack-merge');
 const baseConfig = require('./base.config.js');

@@ -1,0 +1,36 @@
+{% macro getFieldTemplate(type) -%}
+    {% set fieldTemplatePath = "freeform/_templates/formatting/tailwind-3-dark/fields/" %}
+    {{- fieldTemplatePath ~ type ~ ".twig" -}}
+{%- endmacro %}
+
+{% macro render(rows, form) %}
+    {% import _self as self %}
+
+    {% for row in rows %}
+
+        {% set columnCount = row|length %}
+
+        <div{{ form.attributes.row|raw }}>
+            {% for field in row %}
+
+                {% do field.setParameters({
+                    attributes: {
+                        container: {
+                            class: [
+                                columnCount in [2, 3, 4] ? "md:w-1/" ~ columnCount,
+                                columnCount in [2, 3, 4] ? "lg:w-1/" ~ columnCount,
+                                columnCount in [2, 3, 4] ? "xl:w-1/" ~ columnCount,
+                                columnCount == 1 ? "md:w-full lg:w-full xl:w-full"
+                            ],
+                        },
+                    }
+                }) %}
+
+                {% include [self.getFieldTemplate(field.type), self.getFieldTemplate("_default")] %}
+
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+
+{% endmacro %}

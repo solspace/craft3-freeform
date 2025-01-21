@@ -3,6 +3,15 @@
 namespace Solspace\Freeform\Services\Pro;
 
 use craft\db\Query;
+use JetBrains\PhpStorm\NoReturn;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
+use Solspace\Freeform\Bundles\Export\Implementations\Excel\ExportExcel;
+use Solspace\Freeform\Bundles\Export\Implementations\Json\ExportJson;
+use Solspace\Freeform\Bundles\Export\Implementations\Text\ExportText;
+use Solspace\Freeform\Bundles\Export\Implementations\Xml\ExportXml;
+use Solspace\Freeform\Bundles\Export\SubmissionExportInterface;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Events\Export\Profiles\DeleteEvent;
 use Solspace\Freeform\Events\Export\Profiles\RegisterExporterEvent;
 use Solspace\Freeform\Events\Export\Profiles\SaveEvent;
@@ -10,12 +19,6 @@ use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\ExportSettings;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportCsv;
-use Solspace\Freeform\Library\Export\ExportExcel;
-use Solspace\Freeform\Library\Export\ExportInterface;
-use Solspace\Freeform\Library\Export\ExportJson;
-use Solspace\Freeform\Library\Export\ExportText;
-use Solspace\Freeform\Library\Export\ExportXml;
 use Solspace\Freeform\Models\Pro\ExportProfileModel;
 use Solspace\Freeform\Records\Pro\ExportProfileRecord;
 use yii\base\Component;
@@ -96,10 +99,7 @@ class ExportProfilesService extends Component
         ;
     }
 
-    /**
-     * @return null|ExportProfileModel
-     */
-    public function getProfileById(int $id)
+    public function getProfileById(int $id): ?ExportProfileModel
     {
         if (null === self::$profileCache || !isset(self::$profileCache[$id])) {
             if (null === self::$profileCache) {
@@ -122,10 +122,6 @@ class ExportProfilesService extends Component
         return self::$profileCache[$id];
     }
 
-    /**
-     * @throws \Exception
-     * @throws HttpException
-     */
     public function save(ExportProfileModel $model): bool
     {
         $isNew = !$model->id;
@@ -168,17 +164,13 @@ class ExportProfilesService extends Component
 
                 self::$profileCache[$model->id] = $model;
 
-                if (null !== $transaction) {
-                    $transaction->commit();
-                }
+                $transaction?->commit();
 
                 $this->trigger(self::EVENT_AFTER_SAVE, new SaveEvent($model, $isNew));
 
                 return true;
             } catch (\Exception $e) {
-                if (null !== $transaction) {
-                    $transaction->rollBack();
-                }
+                $transaction?->rollBack();
 
                 throw $e;
             }
@@ -187,14 +179,7 @@ class ExportProfilesService extends Component
         return false;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public function deleteById($id)
+    public function deleteById($id): bool
     {
         $model = $this->getProfileById($id);
 
@@ -219,17 +204,13 @@ class ExportProfilesService extends Component
                 ->execute()
             ;
 
-            if (null !== $transaction) {
-                $transaction->commit();
-            }
+            $transaction?->commit();
 
             $this->trigger(self::EVENT_AFTER_DELETE, new DeleteEvent($model));
 
             return (bool) $affectedRows;
         } catch (\Exception $exception) {
-            if (null !== $transaction) {
-                $transaction->rollBack();
-            }
+            $transaction?->rollBack();
 
             throw $exception;
         }
@@ -247,8 +228,12 @@ class ExportProfilesService extends Component
         );
     }
 
-    public function createExporter(string $type, Form $form, array $data): ExportInterface
-    {
+    public function createExporter(
+        string $type,
+        Form $form,
+        SubmissionQuery $query,
+        FieldDescriptorCollection $fieldDescriptors
+    ): SubmissionExportInterface {
         $exporters = $this->getExporters();
         if (!isset($exporters[$type])) {
             throw new FreeformException("Cannot export type `{$type}`");
@@ -256,10 +241,11 @@ class ExportProfilesService extends Component
 
         $class = $exporters[$type];
 
-        return new $class($form, $data, $this->getExportSettings());
+        return new $class($form, $query, $fieldDescriptors, $this->getExportSettings());
     }
 
-    public function export(ExportInterface $exporter, Form $form)
+    #[NoReturn]
+    public function export(SubmissionExportInterface $exporter, Form $form): void
     {
         $fileName = \sprintf(
             '%s submissions %s.%s',
@@ -268,21 +254,23 @@ class ExportProfilesService extends Component
             $exporter->getFileExtension()
         );
 
-        $this->outputFile($exporter->export(), $fileName, $exporter->getMimeType());
+        $resource = tmpfile();
+        $exporter->export($resource);
+
+        $this->outputFile($resource, $fileName, $exporter->getMimeType());
     }
 
-    public function outputFile(string $content, string $fileName, string $contentType)
+    #[NoReturn]
+    public function outputFile($file, string $fileName, string $contentType): void
     {
-        header('Content-Description: File Transfer');
-        header('Content-Type: '.$contentType);
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        header('Content-Length: '.\strlen($content));
+        rewind($file);
 
-        echo $content;
+        \Craft::$app
+            ->response
+            ->setDownloadHeaders($fileName, $contentType)
+            ->sendStreamAsFile($file, $fileName)
+            ->send()
+        ;
 
         exit;
     }
@@ -313,16 +301,12 @@ class ExportProfilesService extends Component
     {
         $exportProfile = new ExportProfileModel($data);
 
-        if (\is_string($exportProfile->fields) && '' !== $exportProfile->fields) {
-            $exportProfile->fields = json_decode($exportProfile->fields, true);
-        }
-
-        if (\is_string($exportProfile->filters) && '' !== $exportProfile->filters) {
-            $exportProfile->filters = json_decode($exportProfile->filters, true);
-        }
-
-        if (\is_string($exportProfile->statuses) && '' !== $exportProfile->statuses && '*' !== $exportProfile->statuses) {
-            $exportProfile->statuses = json_decode($exportProfile->statuses, true);
+        $jsonColumns = ['fields', 'filters', 'statuses'];
+        foreach ($jsonColumns as $column) {
+            $value = $exportProfile->{$column};
+            if (\is_string($value) && '' !== $value && '*' !== $value) {
+                $exportProfile->{$column} = json_decode($value, true);
+            }
         }
 
         return $exportProfile;

@@ -13,26 +13,16 @@
 
 namespace Solspace\Freeform\controllers;
 
-use craft\db\Table;
-use Solspace\Freeform\Bundles\Fields\Types\FieldTypesProvider;
-use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Configuration\FreeformConfig;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Records\FormRecord;
 use Solspace\Freeform\Resources\Bundles\FreeformClientBundle;
-use yii\db\Query;
 use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class FormsController extends BaseController
 {
-    public function __construct($id, $module, $config, private FieldTypesProvider $fieldTypesProvider)
-    {
-        parent::__construct($id, $module, $config);
-    }
-
     public function actionIndex(): Response
     {
         PermissionHelper::requirePermission(Freeform::PERMISSION_FORMS_ACCESS);
@@ -77,72 +67,6 @@ class FormsController extends BaseController
         }
 
         return $this->asJson(['success' => true]);
-    }
-
-    public function actionExport()
-    {
-        $this->requirePostRequest();
-        $request = $this->request;
-        $isCraft5 = version_compare(\Craft::$app->version, '5.0.0-alpha', '>=');
-
-        $id = $request->post('id');
-        $type = $request->post('type', 'csv');
-
-        if (!Freeform::getInstance()->isPro()) {
-            $type = 'csv';
-        }
-
-        $form = $this->getFormsService()->getFormById($id);
-        if (!$form) {
-            throw new NotFoundHttpException('Form not found');
-        }
-
-        $canManageAll = PermissionHelper::checkPermission(Freeform::PERMISSION_SUBMISSIONS_MANAGE);
-        if (!$canManageAll) {
-            PermissionHelper::requirePermission(
-                PermissionHelper::prepareNestedPermission(Freeform::PERMISSION_SUBMISSIONS_MANAGE, $id)
-            );
-        }
-
-        $selectFields = [];
-        $selectFields[] = '[[s.id]]';
-        $selectFields[] = '[[s.ip]]';
-        $selectFields[] = '[[s.dateCreated]]';
-        $selectFields[] = $isCraft5 ? '[[es.title]]' : '[[c.title]]';
-
-        foreach ($form->getLayout()->getFields()->getStorableFields() as $field) {
-            $fieldName = Submission::getFieldColumnName($field);
-            $fieldHandle = $field->getHandle();
-
-            $selectFields[] = "[[sc.{$fieldName}]] as {$fieldHandle}";
-        }
-
-        $query = (new Query())
-            ->select($selectFields)
-            ->from(Submission::TABLE.' s')
-            ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
-            ->where(['s.[[formId]]' => $id])
-        ;
-
-        if ($isCraft5) {
-            $query->innerJoin('{{%elements_sites}} es', 'es.[[elementId]] = s.[[id]]');
-        } else {
-            $query->innerJoin('{{%content}} c', 'c.[[elementId]] = s.[[id]]');
-        }
-
-        if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {
-            $elements = Table::ELEMENTS;
-            $query->innerJoin(
-                $elements.' e',
-                'e.[[id]] = s.[[id]] AND e.[[dateDeleted]] IS NULL'
-            );
-        }
-
-        $data = $query->all();
-
-        $exporter = $this->getExportProfileService()->createExporter($type, $form, $data);
-
-        $this->getExportProfileService()->export($exporter, $form);
     }
 
     private function requireFormManagePermission($id): void

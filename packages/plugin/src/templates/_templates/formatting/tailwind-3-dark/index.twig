@@ -1,0 +1,125 @@
+{% do view.registerAssetBundle('Solspace\\Freeform\\Resources\\Bundles\\FormattingTemplates\\Tailwind3DarkBundle') %}
+
+{% import "freeform/_templates/formatting/tailwind-3-dark/_row.twig" as rowMacro %}
+
+{# Render the opening form tag #}
+{{ form.renderTag({
+    attributes: {
+        form: { class: "freeform-form", "data-freeform-tailwind-dark": true },
+        row: { class: "flex flex-wrap -mx-2 mb-4" },
+        success: { class: "bg-green-800 border border-green-900 font-medium text-white px-4 py-3 rounded relative mb-4" },
+        errors: { class: "bg-red-800 border border-red-900 font-medium text-white px-4 py-3 rounded relative mb-4" },
+        novalidate: true,
+    },
+    buttons: {
+        attributes: {
+            container: { class: "flex flex-wrap -mx-2 mb-4" },
+            column: { class: "ml-2" },
+            buttonWrapper: {},
+            submit: { class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mr-2" },
+            back: { class: "bg-zinc-600 hover:bg-zinc-700 text-white font-medium py-2 px-4 rounded mr-2" },
+            save: { class: "bg-zinc-600 hover:bg-zinc-700 text-white font-medium py-2 px-4 rounded mr-2" },
+        },
+    },
+    fields: {
+        "@global": {
+            attributes: {
+                container: { class: "w-full px-2" },
+                label: { class: "block text-zinc-200 text-base font-medium mb-1" },
+                input: {
+                    class: [
+                        "md:mb-0 mb-4",
+                        "appearance-none bg-zinc-900 block w-full",
+                        "text-zinc-200 rounded py-2 px-3 leading-tight",
+                        "placeholder:font-light placeholder:text-zinc-600",
+                        "border border-zinc-500 focus:outline-none focus:border-blue-600",
+                    ],
+                },
+                instructions: { class: "block text-zinc-500 text-sm -mt-1.5 mb-1" },
+                error: { class: "freeform-errors block w-full text-sm text-red-500 mt-1" },
+            },
+        },
+        ":required": {
+            attributes: {
+                label: { "+class": "required" },
+            },
+        },
+        ":errors": {
+            attributes: {
+                input: { "+class": "border-red-600" },
+            },
+        },
+        "@checkbox, @checkboxes, @radios, @opinion-scale, @signature, @table": {
+            attributes: {
+                input: { "-class": "appearance-none block w-full" },
+            },
+        },
+        "@table": {
+            attributes: {
+                label: { "-class": "block" },
+            },
+        },
+        "@signature": {
+            attributes: {
+                input: { "+class": "rounded py-1 px-2 mr-1 hover:bg-zinc-700" },
+            },
+        },
+        "@checkbox" : {
+            attributes: {
+                label: {
+                    "-class": "block text-zinc-200 text-base font-medium mb-1",
+                    "+class": "ml-2 font-medium text-zinc-300"
+                },
+            },
+        },
+        "@checkbox, @checkboxes, @radios": {
+            attributes: {
+                input: { "+class": "w-4 h-4 rounded" },
+            },
+        },
+        "@stripe": {
+            attributes: {
+                input: { "-class": "rounded py-2 px-3 leading-tight bg-zinc-900 placeholder:font-light placeholder:text-zinc-600 border border-zinc-500 focus:outline-none focus:border-blue-600" },
+            },
+        },
+    },
+}) }}
+
+{# Success and error message handling for non-AJAX forms #}
+{% if not form.settings.ajax %}
+    {% if form.submittedSuccessfully %}
+        <div{{ form.attributes.success|raw }}>
+            <p>{{ form.settings.successMessage | t('freeform') }}</p>
+        </div>
+    {% endif %}
+    {% if form.hasErrors %}
+        <div{{ form.attributes.errors|raw }}>
+            <p>{{ form.settings.errorMessage | t('freeform') }}</p>
+
+            {% if form.errors|length %}
+                <ul class="mb-0">
+                    {% for error in form.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}
+
+{# Render page tabs if multi-page #}
+{% if form.pages|length > 1 %}
+    <ul class="flex border-b-2 border-zinc-100 mb-6">
+        {% for page in form.pages %}
+            <li class="mr-1">
+                <span class="inline-block rounded-t py-2 px-5 {{ form.currentPage.index == page.index ? 'bg-zinc-100 border-l border-t border-r border-zinc-100 text-zinc-900 font-medium' : 'bg-zinc-900 text-zinc-500 font-normal' }}">{{ page.label }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{# Display form field rows and columns #}
+{{ rowMacro.render(form.rows, form) }}
+
+{# Render the closing form tag #}
+{{ form.renderClosingTag }}

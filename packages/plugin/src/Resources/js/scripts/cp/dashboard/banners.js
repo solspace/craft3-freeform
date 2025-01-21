@@ -1,1 +1,0 @@
-$((function(){$(".alert-dismissible a.close").on({click:function(t){var e=t.target.href,r=$(t.target).parents(".alert:first");return Craft.postActionRequest(e,{},(function(){return r.remove()})),t.stopPropagation(),t.preventDefault(),!1}})}));

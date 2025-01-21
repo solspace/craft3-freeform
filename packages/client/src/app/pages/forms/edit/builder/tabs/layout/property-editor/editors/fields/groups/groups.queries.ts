@@ -30,7 +30,7 @@ export const useGroupMutation = (
     variables: GroupItem,
     context: unknown
   ) => {
-    originalOnSuccess && originalOnSuccess(data, variables, context);
+    originalOnSuccess?.(data, variables, context);
     queryClient.invalidateQueries(QKGroups.all);
   };
 

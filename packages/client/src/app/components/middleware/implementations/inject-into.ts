@@ -1,4 +1,4 @@
-import camelCase from 'lodash.camelcase';
+import { camelCase } from 'lodash';
 
 import type { MiddlewareImplementation } from '../middleware';
 
@@ -31,7 +31,7 @@ const injectInto: MiddlewareImplementation<string, Args> = (
     targetValue = camelCase(targetValue);
   }
 
-  updateCallback && updateCallback(target, targetValue);
+  updateCallback?.(target, targetValue);
 
   return value;
 };

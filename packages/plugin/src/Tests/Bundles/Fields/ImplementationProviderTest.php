@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Bundles\Fields;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Bundles\Fields\ImplementationProvider;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ImplementationProvider::class)]
 class ImplementationProviderTest extends TestCase
 {
     public function testExtractsImplementations()

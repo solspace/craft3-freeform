@@ -58,9 +58,11 @@ class AttachFormLinks extends FeatureBundle
 
                 $submissionCount = $data->counters['submissions'];
                 $spamCount = $data->counters['spam'];
+                $savedCount = $data->counters['saved'];
 
                 $submissions = Freeform::t('{count} Submissions', ['count' => $submissionCount]);
                 $spam = Freeform::t('{count} Spam', ['count' => $spamCount]);
+                $saved = Freeform::t('{count} Saved', ['count' => $savedCount]);
 
                 if ($canManageForm) {
                     $event->add(
@@ -86,6 +88,16 @@ class AttachFormLinks extends FeatureBundle
                     'linkList',
                     $spamCount,
                 );
+
+                if ($savedCount) {
+                    $event->add(
+                        $saved,
+                        'saved',
+                        null,
+                        'linkList',
+                        $savedCount,
+                    );
+                }
             }
         );
     }

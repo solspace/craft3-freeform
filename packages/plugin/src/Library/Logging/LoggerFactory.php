@@ -16,18 +16,32 @@ namespace Solspace\Freeform\Library\Logging;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Solspace\Freeform\Library\Helpers\CryptoHelper;
 
 class LoggerFactory
 {
     private static array $instance = [];
 
-    public static function getOrCreateFileLogger(string $category, string $logfilePath): LoggerInterface
-    {
+    public static function getOrCreateFileLogger(
+        string $category,
+        string $logfilePath,
+        ?int $level = null
+    ): LoggerInterface {
+        static $requestId;
+        if (null === $requestId) {
+            $requestId = CryptoHelper::getUniqueToken();
+        }
+
         $hash = sha1($category.$logfilePath);
 
         if (!isset(self::$instance[$hash])) {
             $logger = new Logger($category);
-            $logger->pushHandler(new StreamHandler($logfilePath, Logger::DEBUG));
+            $logger->pushHandler(new StreamHandler($logfilePath, $level ?? Logger::DEBUG));
+            $logger->pushProcessor(function ($record) use ($requestId) {
+                $record['extra']['requestId'] = $requestId;
+
+                return $record;
+            });
 
             self::$instance[$hash] = $logger;
         }

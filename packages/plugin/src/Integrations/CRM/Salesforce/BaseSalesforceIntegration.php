@@ -198,6 +198,9 @@ abstract class BaseSalesforceIntegration extends CRMIntegration implements OAuth
         );
 
         $result = json_decode($response->getBody());
+
+        $this->logger->debug('Querying Salesforce', ['query' => $query, 'results' => $result]);
+
         if (0 === $result->totalSize || !$result->done) {
             return [];
         }

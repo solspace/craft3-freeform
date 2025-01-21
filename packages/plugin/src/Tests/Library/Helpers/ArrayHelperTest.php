@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\Helpers;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\Helpers\ArrayHelper;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(ArrayHelper::class)]
 class ArrayHelperTest extends TestCase
 {
     public function testSome(): void
@@ -23,6 +20,17 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::some($array, fn ($item) => 'non-existent' === $item));
     }
 
+    public function testSomeRecursive(): void
+    {
+        $array = [1, 'two', false, [1, 'two', false]];
+
+        $this->assertTrue(ArrayHelper::someRecursive($array, fn ($item) => 1 === $item));
+        $this->assertTrue(ArrayHelper::someRecursive($array, fn ($item) => 'two' === $item));
+        $this->assertTrue(ArrayHelper::someRecursive($array, fn ($item) => false === $item));
+
+        $this->assertFalse(ArrayHelper::someRecursive($array, fn ($item) => 'non-existent' === $item));
+    }
+
     public function testEvery(): void
     {
         $array = [1, 2, 3, 4];
@@ -30,6 +38,15 @@ class ArrayHelperTest extends TestCase
         $this->assertTrue(ArrayHelper::every($array, fn ($item) => $item > 0 && $item < 5));
         $this->assertFalse(ArrayHelper::every($array, fn ($item) => $item > 1));
         $this->assertFalse(ArrayHelper::every($array, fn ($item) => $item < 4));
+    }
+
+    public function testEveryRecursive(): void
+    {
+        $array = [1, 2, 3, 4, [1, 2, 3, 4]];
+
+        $this->assertTrue(ArrayHelper::everyRecursive($array, fn ($item) => $item > 0 && $item < 5));
+        $this->assertFalse(ArrayHelper::everyRecursive($array, fn ($item) => $item > 1));
+        $this->assertFalse(ArrayHelper::everyRecursive($array, fn ($item) => $item < 4));
     }
 
     public function testFlattenKeys(): void
