@@ -22,7 +22,7 @@
 
 ### Changed
 - Refactored all exporting features and improved memory efficiency.
-- Refactored all queue jobs, preventing duplicates from happening.
+- Refactored all queue job runners into feature bundles and preventing duplicate jobs from happening.
 - Updated various translations throughout the control panel.
 - Updated all sample template CSS and JS, including the Javascript Test to be minified.
 
