@@ -19,6 +19,7 @@
 - Added support for more features in the Lite edition of Freeform:
     - All export file types, including Excel, CSV, XML, JSON and Text.
     - Access to Quick Export and Export Profiles.
+- Verified support for Craft 5.6.x.
 
 ### Changed
 - Refactored all exporting features and improved memory efficiency.
