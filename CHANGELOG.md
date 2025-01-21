@@ -22,6 +22,7 @@
 
 ### Changed
 - Refactored all exporting features and improved memory efficiency.
+- Refactored all queue jobs, preventing duplicates from happening.
 - Updated various translations throughout the control panel.
 - Updated all sample template CSS and JS, including the Javascript Test to be minified.
 
@@ -31,6 +32,7 @@
 - Fixed a bug where the **Save & Continue Later** feature was visible on _Express_ and _Lite_ editions.
 - Fixed a bug where the **Convert to Custom Values** button was incorrectly showing for Limited Users when hidden.
 - Fixed a bug where the **Spam Protection Behavior** setting was showing incorrectly on the Diagnostics page.
+- Fixed a bug where **Email Field** notifications were attempting to send when the Email field was hidden by Conditional Rules.
 
 ## 5.8.7 - 2025-01-15
 
