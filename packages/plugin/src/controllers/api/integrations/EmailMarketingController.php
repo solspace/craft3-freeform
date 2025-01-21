@@ -69,6 +69,7 @@ class EmailMarketingController extends BaseApiController
                 'label' => $field->getLabel(),
                 'required' => $field->isRequired(),
                 'type' => $field->getType(),
+                'options' => $field->getOptions(),
             ];
         }
 

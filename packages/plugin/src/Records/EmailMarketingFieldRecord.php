@@ -23,6 +23,7 @@ use yii\db\ActiveQuery;
  * @property string $label
  * @property string $type
  * @property bool   $required
+ * @property string $options
  */
 class EmailMarketingFieldRecord extends ActiveRecord
 {
