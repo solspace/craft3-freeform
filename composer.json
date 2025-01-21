@@ -1,6 +1,6 @@
 {
   "name": "solspace/craft-freeform",
-  "description": "The most reliable form builder that's ready for wherever your project takes you.",
+  "description": "The most flexible and user-friendly form builder!",
   "version": "5.9.0",
   "type": "craft-plugin",
   "authors": [
@@ -50,7 +50,7 @@
     "fix:dry-run": "vendor/bin/php-cs-fixer fix --dry-run --diff  --config=./.php-cs-fixer.dist.php"
   },
   "extra": {
-    "schemaVersion": "5.4.1",
+    "schemaVersion": "5.4.2",
     "handle": "freeform",
     "class": "Solspace\\Freeform\\Freeform",
     "name": "Freeform",
