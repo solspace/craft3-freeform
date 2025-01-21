@@ -13,6 +13,7 @@
 
 namespace Solspace\Freeform\Services\Integrations;
 
+use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Integrations\DataObjects\FieldObject;
 use Solspace\Freeform\Library\Integrations\Types\CRM\CRMIntegrationInterface;
 use Solspace\Freeform\Records\CrmFieldRecord;
@@ -61,7 +62,7 @@ class CrmService extends IntegrationsService
                 $record->type = $field->getType();
                 $record->required = $field->isRequired();
                 $record->category = $category;
-                $record->options = $field->getOptions()->getIterator()->getArrayCopy();
+                $record->options = json_encode($field->getOptions()->getIterator()->getArrayCopy());
                 $record->save();
 
                 $existingRecords[$field->getHandle()] = $record;
@@ -77,7 +78,7 @@ class CrmService extends IntegrationsService
                     $record->type = $field->getType();
                     $record->required = $field->isRequired();
                     $record->category = $category;
-                    $record->options = $field->getOptions()->getIterator()->getArrayCopy();
+                    $record->options = json_encode($field->getOptions()->getIterator()->getArrayCopy());
                     $record->save();
                 }
             }
@@ -90,7 +91,7 @@ class CrmService extends IntegrationsService
                 $record->type,
                 $record->category,
                 $record->required,
-                $record->options
+                JsonHelper::decode($record->options, true),
             ),
             $existingRecords
         );

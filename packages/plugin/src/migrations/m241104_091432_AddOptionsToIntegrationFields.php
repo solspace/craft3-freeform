@@ -15,13 +15,13 @@ class m241104_091432_AddOptionsToIntegrationFields extends Migration
         $this->addColumn(
             '{{%freeform_crm_fields}}',
             'options',
-            $this->json()->after('required')
+            $this->longText()->after('required')
         );
 
         $this->addColumn(
             '{{%freeform_email_marketing_fields}}',
             'options',
-            $this->json()->after('required')
+            $this->longText()->after('required')
         );
 
         return true;
