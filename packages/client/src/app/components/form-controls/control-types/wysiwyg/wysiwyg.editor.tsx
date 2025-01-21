@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill-new';
 import {
   PreviewContainer,
   PreviewEditor,
@@ -7,7 +7,7 @@ import {
 
 import { QuillEditorWrapper } from './wysiwyg.editor.styles';
 
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 
 type Props = {
   value: string;

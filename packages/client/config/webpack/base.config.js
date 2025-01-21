@@ -18,6 +18,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.jsx$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { presets: ['@babel/preset-env', '@babel/preset-react'] },
+          },
+        ],
+      },
+      {
         test: /\.css$/,
         use: ['style-loader', { loader: 'css-loader' }],
       },
@@ -42,7 +51,7 @@ module.exports = {
   ],
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '@config': path.resolve(__dirname, '../../config/'),
       '@editor': path.resolve(__dirname, '../../src/app/pages/forms/edit/'),

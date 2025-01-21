@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Attributes\Property\Implementations\Options;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Implementations\Options\OptionCollection;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(OptionCollection::class)]
 class OptionCollectionTest extends TestCase
 {
     public function testNestedChildren()

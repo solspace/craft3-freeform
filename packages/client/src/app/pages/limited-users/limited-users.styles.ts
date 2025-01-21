@@ -163,6 +163,11 @@ export const ListItem = styled.li`
     }
   }
 
+  &[data-nesting='1'] h2 {
+    margin-top: 10px !important;
+    margin-left: 70px;
+  }
+
   &[data-nesting='2'] {
     ${TitleBlock} {
       gap: 10px;

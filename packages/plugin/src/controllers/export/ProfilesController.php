@@ -7,7 +7,6 @@ use craft\helpers\UrlHelper;
 use Solspace\Freeform\Controllers\BaseController;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
-use Solspace\Freeform\Library\Helpers\EncryptionHelper;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Library\Helpers\SitesHelper;
 use Solspace\Freeform\Models\Pro\ExportProfileModel;
@@ -146,7 +145,7 @@ class ProfilesController extends BaseController
 
         \Craft::$app->session->setError(Freeform::t('Export Profile not saved.'));
 
-        return $this->renderEditForm($profile, $profile->name);
+        return $this->renderEditForm($profile, $profile->name ?? '');
     }
 
     public function actionDelete(): Response
@@ -179,12 +178,10 @@ class ProfilesController extends BaseController
         }
 
         $form = $profile->getForm();
-        $data = $profile->getSubmissionData();
+        $query = $profile->getQuery();
+        $descriptors = $profile->getFieldDescriptors();
 
-        $key = EncryptionHelper::getKey($form->getUid());
-        $data = EncryptionHelper::decryptExportData($key, $data);
-
-        $exporter = $exportProfilesService->createExporter($type, $form, $data);
+        $exporter = $exportProfilesService->createExporter($type, $form, $query, $descriptors);
 
         $exportProfilesService->export($exporter, $form);
     }

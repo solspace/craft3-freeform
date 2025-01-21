@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Library\DataObjects;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\DataObjects\Relations;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Relations::class)]
 class RelationsTest extends TestCase
 {
     public function testGetRelationshipWithArrayOfIds()

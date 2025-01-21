@@ -128,8 +128,8 @@ export const data: Item[] = [
                 type: 'toggles',
                 values: ['states', 'languages'],
                 options: [
-                  { value: 'states', label: 'States' },
-                  { value: 'provinces', label: 'Provinces' },
+                  { value: 'states', label: 'USA States' },
+                  { value: 'provinces', label: 'Canadian Provinces' },
                   { value: 'countries', label: 'Countries' },
                   { value: 'languages', label: 'Languages' },
                   { value: 'currencies', label: 'Currencies' },
@@ -144,7 +144,7 @@ export const data: Item[] = [
           },
           {
             id: 'convertToCustom',
-            name: 'Convert to Custom Values (for Element and Predefined populators)',
+            name: 'Convert to Custom Values',
             type: 'boolean',
             enabled: true,
           },

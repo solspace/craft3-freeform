@@ -2,13 +2,10 @@
 
 namespace Solspace\Freeform\controllers;
 
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Helpers\PermissionHelper;
 use Solspace\Freeform\Resources\Bundles\LogBundle;
-use yii\base\Exception;
-use yii\base\InvalidConfigException;
-use yii\web\BadRequestHttpException;
-use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 class LogsController extends BaseController
@@ -27,10 +24,6 @@ class LogsController extends BaseController
         );
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     */
     public function actionError(): Response
     {
         $logReader = $this->getLoggerService()->getLogReader();
@@ -47,18 +40,35 @@ class LogsController extends BaseController
         );
     }
 
-    /**
-     * @throws BadRequestHttpException
-     * @throws ForbiddenHttpException
-     * @throws Exception
-     */
-    public function actionClear(): Response
+    public function actionIntegrations(): Response
+    {
+        $logReader = $this->getLoggerService()->getLogReader(IntegrationLoggerProvider::LOG_FILE);
+
+        $this->getLoggerService()->registerJsTranslations($this->view);
+
+        \Craft::$app->view->registerAssetBundle(LogBundle::class);
+
+        return $this->renderTemplate(
+            'freeform/logs/error',
+            [
+                'logReader' => $logReader,
+                'category' => 'integrations',
+            ]
+        );
+    }
+
+    public function actionClear(?string $category = null): Response
     {
         $this->requirePostRequest();
 
         PermissionHelper::requirePermission(Freeform::PERMISSION_SETTINGS_ACCESS);
 
-        $this->getLoggerService()->clearLogs();
+        $fileName = match ($category) {
+            'integrations' => IntegrationLoggerProvider::LOG_FILE,
+            default => null,
+        };
+
+        $this->getLoggerService()->clearLogs($fileName);
 
         if (\Craft::$app->request->getIsAjax()) {
             return $this->asJson(['success' => true]);

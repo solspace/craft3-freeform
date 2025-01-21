@@ -104,6 +104,8 @@ class KeapV2 extends BaseKeapIntegration
     private function processContacts(Form $form, Client $client): void
     {
         if (!$this->mapContacts) {
+            $this->logger->debug('No Contacts mapped, skipping.');
+
             return;
         }
 
@@ -202,12 +204,17 @@ class KeapV2 extends BaseKeapIntegration
             $this->contactId = $json->id;
         }
 
+        $this->logger->info('Contact created', ['id' => $json?->id]);
+        $this->logger->debug('With Mapping', $mapping);
+
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT, $response);
     }
 
     private function processTags(Form $form, Client $client): void
     {
         if (!$this->mapTags) {
+            $this->logger->debug('No Tags mapped, skipping.');
+
             return;
         }
 

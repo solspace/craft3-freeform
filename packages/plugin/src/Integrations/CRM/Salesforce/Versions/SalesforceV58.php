@@ -332,6 +332,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     private function processLeads(Form $form, Client $client): void
     {
         if (!$this->mapLeads) {
+            $this->logger->debug('No Leads mapped, skipping.');
+
             return;
         }
 
@@ -349,6 +351,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         $leadId = null;
         $leadEmail = $mapping['Email'];
         if ($this->checkLeadDuplicates && $leadEmail) {
+            $this->logger->debug('Checking for existing Lead', ['email' => $leadEmail]);
+
             $existingRecord = $this->querySingle(
                 $client,
                 'SELECT Id FROM Lead WHERE Email = \'%s\' LIMIT 1',
@@ -356,6 +360,12 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             );
 
             $leadId = $existingRecord->Id ?? null;
+
+            if ($leadId) {
+                $this->logger->debug('Found existing Lead', ['leadId' => $leadId]);
+            } else {
+                $this->logger->debug('No existing Lead found');
+            }
         }
 
         $requestConfiguration = [
@@ -375,6 +385,9 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                     $requestConfiguration,
                 )
             );
+
+            $this->logger->info('Lead updated', ['id' => $leadId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $json] = $this->getJsonResponse(
                 $client->post(
@@ -384,6 +397,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             );
 
             $leadId = $json->id;
+            $this->logger->info('New Lead created', ['id' => $leadId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForLeads) {
@@ -396,6 +411,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     private function processAccounts(Form $form, Client $client): void
     {
         if (!$this->mapAccounts) {
+            $this->logger->debug('No Accounts mapped, skipping.');
+
             return;
         }
 
@@ -407,7 +424,6 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         }
 
         $appendAccountFields = [];
-
         foreach ($this->accountMapping as $item) {
             if (FieldMapItem::TYPE_RELATION === $item->getType()) {
                 $field = $form->get($item->getValue());
@@ -428,6 +444,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         if (empty($accountName)) {
             $accountName = $contactName;
             $mapping['Name'] = $accountName;
+            $this->logger->debug('No Account name provided, using Contact name instead', ['accountName' => $accountName]);
         }
 
         // We'll query
@@ -439,6 +456,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
             if ($accountWebsite) {
                 $mapping['Website'] = $accountWebsite;
+                $this->logger->debug('No Account website provided, using Contact email domain instead', ['accountWebsite' => $accountWebsite]);
             }
         }
 
@@ -454,9 +472,11 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
         $accountRecord = null;
 
-        // If the advanced mapping is enabled and we have an account website which we can use for a search
+        // If the advanced mapping is enabled, and we have an account website which we can use for a search
         if ($this->duplicateCheck) {
             if ($accountWebsite) {
+                $this->logger->debug('Checking for existing Account by website', ['website' => $accountWebsite]);
+
                 // We'll search for an account with account website
                 $accountRecord = $this->querySingle(
                     $client,
@@ -465,6 +485,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 );
             }
         } else {
+            $this->logger->debug('Checking for existing Account by name', ['name' => $accountName]);
+
             $accountRecord = $this->querySingle(
                 $client,
                 'SELECT Id'.$appendAccountFieldsQuery." FROM Account WHERE Name = '%s' ORDER BY CreatedDate desc LIMIT 1",
@@ -479,22 +501,27 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             }
 
             $mapping = $this->triggerPushEvent(self::CATEGORY_ACCOUNT, $mapping);
+
             $response = $client->patch(
                 $this->getEndpoint('/sobjects/Account/'.$accountRecord->Id),
                 ['json' => $mapping],
             );
 
             $this->accountId = $accountRecord->Id;
+            $this->logger->info('Existing Account updated', ['id' => $accountRecord->Id]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             $mapping = $this->triggerPushEvent(self::CATEGORY_ACCOUNT, $mapping);
+
             $response = $client->post(
                 $this->getEndpoint('/sobjects/Account'),
                 ['json' => $mapping],
             );
 
             $json = json_decode((string) $response->getBody());
-
             $this->accountId = $json->id;
+            $this->logger->info('New Account created', ['id' => $this->accountId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForAccounts && $this->accountId) {
@@ -507,6 +534,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     private function processContacts(Form $form, Client $client): void
     {
         if (!$this->mapContacts) {
+            $this->logger->debug('No Contacts mapped, skipping.');
+
             return;
         }
 
@@ -518,7 +547,6 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         $isAppendContactData = $this->appendContactData;
 
         $appendContactFields = [];
-
         foreach ($this->contactMapping as $item) {
             if (FieldMapItem::TYPE_RELATION === $item->getType()) {
                 $field = $form->get($item->getValue());
@@ -541,22 +569,39 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
 
         $contactRecord = null;
         if (!empty($contactEmail)) {
+            $this->logger->debug('Checking for existing Contact by email', ['email' => $contactEmail]);
+
             $contactRecord = $this->querySingle(
                 $client,
                 'SELECT Id'.$appendFieldsQuery." FROM Contact WHERE Email = '%s' ORDER BY CreatedDate desc LIMIT 1",
                 [$contactEmail],
             );
+
+            if ($contactRecord) {
+                $this->logger->debug('Found existing Contact', ['id' => $contactRecord->Id]);
+            } else {
+                $this->logger->debug('No existing Contact found');
+            }
         }
 
         if (!$contactRecord) {
+            $this->logger->debug('Checking for existing Contact by name', ['name' => $contactName]);
+
             $contactRecord = $this->querySingle(
                 $client,
                 'SELECT Id'.$appendFieldsQuery." FROM Contact WHERE Name = '%s' ORDER BY CreatedDate desc LIMIT 1",
                 [$contactName],
             );
+
+            if ($contactRecord) {
+                $this->logger->debug('Found existing Contact', ['id' => $contactRecord->Id]);
+            } else {
+                $this->logger->debug('No existing Contact found');
+            }
         }
 
         if ($this->accountId) {
+            $this->logger->debug('Assigning Account to Contact', ['id' => $this->accountId]);
             $mapping['AccountId'] = $this->accountId;
         }
 
@@ -572,6 +617,9 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 $this->getEndpoint('/sobjects/Contact/'.$contactRecord->Id),
                 ['json' => $mapping],
             );
+
+            $this->logger->info('Existing Contact updated', ['id' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $json] = $this->getJsonResponse(
                 $client->post(
@@ -581,6 +629,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
             );
 
             $contactId = $json->id;
+            $this->logger->info('New Contact created', ['id' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if ($this->filesForContacts && $contactId) {
@@ -593,6 +643,8 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     private function processOpportunities(Form $form, Client $client): void
     {
         if (!$this->mapOpportunities) {
+            $this->logger->debug('No Opportunities mapped, skipping.');
+
             return;
         }
 
@@ -610,6 +662,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         $mapping['CloseDate'] = $closeDate->toIso8601ZuluString();
         $mapping['StageName'] = $this->getStage();
         if ($this->accountId) {
+            $this->logger->debug('Assigning Account to Opportunity', ['id' => $this->accountId]);
             $mapping['AccountId'] = $this->accountId;
         }
 
@@ -619,6 +672,9 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 ['json' => $mapping],
             )
         );
+
+        $this->logger->info('New Opportunity created', ['id' => $json->id]);
+        $this->logger->debug('With Mapping', $mapping);
 
         if ($this->filesForOpportunities) {
             $this->linkFilesTo($json->id, $form, $client);
@@ -665,14 +721,19 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                     $payload['OwnerId'] = $contact->OwnerId;
                 }
 
-                $response = $client->post(
+                [$response, $json] = $this->getJsonResponse($client->post(
                     $this->getEndpoint('/sobjects/Task'),
                     ['json' => $payload],
-                );
+                ));
+
+                $this->logger->info('Task created for existing Contact', ['contactId' => $contact->Id, 'taskId' => $json->id]);
+                $this->logger->debug('With Mapping', $payload);
 
                 return 201 === $response->getStatusCode();
             }
         }
+
+        $this->logger->debug('Checked for existing contacts, none found.');
 
         return false;
     }
@@ -788,8 +849,12 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
     {
         $documentIds = $this->getLinkedContentDocumentIds($form, $client);
         if (!$documentIds) {
+            $this->logger->debug('No files to link');
+
             return;
         }
+
+        $this->logger->debug('Linking files to record', ['id' => $id, 'documentIds' => $documentIds]);
 
         $composite = array_map(
             fn ($item, $index) => [
@@ -816,5 +881,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
                 ],
             ]
         );
+
+        $this->logger->debug('Files linked to record', ['id' => $id, 'documentIds' => $documentIds]);
     }
 }

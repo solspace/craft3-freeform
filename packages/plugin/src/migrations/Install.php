@@ -188,6 +188,7 @@ class Install extends StreamlinedInstallMigration
                 ->addField('assetId', $this->integer()->notNull())
                 ->addField('fieldHandle', $this->string(255))
                 ->addField('formToken', $this->string(255))
+                ->addForeignKey('assetId', 'assets', 'id', ForeignKey::CASCADE)
                 ->addIndex(['fieldHandle', 'formToken']),
 
             (new Table('freeform_submissions'))

@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Events\Forms\SubmitEvent;
 use Solspace\Freeform\Events\PostForwarding\PostForwardingEvent;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
@@ -30,6 +31,7 @@ class PostForwardingTrigger extends FeatureBundle
     public function __construct(
         private FormIntegrationsProvider $integrationsProvider,
         private IsolatedTwig $isolatedTwig,
+        private IntegrationLoggerProvider $loggerProvider,
     ) {
         Event::on(
             Form::class,
@@ -52,12 +54,16 @@ class PostForwardingTrigger extends FeatureBundle
             return;
         }
 
+        $logger = $this->loggerProvider->getLogger($integration);
+
         $url = $integration->getUrl();
         $url = $this->isolatedTwig->render($url, ['form' => $form, 'submission' => $submission]);
         $triggerPhrase = $integration->getErrorTrigger();
         $triggerPhrase = $this->isolatedTwig->render($triggerPhrase, ['form' => $form, 'submission' => $submission]);
 
         if (!$url) {
+            $logger->debug('POST forwarding URL is not set', ['form' => $form->getHandle(), 'submission' => $submission?->id]);
+
             return;
         }
 
@@ -106,6 +112,8 @@ class PostForwardingTrigger extends FeatureBundle
 
         Event::trigger(PostForwarding::class, PostForwarding::EVENT_POST_FORWARDING, $payloadEvent);
         if (!$payloadEvent->isValid) {
+            $logger->debug('POST forwarding event was not valid', ['form' => $form->getHandle(), 'submission' => $submission?->id]);
+
             return;
         }
 
@@ -131,7 +139,17 @@ class PostForwardingTrigger extends FeatureBundle
             }
         }
 
-        $logger = Freeform::getInstance()->logger->getLogger(FreeformLogger::PAYLOAD_FORWARDING);
+        $baseLogger = Freeform::getInstance()->logger->getLogger(FreeformLogger::PAYLOAD_FORWARDING);
+
+        $logger->debug(
+            'Sending POST payload',
+            [
+                'form' => $form->getHandle(),
+                'submission' => $submission?->id,
+                'url' => $url,
+                'payload' => $payload,
+            ],
+        );
 
         try {
             $response = $client->send($request, $options);
@@ -147,14 +165,16 @@ class PostForwardingTrigger extends FeatureBundle
             if ($status >= 200 && $status < 300) {
                 if ($triggerPhrase) {
                     if (false !== strripos($logContext['response'], $triggerPhrase)) {
-                        $logger->error('POST forwarding failed', [$logContext]);
+                        $baseLogger->error('POST forwarding failed', [$logContext]);
                     }
                 }
+
+                $logger->info('POST forwarding successful', $logContext);
             } else {
-                $logger->error('POST forwarding failed', [$logContext]);
+                $baseLogger->error('POST forwarding failed', [$logContext]);
             }
         } catch (\Exception $e) {
-            $logger->error(
+            $baseLogger->error(
                 'POST forwarding could not send payload',
                 [
                     'url' => $url,

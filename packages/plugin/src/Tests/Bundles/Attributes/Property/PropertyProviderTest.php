@@ -2,6 +2,8 @@
 
 namespace Solspace\Freeform\Tests\Bundles\Attributes\Property;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\DefaultValue;
 use Solspace\Freeform\Attributes\Property\Edition;
@@ -18,11 +20,7 @@ use Solspace\Freeform\Bundles\Form\Limiting\LimitedUsers\LimitedUserChecker;
 use Solspace\Freeform\Bundles\Settings\DefaultsProvider;
 use yii\di\Container;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(PropertyProvider::class)]
 class PropertyProviderTest extends TestCase
 {
     private PropertyProvider $provider;
@@ -77,9 +75,7 @@ class PropertyProviderTest extends TestCase
         $this->assertEquals(22, $object->getId());
     }
 
-    /**
-     * @dataProvider propertyDataProvider
-     */
+    #[DataProvider('propertyDataProvider')]
     public function testGetEditableProperties(array $checklist)
     {
         $handle = $checklist['handle'];
@@ -109,7 +105,7 @@ class PropertyProviderTest extends TestCase
         }
     }
 
-    public function propertyDataProvider(): array
+    public static function propertyDataProvider(): array
     {
         return [
             [[

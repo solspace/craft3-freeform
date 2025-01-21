@@ -21,13 +21,6 @@
             &.string-cell,
             &.text-cell {
                 padding: 6px 10px !important;
-
-                & input[type="text"] {
-                    width: 100%;
-                    border: 0 !important;
-                    padding: 0 !important;
-                    border-radius: 0 !important;
-                }
             }
 
             &.select-cell {
@@ -157,7 +150,7 @@
     <thead>
         <tr>
             <% tableLayout.forEach(function(column) { %>
-                <th><%= column.label %></th>
+                <th class="<%= column.required ? 'required' : '' %>"><%= column.label %></th>
             <% }); %>
         </tr>
     </thead>
@@ -196,7 +189,7 @@
                                 <% }); %>
                             </div>
                         <% } else if (column.type === 'textarea') { %>
-                            <textarea placeholder="<%= column.placeholder %>"><%= column.value %></textarea>
+                            <textarea placeholder="<%= column.placeholder %>"><% if (column.value.length > 0) { %><%= column.value %><% } else { %>Sample data<% } %></textarea>
                         <% } else { %>
                             <input
                                     type="text"

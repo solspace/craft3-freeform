@@ -6,7 +6,6 @@ return [
 
     'freeform/forms/duplicate' => 'freeform/forms/duplicate',
     'freeform/forms/reset-spam-counter' => 'freeform/forms/reset-spam-counter',
-    'freeform/forms/export' => 'freeform/forms/export',
     'freeform/forms/delete' => 'freeform/forms/delete',
 
     'freeform/forms' => 'freeform/forms',

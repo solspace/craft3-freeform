@@ -71,12 +71,11 @@ export const ConditionTable: React.FC<Props> = ({
               <ValueInput
                 condition={condition}
                 onChange={(value) => {
-                  onChange &&
-                    onChange([
-                      ...conditions.slice(0, index),
-                      { ...condition, value },
-                      ...conditions.slice(index + 1),
-                    ]);
+                  onChange?.([
+                    ...conditions.slice(0, index),
+                    { ...condition, value },
+                    ...conditions.slice(index + 1),
+                  ]);
                 }}
               />
             </td>
@@ -84,11 +83,10 @@ export const ConditionTable: React.FC<Props> = ({
               <Action>
                 <DeleteIcon
                   onClick={() => {
-                    onChange &&
-                      onChange([
-                        ...conditions.slice(0, index),
-                        ...conditions.slice(index + 1),
-                      ]);
+                    onChange?.([
+                      ...conditions.slice(0, index),
+                      ...conditions.slice(index + 1),
+                    ]);
                   }}
                 />
               </Action>
@@ -102,16 +100,15 @@ export const ConditionTable: React.FC<Props> = ({
               <button
                 className="btn add icon fullwidth"
                 onClick={() => {
-                  onChange &&
-                    onChange([
-                      ...conditions,
-                      {
-                        uid: v4(),
-                        field: '',
-                        operator: Operator.Equals,
-                        value: '',
-                      },
-                    ]);
+                  onChange?.([
+                    ...conditions,
+                    {
+                      uid: v4(),
+                      field: '',
+                      operator: Operator.Equals,
+                      value: '',
+                    },
+                  ]);
                 }}
               >
                 {translate('Add a condition')}

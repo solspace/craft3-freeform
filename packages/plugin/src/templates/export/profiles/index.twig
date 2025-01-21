@@ -11,7 +11,7 @@
 
 {% block actionButton %}
 
-    {% if craft.freeform.pro and currentUser.can("freeform-pro-exportProfilesManage") %}
+    {% if freeform.edition.atLeast('lite') and currentUser.can("freeform-pro-exportProfilesManage") %}
 
         <div class="buttons">
             {% if forms|length %}
@@ -108,10 +108,10 @@
         </table>
     {% else %}
         <div class="zilch">
-            {% if freeform.pro %}
+            {% if freeform.edition.atLeast('lite') %}
                 {{ "No export profiles exist yet."|t("freeform") }}
             {% else %}
-                {{ "Upgrade to the Pro edition of Freeform to get access to Export Profiles."|t('freeform') }}
+                {{ "Upgrade to the Lite or Pro edition of Freeform to get access to Export Profiles."|t('freeform') }}
             {% endif %}
         </div>
     {% endif %}

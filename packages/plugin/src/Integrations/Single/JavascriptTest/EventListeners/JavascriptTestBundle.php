@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Integrations\Single\JavascriptTest\EventListeners;
 
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Events\Forms\CollectScriptsEvent;
 use Solspace\Freeform\Events\Forms\OutputAsJsonEvent;
 use Solspace\Freeform\Events\Forms\PrepareAjaxResponsePayloadEvent;
@@ -22,6 +23,7 @@ class JavascriptTestBundle extends FeatureBundle
 {
     public function __construct(
         private FormIntegrationsProvider $integrationsProvider,
+        private IntegrationLoggerProvider $loggerProvider,
     ) {
         Event::on(
             Form::class,
@@ -90,21 +92,29 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
+        $logger = $this->loggerProvider->getLogger($integration);
+
         $jsTestInputName = $integration->getInputName();
         $settings = $this->getSettingsService();
 
         $settingsModel = $settings->getSettingsModel();
         if ($settingsModel->bypassSpamCheckOnLoggedInUsers && \Craft::$app->getUser()->id) {
+            $logger->debug('Skipping Javascript Test check for logged in user');
+
             return;
         }
 
         if ($form->isGraphQLPosted()) {
+            $logger->debug('Skipping Javascript Test check for GraphQL request');
+
             return;
         }
 
         /** @var array $postValues */
         $postedValue = \Craft::$app->request->post($jsTestInputName);
         if ('' === $postedValue) {
+            $logger->debug('Javascript Test passed successfully.');
+
             return;
         }
 
@@ -118,6 +128,7 @@ class JavascriptTestBundle extends FeatureBundle
         }
 
         $form->markAsSpam(SpamReason::TYPE_JS_TEST, 'Javascript Test failed');
+        $logger->debug('Javascript Test failed.');
     }
 
     public function getJsTestInput(Form $form): string

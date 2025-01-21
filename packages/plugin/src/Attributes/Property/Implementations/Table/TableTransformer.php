@@ -27,6 +27,7 @@ class TableTransformer extends Transformer
                 'placeholder' => $column->placeholder,
                 'options' => $column->options,
                 'checked' => $column->checked,
+                'required' => $column->required,
             ];
         }
 

@@ -80,6 +80,8 @@ abstract class APIIntegration extends BaseIntegration implements APIIntegrationI
         $event = new ProcessMappingEvent($this, $form, $fields, $keyValueMap);
         Event::trigger($this, self::EVENT_AFTER_PROCESS_MAPPING, $event);
 
+        $this->logger->debug('Mapping processed', ['category' => $category]);
+
         return $event->getMappedValues();
     }
 }

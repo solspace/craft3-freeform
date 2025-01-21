@@ -4,33 +4,26 @@
 	http://jedwatson.github.io/classnames
 */
 
-/*!
- * Quill Editor v1.3.7
- * https://quilljs.com/
- * Copyright (c) 2014, Jason Chen
- * Copyright (c) 2013, salesforce.com
- */
-
 /*! decimal.js-light v2.5.1 https://github.com/MikeMcl/decimal.js-light/LICENCE */
 
 /**
- * @license React
- * react-dom-server-legacy.browser.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+   * match-sorter-utils
+   *
+   * Copyright (c) TanStack
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.md file in the root directory of this source tree.
+   *
+   * @license MIT
+   */
 
 /**
- * @license React
- * react-dom-server.browser.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * @license
+ * Lodash <https://lodash.com/>
+ * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 
 /**
@@ -85,9 +78,9 @@
 
 /**
  * @license React
- * use-sync-external-store-shim.production.min.js
+ * use-sync-external-store-shim.production.js
  *
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -95,9 +88,9 @@
 
 /**
  * @license React
- * use-sync-external-store-shim/with-selector.production.min.js
+ * use-sync-external-store-shim/with-selector.production.js
  *
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -111,7 +104,7 @@
  */
 
 /**
- * @remix-run/router v1.14.1
+ * @remix-run/router v1.21.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -122,7 +115,7 @@
  */
 
 /**
- * React Router DOM v6.21.1
+ * React Router DOM v6.28.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -133,20 +126,9 @@
  */
 
 /**
- * React Router v6.21.1
+ * React Router v6.28.1
  *
  * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-
-/**
- * match-sorter-utils
- *
- * Copyright (c) TanStack
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE.md file in the root directory of this source tree.
@@ -189,7 +171,7 @@
  */
 
 /**!
- * Sortable 1.15.1
+ * Sortable 1.15.6
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT

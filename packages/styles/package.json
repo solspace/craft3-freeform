@@ -5,7 +5,6 @@
     "dev": "npm run clean && npm run build && sass --no-source-map --watch src/:../plugin/src/Resources/css",
     "build": "npm run clean && sass --no-source-map --style=compressed src/:../plugin/src/Resources/css",
     "clean": "rm -rf ../plugin/src/Resources/css",
-    "lint": "",
     "test": ""
   },
   "author": "Solspace Inc.",

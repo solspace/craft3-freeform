@@ -21,7 +21,7 @@ export const RemoveButton: React.FC<Props> = ({ active, onClick }) => {
       style={animation}
       onClick={(event) => {
         event.stopPropagation();
-        onClick && onClick();
+        onClick?.();
       }}
     >
       <DeleteIcon />

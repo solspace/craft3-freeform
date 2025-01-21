@@ -2,14 +2,11 @@
 
 namespace Solspace\Freeform\Tests\Attributes\Property\Validators;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Attributes\Property\Validators\Length;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(Length::class)]
 class LengthValidatorTest extends TestCase
 {
     public function testValidOnSameLength()

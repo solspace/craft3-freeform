@@ -87,9 +87,7 @@ class PardotV4 extends BasePardotIntegration
     protected function getPardotEndpoint(string $object = 'prospect', string $action = 'query'): string
     {
         $root = rtrim($this->getApiRootUrl(), '/');
-
         $object = trim($object, '/');
-
         $action = ltrim($action, '/');
 
         return $root.'/'.$object.'/version/'.self::API_VERSION.'/do/'.$action;
@@ -111,16 +109,20 @@ class PardotV4 extends BasePardotIntegration
 
         $mapping = array_merge($prospectMapping, $customMapping);
         if (!$mapping) {
+            $this->logger->debug('No data mapped, skipping.');
+
             return;
         }
 
         $email = $mapping['email'];
         unset($mapping['email']);
 
-        $response = $client->post(
+        [$response, $json] = $this->getJsonResponse($client->post(
             $this->getPardotEndpoint('prospect', 'create/email/'.$email),
             ['query' => $mapping],
-        );
+        ));
+
+        $this->logger->info('New Prospect created', ['id' => $json?->id ?? $json?->Id ?? null]);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_PROSPECT, $response);
     }

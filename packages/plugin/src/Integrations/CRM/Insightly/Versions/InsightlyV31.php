@@ -68,6 +68,8 @@ class InsightlyV31 extends BaseInsightlyIntegration
     private function processLeads(Form $form, Client $client): void
     {
         if (!$this->mapLeads) {
+            $this->logger->debug('No Leads mapped, skipping.');
+
             return;
         }
 

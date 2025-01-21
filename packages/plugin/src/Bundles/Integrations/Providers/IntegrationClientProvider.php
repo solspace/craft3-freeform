@@ -25,6 +25,6 @@ class IntegrationClientProvider
             $config['handler'] = $event->getStack();
         }
 
-        return new Client($config);
+        return \Craft::createGuzzleClient($config);
     }
 }

@@ -191,6 +191,8 @@ class PipedriveV1 extends BasePipedriveIntegration
     private function processOrganization(Form $form, Client $client): void
     {
         if (!$this->mapOrganization) {
+            $this->logger->debug('No Organization mapped, skipping.');
+
             return;
         }
 
@@ -225,12 +227,16 @@ class PipedriveV1 extends BasePipedriveIntegration
 
         if (isset($json->data->id)) {
             $this->organizationId = (int) $json->data->id;
+            $this->logger->info('New Organization created', ['id' => $this->organizationId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
     }
 
     private function processPerson(Form $form, Client $client): void
     {
         if (!$this->mapPerson) {
+            $this->logger->debug('No Person mapped, skipping.');
+
             return;
         }
 
@@ -261,11 +267,17 @@ class PipedriveV1 extends BasePipedriveIntegration
                 $this->getEndpoint('/persons/'.$personId),
                 ['json' => $mapping],
             );
+
+            $this->logger->info('Existing Person updated', ['id' => $personId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
-            $response = $client->post(
+            [$response, $json] = $this->getJsonResponse($client->post(
                 $this->getEndpoint('/persons'),
                 ['json' => $mapping],
-            );
+            ));
+
+            $this->logger->info('New Person created', ['id' => $json?->data?->id]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_PERSON, $response);
@@ -280,6 +292,8 @@ class PipedriveV1 extends BasePipedriveIntegration
     private function processLeads(Form $form, Client $client): void
     {
         if (!$this->mapLeads) {
+            $this->logger->debug('No Lead mapped, skipping.');
+
             return;
         }
 
@@ -323,6 +337,8 @@ class PipedriveV1 extends BasePipedriveIntegration
 
         if (isset($json->data->id)) {
             $this->leadId = $json->data->id;
+            $this->logger->info('New Lead created', ['id' => $this->leadId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if (!empty($note)) {
@@ -339,6 +355,8 @@ class PipedriveV1 extends BasePipedriveIntegration
     private function processDeals(Form $form, Client $client): void
     {
         if (!$this->mapDeals) {
+            $this->logger->debug('No Deal mapped, skipping.');
+
             return;
         }
 
@@ -379,6 +397,8 @@ class PipedriveV1 extends BasePipedriveIntegration
 
         if (isset($json->data->id)) {
             $this->dealId = (int) $json->data->id;
+            $this->logger->info('New Deal created', ['id' => $this->dealId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         if (!empty($note)) {
@@ -398,6 +418,8 @@ class PipedriveV1 extends BasePipedriveIntegration
             $this->getEndpoint('/notes'),
             ['json' => $json],
         );
+
+        $this->logger->info('Note added to entity', $json);
 
         $this->triggerAfterResponseEvent('note', $response);
     }

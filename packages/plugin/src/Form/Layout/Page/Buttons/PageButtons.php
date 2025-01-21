@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Form\Layout\Page\Buttons;
 
 use craft\helpers\Template;
+use Solspace\Freeform\Attributes\Property\Edition;
 use Solspace\Freeform\Attributes\Property\Implementations\Attributes\PageButtonAttributesTransformer;
 use Solspace\Freeform\Attributes\Property\Implementations\Field\FieldTransformer;
 use Solspace\Freeform\Attributes\Property\Implementations\NotificationTemplates\NotificationTemplateTransformer;
@@ -94,6 +95,7 @@ class PageButtons
     #[Input\Text('Label', placeholder: 'Back')]
     private string $backLabel = 'Back';
 
+    #[Edition(Freeform::EDITION_PRO)]
     #[Section(
         handle: 'save',
         label: 'Save',
@@ -237,7 +239,7 @@ class PageButtons
 
     public function isBack(): bool
     {
-        return $this->back;
+        return 0 === $this->getPage()->getIndex() ? false : $this->back;
     }
 
     public function getBackLabel(): string

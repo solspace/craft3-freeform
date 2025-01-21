@@ -1,3 +1,4 @@
+import config from '@config/freeform/freeform.config';
 import type {
   GenericValue,
   OptionCollection,
@@ -13,19 +14,19 @@ export enum Source {
 }
 
 export const sourceLabels: OptionCollection = [
-  {
+  config.limitations.can('layout.options.custom') && {
     value: 'custom',
     label: translate('Custom'),
   },
-  {
+  config.limitations.can('layout.options.elements') && {
     value: 'elements',
     label: translate('Elements'),
   },
-  {
+  config.limitations.can('layout.options.predefined') && {
     value: 'predefined',
     label: translate('Predefined'),
   },
-];
+].filter(Boolean);
 
 export type Option = {
   label: string;

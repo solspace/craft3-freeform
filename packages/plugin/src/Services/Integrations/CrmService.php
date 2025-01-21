@@ -39,7 +39,10 @@ class CrmService extends IntegrationsService
 
         if ($refresh || empty($existingRecords)) {
             $client = $this->clientProvider->getAuthorizedClient($integration);
+            $logger = $this->loggerProvider->getLogger($integration);
+
             $fields = $integration->fetchFields($category, $client);
+            $logger->debug(\sprintf('Fetched %d Fields', \count($fields)), ['category' => $category]);
 
             $usedFields = [];
             $newFields = [];

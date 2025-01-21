@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from '@components/breadcrumbs/breadcrumbs';

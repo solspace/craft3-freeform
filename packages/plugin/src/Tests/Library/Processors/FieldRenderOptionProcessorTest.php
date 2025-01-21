@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Tests\Library\Processors;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Fields\Implementations\DropdownField;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
@@ -12,11 +13,7 @@ use Solspace\Freeform\Library\Attributes\TableAttributesCollection;
 use Solspace\Freeform\Library\Processors\FieldRenderOptionProcessor;
 use yii\di\Container;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(FieldRenderOptionProcessor::class)]
 class FieldRenderOptionProcessorTest extends TestCase
 {
     private FieldRenderOptionProcessor $processor;

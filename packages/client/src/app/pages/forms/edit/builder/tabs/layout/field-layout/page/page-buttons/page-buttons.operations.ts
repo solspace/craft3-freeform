@@ -22,24 +22,29 @@ export const getButtonGroups = (page: Page): ButtonGroups => {
             label: page.buttons.submitLabel,
             enabled: true,
           });
+
           break;
 
         case 'back':
-          page.buttons.back &&
+          if (page.buttons.back) {
             buttonGroup.push({
               handle: 'back',
               label: page.buttons.backLabel,
               enabled: page.buttons.back,
             });
+          }
+
           break;
 
         case 'save':
-          page.buttons.save &&
+          if (page.buttons.save) {
             buttonGroup.push({
               handle: 'save',
               label: page.buttons.saveLabel,
               enabled: page.buttons.save,
             });
+          }
+
           break;
 
         default:

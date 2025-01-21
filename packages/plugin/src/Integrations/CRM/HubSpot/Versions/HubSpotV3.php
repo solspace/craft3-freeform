@@ -206,6 +206,8 @@ class HubSpotV3 extends BaseHubSpotIntegration
     private function pushContacts(Form $form, Client $client): void
     {
         if (!$this->mapContacts) {
+            $this->logger->debug('No Contacts mapped, skipping.');
+
             return;
         }
 
@@ -229,6 +231,8 @@ class HubSpotV3 extends BaseHubSpotIntegration
         );
 
         if (!$contact) {
+            $this->logger->debug('No existing contact by email found', ['email' => $email]);
+
             $contactCookie = $_COOKIE['hubspotutk'] ?? null;
             if ($contactCookie) {
                 $endpoint = \sprintf(
@@ -241,12 +245,16 @@ class HubSpotV3 extends BaseHubSpotIntegration
                     $response = $client->get($endpoint);
                     $json = json_decode((string) $response->getBody());
                     $contactId = $json->vid ?? null;
+
+                    $this->logger->debug('Found contact by cookie', ['cookie' => $_COOKIE['hubspotutk'], 'contactId' => $contactId]);
                 } catch (\Exception $exception) {
+                    $this->logger->debug('Failed to find contact by cookie', ['cookie' => $_COOKIE['hubspotutk']]);
                     $this->processException($exception, self::CATEGORY_CONTACT);
                 }
             }
         } else {
             $contactId = $contact->id;
+            $this->logger->debug('Found existing contact by email', ['email' => $email, 'contactId' => $contactId]);
         }
 
         if ($contactId) {
@@ -262,6 +270,9 @@ class HubSpotV3 extends BaseHubSpotIntegration
                 $this->getEndpoint('/objects/contacts/'.$contactId),
                 ['json' => ['properties' => $mapping]],
             );
+
+            $this->logger->info('Updated contact', ['contactId' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $data] = $this->getJsonResponse(
                 $client->post(
@@ -271,6 +282,8 @@ class HubSpotV3 extends BaseHubSpotIntegration
             );
 
             $contactId = $data->id;
+            $this->logger->info('New Contact created', ['contactId' => $contactId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CONTACT, $response);
@@ -280,6 +293,8 @@ class HubSpotV3 extends BaseHubSpotIntegration
     private function pushCompanies(Form $form, Client $client): void
     {
         if (!$this->mapCompanies) {
+            $this->logger->debug('No Companies mapped, skipping.');
+
             return;
         }
 
@@ -293,6 +308,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
             $website = $mapping['website'] ?? null;
             if ($website) {
                 $domain = $this->extractDomainFromUrl($website);
+                $this->logger->debug('Extracted domain from website', ['website' => $website, 'domain' => $domain]);
             }
 
             if (!$domain) {
@@ -304,6 +320,7 @@ class HubSpotV3 extends BaseHubSpotIntegration
 
                     if ($domain) {
                         $mapping['domain'] = $domain;
+                        $this->logger->debug('Extracted domain from email', ['email' => $email, 'domain' => $domain]);
                     }
                 }
             }
@@ -334,6 +351,9 @@ class HubSpotV3 extends BaseHubSpotIntegration
                 $this->getEndpoint('/objects/companies/'.$companyId),
                 ['json' => ['properties' => $mapping]],
             );
+
+            $this->logger->info('Updated company', ['companyId' => $companyId]);
+            $this->logger->debug('With Mapping', $mapping);
         } else {
             [$response, $data] = $this->getJsonResponse(
                 $client->post(
@@ -343,6 +363,9 @@ class HubSpotV3 extends BaseHubSpotIntegration
             );
 
             $companyId = $data->id;
+
+            $this->logger->info('New Company created', ['companyId' => $companyId]);
+            $this->logger->debug('With Mapping', $mapping);
         }
 
         $this->triggerAfterResponseEvent(self::CATEGORY_COMPANY, $response);
@@ -352,6 +375,8 @@ class HubSpotV3 extends BaseHubSpotIntegration
     private function pushDeals(Form $form, Client $client): void
     {
         if (!$this->mapDeals) {
+            $this->logger->debug('No Deals mapped, skipping.');
+
             return;
         }
 
@@ -366,6 +391,9 @@ class HubSpotV3 extends BaseHubSpotIntegration
                 ['json' => ['properties' => $properties]],
             )
         );
+
+        $this->logger->info('New Deal created', ['dealId' => $data->id]);
+        $this->logger->debug('With Mapping', $properties);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_DEAL, $response);
         $this->dealId = $data->id;
@@ -383,10 +411,12 @@ class HubSpotV3 extends BaseHubSpotIntegration
             $endpoint = $base.'/company/'.$companyId.'/associations/default';
             if ($dealId) {
                 $client->put($endpoint."/deal/{$dealId}");
+                $this->logger->debug('Associated deal with company', ['companyId' => $companyId, 'dealId' => $dealId]);
             }
 
             if ($contactId) {
                 $client->put($endpoint."/contact/{$contactId}");
+                $this->logger->debug('Associated contact with company', ['companyId' => $companyId, 'contactId' => $contactId]);
             }
         }
 
@@ -394,10 +424,12 @@ class HubSpotV3 extends BaseHubSpotIntegration
             $endpoint = $base.'/contact/'.$contactId.'/associations/default';
             if ($companyId) {
                 $client->put($endpoint."/company/{$companyId}");
+                $this->logger->debug('Associated company with contact', ['contactId' => $contactId, 'companyId' => $companyId]);
             }
 
             if ($dealId) {
                 $client->put($endpoint."/deal/{$dealId}");
+                $this->logger->debug('Associated deal with contact', ['contactId' => $contactId, 'dealId' => $dealId]);
             }
         }
 
@@ -405,10 +437,12 @@ class HubSpotV3 extends BaseHubSpotIntegration
             $endpoint = $base.'/deal/'.$dealId.'/associations/default';
             if ($companyId) {
                 $client->put($endpoint."/company/{$companyId}");
+                $this->logger->debug('Associated company with deal', ['dealId' => $dealId, 'companyId' => $companyId]);
             }
 
             if ($contactId) {
                 $client->put($endpoint."/contact/{$contactId}");
+                $this->logger->debug('Associated contact with deal', ['dealId' => $dealId, 'contactId' => $contactId]);
             }
         }
     }

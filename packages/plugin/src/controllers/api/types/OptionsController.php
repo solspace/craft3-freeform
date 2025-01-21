@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\controllers\api\types;
 
+use Solspace\Freeform\Bundles\Form\Limiting\LimitedUsers\LimitedUserChecker;
 use Solspace\Freeform\Bundles\Transformers\Options\OptionTypeTransformer;
 use Solspace\Freeform\controllers\BaseApiController;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\OptionTypesProvider;
@@ -15,18 +16,35 @@ class OptionsController extends BaseApiController
         $config,
         private OptionTypeTransformer $optionTypeTransformer,
         private OptionTypesProvider $optionTypesProvider,
+        private LimitedUserChecker $checker,
     ) {
         parent::__construct($id, $module, $config);
     }
 
     public function actionGetElementTypes(): Response
     {
-        return $this->getSerializedTypes($this->optionTypesProvider->getElementTypes());
+        $types = $this->optionTypesProvider->getElementTypes();
+        $allowedTypes = [];
+        foreach ($types as $type) {
+            if ($this->checker->can('layout.options.elements.types', $type::class)) {
+                $allowedTypes[] = $type;
+            }
+        }
+
+        return $this->getSerializedTypes($allowedTypes);
     }
 
     public function actionGetPredefinedTypes(): Response
     {
-        return $this->getSerializedTypes($this->optionTypesProvider->getPredefinedTypes());
+        $types = $this->optionTypesProvider->getPredefinedTypes();
+        $allowedTypes = [];
+        foreach ($types as $type) {
+            if ($this->checker->can('layout.options.predefined.types', $type::class)) {
+                $allowedTypes[] = $type;
+            }
+        }
+
+        return $this->getSerializedTypes($allowedTypes);
     }
 
     public function actionOptions(string $type): Response

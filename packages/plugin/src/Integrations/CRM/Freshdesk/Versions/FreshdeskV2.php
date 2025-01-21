@@ -53,7 +53,6 @@ class FreshdeskV2 extends BaseFreshdeskIntegration
     public function getApiRootUrl(): string
     {
         $url = $this->getDomain();
-
         $url = rtrim($url, '/');
 
         return $url.'/api/'.self::API_VERSION;
@@ -72,6 +71,8 @@ class FreshdeskV2 extends BaseFreshdeskIntegration
 
         $mapping = $this->processMapping($form, $this->ticketMapping, self::CATEGORY_TICKET);
         if (!$mapping) {
+            $this->logger->debug('No Tickets mapped, skipping');
+
             return;
         }
 
@@ -163,10 +164,12 @@ class FreshdeskV2 extends BaseFreshdeskIntegration
             }
         }
 
-        $response = $client->post(
+        [$response, $json] = $this->getJsonResponse($client->post(
             $this->getEndpoint('/tickets'),
             [$requestType => $values],
-        );
+        ));
+
+        $this->logger->info('New Ticket created', ['response' => $json]);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_TICKET, $response);
     }

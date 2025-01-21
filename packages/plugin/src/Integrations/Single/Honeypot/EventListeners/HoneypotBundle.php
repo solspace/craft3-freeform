@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Integrations\Single\Honeypot\EventListeners;
 
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Events\Forms\OutputAsJsonEvent;
 use Solspace\Freeform\Events\Forms\PrepareAjaxResponsePayloadEvent;
 use Solspace\Freeform\Events\Forms\RenderTagEvent;
@@ -21,6 +22,7 @@ class HoneypotBundle extends FeatureBundle
 {
     public function __construct(
         private FormIntegrationsProvider $integrationsProvider,
+        private IntegrationLoggerProvider $loggerProvider,
     ) {
         Event::on(
             Form::class,
@@ -80,11 +82,15 @@ class HoneypotBundle extends FeatureBundle
             return;
         }
 
+        $logger = $this->loggerProvider->getLogger($integration);
+
         $honeypotName = $integration->getInputName();
         $settings = $this->getSettingsService();
 
         $settingsModel = $settings->getSettingsModel();
         if ($settingsModel->bypassSpamCheckOnLoggedInUsers && \Craft::$app->getUser()->id) {
+            $logger->debug('Skipping honeypot check for logged in user');
+
             return;
         }
 
@@ -96,11 +102,15 @@ class HoneypotBundle extends FeatureBundle
                 && $honeypotName === $arguments['honeypot']['name']
                 && '' === $arguments['honeypot']['value']
             ) {
+                $logger->debug('Honeypot check passed for GraphQL request');
+
                 return;
             }
         } else {
             $postedValue = \Craft::$app->request->post($honeypotName);
             if ('' === $postedValue) {
+                $logger->debug('Honeypot check passed successfully for POST request');
+
                 return;
             }
         }
@@ -110,6 +120,7 @@ class HoneypotBundle extends FeatureBundle
         }
 
         $form->markAsSpam(SpamReason::TYPE_HONEYPOT, 'Honeypot check failed');
+        $logger->debug('Honeypot check failed. Form marked as spam.', ['error' => $integration->getErrorMessage()]);
     }
 
     public function getHoneypotInput(Form $form): string

@@ -23,7 +23,7 @@ use Solspace\Freeform\Fields\Implementations\Pro\WebsiteField;
 use Solspace\Freeform\Fields\Implementations\RadiosField;
 use Solspace\Freeform\Fields\Implementations\TextareaField;
 use Solspace\Freeform\Fields\Implementations\TextField;
-use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Categories\Categories;
+use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Assets\Assets;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Entries\Entries;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\OptionTypesProvider;
 use Solspace\Freeform\Fields\Properties\Options\Elements\Types\Users\Users;
@@ -84,36 +84,38 @@ class LimitedUsersDefaults
                             new Boolean('encrypted', 'Encrypt Field Data'),
                             new Boolean('types', 'Field Type Switcher'),
                         ]),
+
                     new Boolean('buttons', 'Advanced Settings on Submit Buttons', true),
-                    // (new Group('options', 'Field Option Sources'))
-                    //     ->setChildren([
-                    //         new Boolean('custom', 'Custom Options', true),
-                    //         (new Boolean('elements', 'Elements', true))
-                    //             ->setChildren([
-                    //                 (new Toggles('types', 'Allowed Types'))
-                    //                     ->setValues([
-                    //                         Entries::class,
-                    //                         Categories::class,
-                    //                         Users::class,
-                    //                     ])
-                    //                     ->setOptions($this->getElementTypes()),
-                    //             ]),
-                    //         (new Boolean('predefined', 'Predefined', true))
-                    //             ->setChildren([
-                    //                 (new Toggles('types', 'Allowed Types'))
-                    //                     ->setValues([
-                    //                         States::class,
-                    //                         Languages::class,
-                    //                         Numbers::class,
-                    //                         Years::class,
-                    //                         Months::class,
-                    //                         Days::class,
-                    //                         DaysOfWeek::class,
-                    //                     ])
-                    //                     ->setOptions($this->getPredefinedTypes()),
-                    //             ]),
-                    //         new Boolean('convert', 'Convert to Custom Values (for Element and Predefined populators)'),
-                    //     ]),
+
+                    (new Group('options', 'Field Option Sources'))
+                        ->setChildren([
+                            new Boolean('custom', 'Custom Options', true),
+                            (new Boolean('elements', 'Elements', true))
+                                ->setChildren([
+                                    (new Toggles('types', 'Allowed Types'))
+                                        ->setValues([
+                                            Assets::class,
+                                            Entries::class,
+                                            Users::class,
+                                        ])
+                                        ->setOptions($this->getElementTypes()),
+                                ]),
+                            (new Boolean('predefined', 'Predefined', true))
+                                ->setChildren([
+                                    (new Toggles('types', 'Allowed Types'))
+                                        ->setValues([
+                                            States::class,
+                                            Languages::class,
+                                            Numbers::class,
+                                            Years::class,
+                                            Months::class,
+                                            Days::class,
+                                            DaysOfWeek::class,
+                                        ])
+                                        ->setOptions($this->getPredefinedTypes()),
+                                ]),
+                            new Boolean('convert', 'Convert to Custom Values'),
+                        ]),
                 ]),
             (new Group('notifications', 'Notifications'))
                 ->setChildren([

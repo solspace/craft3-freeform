@@ -2,16 +2,13 @@
 
 namespace Solspace\Freeform\Tests\Library\Templates;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Solspace\Freeform\Library\DataObjects\FormTemplate;
 use Solspace\Freeform\Library\Templates\TemplateLocator;
 use Symfony\Component\Finder\Finder;
 
-/**
- * @internal
- *
- * @coversNothing
- */
+#[CoversClass(TemplateLocator::class)]
 class TemplateLocatorTest extends TestCase
 {
     private TemplateLocator $locator;

@@ -270,9 +270,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
 
     public function getCurrentPage(): Page
     {
-        return $this->getLayout()->getPages()->getByIndex(
-            $this->propertyBag->get(self::PROPERTY_PAGE_INDEX, 0)
-        );
+        return $this->getLayout()->getPages()->getByIndex($this->getCurrentPageIndex());
     }
 
     public function getNextPage(): Page

@@ -4,7 +4,7 @@ namespace Solspace\Freeform\Library\DataObjects\Summary\Statistics;
 
 class Spam
 {
-    public ?bool $spamProtectionBehavior = false;
+    public ?string $spamProtectionBehavior = '';
     public ?bool $spamFolder = false;
     public ?bool $purgeSpam = false;
     public ?int $purgeInterval = 0;

@@ -74,10 +74,13 @@ class JiraCards extends BaseJiraIntegration
 
         $mapping['project'] = ['key' => $this->getProjectKey()];
 
-        $response = $client->post(
+        [$response, $json] = $this->getJsonResponse($client->post(
             $this->getEndpoint('issue'),
             ['json' => ['fields' => $mapping]]
-        );
+        ));
+
+        $this->logger->info('Jira card created', ['id' => $json->id, 'key' => $json->key]);
+        $this->logger->debug('With Mapping', $mapping);
 
         $this->triggerAfterResponseEvent(self::CATEGORY_CARD, $response);
     }
@@ -203,6 +206,8 @@ class JiraCards extends BaseJiraIntegration
     public function populateParameters(Client $client): void
     {
         if ($this->getProjectKey()) {
+            $this->logger->debug('Project key already set, skipping auto-population');
+
             return;
         }
 
@@ -211,6 +216,7 @@ class JiraCards extends BaseJiraIntegration
 
         if (isset($json->projects[0])) {
             $this->setProjectKey($json->projects[0]->key);
+            $this->logger->debug('Project key auto-populated', ['projectKey' => $this->getProjectKey()]);
         }
     }
 
@@ -227,6 +233,13 @@ class JiraCards extends BaseJiraIntegration
                 ['query' => ['projectKeys' => $this->getProjectKey()]]
             )
         );
+
+        $logOptions = array_map(
+            fn ($user) => ['accountId' => $user->accountId, 'displayName' => $user->displayName],
+            $json
+        );
+
+        $this->logger->debug('Users fetched', $logOptions);
 
         return array_map(
             fn ($user) => new FieldObjectOption(
@@ -248,6 +261,8 @@ class JiraCards extends BaseJiraIntegration
             $client
         );
 
+        $this->logger->debug('Components fetched', $components);
+
         return array_map(
             fn ($component) => new FieldObjectOption(
                 $component->id,
@@ -260,6 +275,8 @@ class JiraCards extends BaseJiraIntegration
     private function getPriorityOptions(Client $client): array
     {
         [, $json] = $this->getJsonResponse($client->get($this->getEndpoint('priority')));
+
+        $this->logger->debug('Priorities fetched', $json);
 
         return array_map(
             fn ($priority) => new FieldObjectOption(
@@ -279,6 +296,8 @@ class JiraCards extends BaseJiraIntegration
             ),
             $client
         );
+
+        $this->logger->debug('Versions fetched', $versions);
 
         return array_map(
             fn ($priority) => new FieldObjectOption(

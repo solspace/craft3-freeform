@@ -99,7 +99,7 @@ export const OptionPicker: React.FC<OptionPickerProps> = ({
       callback: (event) => {
         if (event.key === 'Enter') {
           const value = findValueByShadowIndex(filteredOptions, focusIndex);
-          onChange && onChange(updateCurrentValue(value));
+          onChange?.(updateCurrentValue(value));
         }
       },
     },
@@ -131,7 +131,7 @@ export const OptionPicker: React.FC<OptionPickerProps> = ({
 
   const onOptionClick = useCallback(
     (value: string) => {
-      onChange && onChange(updateCurrentValue(value));
+      onChange?.(updateCurrentValue(value));
     },
     [onChange]
   );
@@ -152,7 +152,7 @@ export const OptionPicker: React.FC<OptionPickerProps> = ({
               <PickerClose
                 onClick={(event) => {
                   event.stopPropagation();
-                  onChange && onChange(value.filter((v) => v !== val));
+                  onChange?.(value.filter((v) => v !== val));
                 }}
               >
                 <RemoveIcon />

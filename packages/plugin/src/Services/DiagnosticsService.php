@@ -62,7 +62,7 @@ class DiagnosticsService extends BaseService
                         'The current minimum Craft version Freeform supports is 4.0.0 or greater.'
                     ),
                     new SuggestionValidator(
-                        fn ($value) => version_compare($value['version'], '5.6.0', '<'),
+                        fn ($value) => version_compare($value['version'], '5.7.0', '<'),
                         'Potential Craft Compatibility issue',
                         'This version of Freeform may not be fully compatible with this version of Craft and may encounter issues. Please check if there are any updates available.'
                     ),
@@ -390,6 +390,10 @@ class DiagnosticsService extends BaseService
                         'interval' => $this->getSummary()->statistics->settings->purgeInterval,
                     ],
                 ),
+                new DiagnosticItem(
+                    'Site-Aware Forms: <b>{{ value.enabled ? "Enabled" : "Disabled" }}</b>',
+                    ['enabled' => $this->getSettingsService()->getSettingsModel()->sitesEnabled],
+                ),
             ],
             'Spam Controls' => [
                 new DiagnosticItem(
@@ -404,8 +408,14 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Spam Protection Behavior : <b>{{ value }}</b>',
-                    $this->getSummary()->statistics->spam->spamProtectionBehavior
+                    'Spam Protection Behavior: <b>{{ value }}</b>',
+                    Freeform::t(
+                        match ($this->getSummary()->statistics->spam->spamProtectionBehavior) {
+                            Settings::PROTECTION_DISPLAY_ERRORS => 'Display Errors',
+                            Settings::PROTECTION_SIMULATE_SUCCESS => 'Simulate Success',
+                            Settings::PROTECTION_RELOAD_FORM => 'Reload Form',
+                        }
+                    )
                 ),
                 new DiagnosticItem(
                     'Bypass All Spam Checks for Logged in Users: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
@@ -515,6 +525,10 @@ class DiagnosticsService extends BaseService
                             ]
                         ),
                     ]
+                ),
+                new DiagnosticItem(
+                    'Integration Logging Level: <b>{{ value.level }}</b>',
+                    ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
                 ),
             ],
         ];

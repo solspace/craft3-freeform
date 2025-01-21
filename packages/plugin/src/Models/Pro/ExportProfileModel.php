@@ -4,13 +4,14 @@ namespace Solspace\Freeform\Models\Pro;
 
 use Carbon\Carbon;
 use craft\base\Model;
-use craft\db\Query;
-use craft\db\Table;
+use craft\helpers\Db;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
+use Solspace\Freeform\Elements\Db\SubmissionQuery;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Fields\Interfaces\NoStorageInterface;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
-use Solspace\Freeform\Records\StatusRecord;
 
 class ExportProfileModel extends Model
 {
@@ -18,35 +19,16 @@ class ExportProfileModel extends Model
     public const RANGE_YESTERDAY = 'yesterday';
     public const RANGE_CUSTOM = 'custom';
 
-    /** @var int */
-    public $id;
-
-    /** @var int */
-    public $formId;
-
-    /** @var string */
-    public $name;
-
-    /** @var int */
-    public $limit;
-
-    /** @var string */
-    public $dateRange;
-
-    /** @var string */
-    public $rangeStart;
-
-    /** @var string */
-    public $rangeEnd;
-
-    /** @var array */
-    public $fields;
-
-    /** @var array */
-    public $filters;
-
-    /** @var array */
-    public $statuses;
+    public ?int $id = null;
+    public ?int $formId = null;
+    public ?string $name = null;
+    public ?int $limit = null;
+    public ?string $dateRange = null;
+    public ?string $rangeStart = null;
+    public ?string $rangeEnd = null;
+    public ?array $fields = null;
+    public ?array $filters = null;
+    public null|array|string $statuses = null;
 
     public static function create(Form $form): self
     {
@@ -63,36 +45,16 @@ class ExportProfileModel extends Model
         return Freeform::getInstance()->forms->getFormById($this->formId);
     }
 
-    /**
-     * @return int|string
-     */
-    public function getSubmissionCount()
+    public function getSubmissionCount(): int
     {
-        $command = $this->buildCommand();
-        $command->select('COUNT(s.id)');
+        $query = $this->getQuery();
 
         try {
-            return $command->scalar();
+            return $query->count();
         } catch (\Exception $e) {
             \Craft::$app->session->setError($e->getMessage());
 
-            return 'Invalid Query';
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubmissionData()
-    {
-        $command = $this->buildCommand();
-
-        try {
-            return $command->all();
-        } catch (\Exception $e) {
-            \Craft::$app->session->setError($e->getMessage());
-
-            return [];
+            return 0;
         }
     }
 
@@ -100,16 +62,11 @@ class ExportProfileModel extends Model
     {
         $timezone = $this->getTimezoneOverride();
 
-        switch ($this->dateRange) {
-            case self::RANGE_CUSTOM:
-                return (new Carbon($this->rangeEnd, $timezone))->setTime(23, 59, 59);
-
-            case self::RANGE_YESTERDAY:
-                return (new Carbon('-1 day', $timezone))->setTime(23, 59, 59);
-
-            default:
-                return null;
-        }
+        return match ($this->dateRange) {
+            self::RANGE_CUSTOM => (new Carbon($this->rangeEnd, $timezone))->setTime(23, 59, 59),
+            self::RANGE_YESTERDAY => (new Carbon('-1 day', $timezone))->setTime(23, 59, 59),
+            default => null,
+        };
     }
 
     public function getDateRangeStart(): ?Carbon
@@ -124,24 +81,18 @@ class ExportProfileModel extends Model
             return (new Carbon("-{$this->dateRange} days", $timezone))->setTime(0, 0, 0);
         }
 
-        switch ($this->dateRange) {
-            case self::RANGE_CUSTOM:
-                return (new Carbon($this->rangeStart, $timezone))->setTime(0, 0, 0);
-
-            case self::RANGE_YESTERDAY:
-                return (new Carbon('-1 day', $timezone))->setTime(0, 0, 0);
-
-            case self::RANGE_TODAY:
-            default:
-                return (new Carbon('now', $timezone))->setTime(0, 0, 0);
-        }
+        return match ($this->dateRange) {
+            self::RANGE_CUSTOM => (new Carbon($this->rangeStart, $timezone))->setTime(0, 0, 0),
+            self::RANGE_YESTERDAY => (new Carbon('-1 day', $timezone))->setTime(0, 0, 0),
+            default => (new Carbon('now', $timezone))->setTime(0, 0, 0),
+        };
     }
 
-    public function getFieldSettings(): array
+    public function getFieldDescriptors(): FieldDescriptorCollection
     {
         $form = $this->getForm();
+        $collection = new FieldDescriptorCollection();
 
-        $storedFieldIds = $fieldSettings = [];
         if (!empty($this->fields)) {
             foreach ($this->fields as $fieldId => $item) {
                 $label = $item['label'];
@@ -154,63 +105,48 @@ class ExportProfileModel extends Model
                     }
 
                     $label = $field->getLabel();
-
-                    $storedFieldIds[] = $field->getId();
                 }
 
-                $fieldSettings[$fieldId] = [
-                    'label' => $label,
-                    'checked' => $isChecked,
-                ];
+                $collection->add(
+                    new FieldDescriptor(
+                        $fieldId,
+                        $label,
+                        $isChecked,
+                    )
+                );
             }
         }
 
-        if (empty($fieldSettings)) {
-            $fieldSettings['id'] = [
-                'label' => 'ID',
-                'checked' => true,
-            ];
-            $fieldSettings['title'] = [
-                'label' => 'Title',
-                'checked' => true,
-            ];
-            $fieldSettings['ip'] = [
-                'label' => 'IP Address',
-                'checked' => true,
-            ];
-            $fieldSettings['dateCreated'] = [
-                'label' => 'Date Created',
-                'checked' => true,
-            ];
-            $fieldSettings['status'] = [
-                'label' => 'Status',
-                'checked' => true,
-            ];
+        if (0 === $collection->count()) {
+            $collection
+                ->add(new FieldDescriptor('id', 'ID'))
+                ->add(new FieldDescriptor('title', 'Title'))
+                ->add(new FieldDescriptor('ip', 'IP Address'))
+                ->add(new FieldDescriptor('dateCreated', 'Date Created'))
+                ->add(new FieldDescriptor('status', 'Status'))
+            ;
         }
 
-        if (!isset($fieldSettings['userId'])) {
-            $fieldSettings['userId'] = [
-                'label' => 'Author',
-                'checked' => true,
-            ];
+        if (!$collection->has('userId')) {
+            $collection->add(new FieldDescriptor('userId', 'Author'));
         }
 
         foreach ($form->getLayout()->getFields() as $field) {
             if (
                 $field instanceof NoStorageInterface
                 || !$field->getId()
-                || \in_array($field->getId(), $storedFieldIds, true)
+                || $collection->has($field->getId())
             ) {
                 continue;
             }
 
-            $fieldSettings[$field->getId()] = [
-                'label' => $field->getLabel(),
-                'checked' => true,
-            ];
+            $id = $field->getId();
+            $label = $field->getLabel();
+
+            $collection->add(new FieldDescriptor($id, $label), $id);
         }
 
-        return $fieldSettings;
+        return $collection;
     }
 
     public function safeAttributes(): array
@@ -229,170 +165,70 @@ class ExportProfileModel extends Model
         ];
     }
 
-    private function buildCommand(): Query
+    public function getQuery(): SubmissionQuery
     {
-        $isCraft5 = version_compare(\Craft::$app->version, '5.0.0-alpha', '>=');
-
+        $table = Submission::TABLE;
         $form = $this->getForm();
-        $fieldData = $this->getFieldSettings();
 
-        $searchableFields = [];
-        foreach ($fieldData as $fieldId => $data) {
-            $isChecked = $data['checked'];
-
-            if (!(bool) $isChecked) {
-                continue;
-            }
-
-            if (is_numeric($fieldId)) {
-                $field = $form->get($fieldId);
-                $fieldName = Submission::getFieldColumnName($field);
-                $fieldHandle = $field->getHandle();
-
-                $searchableFields[] = "[[sc.{$fieldName}]] as {$fieldHandle}";
-            } else {
-                $fieldName = $fieldId;
-                $fieldName = match ($fieldName) {
-                    'title' => $isCraft5 ? 'es.[[title]]' : 'c.[['.$fieldName.']]',
-                    'status' => 'stat.[[name]] AS status',
-                    default => 's.[['.$fieldName.']]',
-                };
-
-                $searchableFields[] = $fieldName;
-            }
-        }
-
-        $conditions = ['s.[[formId]] = :formId', 's.[[isSpam]] = false'];
-        $parameters = ['formId' => $this->formId];
+        $query = Submission::find();
+        $query
+            ->formId($form->getId())
+            ->isSpam(false)
+        ;
 
         $dateRangeStart = $this->getDateRangeStart();
         if ($dateRangeStart) {
-            $dateRangeStart->setTimezone('UTC');
-            $conditions[] = 's.[[dateCreated]] >= :dateRangeStart';
-            $parameters['dateRangeStart'] = $dateRangeStart->format('Y-m-d H:i:s');
+            $query->andWhere(['>=', $table.'.[[dateCreated]]', Db::prepareDateForDb($dateRangeStart)]);
         }
 
         $dateRangeEnd = $this->getDateRangeEnd();
         if ($dateRangeEnd) {
-            $dateRangeEnd->setTimezone('UTC');
-            $conditions[] = 's.[[dateCreated]] <= :dateRangeEnd';
-            $parameters['dateRangeEnd'] = $dateRangeEnd->format('Y-m-d H:i:s');
+            $query->andWhere(['<=', $table.'.[[dateCreated]]', Db::prepareDateForDb($dateRangeEnd)]);
         }
 
         if ($this->filters) {
             foreach ($this->filters as $filter) {
-                $id = $filter['field'];
-
+                $fieldId = $id = $filter['field'];
                 $type = $filter['type'];
                 $value = $filter['value'];
 
-                $fieldId = $id;
                 if (is_numeric($id)) {
                     $field = $form->get($id);
                     if (!$field) {
                         continue;
                     }
 
-                    $fieldId = 'sc.[['.Submission::getFieldColumnName($field).']]';
+                    $fieldId = '[['.Submission::getFieldColumnName($field).']]';
                 }
 
-                if ('id' === $fieldId) {
-                    $fieldId = 's.[[id]]';
-                }
+                $fieldId = match ($fieldId) {
+                    'id' => $table.'.[[id]]',
+                    'dateCreated' => $table.'.[[dateCreated]]',
+                    'status' => '[[sub_freeform_statuses]].[[name]]',
+                    'cc_amount' => 'p.[[amount]]',
+                    'cc_currency' => 'p.[[currency]]',
+                    'cc_status' => 'p.[[status]]',
+                    'cc_card' => 'p.[[last4]]',
+                    default => $fieldId,
+                };
 
-                if ('dateCreated' === $fieldId) {
-                    $fieldId = 's.[[dateCreated]]';
-                }
-
-                if ('status' === $fieldId) {
-                    $fieldId = 'stat.[[name]] AS status';
-                }
-
-                if ('cc_amount' === $fieldId) {
-                    $fieldId = 'p.[[amount]]';
-                }
-
-                if ('cc_currency' === $fieldId) {
-                    $fieldId = 'p.[[currency]]';
-                }
-
-                if ('cc_status' === $fieldId) {
-                    $fieldId = 'p.[[status]]';
-                }
-
-                if ('cc_card' === $fieldId) {
-                    $fieldId = 'p.[[last4]]';
-                }
-
-                switch ($type) {
-                    case '=':
-                        $conditions[] = "{$fieldId} = :field_{$id}";
-
-                        break;
-
-                    case '!=':
-                        $conditions[] = "{$fieldId} != :field_{$id}";
-
-                        break;
-
-                    case 'like':
-                        $conditions[] = "{$fieldId} LIKE :field_{$id}";
-
-                        break;
-
-                    case 'not-like':
-                        $conditions[] = "{$fieldId} NOT LIKE :field_{$id}";
-
-                        break;
-
-                    default:
-                        continue 2;
-                }
-
-                $parameters["field_{$id}"] = $value;
+                match ($type) {
+                    '=' => $query->andWhere([$fieldId => $value]),
+                    '!=' => $query->andWhere(['!=', $fieldId, $value]),
+                    'like' => $query->andWhere(['like', $fieldId, $value, false]),
+                    'not-like' => $query->andWhere(['not', ['like', $fieldId, $value, false]])
+                };
             }
         }
-
-        $command = (new Query())
-            ->select(implode(',', $searchableFields))
-            ->from(Submission::TABLE.' s')
-            ->innerJoin(StatusRecord::TABLE.' stat', 'stat.[[id]] = s.[[statusId]]')
-            ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
-            ->where(implode(' AND ', $conditions), $parameters)
-        ;
-
-        $siteId = \Craft::$app->sites->currentSite->id;
-        if ($isCraft5) {
-            $command->innerJoin(
-                '{{%elements_sites}} es',
-                'es.[[elementId]] = s.[[id]] AND es.[[siteId]] = :siteId',
-                ['siteId' => $siteId]
-            );
-        } else {
-            $command->innerJoin(
-                '{{%content}} c',
-                'c.[[elementId]] = s.[[id]] AND c.[[siteId]] = :siteId',
-                ['siteId' => $siteId]
-            );
-        }
-
-        if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {
-            $elements = Table::ELEMENTS;
-            $command->innerJoin(
-                "{$elements} e",
-                'e.[[id]] = s.[[id]] AND e.[[dateDeleted]] IS NULL'
-            );
-        }
-
         if ($this->limit) {
-            $command->limit((int) $this->limit);
+            $query->limit($this->limit);
         }
 
         if (\is_array($this->statuses)) {
-            $command->andWhere(['IN', '[[statusId]]', $this->statuses]);
+            $query->andWhere(['IN', 'statusId', $this->statuses]);
         }
 
-        return $command;
+        return $query;
     }
 
     private function getTimezoneOverride(): ?string

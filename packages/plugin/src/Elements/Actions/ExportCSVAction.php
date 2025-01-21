@@ -5,10 +5,13 @@ namespace Solspace\Freeform\Elements\Actions;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
+use Solspace\Freeform\Bundles\Export\Collections\FieldDescriptorCollection;
+use Solspace\Freeform\Bundles\Export\Implementations\Csv\ExportCsv;
+use Solspace\Freeform\Bundles\Export\Objects\FieldDescriptor;
 use Solspace\Freeform\Elements\Submission;
+use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Exceptions\FreeformException;
-use Solspace\Freeform\Library\Export\ExportCsv;
 
 class ExportCSVAction extends ElementAction
 {
@@ -63,48 +66,30 @@ class ExportCSVAction extends ElementAction
 
     public function performAction(ElementQueryInterface $query): bool
     {
-        /** @var Submission[] $submissions */
-        $submissions = $query->all();
-
-        if ($submissions) {
-            $formId = $submissions[0]['formId'];
-            $form = Freeform::getInstance()->forms->getFormById($formId);
-            if (!$form) {
-                throw new FreeformException(Freeform::t('Form with ID {id} not found', ['id' => $formId]));
-            }
-
-            $dataReorder = [];
-            foreach ($submissions as $submission) {
-                $fieldData = [];
-                $reordered = [];
-                foreach ($submission as $key => $value) {
-                    if (preg_match('/^'.Submission::FIELD_COLUMN_PREFIX.'\d+$/', $key)) {
-                        $fieldData[$key] = $value;
-                    } else {
-                        $reordered[$key] = $value;
-                    }
-                }
-
-                foreach ($form->getForm()->getLayout()->getStorableFields() as $field) {
-                    $columnName = Submission::getFieldColumnName($field);
-                    if ($field->getId() && isset($fieldData[$columnName])) {
-                        $reordered[$columnName] = $fieldData[$columnName];
-                    }
-                }
-
-                $dataReorder[] = $reordered;
-            }
-
-            $submissions = $dataReorder;
-        } else {
+        $descriptors = new FieldDescriptorCollection();
+        $submission = $query->one();
+        if (!$submission instanceof Submission) {
             throw new FreeformException(Freeform::t('No submissions found'));
         }
 
+        $form = $submission->getForm();
+        foreach ($submission as $key => $value) {
+            if (!$value instanceof FieldInterface) {
+                $descriptors->add(new FieldDescriptor($key, ucfirst($key)));
+            }
+        }
+
+        foreach ($form->getLayout()->getFields()->getStorableFields() as $field) {
+            $descriptors->add(new FieldDescriptor($field->getId(), $field->getLabel()));
+        }
+
         $exporter = new ExportCsv(
-            $form->getForm(),
-            $submissions,
-            Freeform::getInstance()->exportProfiles->getExportSettings()
+            $form,
+            $query,
+            $descriptors,
+            Freeform::getInstance()->exportProfiles->getExportSettings(),
         );
+
         $fileName = \sprintf('%s submissions %s.csv', $form->name, date('Y-m-d H:i'));
 
         Freeform::getInstance()->exportProfiles->outputFile($exporter->export(), $fileName, $exporter->getMimeType());
