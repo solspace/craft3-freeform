@@ -14,6 +14,7 @@
 namespace Solspace\Freeform\Bundles\Notifications\SendListeners;
 
 use Solspace\Freeform\Bundles\Notifications\Providers\NotificationsProvider;
+use Solspace\Freeform\Bundles\Rules\RuleValidator;
 use Solspace\Freeform\Events\Forms\SendNotificationsEvent;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Jobs\FreeformQueueHandler;
@@ -28,7 +29,8 @@ class EmailRecipientNotifications extends FeatureBundle
 {
     public function __construct(
         private NotificationsProvider $notificationsProvider,
-        private FreeformQueueHandler $queueHandler
+        private FreeformQueueHandler $queueHandler,
+        private RuleValidator $ruleValidator,
     ) {
         Event::on(Form::class, Form::EVENT_SEND_NOTIFICATIONS, [$this, 'sendToRecipients']);
     }
@@ -54,6 +56,10 @@ class EmailRecipientNotifications extends FeatureBundle
         foreach ($notifications as $notification) {
             $field = $form->get($notification->getField());
             if (!$field) {
+                continue;
+            }
+
+            if ($this->ruleValidator->isFieldHidden($form, $field)) {
                 continue;
             }
 
