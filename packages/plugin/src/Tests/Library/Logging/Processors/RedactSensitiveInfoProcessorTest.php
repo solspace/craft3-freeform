@@ -20,19 +20,17 @@ class RedactSensitiveInfoProcessorTest extends TestCase
             Level::Info,
             'This is a message',
             [
-                'payload' => [
-                    'pass' => 'password',
-                    'api_key' => 'api key',
-                    'clientId' => 'client',
-                    'secret' => 'secret',
-                    'clientSecret' => 'secret',
-                    'password' => 'password',
-                    'somePassword' => 'password',
-                    'other' => 'value',
-                    'nested' => [
-                        'pass' => 'nested pass',
-                        'api_key' => 'nested api key',
-                    ],
+                'pass' => 'password',
+                'api_key' => 'api key',
+                'clientId' => 'client',
+                'secret' => 'secret',
+                'clientSecret' => 'secret',
+                'password' => 'password',
+                'somePassword' => 'password',
+                'other' => 'value',
+                'nested' => [
+                    'pass' => 'nested pass',
+                    'api_key' => 'nested api key',
                 ],
             ],
         );
@@ -42,67 +40,20 @@ class RedactSensitiveInfoProcessorTest extends TestCase
 
         self::assertEquals(
             [
-                'pass' => '**REDACTED**',
-                'api_key' => '**REDACTED**',
-                'clientId' => '**REDACTED**',
-                'secret' => '**REDACTED**',
-                'clientSecret' => '**REDACTED**',
-                'password' => '**REDACTED**',
-                'somePassword' => '**REDACTED**',
+                'pass' => 'pass**********',
+                'api_key' => 'api **********',
+                'clientId' => 'clie**********',
+                'secret' => 'secr**********',
+                'clientSecret' => 'secr**********',
+                'password' => 'pass**********',
+                'somePassword' => 'pass**********',
                 'other' => 'value',
                 'nested' => [
-                    'pass' => '**REDACTED**',
-                    'api_key' => '**REDACTED**',
+                    'pass' => 'nest**********',
+                    'api_key' => 'nest**********',
                 ],
             ],
-            $output->context['payload'],
-        );
-    }
-
-    public function testRedactStdClass()
-    {
-        $logRecord = new LogRecord(
-            new \DateTimeImmutable(),
-            'channel',
-            Level::Info,
-            'This is a message',
-            [
-                'payload' => (object) [
-                    'pass' => 'password',
-                    'api_key' => 'api key',
-                    'clientId' => 'client',
-                    'secret' => 'secret',
-                    'clientSecret' => 'secret',
-                    'password' => 'password',
-                    'somePassword' => 'password',
-                    'other' => 'value',
-                    'nested' => [
-                        'pass' => '**REDACTED**',
-                        'api_key' => '**REDACTED**',
-                    ],
-                ],
-            ],
-        );
-
-        $processor = new RedactSensitiveInfoProcessor();
-        $output = $processor($logRecord);
-
-        self::assertEquals(
-            (object) [
-                'pass' => '**REDACTED**',
-                'api_key' => '**REDACTED**',
-                'clientId' => '**REDACTED**',
-                'secret' => '**REDACTED**',
-                'clientSecret' => '**REDACTED**',
-                'password' => '**REDACTED**',
-                'somePassword' => '**REDACTED**',
-                'other' => 'value',
-                'nested' => [
-                    'pass' => '**REDACTED**',
-                    'api_key' => '**REDACTED**',
-                ],
-            ],
-            $output->context['payload'],
+            $output->context,
         );
     }
 
@@ -114,19 +65,17 @@ class RedactSensitiveInfoProcessorTest extends TestCase
             Level::Info,
             'This is a message',
             [
-                'payload' => [
-                    'pass' => 'password',
-                    'api_key' => 'api key',
-                    'clientId' => 'client',
-                    'secret' => 'secret',
-                    'clientSecret' => 'secret',
-                    'password' => 'password',
-                    'somePassword' => 'password',
-                    'other' => 'value',
-                    'nested' => (object) [
-                        'pass' => '**REDACTED**',
-                        'api_key' => '**REDACTED**',
-                    ],
+                'pass' => 'password',
+                'api_key' => 'api key',
+                'clientId' => 'client',
+                'secret' => 'secret',
+                'clientSecret' => 'secret',
+                'password' => 'password',
+                'somePassword' => 'password',
+                'other' => 'value',
+                'nested' => (object) [
+                    'pass' => 'nested password',
+                    'api_key' => 'nested api key',
                 ],
             ],
         );
@@ -136,20 +85,20 @@ class RedactSensitiveInfoProcessorTest extends TestCase
 
         self::assertEquals(
             [
-                'pass' => '**REDACTED**',
-                'api_key' => '**REDACTED**',
-                'clientId' => '**REDACTED**',
-                'secret' => '**REDACTED**',
-                'clientSecret' => '**REDACTED**',
-                'password' => '**REDACTED**',
-                'somePassword' => '**REDACTED**',
+                'pass' => 'pass**********',
+                'api_key' => 'api **********',
+                'clientId' => 'clie**********',
+                'secret' => 'secr**********',
+                'clientSecret' => 'secr**********',
+                'password' => 'pass**********',
+                'somePassword' => 'pass**********',
                 'other' => 'value',
                 'nested' => (object) [
-                    'pass' => '**REDACTED**',
-                    'api_key' => '**REDACTED**',
+                    'pass' => 'nest**********',
+                    'api_key' => 'nest**********',
                 ],
             ],
-            $output->context['payload'],
+            $output->context,
         );
     }
 }

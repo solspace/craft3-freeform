@@ -7,6 +7,9 @@ use Monolog\Processor\ProcessorInterface;
 
 class RedactSensitiveInfoProcessor implements ProcessorInterface
 {
+    private const VISIBLE_CHARS = 4;
+    private const REDACT = '**********';
+
     private const SENSITIVE_KEYS = [
         'api_key',
         'apiKey',
@@ -23,16 +26,12 @@ class RedactSensitiveInfoProcessor implements ProcessorInterface
 
     public function __invoke(LogRecord $record): LogRecord
     {
-        $context = $record->context;
-
-        if (isset($context['payload'])) {
-            $context['payload'] = $this->redact($context['payload']);
-        }
+        $context = $this->traverseRedactables($record->context);
 
         return $record->with(context: $context);
     }
 
-    private function redact(mixed $data): mixed
+    private function traverseRedactables(mixed $data): mixed
     {
         $isObject = false;
         if ($data instanceof \stdClass) {
@@ -45,16 +44,16 @@ class RedactSensitiveInfoProcessor implements ProcessorInterface
                 // check wildcard keys first
                 foreach (self::WILDCARD_KEYS as $wildcard) {
                     if (str_contains(strtolower($key), strtolower($wildcard))) {
-                        $data[$key] = '**REDACTED**';
+                        $data[$key] = $this->redactValue($value);
 
                         continue 2;
                     }
                 }
 
                 if (\in_array($key, self::SENSITIVE_KEYS, false)) {
-                    $data[$key] = '**REDACTED**';
+                    $data[$key] = $this->redactValue($value);
                 } else {
-                    $data[$key] = $this->redact($value);
+                    $data[$key] = $this->traverseRedactables($value);
                 }
             }
         }
@@ -64,5 +63,14 @@ class RedactSensitiveInfoProcessor implements ProcessorInterface
         }
 
         return $data;
+    }
+
+    private function redactValue(mixed $value): string
+    {
+        if (!\is_string($value)) {
+            return self::REDACT;
+        }
+
+        return substr($value, 0, self::VISIBLE_CHARS).self::REDACT;
     }
 }
