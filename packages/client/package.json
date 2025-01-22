@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Freeform Client",
   "scripts": {
-    "dev": "npm run clean && NODE_ENV=development npm run watch",
+    "dev": "NODE_ENV=development npm run watch",
     "build": "npm run clean && NODE_ENV=production npm run compile",
     "watch": "webpack serve --config ./config/webpack/dev.config.js",
     "clean": "rm -rf ../plugin/src/Resources/js/client",

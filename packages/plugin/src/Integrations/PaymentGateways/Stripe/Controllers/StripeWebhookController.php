@@ -8,6 +8,7 @@ use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\PaymentIntent;
 use Stripe\Webhook;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -31,7 +32,11 @@ class StripeWebhookController extends BaseStripeController
         $json = json_decode($payload, false);
         $header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? null;
 
-        $hash = $json->data->object->subscription_details->metadata->hash ?? $json->data->object->metadata->hash;
+        try {
+            $hash = $json->data->object->subscription_details->metadata->hash ?? $json->data->object->metadata->hash;
+        } catch (\Exception) {
+            throw new BadRequestHttpException('Request did not contain a valid Freeform hash');
+        }
 
         [, $integration] = $this->getRequestItems($hash);
         $secret = $integration->getWebhookSecret();
