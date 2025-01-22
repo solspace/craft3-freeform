@@ -17,6 +17,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Solspace\Freeform\Library\Helpers\CryptoHelper;
+use Solspace\Freeform\Library\Logging\Processors\RedactSensitiveInfoProcessor;
 
 class LoggerFactory
 {
@@ -29,7 +30,7 @@ class LoggerFactory
     ): LoggerInterface {
         static $requestId;
         if (null === $requestId) {
-            $requestId = CryptoHelper::getUniqueToken();
+            $requestId = CryptoHelper::getUniqueToken(6);
         }
 
         $hash = sha1($category.$logfilePath);
@@ -37,6 +38,7 @@ class LoggerFactory
         if (!isset(self::$instance[$hash])) {
             $logger = new Logger($category);
             $logger->pushHandler(new StreamHandler($logfilePath, $level ?? Logger::DEBUG));
+            $logger->pushProcessor(new RedactSensitiveInfoProcessor());
             $logger->pushProcessor(function ($record) use ($requestId) {
                 $record['extra']['requestId'] = $requestId;
 
