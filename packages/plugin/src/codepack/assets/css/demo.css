@@ -216,13 +216,6 @@ html:has(.freeform-warning-notice) {
     display: inline-block;
     height: 25px;
     width: 25px;
-    border-radius: 50%;
-    box-shadow: var(--logo-glow);
-    transition: all 0.5s;
-}
-.freeform-logo:hover img {
-    border-radius: 50%;
-    box-shadow: 0 0 15px 3px rgb(49,109,244,0.5);
 }
 .freeform-logo h1 {
     font: 600 16px sans-serif !important;
