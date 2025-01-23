@@ -14,7 +14,7 @@ import {
   type Property,
   PropertyType,
 } from '@ff-client/types/properties';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import { formSelectors } from '../form/form.selectors';
 import type { Field } from '../layout/fields';

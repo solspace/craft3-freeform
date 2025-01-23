@@ -1132,12 +1132,16 @@ return [
     'Send Notifications on Live Environment only' => 'Envoyer les notifications uniquement sur l’environnement de production',
     'If this setting is enabled, Freeform will only send out Digest emails when the Craft environment is set to production.' => 'Si ce paramètre est activé, Freeform n’enverra des e-mails récapitulatifs que lorsque l’environnement Craft est défini sur production.',
 
-    // Settings // Error Log
+    // Settings // Logs
+    'Logs' => 'Journaux',
+    'Errors <span class="badge">{count}</span>' => 'Erreurs <span class="badge">{count}</span>',
+    'Integrations <span class="badge">{count}</span>' => 'Intégrations <span class="badge">{count}</span>',
     'Error Log' => 'Journal d’erreurs',
-    'Error Log <span class="badge">{count}</span>' => 'Journal d’erreurs <span class="badge">{count}</span>',
-    'Clear' => 'Effacer',
-    'Are you sure you want to clear error logs?' => 'Êtes-vous sûr de vouloir effacer les journaux d’erreurs ?',
+    'Integrations Log' => 'Journal d’intégrations',
+    'Clear' => 'Supprimer',
+    'Are you sure you want to clear this log?' => 'Êtes-vous sûr de vouloir effacer ce journal?',
     'Everything appears to be okay right now! No errors were found.' => 'Tout semble bien se passer pour le moment ! Aucune erreur n’a été trouvée.',
+    'No log items were found.' => 'Aucun élément de journal n’a été trouvé.',
     'Level' => 'Niveau',
     'Details' => 'Détails',
 
@@ -1497,6 +1501,7 @@ return [
 
     // Front End Form Errors // Fields
     'This field is required' => 'Ce champ est obligatoire',
+    'One or more required field columns are missing a value' => 'Il manque une valeur dans une ou plusieurs colonnes de champs obligatoires',
     '{email} is not a valid email address' => '{email} n’est pas une adresse e-mail valide',
     'Variable "{variable}" is missing a value' => 'La variable "{variable}" n’a pas de valeur',
     'Incorrectly calculated value' => 'Valeur calculée incorrectement',

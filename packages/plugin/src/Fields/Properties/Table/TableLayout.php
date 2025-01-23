@@ -22,6 +22,7 @@ class TableLayout implements \IteratorAggregate, \ArrayAccess
                 $column['placeholder'] ?? '',
                 $column['options'] ?? [],
                 $column['checked'] ?? false,
+                $column['required'] ?? false,
             );
         }
     }
@@ -33,6 +34,7 @@ class TableLayout implements \IteratorAggregate, \ArrayAccess
         string $placeholder = '',
         array $options = [],
         bool $checked = false,
+        bool $required = false,
     ): self {
         $column = new TableColumn();
         $column->label = $label;
@@ -41,6 +43,7 @@ class TableLayout implements \IteratorAggregate, \ArrayAccess
         $column->placeholder = $placeholder;
         $column->options = $options;
         $column->checked = $checked;
+        $column->required = $required;
 
         $this->rows[] = $column;
 

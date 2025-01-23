@@ -19,7 +19,6 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\SearchEvent;
 use craft\events\SiteEvent;
 use craft\helpers\App;
-use craft\helpers\Queue;
 use craft\services\Fields;
 use craft\services\Search;
 use craft\services\Sites;
@@ -60,9 +59,6 @@ use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\FieldTypes\FormFieldType;
 use Solspace\Freeform\FieldTypes\SubmissionFieldType;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Jobs\PurgeSpamJob;
-use Solspace\Freeform\Jobs\PurgeSubmissionsJob;
-use Solspace\Freeform\Jobs\PurgeUnfinalizedAssetsJob;
 use Solspace\Freeform\Library\Bundles\BundleLoader;
 use Solspace\Freeform\Library\Helpers\EditionHelper;
 use Solspace\Freeform\Library\Helpers\SearchHelper;
@@ -242,7 +238,6 @@ class Freeform extends Plugin
         $this->initEventListeners();
         $this->initBetaAssets();
         $this->initPaymentAssets();
-        $this->initCleanupJobs();
         $this->initContainerItems();
         $this->initBundles();
 
@@ -621,35 +616,6 @@ class Freeform extends Plugin
                 $event->getView()->registerAssetBundle(PaymentsBundle::class);
             }
         );
-    }
-
-    // TODO: move into a feature bundle
-    private function initCleanupJobs(): void
-    {
-        if (!$this->isInstalled || \Craft::$app->request->getIsConsoleRequest()) {
-            return;
-        }
-
-        if (self::isLocked(SettingsService::CACHE_KEY_PURGE, SettingsService::CACHE_TTL_SECONDS)) {
-            return;
-        }
-
-        $queuePriority = $this->settings->getQueuePriority();
-        $purgeAssetsEnabled = $this->settings->getSettingsModel()->purgeAssets;
-        $assetAge = $this->settings->getPurgableUnfinalizedAssetAgeInMinutes();
-        if ($purgeAssetsEnabled && $assetAge > 0) {
-            Queue::push(new PurgeUnfinalizedAssetsJob(['age' => $assetAge]), $queuePriority);
-        }
-
-        $submissionAge = $this->settings->getPurgableSubmissionAgeInDays();
-        if ($submissionAge > 0) {
-            Queue::push(new PurgeSubmissionsJob(['age' => $submissionAge]), $queuePriority);
-        }
-
-        $spamAge = $this->settings->getPurgableSpamAgeInDays();
-        if ($spamAge > 0) {
-            Queue::push(new PurgeSpamJob(['age' => $spamAge]), $queuePriority);
-        }
     }
 
     private function initContainerItems(): void

@@ -1,5 +1,52 @@
 # Solspace Freeform Changelog
 
+## 5.9.1.1 - 2025-01-23
+
+### Fixed
+- Fixed a compatibility issue with the Monolog 2.x dependency in Craft 4.x.
+
+## 5.9.1 - 2025-01-23
+
+### Changed
+- Updated the integration logging to include extensive Stripe webhook logging.
+- Updated the plugin icon.
+
+## 5.9.0 - 2025-01-21
+
+### Added
+- Added the ability to mark specific field columns as required inside Table fields.
+- Added _Info_ and _Debugging_ logging for integrations.
+    - Added an **Integrations Log** to the settings menu so admins can easily view and clear the log from the control panel.
+- Added the ability to hide specific options from **Element and Predefined sources** for multi-option field types (via the Limited Users feature).
+- Added the ability to limit the **Forms element field type** by specific forms.
+- Added a setting to turn off **Automatic Purge Unfinalized Assets** queue jobs.
+- Added counter for the number of **Saved** submissions on each form card on the dashboard.
+- Added a **Tailwind 3 Dark** mode sample template.
+- Added Site awareness and Integration logging level to the Diagnostics page.
+- Added support for more features in the Express edition of Freeform:
+    - All captchas, including Javascript Test and all reCAPTCHA, hCaptcha and Turnstile options.
+    - All export file types, including Excel, CSV, XML, JSON and Text.
+    - Access to Quick Export.
+- Added support for more features in the Lite edition of Freeform:
+    - All export file types, including Excel, CSV, XML, JSON and Text.
+    - Access to Quick Export and Export Profiles.
+- Verified support for Craft 5.6.x.
+
+### Changed
+- Refactored all exporting features and improved memory efficiency.
+- Refactored all queue job runners into feature bundles and prevented duplicate jobs from happening.
+- Updated various translations throughout the control panel.
+- Updated all sample template CSS and JS, including the Javascript Test to be minified.
+
+### Fixed
+- Fixed a bug where integrations were not using Craft's guzzle configuration (`httpProxy`).
+- Fixed a bug where custom button rendering incorrectly displayed **Back** buttons.
+- Fixed a bug where the **Save & Continue Later** feature was visible on _Express_ and _Lite_ editions.
+- Fixed a bug where the **Convert to Custom Values** button was incorrectly showing for Limited Users when hidden.
+- Fixed a bug where the **Spam Protection Behavior** setting was showing incorrectly on the Diagnostics page.
+- Fixed a bug where **Email Field** notifications were attempting to be sent when the Email field was hidden by Conditional Rules.
+- Fixed a compatibility issue with the integration `options` column type for sites using older versions of MariaDB.
+
 ## 5.8.7 - 2025-01-15
 
 ### Fixed

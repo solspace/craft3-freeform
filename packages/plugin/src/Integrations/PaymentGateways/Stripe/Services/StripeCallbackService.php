@@ -39,8 +39,6 @@ class StripeCallbackService
         ]);
 
         if (!$payment && $savedForm) {
-            $logger->debug('Handling saved form with payment intent');
-
             $savedForm->delete();
 
             $payload = json_decode(
@@ -75,8 +73,6 @@ class StripeCallbackService
             $payment->type = $type;
             $payment->currency = $paymentIntent->currency;
             $payment->amount = $paymentIntent->amount;
-
-            $logger->debug('Payment record created');
         }
 
         if (!$payment) {

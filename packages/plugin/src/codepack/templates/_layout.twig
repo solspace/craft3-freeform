@@ -83,7 +83,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/demo/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/demo/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/demo/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/assets/demo/favicon/site.webmanifest">
+    <link rel="manifest" href="/assets/demo/favicon/manifest.json">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
@@ -209,7 +209,7 @@
 
     <div class="freeform-nav">
         <a href="{{ siteUrl }}demo/" class="freeform-logo">
-            <img src="{{ siteUrl }}assets/demo/images/icon.svg" alt="Freeform Demo"><h1>Freeform Demo</h1>
+            <img src="{{ siteUrl }}assets/demo/images/freeform.svg" alt="Freeform Demo"><h1>Freeform Demo</h1>
         </a>
         {% if demoArea == "templates" or craft.app.request.segment(2) is empty %}
             This section {{ craft.app.request.segment(4) ? "has" : "will" }} automatically {{ craft.app.request.segment(4) ? "loaded" : "load" }} the

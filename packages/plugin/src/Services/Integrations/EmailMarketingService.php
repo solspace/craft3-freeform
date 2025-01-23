@@ -13,6 +13,7 @@
 
 namespace Solspace\Freeform\Services\Integrations;
 
+use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Integrations\DataObjects\FieldObject;
 use Solspace\Freeform\Library\Integrations\Types\EmailMarketing\DataObjects\ListObject;
 use Solspace\Freeform\Library\Integrations\Types\EmailMarketing\EmailMarketingIntegrationInterface;
@@ -144,6 +145,7 @@ class EmailMarketingService extends IntegrationsService
                 $record->label = $field->getLabel();
                 $record->type = $field->getType();
                 $record->required = $field->isRequired();
+                $record->options = json_encode($field->getOptions()->getIterator()->getArrayCopy());
                 $record->category = $category;
                 $record->save();
 
@@ -165,6 +167,7 @@ class EmailMarketingService extends IntegrationsService
                 $record->type,
                 $record->category,
                 $record->required,
+                JsonHelper::decode($record->options, true),
             ),
             $existingRecords
         );

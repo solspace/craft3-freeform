@@ -1,4 +1,4 @@
-import camelCase from 'lodash.camelcase';
+import { camelCase } from 'lodash';
 
 import type { MiddlewareImplementation } from '../middleware';
 

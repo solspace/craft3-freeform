@@ -18,6 +18,23 @@ class ArrayHelper
         return false;
     }
 
+    public static function someRecursive(array $array, callable $fn): bool
+    {
+        foreach ($array as $value) {
+            if (\is_array($value)) {
+                if (self::someRecursive($value, $fn)) {
+                    return true;
+                }
+            } else {
+                if ($fn($value)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Returns true if every element in the $array returns true on the callback call.
      */
@@ -26,6 +43,23 @@ class ArrayHelper
         foreach ($array as $value) {
             if (!$fn($value)) {
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static function everyRecursive(array $array, callable $fn): bool
+    {
+        foreach ($array as $value) {
+            if (\is_array($value)) {
+                if (!self::everyRecursive($value, $fn)) {
+                    return false;
+                }
+            } else {
+                if (!$fn($value)) {
+                    return false;
+                }
             }
         }
 
