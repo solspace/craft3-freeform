@@ -24,11 +24,23 @@ class RedactSensitiveInfoProcessor implements ProcessorInterface
         'password',
     ];
 
-    public function __invoke(LogRecord $record): LogRecord
+    public function __invoke(array|LogRecord $record): array|LogRecord
     {
-        $context = $this->traverseRedactables($record->context);
+        if ($record instanceof LogRecord) {
+            $context = $record->context;
+        } else {
+            $context = $record['context'];
+        }
 
-        return $record->with(context: $context);
+        $context = $this->traverseRedactables($context);
+
+        if ($record instanceof LogRecord) {
+            return $record->with(context: $context);
+        }
+
+        $record['context'] = $context;
+
+        return $record;
     }
 
     private function traverseRedactables(mixed $data): mixed
