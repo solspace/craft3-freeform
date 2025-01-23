@@ -1,5 +1,11 @@
 # Solspace Freeform Changelog
 
+## 5.9.1 - 2025-01-23
+
+### Changed
+- Updated the integration logging to include extensive Stripe webhook logging.
+- Updated the plugin icon.
+
 ## 5.9.0 - 2025-01-21
 
 ### Added
