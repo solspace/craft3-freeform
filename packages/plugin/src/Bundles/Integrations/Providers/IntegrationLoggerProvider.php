@@ -18,7 +18,8 @@ class IntegrationLoggerProvider
     private int $level;
 
     public function __construct(
-        SettingsService $settingsService
+        SettingsService $settingsService,
+        private IntegrationTypeProvider $typeProvider,
     ) {
         $this->level = match ($settingsService->getSettingsModel()->loggingLevel) {
             Settings::LOGGING_LEVEL_INFO => Logger::INFO,
@@ -27,12 +28,14 @@ class IntegrationLoggerProvider
         };
     }
 
-    public function getLogger(IntegrationInterface|Type $integration): LoggerInterface
+    public function getLogger(IntegrationInterface|string|Type $integration): LoggerInterface
     {
         if ($integration instanceof IntegrationInterface) {
             $type = $integration->getTypeDefinition();
-        } else {
+        } elseif ($integration instanceof Type) {
             $type = $integration;
+        } else {
+            $type = $this->typeProvider->getTypeDefinition($integration);
         }
 
         $logCategory = StringHelper::toKebabCase($type->getNameWithVersion());
