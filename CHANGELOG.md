@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.9.1.1 - 2025-01-23
+
+### Fixed
+- Fixed a compatibility issue with the Monolog 2.x dependency in Craft 4.x.
+
 ## 5.9.1 - 2025-01-23
 
 ### Changed
