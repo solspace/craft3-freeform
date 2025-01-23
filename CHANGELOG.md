@@ -1,5 +1,10 @@
 # Solspace Freeform Changelog
 
+## 5.9.1.2 - 2025-01-23
+
+### Fixed
+- Fixed a bug where the Calculation field logic was not editable in the form builder.
+
 ## 5.9.1.1 - 2025-01-23
 
 ### Fixed
