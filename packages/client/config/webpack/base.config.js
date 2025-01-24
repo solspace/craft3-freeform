@@ -48,6 +48,9 @@ module.exports = {
         process.env.NODE_ENV === 'development'
       ),
     }),
+    new webpack.ProvidePlugin({
+      React: 'react',
+    }),
   ],
 
   resolve: {

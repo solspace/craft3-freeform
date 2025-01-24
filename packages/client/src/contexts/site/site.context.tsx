@@ -37,7 +37,11 @@ export const SiteProvider: React.FC<PropsWithChildren> = ({ children }) => {
       (site) => site.id === config.sites.current
     );
 
-    return currentSite || config.sites.list.find((site) => site.primary);
+    return (
+      currentSite ||
+      config.sites.list.find((site) => site.primary) ||
+      config.sites.list[0]
+    );
   });
   const [isPrimary, setIsPrimary] = useState<boolean>(current.primary);
 

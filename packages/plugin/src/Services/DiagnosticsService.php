@@ -391,6 +391,13 @@ class DiagnosticsService extends BaseService
                     ],
                 ),
                 new DiagnosticItem(
+                    'Automatically Purge Unfinalized Assets: <b>{{ value.enabled ? "Enabled, "~value.interval~" hours" : "Disabled"  }}</b>',
+                    [
+                        'enabled' => $this->getSummary()->statistics->settings->purgeAssets,
+                        'interval' => $this->getSummary()->statistics->settings->purgeAssetsInterval / 60,
+                    ],
+                ),
+                new DiagnosticItem(
                     'Site-Aware Forms: <b>{{ value.enabled ? "Enabled" : "Disabled" }}</b>',
                     ['enabled' => $this->getSettingsService()->getSettingsModel()->sitesEnabled],
                 ),

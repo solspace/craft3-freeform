@@ -1,5 +1,19 @@
 # Solspace Freeform Changelog
 
+## 5.9.2 - 2025-01-24
+
+### Fixed
+- Fixed a bug where the Stripe field was not factoring in default values in Radio fields when set as the dynamic amount field.
+- Fixed a bug where the File Drag & Drop field was not displaying all errors.
+- Fixed a bug where the form builder and dashboard would not display any forms for a user who did not have access to the primary site.
+- Fixed unnecessary captcha triggers in Stripe calls.
+- Fixed a bug where the breadcrumbs Site switcher was not displaying correctly in Craft 5.
+
+## 5.9.1.2 - 2025-01-23
+
+### Fixed
+- Fixed a bug where the Calculation field logic was not editable in the form builder.
+
 ## 5.9.1.1 - 2025-01-23
 
 ### Fixed
@@ -1205,6 +1219,15 @@
     - The `hash` field has been removed from `FreeformFieldInterface` in GraphQL as it is no longer relevant.
 - **Stripe Payments**
     - The **Stripe Payment** feature has been removed and replaced by all-new support for the newer Stripe Payment Element.
+
+## 4.1.24 - 2025-01-24
+
+### Added
+- Verified support for Craft 4.14.x.
+
+### Changes
+- Updated the plugin icon.
+- Updated some internal dependencies to prevent security warnings.
 
 ## 4.1.23 - 2024-11-19
 

@@ -18,6 +18,8 @@ class Settings
     public string $sessionContextType = '';
     public bool $purgeSubmissions = false;
     public ?int $purgeInterval = null;
+    public bool $purgeAssets = false;
+    public ?int $purgeAssetsInterval = null;
     public bool $formattingTemplatesPath = false;
     public bool $sendAlertsOnFailedNotifications = false;
     public bool $notificationTemplatesPath = false;

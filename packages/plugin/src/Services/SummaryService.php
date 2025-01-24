@@ -126,6 +126,8 @@ class SummaryService extends Component
         $settings->sessionContextType = $settingsService->getSettingsModel()->sessionContext;
         $settings->purgeSubmissions = (bool) $settingsService->getPurgableSubmissionAgeInDays();
         $settings->purgeInterval = $settingsService->getPurgableSubmissionAgeInDays();
+        $settings->purgeAssets = $settingsService->getSettingsModel()->purgeAssets;
+        $settings->purgeAssetsInterval = $settingsService->getSettingsModel()->purgableUnfinalizedAssetAgeInMinutes ?? 1;
         $settings->formattingTemplatesPath = (bool) $settingsService->getSettingsModel()->formTemplateDirectory;
         $settings->sendAlertsOnFailedNotifications = (bool) $settingsService->getFailedNotificationRecipients();
         $settings->notificationTemplatesPath = (bool) $settingsService->getSettingsModel()->emailTemplateDirectory;
