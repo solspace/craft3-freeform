@@ -394,7 +394,7 @@ class DiagnosticsService extends BaseService
                     'Automatically Purge Unfinalized Assets: <b>{{ value.enabled ? "Enabled, "~value.interval~" hours" : "Disabled"  }}</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeAssets,
-                        'interval' => $this->getSummary()->statistics->settings->purgeAssetsInterval,
+                        'interval' => $this->getSummary()->statistics->settings->purgeAssetsInterval / 60,
                     ],
                 ),
                 new DiagnosticItem(
