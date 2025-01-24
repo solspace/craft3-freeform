@@ -180,8 +180,6 @@ export const initStripe = (props: StripeFunctionConstructorProps) => async (cont
     .catch((error) => {
       field.innerHTML = 'Could not load payment element.';
 
-      console.log(error);
-
       const errors: Record<string, string[]> = {};
       amountFields.forEach((handle) => {
         errors[handle] = [error?.response?.data?.message];
