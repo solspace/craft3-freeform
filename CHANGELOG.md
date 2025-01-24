@@ -1220,6 +1220,15 @@
 - **Stripe Payments**
     - The **Stripe Payment** feature has been removed and replaced by all-new support for the newer Stripe Payment Element.
 
+## 4.1.24 - 2025-01-24
+
+### Added
+- Verified support for Craft 4.14.x.
+
+### Changes
+- Updated the plugin icon.
+- Updated some internal dependencies to prevent security warnings.
+
 ## 4.1.23 - 2024-11-19
 
 ### Added
