@@ -64,6 +64,12 @@ const createXhrRequest: CreateXhrRequest = (method, url, resolve, reject, option
       // Do nothing
     }
 
+    const status = xhr.status;
+    if (status < 200 || status >= 300) {
+      reject(new HttpError(`Request failed with status ${xhr.statusText}`, xhr, data));
+      return;
+    }
+
     resolve({
       status: xhr.status,
       data,
@@ -133,5 +139,19 @@ export class CancelToken {
 
   _setCancelFn(fn: () => void) {
     this.cancelFn = fn;
+  }
+}
+
+class HttpError<T> extends Error {
+  response: XMLHttpRequest & { data: T };
+  status: number;
+
+  constructor(message: string, response: XMLHttpRequest, data: T) {
+    super(message);
+    this.response = { ...response, data };
+    this.status = response.status;
+
+    // Set the prototype explicitly to maintain the prototype chain
+    Object.setPrototypeOf(this, HttpError.prototype);
   }
 }
