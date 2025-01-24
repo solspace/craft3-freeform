@@ -52,7 +52,7 @@
     "react-dnd-html5-backend": "^12.1.1",
     "react-dom": "^16.13.1",
     "react-joyride": "^2.3.0",
-    "react-quill": "^2.0.0",
+    "react-quill-new": "^3.3.3",
     "react-redux": "^7.2.2",
     "react-svg-loader": "^3.0.3",
     "react-tippy": "^1.4.0",
