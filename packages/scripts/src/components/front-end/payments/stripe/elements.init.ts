@@ -83,51 +83,61 @@ export const initStripe = (props: StripeFunctionConstructorProps) => async (cont
 
       // Listen for changes to the amount, interval and interval count fields
       amountFields.forEach((handle) => {
-        (form.elements.namedItem(handle) as HTMLInputElement)?.addEventListener('change', () => {
-          workers.push(handle);
+        const namedElement: Element | RadioNodeList = form.elements.namedItem(handle);
+        let elementList: Array<Element | Node> = [];
+        if (namedElement instanceof RadioNodeList) {
+          elementList = Array.from(namedElement);
+        } else {
+          elementList.push(namedElement);
+        }
 
-          form.freeform.disableSubmit('stripe.working');
-          form.freeform.disableForm();
-          const paymentIntentId = elementMap.get(field).paymentIntent.id;
+        elementList.forEach((element) => {
+          (element as HTMLInputElement)?.addEventListener('change', () => {
+            workers.push(handle);
 
-          queries.paymentIntents
-            .updateAmount(integration, form, paymentIntentId)
-            .then(({ id, client_secret }) => {
-              // If a client_secret is returned - we need to recreate the Stripe element
-              if (client_secret) {
-                paymentElement.unmount();
-                elements = stripe.elements({ clientSecret: client_secret });
+            form.freeform.disableSubmit('stripe.working');
+            form.freeform.disableForm();
+            const paymentIntentId = elementMap.get(field).paymentIntent.id;
 
-                paymentElement = elements.create('payment', event.paymentOptions);
-                paymentElement.mount(field);
-                paymentElement.on('change', (event) => {
-                  elementMap.get(field).empty = event.empty && !event.complete;
+            queries.paymentIntents
+              .updateAmount(integration, form, paymentIntentId)
+              .then(({ id, client_secret }) => {
+                // If a client_secret is returned - we need to recreate the Stripe element
+                if (client_secret) {
+                  paymentElement.unmount();
+                  elements = stripe.elements({ clientSecret: client_secret });
+
+                  paymentElement = elements.create('payment', event.paymentOptions);
+                  paymentElement.mount(field);
+                  paymentElement.on('change', (event) => {
+                    elementMap.get(field).empty = event.empty && !event.complete;
+                  });
+
+                  elementMap.set(field, {
+                    empty: true,
+                    elements,
+                    paymentIntent: {
+                      id,
+                      secret: client_secret,
+                    },
+                  });
+                } else {
+                  elements.fetchUpdates();
+                }
+              })
+              .catch((error) => {
+                form.freeform._renderFieldErrors({
+                  [handle]: [error.response.data.message],
                 });
-
-                elementMap.set(field, {
-                  empty: true,
-                  elements,
-                  paymentIntent: {
-                    id,
-                    secret: client_secret,
-                  },
-                });
-              } else {
-                elements.fetchUpdates();
-              }
-            })
-            .catch((error) => {
-              form.freeform._renderFieldErrors({
-                [handle]: [error.response.data.message],
+              })
+              .finally(() => {
+                workers.pop();
+                if (!workers.length) {
+                  form.freeform.enableSubmit('stripe.working');
+                  form.freeform.enableForm();
+                }
               });
-            })
-            .finally(() => {
-              workers.pop();
-              if (!workers.length) {
-                form.freeform.enableSubmit('stripe.working');
-                form.freeform.enableForm();
-              }
-            });
+          });
         });
       });
 
@@ -172,7 +182,7 @@ export const initStripe = (props: StripeFunctionConstructorProps) => async (cont
 
       const errors: Record<string, string[]> = {};
       amountFields.forEach((handle) => {
-        errors[handle] = [error.response.data.message];
+        errors[handle] = [error?.response?.data?.message];
       });
 
       form.freeform._renderFieldErrors(errors);
