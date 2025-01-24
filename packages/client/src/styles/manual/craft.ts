@@ -8,6 +8,18 @@ const style = createGlobalStyle`
   footer#global-footer {
     display: none;
   }
+
+  ul#crumb-list {
+    li.crumb {
+      > button {
+        z-index: 2;
+      }
+
+      &:after {
+        z-index: 1;
+      }
+    }
+  }
 `;
 
 export default style;
