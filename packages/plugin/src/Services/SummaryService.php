@@ -147,7 +147,9 @@ class SummaryService extends Component
         $spam->blockIp = (bool) $settingsService->getSettingsModel()->blockedIpAddresses;
         $spam->submissionThrottling = (bool) $settingsService->getSettingsModel()->submissionThrottlingCount;
         $spam->minSubmitTime = (bool) $settingsService->getSettingsModel()->minimumSubmitTime;
+        $spam->minSubmitTimeInterval = $settingsService->getSettingsModel()->minimumSubmitTime;
         $spam->submitExpiration = (bool) $settingsService->getSettingsModel()->formSubmitExpiration;
+        $spam->submitExpirationInterval = $settingsService->getSettingsModel()->formSubmitExpiration;
         $spam->submissionThrottlingCount = (int) $settingsService->getSettingsModel()->submissionThrottlingCount;
         $spam->submissionThrottlingTimeFrame = $settingsService->getSettingsModel()->submissionThrottlingTimeFrame;
         $spam->bypassSpamCheckOnLoggedInUsers = $settingsService->getSettingsModel()->bypassSpamCheckOnLoggedInUsers;
