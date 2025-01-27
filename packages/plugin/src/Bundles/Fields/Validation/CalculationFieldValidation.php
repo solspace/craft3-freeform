@@ -13,6 +13,7 @@ use yii\base\Event;
 class CalculationFieldValidation extends FeatureBundle
 {
     private const GET_VARIABLES_PATTERN = '/field:([a-zA-Z0-9_]+)/u';
+    private ?ExpressionLanguage $expressionLanguage = null;
 
     public function __construct()
     {
@@ -20,6 +21,24 @@ class CalculationFieldValidation extends FeatureBundle
             FieldInterface::class,
             FieldInterface::EVENT_VALIDATE,
             [$this, 'validate']
+        );
+
+        // Initialize ExpressionLanguage with sqrt function
+        $this->expressionLanguage = new ExpressionLanguage();
+        $this->expressionLanguage->register(
+            'sqrt',
+            // Compiler function
+            function ($value) {
+                return \sprintf('sqrt(%s)', $value);
+            },
+            // Evaluator function
+            function ($arguments, $value) {
+                if (!is_numeric($value)) {
+                    return $value;
+                }
+
+                return sqrt((float) $value);
+            }
         );
     }
 
@@ -55,10 +74,8 @@ class CalculationFieldValidation extends FeatureBundle
             }
         }
 
-        $expressionLanguage = new ExpressionLanguage();
-
         try {
-            $result = $expressionLanguage->evaluate($calculationLogic, $variablesWithValue);
+            $result = $this->expressionLanguage->evaluate($calculationLogic, $variablesWithValue);
             if (null !== $decimalCount && $decimalCount >= 0) {
                 $result = number_format($result, $decimalCount);
             }
