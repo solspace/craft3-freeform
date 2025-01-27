@@ -13,7 +13,7 @@ use yii\base\Event;
 class CalculationFieldValidation extends FeatureBundle
 {
     private const GET_VARIABLES_PATTERN = '/field:([a-zA-Z0-9_]+)/u';
-    private ?ExpressionLanguage $expressionLanguage = null;
+    private ExpressionLanguage $expressionLanguage;
 
     public function __construct()
     {
