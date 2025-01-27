@@ -422,11 +422,86 @@ class DiagnosticsService extends BaseService
                             Settings::PROTECTION_SIMULATE_SUCCESS => 'Simulate Success',
                             Settings::PROTECTION_RELOAD_FORM => 'Reload Form',
                         }
-                    )
+                    ),
+                    [
+                        new SuggestionValidator(
+                            fn ($value) => 'Display Errors' != $value,
+                            '',
+                            'We recommend using this solely for debugging during initial site setup, testing adjustments, or troubleshooting Freeform spam issues. Displaying an error can inform spam bots of their failures, leading them to attempt different methods.',
+                        ),
+                    ]
                 ),
                 new DiagnosticItem(
                     'Bypass All Spam Checks for Logged in Users: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
                     $this->getSummary()->statistics->spam->bypassSpamCheckOnLoggedInUsers
+                ),
+                new DiagnosticItem(
+                    'Minimum Submit Time: <b>{{ value.enabled ? "Enabled, "~value.interval~" seconds" : "Disabled"  }}</b>',
+                    [
+                        'enabled' => $this->getSummary()->statistics->spam->minSubmitTime,
+                        'interval' => $this->getSummary()->statistics->spam->minSubmitTimeInterval,
+                    ],
+                    [
+                        new WarningValidator(
+                            function ($value) {
+                                if ('' == $value['interval']) {
+                                    return true;
+                                }
+
+                                return version_compare($value['interval'], '11', '<');
+                            },
+                            '',
+                            'Setting a value of more than 10 seconds will lead to many false positives for spam. We strongly recommend setting this to a value of no more than 5 seconds.'
+                        ),
+                        new SuggestionValidator(
+                            function ($value) {
+                                if ('' == $value['interval']) {
+                                    return true;
+                                }
+                                if ('11' <= $value['interval']) {
+                                    return true;
+                                }
+
+                                return version_compare($value['interval'], '6', '<');
+                            },
+                            '',
+                            'Setting a value of more than 5 seconds may lead to many false positives for spam.'
+                        ),
+                    ]
+                ),
+                new DiagnosticItem(
+                    'Form Submit Expiration: <b>{{ value.enabled ? "Enabled, "~value.interval~" minutes" : "Disabled"  }}</b>',
+                    [
+                        'enabled' => $this->getSummary()->statistics->spam->submitExpiration,
+                        'interval' => $this->getSummary()->statistics->spam->submitExpirationInterval,
+                    ],
+                    [
+                        new WarningValidator(
+                            function ($value) {
+                                if ('' == $value['interval']) {
+                                    return true;
+                                }
+
+                                return version_compare($value['interval'], '9', '>');
+                            },
+                            '',
+                            'Setting a value of less than 10 minutes will lead to many false positives for spam. We strongly recommend setting this to a value of no less than 30 minutes.'
+                        ),
+                        new SuggestionValidator(
+                            function ($value) {
+                                if ('' == $value['interval']) {
+                                    return true;
+                                }
+                                if ('9' >= $value['interval']) {
+                                    return true;
+                                }
+
+                                return version_compare($value['interval'], '29', '>');
+                            },
+                            '',
+                            'Setting a value of less than 30 minutes may lead to many false positives for spam.'
+                        ),
+                    ]
                 ),
                 new DiagnosticItem(
                     'Form Submission Throttling: <b>{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second"  }}{% else %}Unlimited{% endif %}</b>',
@@ -434,6 +509,18 @@ class DiagnosticsService extends BaseService
                         'count' => $this->getSummary()->statistics->spam->submissionThrottlingCount,
                         'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame,
                     ],
+                    [
+                        new WarningValidator(
+                            fn ($value) => version_compare($value['count'], '0', '<='),
+                            '',
+                            "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
+                        ),
+                        new WarningValidator(
+                            fn ($value) => version_compare($value['count'], '0', '<='),
+                            '',
+                            "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
+                        ),
+                    ]
                 ),
             ],
 
