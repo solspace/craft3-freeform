@@ -19,19 +19,19 @@
         {
           "name": "Division",
           "operator": "/"
+        },
+        {
+          "name": "Square Root",
+          "operator": "sqrt()"
         }
       ]
     },
     {
-      "title": "Array",
+      "title": "Numeric",
       "items": [
         {
-          "name": "Contains",
+          "name": "Range",
           "operator": ".."
-        },
-        {
-          "name": "Does not contain",
-          "operator": "not in"
         }
       ]
     },
@@ -88,11 +88,15 @@
       ]
     },
     {
-      "title": "Numeric",
+      "title": "Array",
       "items": [
         {
-          "name": "Range",
+          "name": "Contains",
           "operator": ".."
+        },
+        {
+          "name": "Does not contain",
+          "operator": "not in"
         }
       ]
     },
