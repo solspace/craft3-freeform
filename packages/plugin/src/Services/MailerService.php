@@ -18,6 +18,7 @@ use craft\helpers\Assets;
 use craft\mail\Message;
 use craft\web\View;
 use Dompdf\Dompdf;
+use Psr\Log\LoggerInterface;
 use Solspace\Freeform\Bundles\Rules\RuleValidator;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Mailer\RenderEmailEvent;
@@ -67,15 +68,19 @@ class MailerService extends BaseService implements MailHandlerInterface
         Form $form,
         RecipientCollection $recipients,
         ?NotificationTemplate $notificationTemplate = null,
-        ?Submission $submission = null
+        ?Submission $submission = null,
+        ?LoggerInterface $logger = null,
     ): int {
         $sentMailCount = 0;
 
         if (null === $notificationTemplate) {
+            $logger?->warning('No notification template specified.');
+
             return 0;
         }
 
         $recipients = $this->processRecipients($recipients);
+
         $fields = $form->getLayout()->getFields();
 
         $fieldValues = $this->getFieldValues($fields, $form, $submission);
@@ -93,7 +98,13 @@ class MailerService extends BaseService implements MailHandlerInterface
             }
 
             try {
-                $email = $this->compileMessage($notificationTemplate, $fieldValues);
+                $logger?->info('Sending email', [
+                    'recipient' => $emailAddress,
+                    'form' => $form->getName(),
+                    'template' => $notificationTemplate->getName(),
+                ]);
+
+                $email = $this->compileMessage($notificationTemplate, $fieldValues, $logger);
                 $email->setTo([$emailAddress]);
 
                 $pdfTemplates = $notificationTemplate->getPdfTemplateRecords();
@@ -118,6 +129,8 @@ class MailerService extends BaseService implements MailHandlerInterface
                             'contentType' => 'application/pdf',
                         ]);
 
+                        $logger?->debug('Attached PDF to email', ['fileName' => $fileName]);
+
                         if (file_exists($pdfPath)) {
                             unset($pdfPath);
                         }
@@ -131,6 +144,8 @@ class MailerService extends BaseService implements MailHandlerInterface
                                 'fileName' => 'signature.png',
                                 'contentType' => 'image/png',
                             ]);
+
+                            $logger?->debug('Attached signature to email', ['fileName' => 'signature.png']);
 
                             continue;
                         }
@@ -148,6 +163,8 @@ class MailerService extends BaseService implements MailHandlerInterface
                                     $asset->getCopyOfFile(),
                                     ['fileName' => $asset->filename]
                                 );
+
+                                $logger?->debug('Attached file to email', ['fileName' => $asset->filename]);
                             }
                         }
                     }
@@ -157,6 +174,8 @@ class MailerService extends BaseService implements MailHandlerInterface
                 $this->trigger(self::EVENT_BEFORE_SEND, $sendEmailEvent);
 
                 if (!$sendEmailEvent->isValid) {
+                    $logger?->info('Email sending was cancelled by an event listener');
+
                     continue;
                 }
 
@@ -166,17 +185,24 @@ class MailerService extends BaseService implements MailHandlerInterface
 
                 if ($emailSent) {
                     ++$sentMailCount;
+                } else {
+                    $logger?->warning('Email sending failed');
                 }
             } catch (\Exception $exception) {
                 $message = $exception->getMessage();
                 $context = [
                     'template' => $notificationTemplate->getHandle(),
-                    'file' => $exception->getFile(),
+                    'form' => $form->getHandle(),
                 ];
 
-                Freeform::getInstance()->logger->getLogger(FreeformLogger::MAILER)->error($message, $context);
+                $logger->error($message, $context);
+                Freeform::getInstance()
+                    ->logger
+                    ->getLogger(FreeformLogger::MAILER)
+                    ->error($message, $context)
+                ;
 
-                $this->notifyAboutEmailSendingError($emailAddress, $notificationTemplate, $exception, $form);
+                $this->notifyAboutEmailSendingError($emailAddress, $notificationTemplate, $exception, $form, $logger);
             }
         }
 
@@ -209,7 +235,7 @@ class MailerService extends BaseService implements MailHandlerInterface
         ;
     }
 
-    public function compileMessage(NotificationTemplate $notification, array $values): Message
+    public function compileMessage(NotificationTemplate $notification, array $values, ?LoggerInterface $logger = null): Message
     {
         $fromName = trim(App::parseEnv($this->renderString($notification->getFromName(), $values)));
         $fromEmail = trim(App::parseEnv($this->renderString($notification->getFromEmail(), $values)));
@@ -226,6 +252,7 @@ class MailerService extends BaseService implements MailHandlerInterface
         ;
 
         if (empty($text)) {
+            $logger?->debug('No text body found, using HTML body instead');
             $message
                 ->setHtmlBody($html)
                 ->setTextBody($html)
@@ -233,6 +260,7 @@ class MailerService extends BaseService implements MailHandlerInterface
         }
 
         if (empty($html)) {
+            $logger?->debug('No HTML body found, using text body instead');
             $message->setTextBody($text);
         } else {
             $message
@@ -294,6 +322,17 @@ class MailerService extends BaseService implements MailHandlerInterface
             }
         }
 
+        $logger?->debug('Message compiled', [
+            'from' => $message->getFrom(),
+            'cc' => $message->getCc(),
+            'bcc' => $message->getBcc(),
+            'replyTo' => $message->getReplyTo(),
+            'subject' => $message->getSubject(),
+            'textBody' => $text,
+            'htmlBody' => $html,
+            'presetAssets' => $presetAssets,
+        ]);
+
         return $message;
     }
 
@@ -311,12 +350,7 @@ class MailerService extends BaseService implements MailHandlerInterface
 
     private function parseEnvInArray(array $array): array
     {
-        $parsed = [];
-        foreach ($array as $key => $item) {
-            $parsed[$key] = trim(App::parseEnv($item));
-        }
-
-        return $parsed;
+        return array_map(fn ($item) => trim(App::parseEnv($item)), $array);
     }
 
     /**
@@ -368,7 +402,8 @@ class MailerService extends BaseService implements MailHandlerInterface
         string $failedRecipient,
         NotificationTemplate $failedNotification,
         \Exception $exception,
-        Form $form
+        Form $form,
+        ?LoggerInterface $logger,
     ): void {
         if (Freeform::getInstance()->edition()->isBelow(Freeform::EDITION_LITE)) {
             return;
@@ -412,10 +447,13 @@ class MailerService extends BaseService implements MailHandlerInterface
                 'exception' => $exception,
                 'notification' => $failedNotification,
                 'code' => $code,
-            ]
+            ],
+            $logger,
         );
 
         $message->setTo($recipients);
+
+        $logger?->info('Sending email about failed notifications', ['recipients' => $recipients]);
 
         \Craft::$app->mailer->send($message);
         \Craft::$app->view->setTemplateMode($templateMode);
