@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\Bundles\Integrations;
 
 use GuzzleHttp\Exception\RequestException;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Events\Integrations\CrmIntegrations\ProcessValueEvent;
 use Solspace\Freeform\Events\Integrations\FailedRequestEvent;
 use Solspace\Freeform\Fields\Implementations\Pro\DatetimeField;
@@ -16,8 +17,9 @@ use yii\base\Event;
 
 class IntegrationsBundle extends FeatureBundle
 {
-    public function __construct()
-    {
+    public function __construct(
+        private IntegrationLoggerProvider $loggerProvider,
+    ) {
         Event::on(
             APIIntegrationInterface::class,
             APIIntegrationInterface::EVENT_PROCESS_VALUE,
@@ -118,6 +120,7 @@ class IntegrationsBundle extends FeatureBundle
         }
 
         $integration = $event->getIntegration();
+        $logger = $this->loggerProvider->getLogger($integration);
         $exception = $event->getException();
 
         $message = $exception->getMessage();
@@ -127,16 +130,17 @@ class IntegrationsBundle extends FeatureBundle
             }
         }
 
+        $context = ['integration' => [
+            'id' => $integration->getId(),
+            'handle' => $integration->getHandle(),
+        ]];
+
+        $logger->error($message, $context);
+
         $this->plugin()
             ->logger
             ->getLogger(FreeformLogger::INTEGRATION)
-            ->error(
-                $integration->getTypeDefinition()->name.': '.$message,
-                ['integration' => [
-                    'id' => $integration->getId(),
-                    'handle' => $integration->getHandle(),
-                ]],
-            )
+            ->error($integration->getTypeDefinition()->name.': '.$message, $context)
         ;
     }
 }

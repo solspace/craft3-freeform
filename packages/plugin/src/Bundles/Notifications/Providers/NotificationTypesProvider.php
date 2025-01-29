@@ -24,4 +24,17 @@ class NotificationTypesProvider
 
         return $event->getTypes();
     }
+
+    public function getTypeDefinition(string $class): ?Type
+    {
+        $types = $this->getTypes();
+
+        foreach ($types as $type) {
+            if ($type->className === $class) {
+                return $type;
+            }
+        }
+
+        return null;
+    }
 }
