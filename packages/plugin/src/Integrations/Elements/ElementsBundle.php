@@ -5,7 +5,6 @@ namespace Solspace\Freeform\Integrations\Elements;
 use Solspace\Freeform\Bundles\Integrations\Elements\ElementFieldMappingHelper;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
-use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Forms\ValidationEvent;
 use Solspace\Freeform\Events\Integrations\ElementIntegrations\ConnectEvent;
@@ -26,7 +25,6 @@ class ElementsBundle extends FeatureBundle
     public function __construct(
         private FormIntegrationsProvider $integrationsProvider,
         private ElementFieldMappingHelper $mappingHelper,
-        private IntegrationTypeProvider $typeProvider,
         private IntegrationLoggerProvider $loggerProvider,
     ) {
         Event::on(
