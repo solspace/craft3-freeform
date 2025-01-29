@@ -104,9 +104,9 @@ class FreeformFormsExporter extends BaseExporter
         $submissions = FFSubmission::find()
             ->select("COUNT({$table}.[[id]]) as count")
             ->innerJoin(FormRecord::TABLE.' f', "[[f]].[[id]] = {$table}.[[formId]]")
-            ->groupBy("{$table}.[[formId]]")
+            ->groupBy(["{$table}.[[formId]]", '[[f]].[[uid]]'])
             ->orderBy([])
-            ->indexBy('[[f]].uid')
+            ->indexBy('[[f]].[[uid]]')
             ->column()
         ;
 
