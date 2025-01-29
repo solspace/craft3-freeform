@@ -11,8 +11,6 @@ use Solspace\Freeform\Bundles\Form\Context\Request\EditSubmissionContext;
 use Solspace\Freeform\Bundles\Form\Tracking\Cookies;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\FormEventInterface;
-use Solspace\Freeform\Events\Forms\FormLoadedEvent;
-use Solspace\Freeform\Events\Forms\PersistStateEvent;
 use Solspace\Freeform\Events\Forms\ValidationEvent;
 use Solspace\Freeform\Fields\Implementations\EmailField;
 use Solspace\Freeform\Form\Form;
@@ -33,6 +31,7 @@ class FormLimiting extends FeatureBundle
 
     public function __construct()
     {
+        Event::on(Form::class, Form::EVENT_FORM_LOADED, [$this, 'handleDuplicateCheck']);
         Event::on(Form::class, Form::EVENT_RENDER_AFTER_CLOSING_TAG, [$this, 'handleDuplicateCheck']);
         Event::on(Form::class, Form::EVENT_PERSIST_STATE, [$this, 'handleDuplicateCheck']);
         Event::on(Form::class, Form::EVENT_BEFORE_VALIDATE, [$this, 'handleDuplicateCheck']);
@@ -181,7 +180,7 @@ class FormLimiting extends FeatureBundle
             ->where([
                 'isSpam' => false,
                 'formId' => $event->getForm()->getId(),
-                'ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+                'ip' => \Craft::$app->request->getUserIP(),
             ])
             ->limit(1)
         ;
@@ -290,9 +289,6 @@ class FormLimiting extends FeatureBundle
             $this->formCache[] = $formId;
         }
 
-        // Triggered when form is loaded or when form is submitted
-        if ($event instanceof FormLoadedEvent || $event instanceof PersistStateEvent) {
-            $form->setDuplicate(true);
-        }
+        $form->setDuplicate(true);
     }
 }
