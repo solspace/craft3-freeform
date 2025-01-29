@@ -1,5 +1,15 @@
 # Solspace Freeform Changelog
 
+## 5.9.3 - 2025-01-29
+
+### Added
+- Added diagnostic checks for _Minimum Submit Time_ and _Form Submit Expiration_.
+- Added support for the `sqrt` function (square root) in the Calculation field logic.
+
+### Fixed
+- Fixed a bug where the `duplicate` conditional check was not working correctly on form load.
+- Fixed a bug where user registration forms were not validating existing usernames and email addresses.
+
 ## 5.9.2 - 2025-01-24
 
 ### Fixed
