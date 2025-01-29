@@ -4,6 +4,23 @@ import ExpressionLanguage from 'expression-language';
 const getVariablesPattern = /field:([a-zA-Z0-9_]+)/g;
 const expressionLanguage = new ExpressionLanguage();
 
+// Register sqrt function
+expressionLanguage.register(
+  'sqrt',
+  // Compiler function - returns string representation
+  (value: string) => {
+    return `Math.sqrt(${value})`;
+  },
+  // Evaluator function - performs actual calculation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (args: Record<string, any>, value: number) => {
+    if (typeof value !== 'number') {
+      return value;
+    }
+    return Math.sqrt(value);
+  }
+);
+
 const extractValue = (element: HTMLInputElement | HTMLSelectElement): string | number | boolean | null => {
   const value = element.value;
 
