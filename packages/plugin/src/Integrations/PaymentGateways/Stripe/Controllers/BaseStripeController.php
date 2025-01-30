@@ -45,7 +45,7 @@ abstract class BaseStripeController extends BaseApiController
             throw new NotFoundHttpException('Form not found');
         }
 
-        $form->disableFunctionality(true);
+        $form->disableFunctionality(['captchas']);
         $form->handleRequest($this->request);
 
         /** @var Stripe $integration */
