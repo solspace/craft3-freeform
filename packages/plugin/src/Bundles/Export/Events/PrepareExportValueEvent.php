@@ -11,10 +11,10 @@ use yii\base\Event;
 class PrepareExportValueEvent extends Event
 {
     public function __construct(
-        private readonly SubmissionExportInterface $exporter,
-        private readonly FieldDescriptor $descriptor,
-        private readonly Submission $submission,
-        private readonly ?FieldInterface $field,
+        private SubmissionExportInterface $exporter,
+        private FieldDescriptor $descriptor,
+        private Submission $submission,
+        private ?FieldInterface $field,
         private mixed $value,
     ) {
         parent::__construct();
