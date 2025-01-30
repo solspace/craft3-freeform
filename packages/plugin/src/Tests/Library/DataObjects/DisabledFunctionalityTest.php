@@ -236,6 +236,22 @@ class DisabledFunctionalityTest extends TestCase
         $this->assertFalse($disabledFunctionality->isSubmitButtons());
     }
 
+    public function testCaptchasKeyword()
+    {
+        $disabledFunctionality = new DisabledFunctionality(['captchas']);
+
+        $this->assertFalse($disabledFunctionality->isApi());
+        $this->assertFalse($disabledFunctionality->isElements());
+        $this->assertFalse($disabledFunctionality->isAdminNotifications());
+        $this->assertFalse($disabledFunctionality->isUserSelectNotifications());
+        $this->assertFalse($disabledFunctionality->isEmailFieldNotifications());
+        $this->assertFalse($disabledFunctionality->isConditionalNotifications());
+        $this->assertFalse($disabledFunctionality->isPayments());
+        $this->assertFalse($disabledFunctionality->isWebhooks());
+        $this->assertFalse($disabledFunctionality->isSubmitButtons());
+        $this->assertTrue($disabledFunctionality->isCaptchas());
+    }
+
     public function testShorthandKeyword()
     {
         $disabledFunctionality = new DisabledFunctionality(['api']);

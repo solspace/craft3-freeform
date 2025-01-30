@@ -1,5 +1,13 @@
 # Solspace Freeform Changelog
 
+## 5.9.4 - 2025-01-30
+
+### Fixed
+- Fixed a bug where element integrations were being disabled if the Stripe integration was enabled for the same form.
+- Fixed a PHP 8.0 compatibility issue for Craft 4 sites.
+- Fixed a bug where the `duplicate` conditional check was not working correctly on Cookie checks.
+- Fixed a bug where the Freeform Data Export page would not work on sites using PostgreSQL.
+
 ## 5.9.3 - 2025-01-29
 
 ### Added
