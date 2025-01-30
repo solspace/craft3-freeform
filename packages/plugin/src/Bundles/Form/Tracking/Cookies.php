@@ -10,6 +10,11 @@ use yii\base\Event;
 
 class Cookies extends FeatureBundle
 {
+    private const COOKIE_BEHAVIORS = [
+        FormLimiting::LIMIT_ONCE_PER_USER_OR_COOKIE,
+        FormLimiting::LIMIT_ONCE_PER_USER_OR_IP_OR_COOKIE,
+    ];
+
     public function __construct()
     {
         Event::on(Form::class, Form::EVENT_AFTER_SUBMIT, [$this, 'setPostedCookie']);
@@ -20,7 +25,7 @@ class Cookies extends FeatureBundle
         return 'form_posted_'.$form->getId();
     }
 
-    public function setPostedCookie(SubmitEvent $event)
+    public function setPostedCookie(SubmitEvent $event): void
     {
         if (\Craft::$app->request->isConsoleRequest) {
             return;
@@ -28,9 +33,9 @@ class Cookies extends FeatureBundle
 
         $form = $event->getForm();
         $behaviorSettings = $form->getSettings()->getBehavior();
-        $duplicateCheck = $behaviorSettings->duplicateCheck;
+        $behavior = $behaviorSettings->duplicateCheck;
 
-        if (FormLimiting::LIMIT_ONCE_PER_USER_OR_COOKIE === $duplicateCheck) {
+        if (!\in_array($behavior, self::COOKIE_BEHAVIORS, true)) {
             return;
         }
 
