@@ -70,6 +70,11 @@ class TableValidation extends FeatureBundle
             return;
         }
 
+        $isRequired = $field->isRequired();
+        if (!$isRequired) {
+            return;
+        }
+
         $value = $field->getValue();
         $isSomeFilled = ArrayHelper::someRecursive($value, fn ($item) => !empty($item));
         if (!$isSomeFilled) {
@@ -98,15 +103,23 @@ class TableValidation extends FeatureBundle
             return;
         }
 
+        $message = Freeform::t($field->getRequiredErrorMessage() ?: 'This field is required');
+
         $value = $field->getValue();
+        $isSomeFilled = ArrayHelper::someRecursive($value, fn ($item) => !empty($item));
+
+        if (!$isSomeFilled) {
+            $field->addError($message);
+
+            return;
+        }
+
         foreach ($value as $row) {
             foreach ($requiredColumnIndexes as $columnIndex) {
                 if (empty($row[$columnIndex])) {
-                    $message = $field->getRequiredErrorMessage() ?: Freeform::t('This field is required');
+                    $field->addError($message);
 
-                    $field->addError(Freeform::t($message));
-
-                    break;
+                    return;
                 }
             }
         }
