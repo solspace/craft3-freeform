@@ -1,6 +1,6 @@
 name: Report an Issue
 description: Create a report about a bug or something that isn't working correctly in Freeform.
-labels: issue
+labels:
 body:
   - type: markdown
     attributes:
