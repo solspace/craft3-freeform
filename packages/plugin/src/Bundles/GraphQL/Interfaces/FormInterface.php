@@ -12,6 +12,7 @@ use Solspace\Freeform\Bundles\GraphQL\Resolvers\FieldResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\FormCaptchaResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\HoneypotResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PageResolver;
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\PostForwardingResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\RulesResolver;
 use Solspace\Freeform\Bundles\GraphQL\Types\FormType;
 use Solspace\Freeform\Bundles\GraphQL\Types\Generators\FormGenerator;
@@ -268,6 +269,12 @@ class FormInterface extends AbstractInterface
                 'type' => RulesInterface::getType(),
                 'resolve' => RulesResolver::class.'::resolve',
                 'description' => 'The rules for this form',
+            ],
+            'postForwarding' => [
+                'name' => 'postForwarding',
+                'type' => PostForwardingInterface::getType(),
+                'resolve' => PostForwardingResolver::class.'::resolve',
+                'description' => 'The Post Forwarding for this form',
             ],
         ], static::getName());
     }
