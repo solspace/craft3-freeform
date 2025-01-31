@@ -1,5 +1,17 @@
 # Solspace Freeform Changelog
 
+## 5.9.5 - 2025-01-31
+
+### Added
+- Added `FreeformPostForwardingInterface` interface for GraphQL to handle new Post Forwarding integration type.
+- Added `FreeformGoogleTagManagerInterface` interface for GraphQL to handle new Google Tag Manager integration type.
+
+### Fixed
+- Fixed a bug where Table fields were incorrectly marked as required, even when they were not supposed to be.
+- Fixed a bug where Dropdown and Radio column types in Table fields were breaking in the form builder.
+- Fixed a bug where the new Post Forwarding integration type (`postForwarding`) was not supported in GraphQL.
+- Fixed a bug where the new Google Tag Manager integration type (`gtm`) was not supported in GraphQL.
+
 ## 5.9.4 - 2025-01-30
 
 ### Fixed
