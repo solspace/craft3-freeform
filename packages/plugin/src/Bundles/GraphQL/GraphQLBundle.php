@@ -17,11 +17,13 @@ use Solspace\Freeform\Bundles\GraphQL\Interfaces\FieldRuleInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\FormInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\FormPropertiesInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\FreeformInterface;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\GoogleTagManagerInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\NotificationTemplateInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\OpinionScaleInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\OptionInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\PageInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\PageRuleInterface;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\PostForwardingInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\RowInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\RuleConditionInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\RulesInterface;
@@ -82,6 +84,8 @@ class GraphQLBundle extends FeatureBundle
                 $event->types[] = RulesInterface::class;
                 $event->types[] = FormPropertiesInterface::class;
                 $event->types[] = DynamicNotificationInterface::class;
+                $event->types[] = PostForwardingInterface::class;
+                $event->types[] = GoogleTagManagerInterface::class;
             }
         );
 
