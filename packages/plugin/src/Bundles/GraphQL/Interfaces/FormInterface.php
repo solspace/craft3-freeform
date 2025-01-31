@@ -10,6 +10,7 @@ use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\HoneypotInterface
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\CsrfTokenResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\FieldResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\FormCaptchaResolver;
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\GoogleTagManagerResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\HoneypotResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PageResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PostForwardingResolver;
@@ -275,6 +276,12 @@ class FormInterface extends AbstractInterface
                 'type' => PostForwardingInterface::getType(),
                 'resolve' => PostForwardingResolver::class.'::resolve',
                 'description' => 'The Post Forwarding for this form',
+            ],
+            'gtm' => [
+                'name' => 'gtm',
+                'type' => GoogleTagManagerInterface::getType(),
+                'resolve' => GoogleTagManagerResolver::class.'::resolve',
+                'description' => 'The Google Tag Manager for this form',
             ],
         ], static::getName());
     }
