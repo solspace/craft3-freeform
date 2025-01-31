@@ -14,7 +14,7 @@ export const TableDropdownEditor: React.FC<TableEditorProps> = ({
   onUpdate,
 }) => {
   useEffect(() => {
-    if (!column?.options.length) {
+    if (!column?.options?.length) {
       onUpdate({ ...column, options: [''] });
     }
   }, [column, onUpdate]);

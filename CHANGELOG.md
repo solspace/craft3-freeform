@@ -1,5 +1,17 @@
 # Solspace Freeform Changelog
 
+## 5.9.5 - 2025-01-31
+
+### Added
+- Added `FreeformPostForwardingInterface` interface for GraphQL to handle new Post Forwarding integration type.
+- Added `FreeformGoogleTagManagerInterface` interface for GraphQL to handle new Google Tag Manager integration type.
+
+### Fixed
+- Fixed a bug where Table fields were incorrectly marked as required, even when they were not supposed to be.
+- Fixed a bug where Dropdown and Radio column types in Table fields were breaking in the form builder.
+- Fixed a bug where the new Post Forwarding integration type (`postForwarding`) was not supported in GraphQL.
+- Fixed a bug where the new Google Tag Manager integration type (`gtm`) was not supported in GraphQL.
+
 ## 5.9.4 - 2025-01-30
 
 ### Fixed
@@ -1232,7 +1244,7 @@
     - The `freeform/fields/create` field creation console command has been removed as it is no longer applicable.
     - The following attribute control parameters have been removed and replaced by accessing them via the new `attributes` object: `inputClass`, `submitClass`, `rowClass`, `columnClass`, `labelClass`, `errorClass`, `instructionsClass`, `class`, `id`, `name`, `method`, and `action`.
 - **GraphQL**
-    - The `extraPostUrl`, `extraPostTriggerPhrase`, `gtmId`, and `gtmEventName` fields have been removed from `FreeformFormInterface` in GraphQL. Please use the new interface instead (TBD).
+    - The `extraPostUrl`, `extraPostTriggerPhrase`, `gtmId`, and `gtmEventName` fields have been removed from `FreeformFormInterface` in GraphQL. Please use `postForwarding` and `gtm`, as well as the new `FreeformPostForwardingInterface` and `FreeformGoogleTagManagerInterface` interfaces instead.
     - The `inputAttributes`, `labelAttributes`, `errorAttributes`, and `instructionAttributes` fields have been removed from `FreeformFormInterface` in GraphQL. Please use the `FreeformAttributesInterface` instead.
     - The `hash` field has been removed from `FreeformFieldInterface` in GraphQL as it is no longer relevant.
 - **Stripe Payments**
