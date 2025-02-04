@@ -3,6 +3,7 @@
 namespace Solspace\Freeform\migrations;
 
 use craft\db\Migration;
+use craft\helpers\MigrationHelper;
 use Solspace\Freeform\Library\Migrations\ForeignKey;
 
 /**
@@ -12,6 +13,12 @@ class m240903_145034_CreateFormGroupsEntriesTable extends Migration
 {
     public function safeUp(): bool
     {
+        if ($this->tableExists('{{%freeform_forms_groups_entries}}')) {
+            \Craft::warning("Table '{{%freeform_forms_groups}}' already exists. Skipping migration.", __METHOD__);
+
+            return true;
+        }
+
         $this->createTable(
             '{{%freeform_forms_groups_entries}}',
             [
@@ -19,9 +26,9 @@ class m240903_145034_CreateFormGroupsEntriesTable extends Migration
                 'groupId' => $this->integer()->notNull(),
                 'formId' => $this->integer()->notNull(),
                 'order' => $this->integer()->notNull(),
-                'dateCreated' => $this->dateTime(),
-                'dateUpdated' => $this->dateTime(),
-                'uid' => $this->uid(),
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid()->notNull(),
             ]
         );
 
@@ -48,8 +55,8 @@ class m240903_145034_CreateFormGroupsEntriesTable extends Migration
 
     public function safeDown(): bool
     {
-        echo "m240903_145034_CreateFormGroupsEntriesTable cannot be reverted.\n";
+        MigrationHelper::dropTableIfExists('{{%freeform_forms_groups_entries}}', $this);
 
-        return false;
+        return true;
     }
 }
