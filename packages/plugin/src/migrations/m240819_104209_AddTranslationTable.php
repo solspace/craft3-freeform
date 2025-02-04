@@ -3,11 +3,21 @@
 namespace Solspace\Freeform\migrations;
 
 use craft\db\Migration;
+use craft\helpers\MigrationHelper;
 
+/**
+ * m240819_104209_AddTranslationTable migration.
+ */
 class m240819_104209_AddTranslationTable extends Migration
 {
     public function safeUp(): bool
     {
+        if ($this->tableExists('{{%freeform_forms_translations}}')) {
+            \Craft::warning("Table '{{%freeform_forms_translations}}' already exists. Skipping migration.", __METHOD__);
+
+            return true;
+        }
+
         $this->createTable(
             '{{%freeform_forms_translations}}',
             [
@@ -17,7 +27,7 @@ class m240819_104209_AddTranslationTable extends Migration
                 'translations' => $this->longText()->notNull(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
-                'uid' => $this->uid(),
+                'uid' => $this->uid()->notNull(),
             ]
         );
 
@@ -51,7 +61,7 @@ class m240819_104209_AddTranslationTable extends Migration
 
     public function safeDown(): bool
     {
-        $this->dropTableIfExists('{{%freeform_forms_translations}}');
+        MigrationHelper::dropTableIfExists('{{%freeform_forms_translations}}', $this);
 
         return true;
     }
