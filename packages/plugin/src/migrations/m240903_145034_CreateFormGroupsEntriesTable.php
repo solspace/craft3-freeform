@@ -13,8 +13,8 @@ class m240903_145034_CreateFormGroupsEntriesTable extends Migration
 {
     public function safeUp(): bool
     {
-        if ($this->tableExists('{{%freeform_forms_groups_entries}}')) {
-            \Craft::warning("Table '{{%freeform_forms_groups}}' already exists. Skipping migration.", __METHOD__);
+        if ($this->db->tableExists('{{%freeform_forms_groups_entries}}')) {
+            \Craft::warning("Table 'freeform_forms_groups_entries' already exists. Skipping migration.", __METHOD__);
 
             return true;
         }

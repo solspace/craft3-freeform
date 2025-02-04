@@ -12,8 +12,8 @@ class m240819_104209_AddTranslationTable extends Migration
 {
     public function safeUp(): bool
     {
-        if ($this->tableExists('{{%freeform_forms_translations}}')) {
-            \Craft::warning("Table '{{%freeform_forms_translations}}' already exists. Skipping migration.", __METHOD__);
+        if ($this->db->tableExists('{{%freeform_forms_translations}}')) {
+            \Craft::warning("Table 'freeform_forms_translations' already exists. Skipping migration.", __METHOD__);
 
             return true;
         }
