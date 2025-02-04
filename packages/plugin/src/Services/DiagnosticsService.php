@@ -515,11 +515,6 @@ class DiagnosticsService extends BaseService
                             '',
                             "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
                         ),
-                        new WarningValidator(
-                            fn ($value) => version_compare($value['count'], '0', '<='),
-                            '',
-                            "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
-                        ),
                     ]
                 ),
             ],
