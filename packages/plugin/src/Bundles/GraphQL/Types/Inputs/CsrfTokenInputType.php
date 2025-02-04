@@ -22,6 +22,11 @@ class CsrfTokenInputType extends InputObjectType
             return $inputType;
         }
 
+        /*
+         * FIXME
+         * - Add CSRF token name field name (CRAFT_CSRF_TOKEN) instead of requiring name / value fields
+         * - Also use proper CsrfTokenInputArguments so we do not expose query fields for mutations
+         */
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
             CsrfTokenArguments::getArguments(),
             self::getName()

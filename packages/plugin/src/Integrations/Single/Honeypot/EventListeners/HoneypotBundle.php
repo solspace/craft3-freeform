@@ -68,7 +68,13 @@ class HoneypotBundle extends FeatureBundle
             return;
         }
 
+        /*
+         * FIXME
+         * - add inputName
+         * - deprecate name and value and remove in version 6
+         */
         $event->add('honeypot', [
+            'errorMessage' => $integration->getErrorMessage(),
             'name' => $integration->getInputName(),
             'value' => '',
         ]);

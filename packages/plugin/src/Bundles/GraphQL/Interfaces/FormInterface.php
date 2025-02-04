@@ -12,6 +12,7 @@ use Solspace\Freeform\Bundles\GraphQL\Resolvers\FieldResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\FormCaptchaResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\GoogleTagManagerResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\HoneypotResolver;
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\JavascriptTestResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PageResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PostForwardingResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\RulesResolver;
@@ -94,6 +95,22 @@ class FormInterface extends AbstractInterface
                 'description' => "The form's handle",
                 'resolve' => function ($source) {
                     return $source->getSettings()->description;
+                },
+            ],
+            'successBehavior' => [
+                'name' => 'successBehavior',
+                'type' => Type::string(),
+                'description' => "The form's success behavior",
+                'resolve' => function ($source) {
+                    return $source->getSettings()->successBehavior;
+                },
+            ],
+            'successTemplate' => [
+                'name' => 'successTemplate',
+                'type' => Type::string(),
+                'description' => "The form's success template",
+                'resolve' => function ($source) {
+                    return $source->getSettings()->successTemplate;
                 },
             ],
             'returnUrl' => [
@@ -192,6 +209,11 @@ class FormInterface extends AbstractInterface
                     return $source->getSettings()->processingText;
                 },
             ],
+            /*
+             * FIXME
+             * - Deprecate captcha and remove in version 6
+             * - Add proper reCaptcha, hCaptcha and turnstiles types that support lists
+             */
             'captcha' => [
                 'name' => 'captcha',
                 'type' => FormCaptchaInterface::getType(),
@@ -239,6 +261,22 @@ class FormInterface extends AbstractInterface
                     return $source->getSettings()->errorMessage;
                 },
             ],
+            'duplicateCheck' => [
+                'name' => 'duplicateCheck',
+                'type' => Type::string(),
+                'description' => 'The form’s duplicate check rule',
+                'resolve' => function ($source) {
+                    return $source->getSettings()->duplicateCheck;
+                },
+            ],
+            'stopSubmissionsAfter' => [
+                'name' => 'stopSubmissionsAfter',
+                'type' => Type::string(),
+                'description' => 'The form’s stop submissions after date',
+                'resolve' => function ($source) {
+                    return $source->getSettings()->stopSubmissionsAfter;
+                },
+            ],
             'disableSubmit' => [
                 'name' => 'disableSubmit',
                 'type' => Type::boolean(),
@@ -282,6 +320,12 @@ class FormInterface extends AbstractInterface
                 'type' => GoogleTagManagerInterface::getType(),
                 'resolve' => GoogleTagManagerResolver::class.'::resolve',
                 'description' => 'The Google Tag Manager for this form',
+            ],
+            'javascriptTest' => [
+                'name' => 'javascriptTest',
+                'type' => JavascriptTestInterface::getType(),
+                'resolve' => JavascriptTestResolver::class.'::resolve',
+                'description' => 'The Javascript Test for this form',
             ],
         ], static::getName());
     }

@@ -1,5 +1,7 @@
 <?php
 
+// FIXME - Move out of SimpleObjects
+
 namespace Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects;
 
 use GraphQL\Type\Definition\ResolveInfo;
@@ -23,9 +25,17 @@ class HoneypotType extends AbstractObjectType
     /**
      * @param Option $source
      * @param mixed  $arguments
+     *
+     * FIXME
+     *  - Add inputName
+     *  - Deprecate name and value and remove in version 6
      */
     protected function resolve($source, $arguments, mixed $context, ResolveInfo $resolveInfo): mixed
     {
+        if ('errorMessage' === $resolveInfo->fieldName) {
+            return $source['errorMessage'] ?? null;
+        }
+
         if ('name' === $resolveInfo->fieldName) {
             return $source['name'] ?? null;
         }

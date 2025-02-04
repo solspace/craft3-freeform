@@ -18,6 +18,7 @@ use Solspace\Freeform\Bundles\GraphQL\Interfaces\FormInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\FormPropertiesInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\FreeformInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\GoogleTagManagerInterface;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\JavascriptTestInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\NotificationTemplateInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\OpinionScaleInterface;
 use Solspace\Freeform\Bundles\GraphQL\Interfaces\OptionInterface;
@@ -86,6 +87,7 @@ class GraphQLBundle extends FeatureBundle
                 $event->types[] = DynamicNotificationInterface::class;
                 $event->types[] = PostForwardingInterface::class;
                 $event->types[] = GoogleTagManagerInterface::class;
+                $event->types[] = JavascriptTestInterface::class;
             }
         );
 

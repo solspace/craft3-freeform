@@ -1,5 +1,7 @@
 <?php
 
+// FIXME - Rename all references of jsTest, JsTest to JavascriptTest
+
 namespace Solspace\Freeform\Integrations\Single\JavascriptTest\EventListeners;
 
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
@@ -81,7 +83,17 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
-        $event->add('jsTest', ['name' => $integration->getInputName()]);
+        // FIXME - deprecate and remove in version 6
+        $event->add('jsTest', [
+            'errorMessage' => $integration->getErrorMessage(),
+            'inputName' => $integration->getInputName(),
+            'name' => $integration->getInputName(),
+        ]);
+
+        $event->add('javascriptTest', [
+            'errorMessage' => $integration->getErrorMessage(),
+            'inputName' => $integration->getInputName(),
+        ]);
     }
 
     public function validateJavascript(ValidationEvent $event): void
@@ -100,12 +112,6 @@ class JavascriptTestBundle extends FeatureBundle
         $settingsModel = $settings->getSettingsModel();
         if ($settingsModel->bypassSpamCheckOnLoggedInUsers && \Craft::$app->getUser()->id) {
             $logger->debug('Skipping Javascript Test check for logged in user');
-
-            return;
-        }
-
-        if ($form->isGraphQLPosted()) {
-            $logger->debug('Skipping Javascript Test check for GraphQL request');
 
             return;
         }
@@ -188,7 +194,17 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
-        $event->add('jsTest', ['name' => $integration->getInputName()]);
+        // FIXME - deprecate and remove in version 6
+        $event->add('jsTest', [
+            'errorMessage' => $integration->getErrorMessage(),
+            'inputName' => $integration->getInputName(),
+            'name' => $integration->getInputName(),
+        ]);
+
+        $event->add('javascriptTest', [
+            'errorMessage' => $integration->getErrorMessage(),
+            'inputName' => $integration->getInputName(),
+        ]);
     }
 
     private function getIntegration(Form $form): ?JavascriptTest
