@@ -16,11 +16,38 @@
         {{ redirectInput('freeform/settings/spam') }}
         {{ csrfInput() }}
 
-        <p class="first">{{ "Spam protection features are configured in the <b>Integrations</b> settings area."|t('freeform')|raw }}</p>
+        <p class="first">{{ "Spam protection features are configured in the <b>Integrations</b> settings area:"|t('freeform')|raw }}</p>
         <ul class="freeform-settings-list">
-            <li><a href='{{ cpUrl("freeform/settings/integrations/single/Honeypot") }}'>{{ "Configure Freeform Honeypot"|t('freeform') }}</a></li>
-            <li><a href='{{ cpUrl("freeform/settings/integrations/single/JavascriptTest") }}'>{{ "Configure Freeform Javascript Test"|t('freeform') }}</a></li>
-            <li><a href='{{ cpUrl("freeform/settings/integrations/captchas") }}'>{{ "Configure reCAPTCHA or hCaptcha"|t('freeform') }}</a></li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/single/Honeypot") }}'>
+                    {{ "Freeform Honeypot"|t('freeform') }}
+                </a>
+            </li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/single/JavascriptTest") }}'>
+                    {{ "Freeform Javascript Test"|t('freeform') }}
+                </a>
+            </li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/captchas") }}'>
+                    {{ "Captchas"|t('freeform') }}
+                </a>
+            </li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\Keywords\\BlockKeywords") }}'>
+                    {{ "Keyword Blocking"|t('freeform') }}
+                </a>
+            </li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\Emails\\BlockEmailAddresses") }}'>
+                    {{ "Email Address Blocking"|t('freeform') }}
+                </a>
+            </li>
+            <li>
+                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\IpAddresses\\BlockIpAddresses") }}'>
+                    {{ "IP Address Blocking"|t('freeform') }}
+                </a>
+            </li>
         </ul>
 
         <hr />
@@ -95,29 +122,6 @@
                 }) }}
             </div>
         </div>
-
-        <hr>
-
-        <h2>{{ "Spam Blocking"|t('freeform') }}</h2>
-
-        <p class="first">{{ "The blocking of keywords, email addresses and IP addresses are now configured in the <b>Integrations</b> settings area."|t('freeform')|raw }}</p>
-        <ul class="freeform-settings-list">
-            <li>
-                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\Keywords\\BlockKeywords") }}'>
-                    {{ "Configure Keyword Blocking"|t('freeform') }}
-                </a>
-            </li>
-            <li>
-                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\Emails\\BlockEmailAddresses") }}'>
-                    {{ "Configure Email Address Blocking"|t('freeform') }}
-                </a>
-            </li>
-            <li>
-                <a href='{{ cpUrl("freeform/settings/integrations/spam-blocking/new?serviceProvider=Solspace\\Freeform\\Integrations\\SpamBlocking\\IpAddresses\\BlockIpAddresses") }}'>
-                    {{ "Configure IP Address Blocking"|t('freeform') }}
-                </a>
-            </li>
-        </ul>
 
         <hr>
 
