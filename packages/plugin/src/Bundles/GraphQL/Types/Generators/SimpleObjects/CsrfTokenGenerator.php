@@ -1,5 +1,7 @@
 <?php
 
+// FIXME - Move out of SimpleObjects
+
 namespace Solspace\Freeform\Bundles\GraphQL\Types\Generators\SimpleObjects;
 
 use Solspace\Freeform\Bundles\GraphQL\Arguments\CsrfTokenArguments;

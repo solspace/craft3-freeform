@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * FIXME
+ * - Add appearance mode
+ * - The 3 modes for Turnstile are Managed, Non-Interactive, and Invisible.
+ * - Refer to appearance modes to configure whether to have the widget be always visible or visible only when interaction is required.
+ */
+
 namespace Solspace\Freeform\Integrations\Captchas\Turnstile;
 
 use GuzzleHttp\Client;
@@ -258,6 +265,11 @@ class Turnstile extends BaseIntegration implements CaptchaIntegrationInterface
 
     private function getCaptchaResponse(Form $form): ?string
     {
+        /*
+         * FIXME
+         * - Add cf-turnstile-response instead of captcha
+         * - Deprecate captcha and remove in version 6
+         */
         if ($form->isGraphQLPosted()) {
             $arguments = $form->getGraphQLArguments();
 

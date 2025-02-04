@@ -9,7 +9,17 @@ class HoneypotArguments extends Arguments
 {
     public static function getArguments(): array
     {
+        /*
+         * FIXME
+         * - add inputName
+         * - deprecate name and value and remove in version 6
+         */
         return [
+            'errorMessage' => [
+                'name' => 'errorMessage',
+                'type' => Type::string(),
+                'description' => 'The Honeypot custom error message.',
+            ],
             'name' => [
                 'name' => 'name',
                 'type' => Type::string(),

@@ -6,9 +6,9 @@ use craft\gql\base\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Integrations\Single\Honeypot\Honeypot;
+use Solspace\Freeform\Integrations\Single\JavascriptTest\JavascriptTest;
 
-class HoneypotResolver extends Resolver
+class JavascriptTestResolver extends Resolver
 {
     public static function resolve($source, array $arguments, $context, ResolveInfo $resolveInfo): ?array
     {
@@ -17,20 +17,14 @@ class HoneypotResolver extends Resolver
         }
 
         $integrationProvider = \Craft::$container->get(FormIntegrationsProvider::class);
-        $honeypot = $integrationProvider->getSingleton($source, Honeypot::class);
-        if (!$honeypot) {
+        $javascriptTest = $integrationProvider->getSingleton($source, JavascriptTest::class);
+        if (!$javascriptTest) {
             return null;
         }
 
-        /*
-         * FIXME
-         * - add inputName
-         * - deprecate name and value and remove in version 6
-         */
         return [
-            'errorMessage' => $honeypot->getErrorMessage(),
-            'name' => $honeypot->getInputName(),
-            'value' => '',
+            'errorMessage' => $javascriptTest->getErrorMessage(),
+            'inputName' => $javascriptTest->getInputName(),
         ];
     }
 }

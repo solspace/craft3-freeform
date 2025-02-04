@@ -21,6 +21,7 @@ class FileUploadInputType extends InputObjectType
             return Type::listOf($inputType);
         }
 
+        // FIXME - Use proper FileUploadInputArguments so we do not expose query fields for mutations
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
             FileUploadArguments::getArguments(),
             self::getName()

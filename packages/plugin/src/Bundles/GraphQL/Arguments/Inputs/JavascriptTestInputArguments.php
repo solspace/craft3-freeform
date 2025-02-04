@@ -3,12 +3,12 @@
 namespace Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs;
 
 use craft\gql\base\Arguments;
-use Solspace\Freeform\Bundles\GraphQL\Types\Inputs\HoneypotInputType;
+use Solspace\Freeform\Bundles\GraphQL\Types\Inputs\JavascriptTestInputType;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Integrations\Single\Honeypot\Honeypot;
+use Solspace\Freeform\Integrations\Single\JavascriptTest\JavascriptTest;
 
-class HoneypotInputArguments extends Arguments
+class JavascriptTestInputArguments extends Arguments
 {
     private static Form $form;
 
@@ -20,17 +20,17 @@ class HoneypotInputArguments extends Arguments
     public static function getArguments(): array
     {
         $integrationProvider = \Craft::$container->get(FormIntegrationsProvider::class);
-        $honeypot = $integrationProvider->getSingleton(self::$form, Honeypot::class);
+        $javascriptTest = $integrationProvider->getSingleton(self::$form, JavascriptTest::class);
 
-        if (!$honeypot) {
+        if (!$javascriptTest) {
             return [];
         }
 
         return [
-            'honeypot' => [
-                'name' => 'honeypot',
-                'type' => HoneypotInputType::getType(),
-                'description' => 'The honeypot name/value.',
+            'javascriptTest' => [
+                'name' => 'javascriptTest',
+                'type' => JavascriptTestInputType::getType(self::$form),
+                'description' => 'The Javascript Test name/value.',
             ],
         ];
     }

@@ -62,6 +62,11 @@ class SubmissionInterface extends Element
                         'type' => Type::string(),
                         'description' => 'The generated hash for the submission',
                     ],
+                    /*
+                     * FIXME
+                     * - Deprecate captcha and remove in version 6
+                     * - Add proper reCaptcha, hCaptcha and turnstiles types that support lists
+                     */
                     'captcha' => [
                         'name' => 'captcha',
                         'type' => SubmissionCaptchaInterface::getType(),
@@ -142,6 +147,11 @@ class SubmissionInterface extends Element
                         'name' => 'assets',
                         'type' => Type::listOf(Asset::getType()),
                         'description' => 'The assets of the submission',
+                    ],
+                    'javascriptTest' => [
+                        'name' => 'javascriptTest',
+                        'type' => JavascriptTestInterface::getType(),
+                        'description' => 'The Javascript Test of the submission',
                     ],
                 ],
             ),

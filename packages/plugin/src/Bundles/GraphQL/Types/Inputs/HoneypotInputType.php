@@ -19,6 +19,11 @@ class HoneypotInputType extends InputObjectType
             return $inputType;
         }
 
+        /*
+         * FIXME
+         * - Add honeypot field input name (freeform_honeypot_handle or freeform_honeypot_foobar) instead of requiring name / value fields.
+         * - Also add proper HoneypotInputArguments so we do not expose query fields for mutations
+         */
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
             HoneypotArguments::getArguments(),
             self::getName()

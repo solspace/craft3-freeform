@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * FIXME
+ * - Deprecate captcha resolver and remove in version 6
+ * - Add proper reCaptcha, hCaptcha and turnstiles resolvers
+ * - Move out of SimpleObjects
+ */
+
 namespace Solspace\Freeform\Bundles\GraphQL\Types\Generators\SimpleObjects;
 
 use Solspace\Freeform\Bundles\GraphQL\Arguments\SubmissionCaptchaArguments;
