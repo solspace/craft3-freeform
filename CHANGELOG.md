@@ -1,5 +1,14 @@
 # Solspace Freeform Changelog
 
+## 5.9.6 - 2025-02-04
+
+### Changed
+- Improved some migrations not to fail if there were any previous failures.
+
+### Fixed
+- Fixed a bug where the _Form Submission Throttling_ diagnostic item showed an extra warning message.
+- Fixed a bug where _Captchas_, _Javascript Test_ and various other form settings were not supported in GraphQL.
+
 ## 5.9.5 - 2025-01-31
 
 ### Added
