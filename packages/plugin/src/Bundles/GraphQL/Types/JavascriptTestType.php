@@ -29,8 +29,12 @@ class JavascriptTestType extends AbstractObjectType
             return $source['errorMessage'] ?? null;
         }
 
-        if ('inputName' === $resolveInfo->fieldName) {
-            return $source['inputName'] ?? null;
+        if ('name' === $resolveInfo->fieldName) {
+            return $source['name'] ?? null;
+        }
+
+        if ('value' === $resolveInfo->fieldName) {
+            return $source['value'] ?? null;
         }
 
         return null;

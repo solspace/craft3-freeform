@@ -4,13 +4,13 @@ namespace Solspace\Freeform\Bundles\GraphQL\Types\Inputs;
 
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\SubmissionCaptchaArguments;
+use GraphQL\Type\Definition\Type;
 
-class SubmissionCaptchaInputType extends InputObjectType
+class CaptchaInputType extends InputObjectType
 {
     public static function getName(): string
     {
-        return 'FreeformSubmissionCaptchaInputType';
+        return 'FreeformCaptchaInputType';
     }
 
     public static function getType(): mixed
@@ -19,13 +19,21 @@ class SubmissionCaptchaInputType extends InputObjectType
             return $inputType;
         }
 
-        /*
-         * FIXME
-         * - Add g-recaptcha-response, h-captcha-response or cf-turnstile-response field input names instead of requiring name / value fields.
-         * - Also add proper SubmissionCaptchaInputArguments so we do not expose query fields for mutations
-         */
+        $fieldDefinitions = [
+            'name' => [
+                'name' => 'name',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input name.',
+            ],
+            'value' => [
+                'name' => 'value',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input value.',
+            ],
+        ];
+
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
-            SubmissionCaptchaArguments::getArguments(),
+            $fieldDefinitions,
             self::getName()
         );
 

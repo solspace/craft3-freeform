@@ -4,7 +4,7 @@ namespace Solspace\Freeform\Bundles\GraphQL\Types\Inputs;
 
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\DynamicNotificationInputsArguments;
+use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\DynamicNotificationInputArguments;
 
 class FormPropertiesInputType extends InputObjectType
 {
@@ -21,7 +21,7 @@ class FormPropertiesInputType extends InputObjectType
 
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
             array_merge(
-                DynamicNotificationInputsArguments::getArguments(),
+                DynamicNotificationInputArguments::getArguments(),
             ),
             self::getName()
         );

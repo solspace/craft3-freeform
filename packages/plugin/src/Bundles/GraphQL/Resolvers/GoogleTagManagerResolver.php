@@ -17,14 +17,14 @@ class GoogleTagManagerResolver extends Resolver
         }
 
         $integrationProvider = \Craft::$container->get(FormIntegrationsProvider::class);
-        $gtm = $integrationProvider->getSingleton($source, GTM::class);
-        if (!$gtm) {
+        $googleTagManager = $integrationProvider->getSingleton($source, GTM::class);
+        if (!$googleTagManager) {
             return null;
         }
 
         return [
-            'containerId' => $gtm->getContainerId(),
-            'eventName' => $gtm->getEventName(),
+            'containerId' => $googleTagManager->getContainerId(),
+            'eventName' => $googleTagManager->getEventName(),
         ];
     }
 }

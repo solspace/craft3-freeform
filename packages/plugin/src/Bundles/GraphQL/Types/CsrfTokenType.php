@@ -1,13 +1,10 @@
 <?php
 
-// FIXME - Move out of SimpleObjects
-
-namespace Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects;
+namespace Solspace\Freeform\Bundles\GraphQL\Types;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\CsrfTokenInterface;
-use Solspace\Freeform\Bundles\GraphQL\Types\AbstractObjectType;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\CsrfTokenInterface;
 use Solspace\Freeform\Fields\DataContainers\Option;
 
 class CsrfTokenType extends AbstractObjectType

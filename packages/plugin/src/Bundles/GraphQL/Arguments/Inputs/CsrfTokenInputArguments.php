@@ -9,18 +9,20 @@ class CsrfTokenInputArguments extends Arguments
 {
     public static function getArguments(): array
     {
-        $isCsrfEnabled = \Craft::$app->getConfig()->getGeneral()->enableCsrfProtection;
+        $generalConfig = \Craft::$app->getConfig()->getGeneral();
+        $csrfTokenName = $generalConfig->csrfTokenName;
+        $isCsrfEnabled = $generalConfig->enableCsrfProtection;
 
-        if ($isCsrfEnabled) {
-            return [
-                'csrfToken' => [
-                    'name' => 'csrfToken',
-                    'type' => CsrfTokenInputType::getType(),
-                    'description' => 'The CSRF name/value.',
-                ],
-            ];
+        if (!$isCsrfEnabled || !$csrfTokenName) {
+            return [];
         }
 
-        return [];
+        return [
+            'csrfToken' => [
+                'name' => 'csrfToken',
+                'type' => CsrfTokenInputType::getType(),
+                'description' => 'The CSRF field input name and value.',
+            ],
+        ];
     }
 }

@@ -1,13 +1,10 @@
 <?php
 
-// FIXME - Move out of SimpleObjects
-
-namespace Solspace\Freeform\Bundles\GraphQL\Types\Generators\SimpleObjects;
+namespace Solspace\Freeform\Bundles\GraphQL\Types\Generators;
 
 use Solspace\Freeform\Bundles\GraphQL\Arguments\CsrfTokenArguments;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\CsrfTokenInterface;
-use Solspace\Freeform\Bundles\GraphQL\Types\Generators\AbstractGenerator;
-use Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects\CsrfTokenType;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\CsrfTokenInterface;
+use Solspace\Freeform\Bundles\GraphQL\Types\CsrfTokenType;
 
 class CsrfTokenGenerator extends AbstractGenerator
 {

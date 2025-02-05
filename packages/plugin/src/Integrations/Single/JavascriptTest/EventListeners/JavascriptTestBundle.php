@@ -1,7 +1,5 @@
 <?php
 
-// FIXME - Rename all references of jsTest, JsTest to JavascriptTest
-
 namespace Solspace\Freeform\Integrations\Single\JavascriptTest\EventListeners;
 
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
@@ -18,6 +16,7 @@ use Solspace\Freeform\Library\Attributes\Attributes;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\DataObjects\SpamReason;
 use Solspace\Freeform\Library\Helpers\CryptoHelper;
+use Solspace\Freeform\Library\Integrations\IntegrationInterface;
 use Solspace\Freeform\Services\SettingsService;
 use yii\base\Event;
 
@@ -30,19 +29,19 @@ class JavascriptTestBundle extends FeatureBundle
         Event::on(
             Form::class,
             Form::EVENT_OUTPUT_AS_JSON,
-            [$this, 'addJsTestToJson']
+            [$this, 'attachToJson']
         );
 
         Event::on(
             Form::class,
             Form::EVENT_RENDER_AFTER_OPEN_TAG,
-            [$this, 'addJsTestInputToForm']
+            [$this, 'addJavascriptTestInputToForm']
         );
 
         Event::on(
             Form::class,
             Form::EVENT_RENDER_AFTER_CLOSING_TAG,
-            [$this, 'addJsTestScript']
+            [$this, 'addJavascriptTestScript']
         );
 
         Event::on(
@@ -64,7 +63,7 @@ class JavascriptTestBundle extends FeatureBundle
         );
     }
 
-    public function addJsTestInputToForm(RenderTagEvent $event): void
+    public function addJavascriptTestInputToForm(RenderTagEvent $event): void
     {
         $form = $event->getForm();
         $integration = $this->getIntegration($form);
@@ -72,10 +71,10 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
-        $event->addChunk($this->getJsTestInput($form));
+        $event->addChunk($this->getJavascriptTestInput($form));
     }
 
-    public function addJsTestToJson(OutputAsJsonEvent $event): void
+    public function attachToJson(OutputAsJsonEvent $event): void
     {
         $form = $event->getForm();
         $integration = $this->getIntegration($form);
@@ -83,17 +82,7 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
-        // FIXME - deprecate and remove in version 6
-        $event->add('jsTest', [
-            'errorMessage' => $integration->getErrorMessage(),
-            'inputName' => $integration->getInputName(),
-            'name' => $integration->getInputName(),
-        ]);
-
-        $event->add('javascriptTest', [
-            'errorMessage' => $integration->getErrorMessage(),
-            'inputName' => $integration->getInputName(),
-        ]);
+        $event->add('javascriptTest', $this->getIntegrationAttributes($integration));
     }
 
     public function validateJavascript(ValidationEvent $event): void
@@ -106,7 +95,7 @@ class JavascriptTestBundle extends FeatureBundle
 
         $logger = $this->loggerProvider->getLogger($integration);
 
-        $jsTestInputName = $integration->getInputName();
+        $javascriptTestInputName = $integration->getInputName();
         $settings = $this->getSettingsService();
 
         $settingsModel = $settings->getSettingsModel();
@@ -116,8 +105,14 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
+        if ($form->isGraphQLPosted()) {
+            $logger->debug('Skipping Javascript Test check for GraphQL request');
+
+            return;
+        }
+
         /** @var array $postValues */
-        $postedValue = \Craft::$app->request->post($jsTestInputName);
+        $postedValue = \Craft::$app->request->post($javascriptTestInputName);
         if ('' === $postedValue) {
             $logger->debug('Javascript Test passed successfully.');
 
@@ -137,7 +132,7 @@ class JavascriptTestBundle extends FeatureBundle
         $logger->debug('Javascript Test failed.');
     }
 
-    public function getJsTestInput(Form $form): string
+    public function getJavascriptTestInput(Form $form): string
     {
         $integration = $this->getIntegration($form);
         if (!$integration) {
@@ -166,7 +161,7 @@ class JavascriptTestBundle extends FeatureBundle
             EOS;
     }
 
-    public function addJsTestScript(RenderTagEvent $event): void
+    public function addJavascriptTestScript(RenderTagEvent $event): void
     {
         if (!$event->isGenerateTag()) {
             return;
@@ -194,17 +189,7 @@ class JavascriptTestBundle extends FeatureBundle
             return;
         }
 
-        // FIXME - deprecate and remove in version 6
-        $event->add('jsTest', [
-            'errorMessage' => $integration->getErrorMessage(),
-            'inputName' => $integration->getInputName(),
-            'name' => $integration->getInputName(),
-        ]);
-
-        $event->add('javascriptTest', [
-            'errorMessage' => $integration->getErrorMessage(),
-            'inputName' => $integration->getInputName(),
-        ]);
+        $event->add('javascriptTest', $this->getIntegrationAttributes($integration));
     }
 
     private function getIntegration(Form $form): ?JavascriptTest
@@ -219,6 +204,14 @@ class JavascriptTestBundle extends FeatureBundle
         }
 
         return $integration;
+    }
+
+    private function getIntegrationAttributes(IntegrationInterface $integration): array
+    {
+        return [
+            'errorMessage' => $integration->getErrorMessage(),
+            'name' => $integration->getInputName(),
+        ];
     }
 
     private function getSettingsService(): SettingsService

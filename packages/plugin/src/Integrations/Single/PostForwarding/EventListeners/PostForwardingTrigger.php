@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
+use Solspace\Freeform\Events\Forms\OutputAsJsonEvent;
 use Solspace\Freeform\Events\Forms\SubmitEvent;
 use Solspace\Freeform\Events\PostForwarding\PostForwardingEvent;
 use Solspace\Freeform\Fields\Implementations\FileUploadField;
@@ -37,6 +38,12 @@ class PostForwardingTrigger extends FeatureBundle
             Form::class,
             Form::EVENT_AFTER_SUBMIT,
             [$this, 'sendPostPayload']
+        );
+
+        Event::on(
+            Form::class,
+            Form::EVENT_OUTPUT_AS_JSON,
+            [$this, 'attachToJson']
         );
     }
 
@@ -184,5 +191,25 @@ class PostForwardingTrigger extends FeatureBundle
                 ]
             );
         }
+    }
+
+    public function attachToJson(OutputAsJsonEvent $event): void
+    {
+        $form = $event->getForm();
+
+        if ($form->isDisabled()->payload) {
+            return;
+        }
+
+        $integration = $this->integrationsProvider->getSingleton($form, PostForwarding::class);
+        if (!$integration) {
+            return;
+        }
+
+        $event->add('postForwarding', [
+            'url' => $integration->getUrl(),
+            'errorTrigger' => $integration->getErrorTrigger(),
+            'sendFiles' => $integration->isSendFiles(),
+        ]);
     }
 }

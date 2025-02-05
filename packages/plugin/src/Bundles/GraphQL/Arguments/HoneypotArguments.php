@@ -9,11 +9,6 @@ class HoneypotArguments extends Arguments
 {
     public static function getArguments(): array
     {
-        /*
-         * FIXME
-         * - add inputName
-         * - deprecate name and value and remove in version 6
-         */
         return [
             'errorMessage' => [
                 'name' => 'errorMessage',
@@ -23,12 +18,18 @@ class HoneypotArguments extends Arguments
             'name' => [
                 'name' => 'name',
                 'type' => Type::string(),
-                'description' => 'The Honeypot field name.',
+                'description' => 'The Honeypot field input name.',
             ],
+
+            /*
+             * @deprecated - this argument is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
             'value' => [
                 'name' => 'value',
                 'type' => Type::string(),
-                'description' => 'The Honeypot field value.',
+                'description' => 'The Honeypot field input value. Deprecated. Will be removed in Freeform 6.0.',
             ],
         ];
     }

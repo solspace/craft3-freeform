@@ -15,10 +15,10 @@ class JavascriptTestArguments extends Arguments
                 'type' => Type::string(),
                 'description' => 'The Javascript Test custom error message.',
             ],
-            'inputName' => [
-                'name' => 'inputName',
+            'name' => [
+                'name' => 'name',
                 'type' => Type::string(),
-                'description' => 'The Javascript Test input name.',
+                'description' => 'The Javascript Test field input name.',
             ],
         ];
     }

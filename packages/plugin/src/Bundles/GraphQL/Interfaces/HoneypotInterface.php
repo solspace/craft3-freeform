@@ -1,13 +1,10 @@
 <?php
 
-// FIXME - Move out of SimpleObjects
-
-namespace Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects;
+namespace Solspace\Freeform\Bundles\GraphQL\Interfaces;
 
 use Solspace\Freeform\Bundles\GraphQL\Arguments\HoneypotArguments;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\AbstractInterface;
-use Solspace\Freeform\Bundles\GraphQL\Types\Generators\SimpleObjects\HoneypotGenerator;
-use Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects\HoneypotType;
+use Solspace\Freeform\Bundles\GraphQL\Types\Generators\HoneypotGenerator;
+use Solspace\Freeform\Bundles\GraphQL\Types\HoneypotType;
 
 class HoneypotInterface extends AbstractInterface
 {

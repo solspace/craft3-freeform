@@ -133,6 +133,25 @@ class SubmissionMutationResolver extends ElementMutationResolver
             $payload['honeypot'] = $arguments['honeypot'];
         }
 
+        if (!empty($arguments['gtm'])) {
+            $payload['gtm'] = $arguments['gtm'];
+        }
+
+        if (!empty($arguments['postForwarding'])) {
+            $payload['postForwarding'] = $arguments['postForwarding'];
+        }
+
+        if (!empty($arguments['javascriptTest'])) {
+            $payload['javascriptTest'] = $arguments['javascriptTest'];
+        }
+
+        $generalConfig = \Craft::$app->getConfig()->getGeneral();
+        $isCsrfEnabled = $generalConfig->enableCsrfProtection;
+        $csrfTokenName = $generalConfig->csrfTokenName;
+        if ($isCsrfEnabled && $csrfTokenName && !empty($arguments[$csrfTokenName])) {
+            $payload[$csrfTokenName] = $arguments[$csrfTokenName];
+        }
+
         // Allows field definitions specified in the response to be resolved
         foreach ($arguments as $key => $value) {
             $payload[$key] = $value;

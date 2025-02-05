@@ -29,8 +29,8 @@ class JavascriptTestInputArguments extends Arguments
         return [
             'javascriptTest' => [
                 'name' => 'javascriptTest',
-                'type' => JavascriptTestInputType::getType(self::$form),
-                'description' => 'The Javascript Test name/value.',
+                'type' => JavascriptTestInputType::getType(),
+                'description' => 'The Javascript Test field input name and value.',
             ],
         ];
     }

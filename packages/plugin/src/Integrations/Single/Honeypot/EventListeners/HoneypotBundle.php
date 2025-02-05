@@ -15,6 +15,7 @@ use Solspace\Freeform\Integrations\Single\Honeypot\Honeypot;
 use Solspace\Freeform\Library\Attributes\Attributes;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\DataObjects\SpamReason;
+use Solspace\Freeform\Library\Integrations\IntegrationInterface;
 use Solspace\Freeform\Services\SettingsService;
 use yii\base\Event;
 
@@ -27,7 +28,7 @@ class HoneypotBundle extends FeatureBundle
         Event::on(
             Form::class,
             Form::EVENT_OUTPUT_AS_JSON,
-            [$this, 'addHoneypotToJson']
+            [$this, 'attachToJson']
         );
 
         Event::on(
@@ -60,7 +61,7 @@ class HoneypotBundle extends FeatureBundle
         $event->addChunk($this->getHoneypotInput($form));
     }
 
-    public function addHoneypotToJson(OutputAsJsonEvent $event): void
+    public function attachToJson(OutputAsJsonEvent $event): void
     {
         $form = $event->getForm();
         $integration = $this->getHoneypotIntegration($form);
@@ -68,16 +69,7 @@ class HoneypotBundle extends FeatureBundle
             return;
         }
 
-        /*
-         * FIXME
-         * - add inputName
-         * - deprecate name and value and remove in version 6
-         */
-        $event->add('honeypot', [
-            'errorMessage' => $integration->getErrorMessage(),
-            'name' => $integration->getInputName(),
-            'value' => '',
-        ]);
+        $event->add('honeypot', $this->getIntegrationAttributes($integration));
     }
 
     public function validateFormHoneypot(ValidationEvent $event): void
@@ -169,7 +161,7 @@ class HoneypotBundle extends FeatureBundle
             return;
         }
 
-        $event->add('honeypot', ['name' => $integration->getInputName()]);
+        $event->add('honeypot', $this->getIntegrationAttributes($integration));
     }
 
     private function getHoneypotIntegration(Form $form): ?Honeypot
@@ -184,6 +176,21 @@ class HoneypotBundle extends FeatureBundle
         }
 
         return $integration;
+    }
+
+    private function getIntegrationAttributes(IntegrationInterface $integration): array
+    {
+        return [
+            'errorMessage' => $integration->getErrorMessage(),
+            'name' => $integration->getInputName(),
+
+            /*
+             * @deprecated - this attribute is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
+            'value' => '',
+        ];
     }
 
     private function getSettingsService(): SettingsService
