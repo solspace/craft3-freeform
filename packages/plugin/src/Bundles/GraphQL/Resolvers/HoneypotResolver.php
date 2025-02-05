@@ -22,14 +22,15 @@ class HoneypotResolver extends Resolver
             return null;
         }
 
-        /*
-         * FIXME
-         * - add inputName
-         * - deprecate name and value and remove in version 6
-         */
         return [
             'errorMessage' => $honeypot->getErrorMessage(),
             'name' => $honeypot->getInputName(),
+
+            /*
+             * @deprecated - this argument is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
             'value' => '',
         ];
     }

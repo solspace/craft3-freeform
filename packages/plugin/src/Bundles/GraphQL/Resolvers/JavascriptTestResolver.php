@@ -24,7 +24,7 @@ class JavascriptTestResolver extends Resolver
 
         return [
             'errorMessage' => $javascriptTest->getErrorMessage(),
-            'inputName' => $javascriptTest->getInputName(),
+            'name' => $javascriptTest->getInputName(),
         ];
     }
 }

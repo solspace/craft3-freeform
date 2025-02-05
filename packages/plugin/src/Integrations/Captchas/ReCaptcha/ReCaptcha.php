@@ -332,11 +332,6 @@ class ReCaptcha extends BaseIntegration implements CaptchaIntegrationInterface
 
     private function getCaptchaResponse(Form $form): ?string
     {
-        /*
-         * FIXME
-         * - Add g-recaptcha-response instead of captcha
-         * - Deprecate captcha and remove in version 6
-         */
         if ($form->isGraphQLPosted()) {
             $arguments = $form->getGraphQLArguments();
 

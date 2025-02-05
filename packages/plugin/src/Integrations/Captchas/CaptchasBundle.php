@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Integrations\Captchas;
 
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\CaptchaResolver;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Events\Forms\OutputAsJsonEvent;
 use Solspace\Freeform\Events\Forms\RenderTagEvent;
@@ -64,6 +65,12 @@ class CaptchasBundle extends FeatureBundle
             Form::class,
             Form::EVENT_SET_PROPERTIES,
             [$this, 'processOptions']
+        );
+
+        Event::on(
+            Form::class,
+            Form::EVENT_OUTPUT_AS_JSON,
+            [$this, 'attachToJson']
         );
     }
 
@@ -145,18 +152,31 @@ class CaptchasBundle extends FeatureBundle
 
     public function attachToJson(OutputAsJsonEvent $event): void
     {
+        $captchas = [];
+
         $integrations = $this->getCaptchasForForm($event->getForm());
         if (!$integrations) {
             return;
         }
 
-        $event->add(
-            'captchas',
-            array_map(
-                fn (CaptchaIntegrationInterface $integration) => $integration->getCaptchaHandle(),
-                $integrations
-            )
-        );
+        $enabled = array_filter($integrations, fn ($integration) => $integration->isEnabled());
+        if (!$enabled) {
+            return;
+        }
+
+        foreach ($integrations as $integration) {
+            if (!$integration->isEnabled()) {
+                continue;
+            }
+
+            $captchas[] = CaptchaResolver::getArguments($integration);
+        }
+
+        if (empty($captchas)) {
+            return;
+        }
+
+        $event->add('captchas', $captchas);
     }
 
     public static function getCaptchaAttributes(Form $form): Attributes

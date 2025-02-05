@@ -5,31 +5,11 @@ namespace Solspace\Freeform\Bundles\GraphQL\Arguments;
 use craft\gql\base\Arguments;
 use GraphQL\Type\Definition\Type;
 
-class SubmissionCaptchaArguments extends Arguments
+class CaptchaArguments extends Arguments
 {
     public static function getArguments(): array
     {
-        /*
-         * FIXME
-         * - Add proper captcha type field handles
-         * - deprecate name and value and remove in version 6
-         */
         return [
-            'name' => [
-                'name' => 'name',
-                'type' => Type::string(),
-                'description' => 'The Captcha field name (E.g "g-recaptcha-response", "h-captcha-response" or "cf-turnstile-response").',
-            ],
-            'value' => [
-                'name' => 'value',
-                'type' => Type::string(),
-                'description' => 'The Captcha verification response value.',
-            ],
-            'fieldHandle' => [
-                'name' => 'fieldHandle',
-                'type' => Type::string(),
-                'description' => 'The Captcha field handle',
-            ],
             'version' => [
                 'name' => 'version',
                 'type' => Type::string(),
@@ -74,6 +54,33 @@ class SubmissionCaptchaArguments extends Arguments
                 'name' => 'locale',
                 'type' => Type::string(),
                 'description' => 'The Captcha locale',
+            ],
+            'name' => [
+                'name' => 'name',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input name (E.g "g-recaptcha-response", "h-captcha-response" or "cf-turnstile-response")',
+            ],
+
+            /*
+             * @deprecated - this argument is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
+            'handle' => [
+                'name' => 'handle',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input name (E.g "g-recaptcha-response", "h-captcha-response" or "cf-turnstile-response"). Deprecated. Will be removed in Freeform 6.0.',
+            ],
+
+            /*
+             * @deprecated - this argument is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
+            'enabled' => [
+                'name' => 'enabled',
+                'type' => Type::boolean(),
+                'description' => 'The Captcha state. Deprecated. Will be removed in Freeform 6.0.',
             ],
         ];
     }

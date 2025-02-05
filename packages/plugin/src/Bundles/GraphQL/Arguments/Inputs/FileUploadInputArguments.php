@@ -1,11 +1,11 @@
 <?php
 
-namespace Solspace\Freeform\Bundles\GraphQL\Arguments;
+namespace Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs;
 
 use craft\gql\base\Arguments;
 use GraphQL\Type\Definition\Type;
 
-class FileUploadArguments extends Arguments
+class FileUploadInputArguments extends Arguments
 {
     public static function getArguments(): array
     {

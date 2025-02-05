@@ -19,7 +19,6 @@ class DynamicNotificationInputType extends InputObjectType
             return $inputType;
         }
 
-        // FIXME - Use proper DynamicNotificationInputArguments so we do not expose query fields for mutations
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
             DynamicNotificationArguments::getArguments(),
             self::getName()
