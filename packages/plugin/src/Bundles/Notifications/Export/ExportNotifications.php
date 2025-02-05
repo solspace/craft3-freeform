@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use craft\helpers\Db;
 use craft\helpers\StringHelper;
 use craft\web\Application;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
@@ -27,8 +28,9 @@ class ExportNotifications extends FeatureBundle
 
     public const NOTIFICATION_TYPE = 'export-notification';
 
-    public function __construct()
-    {
+    public function __construct(
+        private NotificationLoggerProvider $notificationLoggerProvider,
+    ) {
         Event::on(Application::class, Application::EVENT_AFTER_REQUEST, [$this, 'handleNotifications']);
     }
 
@@ -86,9 +88,12 @@ class ExportNotifications extends FeatureBundle
 
             $template = NotificationTemplate::fromRecord($record);
             $recipients = RecipientCollection::fromArray(json_decode($notification->recipients));
+            $processedRecipients = $mailer->processRecipients($recipients);
 
-            $message = $mailer->compileMessage($template, $variables);
-            $message->setTo($mailer->processRecipients($recipients));
+            $logger = $this->notificationLoggerProvider->getLogger($template, $form);
+
+            $message = $mailer->compileMessage($template, $variables, $logger);
+            $message->setTo($processedRecipients);
 
             $exporter = $exportService->createExporter(
                 $notification->fileType,
@@ -112,6 +117,12 @@ class ExportNotifications extends FeatureBundle
                     'contentType' => $exporter->getMimeType(),
                 ]
             );
+
+            $logger->info('Sending export notification', [
+                'form' => $form->getHandle(),
+                'profile' => $profile->name,
+                'recipients' => $processedRecipients,
+            ]);
 
             \Craft::$app->mailer->send($message);
         }

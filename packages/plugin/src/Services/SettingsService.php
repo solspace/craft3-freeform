@@ -15,6 +15,7 @@ namespace Solspace\Freeform\Services;
 
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
 use Solspace\Freeform\Events\Freeform\RegisterSettingsNavigationEvent;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
@@ -237,6 +238,7 @@ class SettingsService extends BaseService
     {
         $errorCount = Freeform::getInstance()->logger->getLogReader()->count();
         $integrationsCount = Freeform::getInstance()->logger->getLogReader(IntegrationLoggerProvider::LOG_FILE)->count();
+        $emailCount = Freeform::getInstance()->logger->getLogReader(NotificationLoggerProvider::LOG_FILE)->count();
 
         $nav = [
             'general' => ['title' => Freeform::t('General Settings')],
@@ -264,6 +266,7 @@ class SettingsService extends BaseService
             'hdlogs' => ['heading' => Freeform::t('Logs')],
             'error-log' => ['title' => Freeform::t('Errors <span class="badge">{count}</span>', ['count' => $errorCount])],
             'integrations-log' => ['title' => Freeform::t('Integrations <span class="badge">{count}</span>', ['count' => $integrationsCount])],
+            'email-log' => ['title' => Freeform::t('Emails <span class="badge">{count}</span>', ['count' => $emailCount])],
         ];
 
         if (!$this->isAllowAdminEdit()) {

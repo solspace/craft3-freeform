@@ -8,7 +8,7 @@ use craft\helpers\UrlHelper;
 use Solspace\Freeform\Bundles\Form\Context\Session\Bag\SessionBag;
 use Solspace\Freeform\Bundles\Form\SaveForm\Actions\SaveFormAction;
 use Solspace\Freeform\Bundles\Form\SaveForm\Events\SaveFormEvent;
-use Solspace\Freeform\Bundles\Notifications\Providers\NotificationTemplateProvider;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
 use Solspace\Freeform\Events\Forms\HandleRequestEvent;
 use Solspace\Freeform\Fields\Implementations\EmailField;
 use Solspace\Freeform\Form\Form;
@@ -30,7 +30,7 @@ class SaveForm extends FeatureBundle
     public const CLEANUP_CACHE_TTL = 60 * 60; // 1 hour
 
     public function __construct(
-        private NotificationTemplateProvider $templateProvider,
+        private NotificationLoggerProvider $notificationLoggerProvider,
     ) {
         Event::on(Form::class, Form::EVENT_AFTER_HANDLE_REQUEST, [$this, 'handleSave']);
 
@@ -150,8 +150,12 @@ class SaveForm extends FeatureBundle
             return;
         }
 
+        $logger = $this->notificationLoggerProvider->getLogger($notification, $form);
+
         $recipients = $mailer->processRecipients($emailField->getRecipients());
         if (empty($recipients)) {
+            $logger->warning('No recipients found', ['form' => $form->getHandle(), 'context' => 'Saving Form on front-end']);
+
             return;
         }
 
@@ -163,10 +167,13 @@ class SaveForm extends FeatureBundle
                     'form' => $form,
                     'token' => $token,
                     'key' => $key,
-                ]
+                ],
+                $logger,
             );
 
             $message->setTo($recipients);
+
+            $logger->info('Sending "Save Form" notification', ['form' => $form->getHandle(), 'recipients' => $recipients]);
 
             \Craft::$app->mailer->send($message);
         } catch (\Exception $exception) {

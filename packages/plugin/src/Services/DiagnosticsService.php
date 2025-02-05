@@ -616,7 +616,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Integration Logging Level: <b>{{ value.level }}</b>',
+                    'Logging Level: <b>{{ value.level }}</b>',
                     ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
                 ),
             ],

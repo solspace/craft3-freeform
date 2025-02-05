@@ -83,8 +83,8 @@
     }) }}
 
     {{ forms.selectField({
-        label: "Integration Logging Level"|t('freeform'),
-        instructions: "Set the logging level for integrations as desired. 'Errors' logs only errors, 'Info' logs information about which integrations processed which mapped objects, and 'Debug' logs all processes occurring within integrations, which is useful for setup and debugging."|t('freeform'),
+        label: "Logging Level"|t('freeform'),
+        instructions: "Set the logging level for Freeform. 'Errors' logs only errors, 'Info' logs information about what's been processed, and 'Debug' logs all processes occurring, which is useful for setup and debugging."|t('freeform'),
         name: "settings[loggingLevel]",
         value: settings.loggingLevel,
         errors: settings.errors("loggingLevel"),
