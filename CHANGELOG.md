@@ -1,5 +1,15 @@
 # Solspace Freeform Changelog
 
+## 5.9.7 - 2025-02-05
+
+### Added
+- Added _Info_ and _Debugging_ logging for email notifications.
+    - Added an **Email Log** to the settings menu so admins can easily view and clear the log from the control panel.
+- Added more translations to the Freeform Diagnostics page.
+
+### Changed
+- Cleanup and improvements to GraphQL support.
+
 ## 5.9.6 - 2025-02-04
 
 ### Changed
