@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export const QKFormMonitor = {
   forms: ['form-monitor', 'forms'],
+  formStats: ['form-monitor', 'stats'],
   formTests: (id?: number) =>
     id !== undefined
       ? [...QKFormMonitor.forms, id, 'form-tests']
@@ -16,6 +17,32 @@ export const useFMForms = (): UseQueryResult<number[]> => {
   );
 };
 
+export const useFMFormStats = (): UseQueryResult<FormWithStats[]> => {
+  return useQuery(QKFormMonitor.formStats, () =>
+    axios
+      .get<FormWithStats[]>('/api/form-monitor/stats')
+      .then((res) => res.data)
+  );
+};
+
+interface FormStats {
+  success: number;
+  failed: number;
+  pending: number;
+  total: number;
+  percentage: {
+    success: number;
+    failed: number;
+    pending: number;
+  };
+}
+
+export interface FormWithStats {
+  formId: number;
+  formUrl: string;
+  stats: FormStats;
+}
+
 type FMTest = {
   id: string;
   formId: number;
@@ -26,7 +53,10 @@ type FMTest = {
   responseCode: number;
 };
 
-type FMTestsResponse = FMTest[];
+type FMTestsResponse = {
+  tests: FMTest[];
+  total: number;
+};
 
 export const useFMFormTestsQuery = (
   id?: number

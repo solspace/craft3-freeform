@@ -82,8 +82,7 @@ class FormMonitor extends APIIntegration
 
     public function getApiRootUrl(): string
     {
-        return 'https://api.leftip.com/v1';
-        // return 'https://api.formmonitor.com/v1';
+        return 'https://api.formmonitor.com/v1';
     }
 
     public function checkConnection(Client $client): bool
@@ -134,6 +133,14 @@ class FormMonitor extends APIIntegration
     {
         $endpoint = $this->getEndpoint('/forms/'.$form->getId().'/tests');
         $response = $client->get($endpoint, ['query' => $options]);
+
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    public function fetchStats(Client $client): array
+    {
+        $endpoint = $this->getEndpoint('/forms/stats');
+        $response = $client->get($endpoint);
 
         return json_decode((string) $response->getBody(), true);
     }

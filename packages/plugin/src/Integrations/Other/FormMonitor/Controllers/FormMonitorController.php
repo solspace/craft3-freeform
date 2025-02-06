@@ -106,4 +106,40 @@ class FormMonitorController extends BaseApiController
 
         return $this->asJson($tests);
     }
+
+    public function actionStats(): Response
+    {
+        try {
+            $integration = (new Query())
+                ->select(['*'])
+                ->from(IntegrationRecord::TABLE)
+                ->where([
+                    'class' => FormMonitor::class,
+                    'enabled' => true,
+                ])
+                ->one()
+            ;
+
+            if (!$integration) {
+                return $this->asJson([]);
+            }
+
+            $formMonitor = $this->formIntegrationsProvider->getById($integration['id']);
+            if (!$formMonitor instanceof FormMonitor) {
+                return $this->asJson([]);
+            }
+
+            $client = $this->clientProvider->getAuthorizedClient($formMonitor);
+            $stats = $formMonitor->fetchStats($client);
+
+            return $this->asJson($stats);
+        } catch (\Exception $exception) {
+            $this->loggerService
+                ->getLogger('Form Monitor')
+                ->error($exception->getMessage())
+            ;
+
+            return $this->asJson([]);
+        }
+    }
 }

@@ -44,8 +44,8 @@ export const FMTests: React.FC = () => {
   return (
     <FormMonitorWrapper>
       {data === undefined && isFetching && <div>{translate('Loading...')}</div>}
-      {data && data.length === 0 && <FMEmptyTests />}
-      {data !== undefined && data.length > 0 && (
+      {data && data?.tests?.length === 0 && <FMEmptyTests />}
+      {data !== undefined && data?.tests?.length > 0 && (
         <TestTable>
           <thead>
             <tr>
@@ -57,7 +57,7 @@ export const FMTests: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((test) => {
+            {data?.tests?.map((test) => {
               const form = forms.find((form) => form.id === test.formId);
               if (!form) {
                 return null;
