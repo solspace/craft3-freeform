@@ -1,5 +1,12 @@
 # Solspace Freeform Changelog
 
+## 5.9.8 - 2025-02-06
+
+### Fixed
+- Fixed a bug where Username validation was displayed on the Email field for User element integrations.
+- Fixed a bug where the Email and Username validation was incorrectly happening on User element integrations in edit mode ("update profile" type forms).
+- Fixed an `Uncaught ReflectionException` issue that could happen in rare circumstances.
+
 ## 5.9.7 - 2025-02-05
 
 ### Added
