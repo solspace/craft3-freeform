@@ -4,7 +4,7 @@ namespace Solspace\Freeform\Bundles\GraphQL\Types\Inputs;
 
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\HoneypotArguments;
+use GraphQL\Type\Definition\Type;
 
 class HoneypotInputType extends InputObjectType
 {
@@ -19,8 +19,21 @@ class HoneypotInputType extends InputObjectType
             return $inputType;
         }
 
+        $fieldDefinitions = [
+            'name' => [
+                'name' => 'name',
+                'type' => Type::string(),
+                'description' => 'The Honeypot field input name.',
+            ],
+            'value' => [
+                'name' => 'value',
+                'type' => Type::string(),
+                'description' => 'The Honeypot field input value.',
+            ],
+        ];
+
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
-            HoneypotArguments::getArguments(),
+            $fieldDefinitions,
             self::getName()
         );
 

@@ -1,23 +1,22 @@
 <?php
 
-namespace Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects;
+namespace Solspace\Freeform\Bundles\GraphQL\Types;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\CsrfTokenInterface;
-use Solspace\Freeform\Bundles\GraphQL\Types\AbstractObjectType;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\HoneypotInterface;
 use Solspace\Freeform\Fields\DataContainers\Option;
 
-class CsrfTokenType extends AbstractObjectType
+class HoneypotType extends AbstractObjectType
 {
     public static function getName(): string
     {
-        return 'FreeformCsrfTokenType';
+        return 'FreeformHoneypotType';
     }
 
     public static function getTypeDefinition(): Type
     {
-        return CsrfTokenInterface::getType();
+        return HoneypotInterface::getType();
     }
 
     /**
@@ -26,10 +25,19 @@ class CsrfTokenType extends AbstractObjectType
      */
     protected function resolve($source, $arguments, mixed $context, ResolveInfo $resolveInfo): mixed
     {
+        if ('errorMessage' === $resolveInfo->fieldName) {
+            return $source['errorMessage'] ?? null;
+        }
+
         if ('name' === $resolveInfo->fieldName) {
             return $source['name'] ?? null;
         }
 
+        /*
+         * @deprecated - this argument is no longer used
+         *
+         * @remove - Freeform 6.0
+         */
         if ('value' === $resolveInfo->fieldName) {
             return $source['value'] ?? null;
         }

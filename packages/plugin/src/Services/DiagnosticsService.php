@@ -6,7 +6,6 @@ use craft\base\PluginInterface;
 use craft\db\Query;
 use craft\helpers\App;
 use craft\helpers\UrlHelper;
-use craft\i18n\Translation;
 use craft\mail\transportadapters\Gmail;
 use craft\mail\transportadapters\Sendmail;
 use craft\mail\transportadapters\Smtp;
@@ -85,7 +84,7 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
-                'Database Driver: <b>{{ value.driver == "pgsql" ? "PostgreSQL" : value.driver == "mysql" ? "MySQL" : "MariaDB" }} {{ value.version }}</b>',
+                Freeform::t('Database Driver').': <b>{{ value.driver == "pgsql" ? "PostgreSQL" : value.driver == "mysql" ? "MySQL" : "MariaDB" }} {{ value.version }}</b>',
                 [
                     'driver' => $system->databaseDriver,
                     'version' => \Craft::$app->db->getServerVersion(),
@@ -116,22 +115,27 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
-                'OS: <b>{{ value }}</b>',
+                Freeform::t('OS').': <b>{{ value }}</b>',
                 \sprintf('%s %s', \PHP_OS, php_uname('r')),
             ),
             new DiagnosticItem(
-                'Dev Mode: <b>{{ value.devmode == 1 ? "On" : "Off" }}</b> / Allow Admin Changes: <b>{{ value.allowadmin == 1 ? "Yes" : "No" }}</b>',
-                [
-                    'devmode' => \Craft::$app->getConfig()->getGeneral()->devMode,
-                    'allowadmin' => \Craft::$app->getConfig()->getGeneral()->allowAdminChanges,
-                ],
+                Freeform::t('Environment').': <b>{{ value }}</b>',
+                \Craft::$app->getConfig()->env,
             ),
             new DiagnosticItem(
-                'Async CSRF Inputs: <b>{{ value == 1 ? "Yes" : "No" }}</b>',
+                Freeform::t('Dev Mode').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
+                \Craft::$app->getConfig()->getGeneral()->devMode,
+            ),
+            new DiagnosticItem(
+                Freeform::t('Allow Admin Changes').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
+                \Craft::$app->getConfig()->getGeneral()->allowAdminChanges,
+            ),
+            new DiagnosticItem(
+                Freeform::t('Async CSRF Inputs').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                 \Craft::$app->getConfig()->getGeneral()->asyncCsrfInputs,
             ),
             new DiagnosticItem(
-                'Memory Limit: <b>{{ value }}</b>',
+                Freeform::t('Memory Limit').': <b>{{ value }}</b>',
                 \ini_get('memory_limit'),
                 [
                     // Suggestion validator for memory limits between 256M and 511M
@@ -184,11 +188,11 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
-                'Craft Email configuration: <b>{{ value.transport }}</b>',
+                Freeform::t('Craft Email configuration').': <b>{{ value.transport }}</b>',
                 ['transport' => $emailTransport, 'issues' => $emailIssues],
             ),
             new DiagnosticItem(
-                'PHP Sessions: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                Freeform::t('PHP Sessions').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                 \PHP_SESSION_ACTIVE === session_status() && isset($_SESSION) && session_id(),
                 [
                     new WarningValidator(
@@ -199,7 +203,7 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
-                'BC Math extension: <b>{{ value ? "Enabled" : "Not Found" }}</b>',
+                Freeform::t('BC Math extension').': <b>'.Freeform::t('{{ value ? "Enabled" : "Not found" }}').'</b>',
                 \extension_loaded('bcmath'),
                 [
                     new WarningValidator(
@@ -210,7 +214,7 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
-                'ImageMagick extension: <b>{{ value ? "Enabled" : "Not Found" }}</b>',
+                Freeform::t('ImageMagick extension').': <b>'.Freeform::t('{{ value ? "Enabled" : "Not found" }}').'</b>',
                 \extension_loaded('imagick') || \extension_loaded('gd'),
                 [
                     new WarningValidator(
@@ -239,39 +243,39 @@ class DiagnosticsService extends BaseService
 
         $diagnosticItems = [
             new DiagnosticItem(
-                'Forms: <b>{{ value }}</b>',
+                Freeform::t('Forms').': <b>{{ value }}</b>',
                 $statistics->totals->forms
             ),
             new DiagnosticItem(
-                'Fields: <b>{{ value }}</b>',
+                Freeform::t('Fields').': <b>{{ value }}</b>',
                 $statistics->totals->fields
             ),
             new DiagnosticItem(
-                'Favorites Fields: <b>{{ value }}</b>',
+                Freeform::t('Favorites Fields').': <b>{{ value }}</b>',
                 $statistics->totals->favoriteFields
             ),
             new DiagnosticItem(
-                'Submissions: <b>{{ value }}</b>',
+                Freeform::t('Submissions').': <b>{{ value }}</b>',
                 $statistics->totals->submissions
             ),
             new DiagnosticItem(
-                'Spam Submissions: <b>{{ value }}</b>',
+                Freeform::t('Spam Submissions').': <b>{{ value }}</b>',
                 $statistics->totals->spam
             ),
             new DiagnosticItem(
-                'Formatting templates: <b>{{ value }}</b>',
+                Freeform::t('Formatting Templates').': <b>{{ value }}</b>',
                 \count($formTemplates)
             ),
             new DiagnosticItem(
-                'Email Notification templates: <b>{{ value }}</b>',
+                Freeform::t('Email Notification Templates').': <b>{{ value }}</b>',
                 \count($emailTemplates)
             ),
             new DiagnosticItem(
-                'Success templates: <b>{{ value }}</b>',
+                Freeform::t('Success Templates').': <b>{{ value }}</b>',
                 \count($successTemplates)
             ),
             new DiagnosticItem(
-                'Integrations: <b>{{ value }}</b>',
+                Freeform::t('Integrations').': <b>{{ value }}</b>',
                 \count($integrations)
             ),
         ];
@@ -279,7 +283,7 @@ class DiagnosticsService extends BaseService
         // Check if Freeform Pro is enabled, then add the Form types item
         if ($freeform->isPro()) {
             $diagnosticItems[] = new DiagnosticItem(
-                'Form types: <b>{{ value|length }}</b>',
+                Freeform::t('Form Types').': <b>{{ value|length }}</b>',
                 \count($formTypes)
             );
         }
@@ -310,8 +314,7 @@ class DiagnosticsService extends BaseService
 
             // Modify version text based on specific conditions or use defaults
             $version = $versionMap[strtolower($version)] ?? $version;
-
-            $label = "{$name}".($version ? " ({$version}):" : ':')."<b>{$count}</b> ".(1 === $count ? 'form' : 'forms');
+            $label = "{$name}".($version ? " ({$version}):" : ':')."<b>{$count}</b> ".Freeform::t(1 === $count ? 'form' : 'forms');
 
             $diagnosticItems[] = new DiagnosticItem($label, ['value' => $integration]);
         }
@@ -330,11 +333,11 @@ class DiagnosticsService extends BaseService
         if ($freeform->isPro()) {
             return [
                 new DiagnosticItem(
-                    'Regular: <b>{{ value }}</b> {{ value != 1 ? "forms" : "form" }}',
+                    Freeform::t('Regular').': <b>{{ value }}</b> '.Freeform::t('{{ value != 1 ? "forms" : "form" }}'),
                     $statistics->totals->regularForm
                 ),
                 new DiagnosticItem(
-                    'Payments: <b>{{ value }}</b> {{ value != 1 ? "forms" : "form" }}',
+                    Freeform::t('Payments').': <b>{{ value }}</b> '.Freeform::t('{{ value != 1 ? "forms" : "form" }}'),
                     $this->getFormsWithPaymentIntegrations()
                 ),
             ];
@@ -351,17 +354,17 @@ class DiagnosticsService extends BaseService
         [$emailTransport, $emailIssues] = $this->getEmailSettings();
 
         return [
-            'General Settings' => [
+            Freeform::t('General Settings') => [
                 new DiagnosticItem(
-                    'Disable Submit Button on Form Submit: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Disable Submit Button on Form Submit').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     $this->getSummary()->statistics->settings->disableSubmit
                 ),
                 new DiagnosticItem(
-                    'Automatically Scroll to Form on Errors and Multipage forms: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Automatically Scroll to Form on Errors and Multipage forms').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     $this->getSummary()->statistics->settings->autoScroll,
                 ),
                 new DiagnosticItem(
-                    'Script Insert Location: <b>{{ value|capitalize }}</b>',
+                    Freeform::t('Script Insert Location').': <b>{{ value|capitalize }}</b>',
                     $this->getSummary()->statistics->settings->jsInsertLocation,
                     [
                         new SuggestionValidator(
@@ -372,39 +375,39 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Script Insert Type: <b>{{ value }}</b>',
+                    Freeform::t('Script Insert Type').': <b>{{ value }}</b>',
                     $this->getJsInsertType()
                 ),
                 new DiagnosticItem(
-                    'Freeform Session Context: <b>{{ value }}</b>',
+                    Freeform::t('Freeform Session Context').': <b>{{ value }}</b>',
                     $this->getSettingsService()->getSettingsModel()->getSessionContextHumanReadable(),
                 ),
                 new DiagnosticItem(
-                    'Enable Search Index Updating on New Submissions: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Enable Search Index Updating on New Submissions').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     $this->getSettingsService()->getSettingsModel()->updateSearchIndexes
                 ),
                 new DiagnosticItem(
-                    'Automatically Purge Submission Data: <b>{{ value.enabled ? "Enabled, "~value.interval~" days" : "Disabled"  }}</b>',
+                    Freeform::t('Automatically Purge Submission Data').': <b>'.Freeform::t('{{ value.enabled ? "Enabled, "~value.interval~" days" : "Disabled" }}').'</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeSubmissions,
                         'interval' => $this->getSummary()->statistics->settings->purgeInterval,
                     ],
                 ),
                 new DiagnosticItem(
-                    'Automatically Purge Unfinalized Assets: <b>{{ value.enabled ? "Enabled, "~value.interval~" hours" : "Disabled"  }}</b>',
+                    Freeform::t('Automatically Purge Unfinalized Assets').': <b>'.Freeform::t('{{ value.enabled ? "Enabled, "~value.interval~" hours" : "Disabled" }}').'</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeAssets,
                         'interval' => $this->getSummary()->statistics->settings->purgeAssetsInterval / 60,
                     ],
                 ),
                 new DiagnosticItem(
-                    'Site-Aware Forms: <b>{{ value.enabled ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Site-Aware Forms').': <b>'.Freeform::t('{{ value.enabled ? "Enabled" : "Disabled" }}').'</b>',
                     ['enabled' => $this->getSettingsService()->getSettingsModel()->sitesEnabled],
                 ),
             ],
-            'Spam Controls' => [
+            Freeform::t('Spam Controls') => [
                 new DiagnosticItem(
-                    'Spam Folder: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Spam Folder').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     $this->getSummary()->statistics->spam->spamFolder,
                     [
                         new SuggestionValidator(
@@ -415,7 +418,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Spam Protection Behavior: <b>{{ value }}</b>',
+                    Freeform::t('Spam Protection Behavior').': <b>{{ value }}</b>',
                     Freeform::t(
                         match ($this->getSummary()->statistics->spam->spamProtectionBehavior) {
                             Settings::PROTECTION_DISPLAY_ERRORS => 'Display Errors',
@@ -432,11 +435,11 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Bypass All Spam Checks for Logged in Users: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Bypass All Spam Checks for Logged in Users').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     $this->getSummary()->statistics->spam->bypassSpamCheckOnLoggedInUsers
                 ),
                 new DiagnosticItem(
-                    'Minimum Submit Time: <b>{{ value.enabled ? "Enabled, "~value.interval~" seconds" : "Disabled"  }}</b>',
+                    Freeform::t('Minimum Submit Time').': <b>'.Freeform::t('{{ value.enabled ? "Enabled, "~value.interval~" seconds" : "Disabled"  }}').'</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->spam->minSubmitTime,
                         'interval' => $this->getSummary()->statistics->spam->minSubmitTimeInterval,
@@ -470,7 +473,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Form Submit Expiration: <b>{{ value.enabled ? "Enabled, "~value.interval~" minutes" : "Disabled"  }}</b>',
+                    Freeform::t('Form Submit Expiration').': <b>'.Freeform::t('{{ value.enabled ? "Enabled, "~value.interval~" minutes" : "Disabled"  }}').'</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->spam->submitExpiration,
                         'interval' => $this->getSummary()->statistics->spam->submitExpirationInterval,
@@ -504,7 +507,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Form Submission Throttling: <b>{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second"  }}{% else %}Unlimited{% endif %}</b>',
+                    Freeform::t('Form Submission Throttling').': <b>'.Freeform::t('{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second"  }}{% else %}Unlimited{% endif %}').'</b>',
                     [
                         'count' => $this->getSummary()->statistics->spam->submissionThrottlingCount,
                         'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame,
@@ -515,18 +518,13 @@ class DiagnosticsService extends BaseService
                             '',
                             "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
                         ),
-                        new WarningValidator(
-                            fn ($value) => version_compare($value['count'], '0', '<='),
-                            '',
-                            "This feature is intended for extreme conditions, such as preventing your site from going down if attacked by a spammer. It should NOT be used as a 'fine-tuning' spam measure, as it applies to ALL users. Use extreme caution for larger and more active sites."
-                        ),
                     ]
                 ),
             ],
 
-            'Template Directories' => [
+            Freeform::t('Template Directories') => [
                 new DiagnosticItem(
-                    'Formatting Templates Directory Path: <b>{{ value ? value : "Not set" }}</b>',
+                    Freeform::t('Formatting Templates Directory Path').': <b>'.Freeform::t('{{ value ? value : "Not set" }}').'</b>',
                     $this->getSettingsService()->getSettingsModel()->formTemplateDirectory,
                     [
                         new WarningValidator(
@@ -547,7 +545,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Email Templates Directory Path: <b>{{ value ? value : "Not set" }}</b>',
+                    Freeform::t('Email Templates Directory Path').': <b>'.Freeform::t('{{ value ? value : "Not set" }}').'</b>',
                     $this->getSettingsService()->getSettingsModel()->emailTemplateDirectory,
                     [
                         new WarningValidator(
@@ -568,11 +566,11 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Email Template Storage Type: <b>{{ value }}</b>',
+                    Freeform::t('Email Template Storage Type').': <b>{{ value }}</b>',
                     $this->getSettingsService()->getSettingsModel()->getEmailStorageTypeName()
                 ),
                 new DiagnosticItem(
-                    'Success Templates Directory Path: <b>{{ value ? value : "Not set" }}</b>',
+                    Freeform::t('Success Templates Directory Path').': <b>'.Freeform::t('{{ value ? value : "Not set" }}').'</b>',
                     $this->getSettingsService()->getSettingsModel()->successTemplateDirectory,
                     [
                         new WarningValidator(
@@ -594,17 +592,17 @@ class DiagnosticsService extends BaseService
                 ),
             ],
 
-            'Reliability' => [
+            Freeform::t('Reliability') => [
                 new DiagnosticItem(
-                    'Developer Digest Email: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Developer Digest Email').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     \count($this->getSettingsService()->getDigestRecipients()) > 0
                 ),
                 new DiagnosticItem(
-                    'Update Warnings & Notices: <b>{{ value ? "Enabled" : "Disabled" }}</b>',
+                    Freeform::t('Update Warnings & Notices').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
                     (bool) $this->getSettingsService()->getSettingsModel()->displayFeed
                 ),
                 new DiagnosticItem(
-                    'Errors logged: <b>{{ value ? value~" errors found" : "None found" }}</b>',
+                    Freeform::t('Errors logged').': <b>'.Freeform::t('{{ value ? value~" errors found" : "None found" }}').'</b>',
                     Freeform::getInstance()->logger->getLogReader()->count(),
                     [
                         new WarningValidator(
@@ -612,7 +610,7 @@ class DiagnosticsService extends BaseService
                                 return !$value;
                             },
                             '{{ extra.count }} Errors logged in the Freeform Error Log',
-                            'Please check the <a href="{{ extra.url }}">error log </a> to see if there are any serious issues.',
+                            Freeform::t('Please check the <a href="{{ extra.url }}">error log</a> to see if there are any serious issues.'),
                             [
                                 'url' => UrlHelper::cpUrl('freeform/settings/error-log'),
                                 'count' => Freeform::getInstance()->logger->getLogReader()->count(),
@@ -621,7 +619,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    'Integration Logging Level: <b>{{ value.level }}</b>',
+                    Freeform::t('Logging Level').': <b>{{ value.level }}</b>',
                     ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
                 ),
             ],
@@ -643,7 +641,7 @@ class DiagnosticsService extends BaseService
         }
 
         if (empty($diagnosticItems)) {
-            $diagnosticItems[] = new DiagnosticItem(Translation::translate('No modules are installed.'), []);
+            $diagnosticItems[] = new DiagnosticItem(Freeform::t('No modules are installed.'), []);
         }
 
         return $diagnosticItems;

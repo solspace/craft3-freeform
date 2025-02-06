@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\controllers\notifications;
 
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
 use Solspace\Freeform\Controllers\BaseController;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
@@ -52,6 +53,8 @@ class SenderController extends BaseController
             return $this->asJson(true);
         }
 
+        $loggerProvider = \Craft::$container->get(NotificationLoggerProvider::class);
+
         foreach ($submissionIds as $submissionId) {
             $submission = $this->getSubmissionsService()->getSubmissionById($submissionId);
             if (!$submission) {
@@ -75,12 +78,14 @@ class SenderController extends BaseController
             }
 
             $notification = NotificationTemplate::fromRecord($notification);
+            $logger = $loggerProvider->getLogger($notification, $form);
 
             $this->getMailerService()->sendEmail(
                 $form,
                 $recipients,
                 $notification,
-                $submission
+                $submission,
+                $logger,
             );
         }
 

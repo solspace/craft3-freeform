@@ -85,7 +85,7 @@ class DynamicRecipients extends FeatureBundle
                         'postedData' => $postedData,
                         'recipients' => $recipients,
                         'template' => $template,
-                        'notificationType' => Dynamic::class,
+                        'notificationId' => $notification->getId(),
                     ])
                 );
             }

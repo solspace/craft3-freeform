@@ -21,10 +21,13 @@ class ReflectionHelper
         $reflectedClass = new \ReflectionClass($object);
         $isSubclassOf = $reflectedClass->isSubclassOf($className);
 
-        try {
-            $implementsInterface = $reflectedClass->implementsInterface($className);
-        } catch (\ReflectionException) {
-            $implementsInterface = false;
+        $implementsInterface = false;
+        if (interface_exists($className)) {
+            try {
+                $implementsInterface = $reflectedClass->implementsInterface($className);
+            } catch (\ReflectionException) {
+                $implementsInterface = false;
+            }
         }
 
         return $isSubclassOf || $implementsInterface;

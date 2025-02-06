@@ -26,7 +26,7 @@ class AdminNotifications extends FeatureBundle
 {
     public function __construct(
         private NotificationsProvider $notificationsProvider,
-        private FreeformQueueHandler $queueHandler
+        private FreeformQueueHandler $queueHandler,
     ) {
         Event::on(Form::class, Form::EVENT_SEND_NOTIFICATIONS, [$this, 'sendToRecipients']);
     }
@@ -51,14 +51,7 @@ class AdminNotifications extends FeatureBundle
 
         foreach ($notifications as $notification) {
             $recipients = $notification->getRecipients();
-            if (!$recipients) {
-                continue;
-            }
-
             $template = $notification->getTemplate();
-            if (!$template) {
-                continue;
-            }
 
             $this->queueHandler->executeNotificationJob(
                 new SendNotificationsJob([
@@ -67,7 +60,7 @@ class AdminNotifications extends FeatureBundle
                     'postedData' => $postedData,
                     'recipients' => $recipients,
                     'template' => $template,
-                    'notificationType' => Admin::class,
+                    'notificationId' => $notification->getId(),
                 ])
             );
         }

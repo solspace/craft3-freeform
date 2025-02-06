@@ -1,23 +1,22 @@
 <?php
 
-namespace Solspace\Freeform\Bundles\GraphQL\Types\SimpleObjects;
+namespace Solspace\Freeform\Bundles\GraphQL\Types;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\FormCaptchaInterface;
-use Solspace\Freeform\Bundles\GraphQL\Types\AbstractObjectType;
+use Solspace\Freeform\Bundles\GraphQL\Interfaces\CsrfTokenInterface;
 use Solspace\Freeform\Fields\DataContainers\Option;
 
-class FormCaptchaType extends AbstractObjectType
+class CsrfTokenType extends AbstractObjectType
 {
     public static function getName(): string
     {
-        return 'FreeformFormCaptchaType';
+        return 'FreeformCsrfTokenType';
     }
 
     public static function getTypeDefinition(): Type
     {
-        return FormCaptchaInterface::getType();
+        return CsrfTokenInterface::getType();
     }
 
     /**
@@ -30,12 +29,8 @@ class FormCaptchaType extends AbstractObjectType
             return $source['name'] ?? null;
         }
 
-        if ('handle' === $resolveInfo->fieldName) {
-            return $source['handle'] ?? null;
-        }
-
-        if ('enabled' === $resolveInfo->fieldName) {
-            return $source['enabled'] ?? null;
+        if ('value' === $resolveInfo->fieldName) {
+            return $source['value'] ?? null;
         }
 
         return null;

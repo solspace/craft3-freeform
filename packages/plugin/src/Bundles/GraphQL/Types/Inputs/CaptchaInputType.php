@@ -4,13 +4,13 @@ namespace Solspace\Freeform\Bundles\GraphQL\Types\Inputs;
 
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\DynamicNotificationInputArguments;
+use GraphQL\Type\Definition\Type;
 
-class FormPropertiesInputType extends InputObjectType
+class CaptchaInputType extends InputObjectType
 {
     public static function getName(): string
     {
-        return 'FreeformFormPropertiesInputType';
+        return 'FreeformCaptchaInputType';
     }
 
     public static function getType(): mixed
@@ -19,10 +19,21 @@ class FormPropertiesInputType extends InputObjectType
             return $inputType;
         }
 
+        $fieldDefinitions = [
+            'name' => [
+                'name' => 'name',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input name.',
+            ],
+            'value' => [
+                'name' => 'value',
+                'type' => Type::string(),
+                'description' => 'The Captcha field input value.',
+            ],
+        ];
+
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
-            array_merge(
-                DynamicNotificationInputArguments::getArguments(),
-            ),
+            $fieldDefinitions,
             self::getName()
         );
 

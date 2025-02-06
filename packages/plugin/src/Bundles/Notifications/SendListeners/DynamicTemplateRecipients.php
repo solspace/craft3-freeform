@@ -53,10 +53,6 @@ class DynamicTemplateRecipients extends FeatureBundle
         }
 
         $notification = $this->plugin()->notifications->requireNotification($form, $template, 'Dynamic Notification from template params');
-        if (!$notification) {
-            return;
-        }
-
         $recipientCollection = new RecipientCollection();
 
         if (\is_array($recipients)) {

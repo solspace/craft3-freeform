@@ -1,5 +1,31 @@
 # Solspace Freeform Changelog
 
+## 5.9.8 - 2025-02-06
+
+### Fixed
+- Fixed a bug where Username validation was displayed on the Email field for User element integrations.
+- Fixed a bug where the Email and Username validation was incorrectly happening on User element integrations in edit mode ("update profile" type forms).
+- Fixed an `Uncaught ReflectionException` issue that could happen in rare circumstances.
+
+## 5.9.7 - 2025-02-05
+
+### Added
+- Added _Info_ and _Debugging_ logging for email notifications.
+    - Added an **Email Log** to the settings menu so admins can easily view and clear the log from the control panel.
+- Added more translations to the Freeform Diagnostics page.
+
+### Changed
+- Cleanup and improvements to GraphQL support.
+
+## 5.9.6 - 2025-02-04
+
+### Changed
+- Improved some migrations not to fail if there were any previous failures.
+
+### Fixed
+- Fixed a bug where the _Form Submission Throttling_ diagnostic item showed an extra warning message.
+- Fixed a bug where _Captchas_, _Javascript Test_ and various other form settings were not supported in GraphQL.
+
 ## 5.9.5 - 2025-01-31
 
 ### Added

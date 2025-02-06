@@ -27,6 +27,16 @@ class NotificationsProvider
 {
     public function __construct(private PropertyProvider $propertyProvider) {}
 
+    public function getById(int $id): ?NotificationInterface
+    {
+        $record = FormNotificationRecord::findOne(['id' => $id]);
+        if (!$record) {
+            return null;
+        }
+
+        return $this->createNotificationObjects($record);
+    }
+
     /**
      * @return FormNotificationRecord[]
      */

@@ -14,45 +14,51 @@
 namespace Solspace\Freeform\Jobs;
 
 use craft\queue\BaseJob;
-use Solspace\Freeform\Events\Notifications\PrepareSendNotificationEvent;
+use Psr\Log\LoggerInterface;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationsProvider;
+use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\DataObjects\NotificationTemplate;
 use Solspace\Freeform\Notifications\Components\Recipients\RecipientCollection;
-use yii\base\Event;
 
 class SendNotificationsJob extends BaseJob implements NotificationJobInterface
 {
-    public const EVENT_PREPARE_NOTIFICATION_JOB = 'prepare-send-notification';
-
     public ?int $formId = null;
     public ?int $submissionId = null;
     public array $postedData = [];
     public ?RecipientCollection $recipients = null;
     public ?NotificationTemplate $template = null;
     public ?int $siteId = null;
-    public array $headers = [];
-    public ?string $notificationType;
+    public ?int $notificationId = null;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
-
-        Event::trigger(
-            $this,
-            self::EVENT_PREPARE_NOTIFICATION_JOB,
-            new PrepareSendNotificationEvent($this)
-        );
 
         $this->siteId = \Craft::$app->getSites()->getCurrentSite()->id;
     }
 
     public function execute($queue): void
     {
+        $freeform = Freeform::getInstance();
+
+        $form = $freeform->forms->getFormById($this->formId);
+        if (!$form) {
+            return;
+        }
+
+        $logger = $this->getLogger($form);
+
         if (!$this->recipients) {
+            $logger->warning('No recipients found for the notification', ['form' => $form->getHandle()]);
+
             return;
         }
 
         if (!$this->template) {
+            $logger->warning('No template found for the notification', ['form' => $form->getHandle()]);
+
             return;
         }
 
@@ -64,13 +70,6 @@ class SendNotificationsJob extends BaseJob implements NotificationJobInterface
         // Set the application language to the site's primary language
         \Craft::$app->language = $sites->getCurrentSite()->language;
 
-        $freeform = Freeform::getInstance();
-
-        $form = $freeform->forms->getFormById($this->formId);
-        if (!$form) {
-            return;
-        }
-
         $form->valuesFromArray($this->postedData);
         $submission = $freeform->submissions->getSubmissionById($this->submissionId);
 
@@ -79,7 +78,7 @@ class SendNotificationsJob extends BaseJob implements NotificationJobInterface
             $this->recipients,
             $this->template,
             $submission,
-            $this->headers,
+            $logger,
         );
 
         $sites->setCurrentSite($originalSiteId);
@@ -89,5 +88,15 @@ class SendNotificationsJob extends BaseJob implements NotificationJobInterface
     protected function defaultDescription(): ?string
     {
         return Freeform::t('Freeform: Processing Notifications');
+    }
+
+    private function getLogger(Form $form): LoggerInterface
+    {
+        $loggerProvider = \Craft::$container->get(NotificationLoggerProvider::class);
+        $notificationProvider = \Craft::$container->get(NotificationsProvider::class);
+
+        $notification = $notificationProvider->getById($this->notificationId);
+
+        return $loggerProvider->getLogger($notification, $form);
     }
 }
