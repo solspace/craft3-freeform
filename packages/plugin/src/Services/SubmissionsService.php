@@ -134,6 +134,7 @@ class SubmissionsService extends BaseService implements SubmissionHandlerInterfa
             ->select(["COUNT({$submissions}.[[id]]) as [[submissionCount]]"])
             ->from($submissions)
             ->filterWhere(['isSpam' => $isSpam])
+            ->andWhere(['isHidden' => false])
             ->groupBy("{$submissions}.[[formId]]")
             ->indexBy('formId')
         ;

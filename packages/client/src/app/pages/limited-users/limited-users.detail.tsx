@@ -32,7 +32,7 @@ export const LimitedUsersDetail: React.FC = () => {
   const mutation = useLimitedUsersMutation(id);
   const isCraft5 = config.metadata.craft.is5;
 
-  useSidebarSelect(5);
+  useSidebarSelect('freeform/settings');
 
   useEffect(() => {
     if (data) {

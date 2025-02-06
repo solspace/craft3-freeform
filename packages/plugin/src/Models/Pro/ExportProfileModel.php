@@ -220,6 +220,39 @@ class ExportProfileModel extends Model
                 };
             }
         }
+
+        $command = (new Query())
+            ->select(implode(',', $searchableFields))
+            ->from(Submission::TABLE.' s')
+            ->innerJoin(StatusRecord::TABLE.' stat', 'stat.[[id]] = s.[[statusId]]')
+            ->innerJoin(Submission::getContentTableName($form).' sc', 'sc.[[id]] = s.[[id]]')
+            ->where(implode(' AND ', $conditions), $parameters)
+            ->andWhere(['s.[[isHidden]]' => false])
+        ;
+
+        $siteId = \Craft::$app->sites->currentSite->id;
+        if ($isCraft5) {
+            $command->innerJoin(
+                '{{%elements_sites}} es',
+                'es.[[elementId]] = s.[[id]] AND es.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
+        } else {
+            $command->innerJoin(
+                '{{%content}} c',
+                'c.[[elementId]] = s.[[id]] AND c.[[siteId]] = :siteId',
+                ['siteId' => $siteId]
+            );
+        }
+
+        if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {
+            $elements = Table::ELEMENTS;
+            $command->innerJoin(
+                "{$elements} e",
+                'e.[[id]] = s.[[id]] AND e.[[dateDeleted]] IS NULL'
+            );
+        }
+
         if ($this->limit) {
             $query->limit($this->limit);
         }

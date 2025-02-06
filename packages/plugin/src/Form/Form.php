@@ -22,6 +22,7 @@ use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\Fields\TransformValueEvent;
 use Solspace\Freeform\Events\Forms\AttachFormAttributesEvent;
 use Solspace\Freeform\Events\Forms\CreateSubmissionEvent;
+use Solspace\Freeform\Events\Forms\DisableFunctionalityEvent;
 use Solspace\Freeform\Events\Forms\FormLoadedEvent;
 use Solspace\Freeform\Events\Forms\GetCustomPropertyEvent;
 use Solspace\Freeform\Events\Forms\HandleRequestEvent;
@@ -100,6 +101,7 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
     public const EVENT_GET_CUSTOM_PROPERTY = 'get-custom-property';
     public const EVENT_QUICK_LOAD = 'quick-load';
     public const EVENT_CONTEXT_RETRIEVAL = 'context-retrieval';
+    public const EVENT_DISABLE_FUNCTIONALITY = 'disable-functionality';
 
     public const PROPERTY_STORED_VALUES = 'storedValues';
     public const PROPERTY_PAGE_INDEX = 'pageIndex';
@@ -730,6 +732,12 @@ abstract class Form implements FormTypeInterface, \IteratorAggregate, CustomNorm
     public function isDisabled(): DisabledFunctionality
     {
         $disableSettings = $this->disableFunctionality ?: $this->getProperties()->get(self::DATA_DISABLE);
+
+        $event = new DisableFunctionalityEvent($this, $disableSettings);
+        Event::trigger($this, self::EVENT_DISABLE_FUNCTIONALITY, $event);
+
+        $disableSettings = $event->getSettings();
+
         if ($this->isMarkedAsSpam()) {
             $disableSettings = true;
         }

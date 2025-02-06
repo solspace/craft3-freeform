@@ -21,19 +21,20 @@ class BundleLoader
         $loadableClasses = [];
 
         /** @var BundleInterface $class */
-        foreach ($classMap as $class => $path) {
-            $reflectionClass = new \ReflectionClass($class);
-            if (
-                $reflectionClass->implementsInterface(BundleInterface::class)
-                && !$reflectionClass->isAbstract()
-                && !$reflectionClass->isInterface()
-            ) {
-                if ($class::isProOnly() && !Freeform::getInstance()->isPro()) {
-                    continue;
-                }
+        foreach ($classMap as $class => $classPath) {
+            try {
+                $reflectionClass = new \ReflectionClass($class);
 
-                $priority = $class::getPriority();
-                $loadableClasses[$priority][] = $class;
+                if ($reflectionClass->implementsInterface(BundleInterface::class) && !$reflectionClass->isAbstract(
+                ) && !$reflectionClass->isInterface()) {
+                    if ($class::isProOnly() && !Freeform::getInstance()->isPro()) {
+                        continue;
+                    }
+
+                    $priority = $class::getPriority();
+                    $loadableClasses[$priority][] = $class;
+                }
+            } catch (\Exception) {
             }
         }
 

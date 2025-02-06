@@ -25,6 +25,7 @@ class SubmissionQuery extends ElementQuery
     public mixed $incrementalId = null;
     public ?string $token = null;
     public ?bool $isSpam = null;
+    public ?bool $isHidden = false;
     public array $fieldSearch = [];
     public ?string $spamReason = null;
     public bool $skipContent = false;
@@ -75,6 +76,13 @@ class SubmissionQuery extends ElementQuery
     public function isSpam(?int $value = null): self
     {
         $this->isSpam = $value;
+
+        return $this;
+    }
+
+    public function isHidden(?bool $value = null): self
+    {
+        $this->isHidden = $value;
 
         return $this;
     }
@@ -236,6 +244,10 @@ class SubmissionQuery extends ElementQuery
 
         if (null !== $this->isSpam) {
             $this->subQuery->andWhere(Db::parseParam($table.'.[[isSpam]]', $this->isSpam));
+        }
+
+        if (null !== $this->isHidden) {
+            $this->subQuery->andWhere(Db::parseParam($table.'.[[isHidden]]', $this->isHidden));
         }
 
         if (!empty($this->spamReason)) {

@@ -21,7 +21,7 @@ export const LimitedUsers: React.FC = () => {
   const isPro = config.editions.isAtLeast(Edition.Pro);
   const isCraft5 = config.metadata.craft.is5;
 
-  useSidebarSelect(5);
+  useSidebarSelect('freeform/settings');
 
   if (!data && isFetching) {
     return <div>Loading...</div>;

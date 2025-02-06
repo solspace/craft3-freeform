@@ -48,6 +48,16 @@ class NotificationsProvider
         ;
     }
 
+    public function getByFormAndId(Form $form, int $id): ?NotificationInterface
+    {
+        $record = FormNotificationRecord::findOne([
+            'formId' => $form->getId(),
+            'id' => $id,
+        ]);
+
+        return $record ? $this->createNotificationObjects($record) : null;
+    }
+
     public function getByForm(?Form $form = null): array
     {
         $records = $this->getRecordsByForm($form);
