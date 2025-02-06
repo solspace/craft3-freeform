@@ -22,21 +22,33 @@ class CsrfInput extends FeatureBundle
         Event::on(Form::class, Form::EVENT_OUTPUT_AS_JSON, [$this, 'attachToJson']);
     }
 
-    public function attachInput(RenderTagEvent $event)
+    public function attachInput(RenderTagEvent $event): void
     {
         $this->setNoCacheHeaders();
         $event->addChunk(Html::csrfInput());
     }
 
-    public function attachToJson(OutputAsJsonEvent $event)
+    public function attachToJson(OutputAsJsonEvent $event): void
     {
         $this->setNoCacheHeaders();
-        $name = \Craft::$app->getConfig()->getGeneral()->csrfTokenName;
-        $token = \Craft::$app->request->csrfToken;
 
+        $csrfTokenName = \Craft::$app->getConfig()->getGeneral()->csrfTokenName;
+        $csrfTokenValue = \Craft::$app->getRequest()->getCsrfToken();
+
+        $event->add('csrfToken', [
+            'name' => $csrfTokenName,
+            'value' => $csrfTokenValue,
+        ]);
+
+        /*
+         * @deprecated - this attribute is no longer used
+         *
+         * @remove - Freeform 6.0
+         */
         $event->add('csrf', [
-            'name' => $name,
-            'token' => $token,
+            'name' => $csrfTokenName,
+            'value' => $csrfTokenValue,
+            'token' => $csrfTokenValue,
         ]);
     }
 

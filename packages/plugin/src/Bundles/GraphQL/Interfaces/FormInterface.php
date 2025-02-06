@@ -4,14 +4,12 @@ namespace Solspace\Freeform\Bundles\GraphQL\Interfaces;
 
 use GraphQL\Type\Definition\Type;
 use Solspace\Freeform\Bundles\GraphQL\Arguments\FieldArguments;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\CsrfTokenInterface;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\FormCaptchaInterface;
-use Solspace\Freeform\Bundles\GraphQL\Interfaces\SimpleObjects\HoneypotInterface;
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\CaptchaResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\CsrfTokenResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\FieldResolver;
-use Solspace\Freeform\Bundles\GraphQL\Resolvers\FormCaptchaResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\GoogleTagManagerResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\HoneypotResolver;
+use Solspace\Freeform\Bundles\GraphQL\Resolvers\JavascriptTestResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PageResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\PostForwardingResolver;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\RulesResolver;
@@ -45,7 +43,7 @@ class FormInterface extends AbstractInterface
 
     public static function getFieldDefinitions(): array
     {
-        return \Craft::$app->gql->prepareFieldDefinitions([
+        $fieldDefinitions = [
             'id' => [
                 'name' => 'id',
                 'type' => Type::int(),
@@ -94,6 +92,22 @@ class FormInterface extends AbstractInterface
                 'description' => "The form's handle",
                 'resolve' => function ($source) {
                     return $source->getSettings()->description;
+                },
+            ],
+            'successBehavior' => [
+                'name' => 'successBehavior',
+                'type' => Type::string(),
+                'description' => "The form's success behavior",
+                'resolve' => function ($source) {
+                    return $source->getSettings()->successBehavior;
+                },
+            ],
+            'successTemplate' => [
+                'name' => 'successTemplate',
+                'type' => Type::string(),
+                'description' => "The form's success template",
+                'resolve' => function ($source) {
+                    return $source->getSettings()->successTemplate;
                 },
             ],
             'returnUrl' => [
@@ -192,24 +206,6 @@ class FormInterface extends AbstractInterface
                     return $source->getSettings()->processingText;
                 },
             ],
-            'captcha' => [
-                'name' => 'captcha',
-                'type' => FormCaptchaInterface::getType(),
-                'resolve' => FormCaptchaResolver::class.'::resolve',
-                'description' => 'The Captcha for this form',
-            ],
-            'honeypot' => [
-                'name' => 'honeypot',
-                'type' => HoneypotInterface::getType(),
-                'resolve' => HoneypotResolver::class.'::resolve',
-                'description' => 'The Honeypot for this form',
-            ],
-            'csrfToken' => [
-                'name' => 'csrfToken',
-                'type' => CsrfTokenInterface::getType(),
-                'resolve' => CsrfTokenResolver::class.'::resolve',
-                'description' => 'The CSRF Token for this form',
-            ],
             'pages' => [
                 'name' => 'pages',
                 'type' => Type::listOf(PageInterface::getType()),
@@ -237,6 +233,22 @@ class FormInterface extends AbstractInterface
                 'description' => 'The form’s error message',
                 'resolve' => function ($source) {
                     return $source->getSettings()->errorMessage;
+                },
+            ],
+            'duplicateCheck' => [
+                'name' => 'duplicateCheck',
+                'type' => Type::string(),
+                'description' => 'The form’s duplicate check rule',
+                'resolve' => function ($source) {
+                    return $source->getSettings()->duplicateCheck;
+                },
+            ],
+            'stopSubmissionsAfter' => [
+                'name' => 'stopSubmissionsAfter',
+                'type' => Type::string(),
+                'description' => 'The form’s stop submissions after date',
+                'resolve' => function ($source) {
+                    return $source->getSettings()->stopSubmissionsAfter;
                 },
             ],
             'disableSubmit' => [
@@ -271,6 +283,35 @@ class FormInterface extends AbstractInterface
                 'resolve' => RulesResolver::class.'::resolve',
                 'description' => 'The rules for this form',
             ],
+            /*
+             * @deprecated - this field definition is no longer used
+             *
+             * @remove - Freeform 6.0
+             */
+            'captcha' => [
+                'name' => 'captcha',
+                'type' => CaptchaInterface::getType(),
+                'resolve' => CaptchaResolver::class.'::resolveOne',
+                'description' => 'The Captcha field input name and value for this form. Deprecated. Will be removed in Freeform 6.0',
+            ],
+            'captchas' => [
+                'name' => 'captchas',
+                'type' => Type::listOf(CaptchaInterface::getType()),
+                'resolve' => CaptchaResolver::class.'::resolve',
+                'description' => 'List of Captcha field input names and values for this form',
+            ],
+            'csrfToken' => [
+                'name' => 'csrfToken',
+                'type' => CsrfTokenInterface::getType(),
+                'resolve' => CsrfTokenResolver::class.'::resolve',
+                'description' => 'The CSRF field input name and value for this form',
+            ],
+            'honeypot' => [
+                'name' => 'honeypot',
+                'type' => HoneypotInterface::getType(),
+                'resolve' => HoneypotResolver::class.'::resolve',
+                'description' => 'The Honeypot field input name and value for this form',
+            ],
             'postForwarding' => [
                 'name' => 'postForwarding',
                 'type' => PostForwardingInterface::getType(),
@@ -283,6 +324,17 @@ class FormInterface extends AbstractInterface
                 'resolve' => GoogleTagManagerResolver::class.'::resolve',
                 'description' => 'The Google Tag Manager for this form',
             ],
-        ], static::getName());
+            'javascriptTest' => [
+                'name' => 'javascriptTest',
+                'type' => JavascriptTestInterface::getType(),
+                'resolve' => JavascriptTestResolver::class.'::resolve',
+                'description' => 'The Javascript Test for this form',
+            ],
+        ];
+
+        return \Craft::$app->getGql()->prepareFieldDefinitions(
+            $fieldDefinitions,
+            self::getName()
+        );
     }
 }

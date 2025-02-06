@@ -6,9 +6,9 @@ use craft\gql\base\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Solspace\Freeform\Bundles\Integrations\Providers\FormIntegrationsProvider;
 use Solspace\Freeform\Form\Form;
-use Solspace\Freeform\Integrations\Single\GTM\GTM;
+use Solspace\Freeform\Integrations\Single\JavascriptTest\JavascriptTest;
 
-class GoogleTagManagerResolver extends Resolver
+class JavascriptTestResolver extends Resolver
 {
     public static function resolve($source, array $arguments, $context, ResolveInfo $resolveInfo): ?array
     {
@@ -17,14 +17,14 @@ class GoogleTagManagerResolver extends Resolver
         }
 
         $integrationProvider = \Craft::$container->get(FormIntegrationsProvider::class);
-        $googleTagManager = $integrationProvider->getSingleton($source, GTM::class);
-        if (!$googleTagManager) {
+        $javascriptTest = $integrationProvider->getSingleton($source, JavascriptTest::class);
+        if (!$javascriptTest) {
             return null;
         }
 
         return [
-            'containerId' => $googleTagManager->getContainerId(),
-            'eventName' => $googleTagManager->getEventName(),
+            'errorMessage' => $javascriptTest->getErrorMessage(),
+            'name' => $javascriptTest->getInputName(),
         ];
     }
 }

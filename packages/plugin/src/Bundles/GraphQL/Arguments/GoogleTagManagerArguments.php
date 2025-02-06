@@ -13,12 +13,12 @@ class GoogleTagManagerArguments extends Arguments
             'containerId' => [
                 'name' => 'containerId',
                 'type' => Type::string(),
-                'description' => 'Container ID',
+                'description' => 'The Google Tag Manager container ID',
             ],
             'eventName' => [
                 'name' => 'eventName',
                 'type' => Type::string(),
-                'description' => 'Event name',
+                'description' => 'The Google Tag Manager event name',
             ],
         ];
     }

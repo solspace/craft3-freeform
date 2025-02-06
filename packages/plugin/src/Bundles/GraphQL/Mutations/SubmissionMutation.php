@@ -6,10 +6,11 @@ use craft\errors\GqlException;
 use craft\gql\base\ElementMutationResolver;
 use craft\gql\base\Mutation;
 use craft\gql\base\MutationResolver;
+use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\CaptchaInputArguments;
 use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\CsrfTokenInputArguments;
 use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\FormPropertiesInputsArguments;
 use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\HoneypotInputArguments;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\SubmissionCaptchaInputArguments;
+use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\JavascriptTestInputArguments;
 use Solspace\Freeform\Bundles\GraphQL\GqlPermissions;
 use Solspace\Freeform\Bundles\GraphQL\Resolvers\Mutations\SubmissionMutationResolver;
 use Solspace\Freeform\Bundles\GraphQL\Types\Generators\SubmissionGenerator;
@@ -41,18 +42,21 @@ class SubmissionMutation extends Mutation
                 self::prepareResolver($mutationResolver, $mutationInputFields);
 
                 HoneypotInputArguments::setForm($form);
-                SubmissionCaptchaInputArguments::setForm($form);
+                CaptchaInputArguments::setForm($form);
+                JavascriptTestInputArguments::setForm($form);
 
                 $formPropertiesInputArguments = FormPropertiesInputsArguments::getArguments();
                 $csrfInputArguments = CsrfTokenInputArguments::getArguments();
                 $honeypotInputArguments = HoneypotInputArguments::getArguments();
-                $captchaInputArguments = SubmissionCaptchaInputArguments::getArguments();
+                $captchaInputArguments = CaptchaInputArguments::getArguments();
+                $javascriptTestInputArguments = JavascriptTestInputArguments::getArguments();
 
                 $mutationArguments = array_merge(
                     $formPropertiesInputArguments,
                     $csrfInputArguments,
                     $honeypotInputArguments,
                     $captchaInputArguments,
+                    $javascriptTestInputArguments,
                     $mutationResolver->getResolutionData(ElementMutationResolver::CONTENT_FIELD_KEY)
                 );
 

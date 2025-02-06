@@ -6,7 +6,7 @@ use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\FileUploadArguments;
+use Solspace\Freeform\Bundles\GraphQL\Arguments\Inputs\FileUploadInputArguments;
 
 class FileUploadInputType extends InputObjectType
 {
@@ -22,7 +22,7 @@ class FileUploadInputType extends InputObjectType
         }
 
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
-            FileUploadArguments::getArguments(),
+            FileUploadInputArguments::getArguments(),
             self::getName()
         );
 

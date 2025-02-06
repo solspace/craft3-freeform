@@ -4,7 +4,7 @@ namespace Solspace\Freeform\Bundles\GraphQL\Types\Inputs;
 
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\InputObjectType;
-use Solspace\Freeform\Bundles\GraphQL\Arguments\CsrfTokenArguments;
+use GraphQL\Type\Definition\Type;
 
 class CsrfTokenInputType extends InputObjectType
 {
@@ -13,17 +13,27 @@ class CsrfTokenInputType extends InputObjectType
         return 'FreeformCsrfTokenInputType';
     }
 
-    /**
-     * Users would grab a CSRF token name and value from actions/users/session-info.
-     */
     public static function getType(): mixed
     {
         if ($inputType = GqlEntityRegistry::getEntity(self::getName())) {
             return $inputType;
         }
 
+        $fieldDefinitions = [
+            'name' => [
+                'name' => 'name',
+                'type' => Type::string(),
+                'description' => 'The CSRF field input name.',
+            ],
+            'value' => [
+                'name' => 'value',
+                'type' => Type::string(),
+                'description' => 'The CSRF field input value.',
+            ],
+        ];
+
         $fields = \Craft::$app->getGql()->prepareFieldDefinitions(
-            CsrfTokenArguments::getArguments(),
+            $fieldDefinitions,
             self::getName()
         );
 
