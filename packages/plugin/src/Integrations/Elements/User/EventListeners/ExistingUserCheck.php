@@ -32,15 +32,23 @@ class ExistingUserCheck extends FeatureBundle
             return;
         }
 
+        if ($element->id) {
+            return;
+        }
+
+        $mapping = $integration->getAttributeMapping();
+        $isEmailMapped = $mapping->isSourceMapped('email');
+        $isUsernameMapped = $mapping->isSourceMapped('username');
+
         $userService = \Craft::$app->getUsers();
-        if ($userService->getUserByUsernameOrEmail($element->username)) {
-            $element->addError('email', \Craft::t('app', 'Email is in use already.'));
+        if ($isUsernameMapped && $userService->getUserByUsernameOrEmail($element->username)) {
+            $element->addError('username', \Craft::t('app', 'Username already exists.'));
 
             return;
         }
 
-        if ($userService->getUserByUsernameOrEmail($element->email)) {
-            $element->addError('username', \Craft::t('app', 'Username already exists.'));
+        if ($isEmailMapped && $userService->getUserByUsernameOrEmail($element->email)) {
+            $element->addError('email', \Craft::t('app', 'Email is in use already.'));
         }
     }
 }
