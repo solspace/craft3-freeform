@@ -191,10 +191,6 @@ class ActiveCampaignV3 extends BaseActiveCampaignIntegration
                     $this->deal[$key] = $value;
                 }
             }
-
-            $this->deal['title'] = 'Deal';
-            $this->deal['currency'] = 'usd';
-            $this->deal['value'] = 0;
         }
 
         if ($this->mapAccount) {
