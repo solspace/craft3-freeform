@@ -63,18 +63,17 @@ body:
       placeholder: e.g. 5.1.8
     validations:
       required: true
-  - type: dropdown
+  - type: checkboxes
     id: when-started
     attributes:
       label: When did this issue start?
       description: Choose all that apply.
-      multiple: true
       options:
-        - Fresh install of Freeform
-        - After upgrading from older Freeform version
-        - After upgrading from older Craft version
-        - After a change to hosting configuration
-        - Unsure
+        - label: Unsure
+        - label: Fresh install of Freeform
+        - label: After upgrading from older Freeform version
+        - label: After upgrading from older Craft version
+        - label: After a change to hosting configuration
   - type: input
     id: previous-freeform-version
     attributes:
