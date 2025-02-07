@@ -1,0 +1,31 @@
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What is your idea?
+      description: Please share your suggestions for changes, additions, or improvements you would like to see for Freeform.
+      placeholder: Please elaborate as much as possible.
+    validations:
+      required: true
+  - type: dropdown
+    id: freeform-version
+    attributes:
+      label: Freeform Version
+      description: Which version of Freeform does this apply to?
+      options:
+        - Any
+        - 5.x
+        - 4.x
+    validations:
+      required: true
+  - type: dropdown
+    id: craft-version
+    attributes:
+      label: Craft Version
+      description: Which version of Craft does this apply to?
+      options:
+        - Any
+        - 5.x
+        - 4.x
+    validations:
+      required: true

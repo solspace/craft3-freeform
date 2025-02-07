@@ -39,19 +39,18 @@ body:
     id: freeform-edition
     attributes:
       label: Freeform Edition
-      description: What edition of Freeform are you running?
+      description: Which edition of Freeform are you currently using?
       options:
         - Pro
         - Lite
         - Express
-      default: 0
     validations:
       required: true
   - type: input
     id: freeform-version
     attributes:
       label: Freeform Version
-      description: What version of Freeform are you using?
+      description: Which version of Freeform are you currently using?
       placeholder: e.g. 5.3.1
     validations:
       required: true
@@ -59,7 +58,7 @@ body:
     id: craft-version
     attributes:
       label: Craft Version
-      description: What version of Craft are you running?
+      description: Which version of Craft are you currently using?
       placeholder: e.g. 5.1.8
     validations:
       required: true

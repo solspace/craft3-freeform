@@ -1,0 +1,36 @@
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: How can we help you?
+      description: Please describe your question or the problem you're trying to resolve.
+      placeholder: Please elaborate as much as possible.
+    validations:
+      required: true
+  - type: dropdown
+    id: freeform-edition
+    attributes:
+      label: Freeform Edition
+      description: Which edition of Freeform are you currently using?
+      options:
+        - Pro
+        - Lite
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: freeform-version
+    attributes:
+      label: Freeform Version
+      description: Which version of Freeform are you currently using?
+      placeholder: e.g. 5.3.1
+    validations:
+      required: true
+  - type: input
+    id: craft-version
+    attributes:
+      label: Craft Version
+      description: Which version of Craft are you currently using?
+      placeholder: e.g. 5.1.8
+    validations:
+      required: true
