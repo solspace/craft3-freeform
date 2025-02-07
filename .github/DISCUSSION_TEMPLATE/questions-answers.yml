@@ -15,6 +15,7 @@ body:
       options:
         - Pro
         - Lite
+        - Express
       default: 0
     validations:
       required: true
