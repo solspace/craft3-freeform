@@ -59,10 +59,16 @@ class FormMonitorController extends BaseApiController
 
         $client = $this->clientProvider->getAuthorizedClient($formMonitor);
 
+        $request = \Craft::$app->getRequest();
+        $limit = (int) $request->getQueryParam('limit', 100);
+        $offset = (int) $request->getQueryParam('offset', 0);
+        $sort = $request->getQueryParam('sort', 'desc');
+
         try {
             $tests = $formMonitor->fetchTests($client, $form, [
-                'limit' => 100,
-                'offset' => 0,
+                'limit' => $limit,
+                'offset' => $offset,
+                'sort' => $sort,
             ]);
         } catch (BadResponseException $exception) {
             $this
@@ -71,37 +77,7 @@ class FormMonitorController extends BaseApiController
                 ->error((string) $exception->getResponse()->getBody())
             ;
 
-            // TODO: remove this test code
-
-            return $this->asJson([
-                [
-                    'id' => 1,
-                    'formId' => 3,
-                    'status' => 'fail',
-                    'response' => (string) $exception->getResponse()->getBody(),
-                    'responseCode' => $exception->getCode(),
-                    'dateAttempted' => '2021-01-01T00:00:00Z',
-                    'dateCompleted' => '2024-12-22T00:00:00Z',
-                ],
-                [
-                    'id' => 2,
-                    'formId' => 3,
-                    'status' => 'success',
-                    'response' => null,
-                    'responseCode' => 201,
-                    'dateAttempted' => '2021-01-01T00:00:00Z',
-                    'dateCompleted' => '2021-01-01T00:00:00Z',
-                ],
-                [
-                    'id' => 3,
-                    'formId' => 3,
-                    'status' => 'success',
-                    'response' => null,
-                    'responseCode' => 200,
-                    'dateAttempted' => '2021-01-01T00:00:00Z',
-                    'dateCompleted' => '2021-01-01T00:00:00Z',
-                ],
-            ]);
+            return $this->asJson([]);
         }
 
         return $this->asJson($tests);

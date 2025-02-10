@@ -12,6 +12,7 @@ import { Cell, Pie, PieChart } from 'recharts';
 
 import { PaddedChartFooter } from '../forms/list/views/grid/card/card.styles';
 
+import { FormMonitorLoader } from './form-monitor.loader';
 import { useFMForms, useFMFormStats } from './form-monitor.queries';
 import {
   Card,
@@ -166,6 +167,14 @@ export const FormMonitor: React.FC = () => {
     (!forms || !formIds) &&
     (isFetchingForms || isFetchingFormids || isFetchingStats);
 
+  if (isLoading) {
+    return (
+      <FormMonitorWrapper>
+        <FormMonitorLoader />
+      </FormMonitorWrapper>
+    );
+  }
+
   if (!isPro) {
     return (
       <FormMonitorWrapper>
@@ -179,70 +188,85 @@ export const FormMonitor: React.FC = () => {
     );
   }
 
-  if (isLoading) {
+  if (formIds && formIds.length === 0) {
     return (
       <FormMonitorWrapper>
-        <div>{translate('Loading...')}</div>
+        <EmptyBlock lite title={translate('No forms are being monitored')} />
       </FormMonitorWrapper>
     );
   }
 
   return (
     <FormMonitorWrapper>
-      <Cards>
-        {formIds.map((id) => {
-          const form = forms?.find((form) => form.id === id);
-          const formStats = formsWithStats.find((f) => f.formId === id);
+      {isLoading && <FormMonitorLoader />}
+      {!isLoading && !isPro && (
+        <EmptyBlock
+          lite
+          title={translate(
+            'Upgrade to the Freeform Pro edition to get access to Form Monitor'
+          )}
+        />
+      )}
+      {!isLoading && isPro && formIds && formIds.length > 0 && (
+        <Cards>
+          {formIds.map((id) => {
+            const form = forms?.find((form) => form.id === id);
+            const formStats = formsWithStats?.find((f) => f.formId === id);
 
-          if (!form) {
-            return null;
-          }
+            if (!form) {
+              return null;
+            }
 
-          const { name, settings } = form;
-          const { color } = settings.general;
+            const { name, settings } = form;
+            const { color } = settings.general;
 
-          return (
-            <Card to={`${id}/tests`} key={id}>
-              <CardContent>
-                <FormCardContent>
-                  <Title>{name}</Title>
-                </FormCardContent>
-                <StatsChart stats={formStats?.stats} />
-              </CardContent>
-              <ResponsiveContainer width="100%" height={40}>
-                <AreaChart
-                  data={form.chartData || randomData}
-                  margin={{ top: 10, bottom: 3, left: 0, right: 0 }}
-                >
-                  <defs>
-                    <linearGradient
-                      id={`color${form.id}`}
-                      x1={0}
-                      y1={0}
-                      x2={0}
-                      y2={1}
-                    >
-                      <stop offset="5%" stopColor={color} stopOpacity={0.4} />
-                      <stop offset="95%" stopColor={color} stopOpacity={0.3} />
-                    </linearGradient>
-                  </defs>
-                  <Area
-                    type="monotone"
-                    dataKey={'uv'}
-                    stroke={color}
-                    strokeWidth={1}
-                    strokeOpacity={1}
-                    fillOpacity={1}
-                    fill={`url(#color${form.id})`}
-                    isAnimationActive={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-              <PaddedChartFooter $color={color} />
-            </Card>
-          );
-        })}
-      </Cards>
+            return (
+              <Card to={`${id}/tests`} key={id}>
+                <CardContent>
+                  <FormCardContent>
+                    <Title>{name}</Title>
+                  </FormCardContent>
+                  <StatsChart stats={formStats?.stats} />
+                </CardContent>
+                <ResponsiveContainer width="100%" height={40}>
+                  <AreaChart
+                    data={form.chartData || randomData}
+                    margin={{ top: 10, bottom: 3, left: 0, right: 0 }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id={`color${form.id}`}
+                        x1={0}
+                        y1={0}
+                        x2={0}
+                        y2={1}
+                      >
+                        <stop offset="5%" stopColor={color} stopOpacity={0.4} />
+                        <stop
+                          offset="95%"
+                          stopColor={color}
+                          stopOpacity={0.3}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <Area
+                      type="monotone"
+                      dataKey={'uv'}
+                      stroke={color}
+                      strokeWidth={1}
+                      strokeOpacity={1}
+                      fillOpacity={1}
+                      fill={`url(#color${form.id})`}
+                      isAnimationActive={false}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+                <PaddedChartFooter $color={color} />
+              </Card>
+            );
+          })}
+        </Cards>
+      )}
     </FormMonitorWrapper>
   );
 };

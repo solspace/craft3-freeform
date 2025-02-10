@@ -4,10 +4,19 @@ import translate from '@ff-client/utils/translations';
 
 import { FormMonitorWrapper } from './form-monitor.styles';
 
-export const FMEmptyTests: React.FC = () => {
+interface FMEmptyTestsProps {
+  error?: boolean;
+}
+
+export const FMEmptyTests: React.FC<FMEmptyTestsProps> = ({ error }) => {
   return (
     <FormMonitorWrapper>
-      <EmptyBlock lite title={translate('No form tests found')} />
+      <EmptyBlock
+        lite
+        title={
+          error ? translate('Error loading tests') : translate('No tests found')
+        }
+      />
     </FormMonitorWrapper>
   );
 };

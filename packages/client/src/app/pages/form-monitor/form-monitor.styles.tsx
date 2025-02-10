@@ -65,6 +65,10 @@ export const StatusBadge = styled.div`
   color: ${colors.white};
   background-color: ${colors.teal500};
 
+  &.status-pending {
+    background-color: ${colors.yellow400};
+  }
+
   &.status-failed {
     background-color: ${colors.red500};
   }
@@ -156,4 +160,10 @@ export const LayoutContainer = styled.div`
     position: sticky;
     top: ${spacings.xl};
   }
+`;
+
+export const LoaderCard = styled.div`
+  border: 1px solid ${colors.gray200};
+
+  ${Card}
 `;
