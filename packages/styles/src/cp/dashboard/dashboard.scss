@@ -1,7 +1,7 @@
-@import '../../shared/flexbox-grid';
-@import '../../shared/color-indicator';
-@import '../../shared/variables';
-@import '../settings/form-cards';
+@use '../../shared/flexbox-grid';
+@use '../../shared/color-indicator';
+@use '../../shared/variables';
+@use '../settings/form-cards';
 
 #main-content {
   #content-container,
@@ -16,14 +16,14 @@
     justify-content: flex-start;
     align-items: center;
 
-    margin: $spacing-wide 0;
+    margin: variables.$spacing-wide 0;
 
     .hero {
       font-size: 1.5rem;
-      margin: auto ($spacing-wide * 3) auto 0;
+      margin: auto (variables.$spacing-wide * 3) auto 0;
 
       small {
-        color: $color-row-actions-text;
+        color: variables.$color-row-actions-text;
       }
     }
   }
@@ -31,7 +31,7 @@
   table {
     td,
     th {
-      padding-right: $spacing-wide;
+      padding-right: variables.$spacing-wide;
     }
   }
 }

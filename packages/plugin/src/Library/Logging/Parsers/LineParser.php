@@ -15,7 +15,13 @@ namespace Solspace\Freeform\Library\Logging\Parsers;
 
 class LineParser implements LogParserInterface
 {
-    private string $pattern = '/\[(?P<date>.*?)\] (?P<logger>.*?)\.*(?P<level>\w+): (?P<message>.+)/';
+    private string $pattern = '/^'.
+        '\[(?<date>.*)] '.
+        '(?<channel>[\w-]+).(?<level>\w+): '.
+        '(?<message>.*)'.
+        '(?<context> (\[.*?]|\{.*?}))'.
+        '(?<extra> (\{.*}))'.
+        '\s{0,2}$/';
 
     public function __construct(?string $pattern = null)
     {

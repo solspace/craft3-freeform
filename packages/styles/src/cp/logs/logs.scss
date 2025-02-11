@@ -1,42 +1,89 @@
-.log-badge {
-  display: inline-block;
-  padding: 0 5px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: bold;
+$logColors: (
+        debug: #6c757d,
+        info: #0284c7,
+        notice: #28a745,
+        warning: #ffc107,
+        error: #dc3545,
+        critical: #dc3545,
+        alert: #dc3545,
+        emergency: #dc3545
+);
 
-  &.log-level-debug {
-    background-color: #6c757d;
-  }
-  &.log-level-info {
-    background-color: #0284c7;
-  }
-  &.log-level-notice {
-    background-color: #28a745;
-  }
-  &.log-level-warning {
-    background-color: #ffc107;
-  }
-  &.log-level-error {
-    background-color: #dc3545;
-  }
-  &.log-level-critical {
-    background-color: #dc3545;
-  }
-  &.log-level-alert {
-    background-color: #dc3545;
-  }
-  &.log-level-emergency {
-    background-color: #dc3545;
-  }
-}
+.log-table {
 
-.log-message {
-  color: #b1b1b1;
-  width: 70%;
+  tbody {
+    tr {
+      box-shadow: 0 -1px 0 rgba(51, 64, 77, .1);
+    }
 
-  word-break: break-word;
-  overflow-wrap: break-word;
+    td {
+      padding: 0;
+      padding-block: 0 !important;
+      border-block-start: none !important;
+
+      &.log-meta {
+        padding: 4px 0 4px 10px !important;
+        vertical-align: top;
+
+        [data-channel] {
+          font-weight: bold;
+        }
+
+        [data-date] {
+          color: #b1b1b1;
+          font-size: 12px !important;
+        }
+
+        [data-request-id] {
+          color: #b1b1b1;
+          font-size: 12px !important;
+        }
+      }
+
+      &.log-level {
+        width: 16px;
+
+        @each $level, $color in $logColors {
+          &.log-level-#{$level} {
+            background-color: $color !important;
+          }
+        }
+
+        > div {
+          width: 16px;
+          padding: 8px 4px;
+
+          color: #ffffff;
+          text-align: center;
+          font-size: 8px;
+          font-weight: bold;
+          line-height: 8px;
+
+          writing-mode: sideways-lr;
+          text-orientation: mixed;
+
+          user-select: none;
+        }
+      }
+
+      &.log-message {
+        word-break: break-word;
+        overflow-wrap: break-word;
+
+        padding: 10px 24px 10px 0 !important;
+
+        .message {
+          padding: 0 0 10px;
+        }
+
+        code {
+          max-height: 300px;
+          padding: 1em;
+
+          border: 1px solid rgba(51, 64, 77, .1);
+          border-radius: 5px;
+        }
+      }
+    }
+  }
 }

@@ -29,32 +29,43 @@
     <div class="container">
 
         {% if logReader|length %}
-            <table class="data fullwidth">
+            <table class="data fullwidth log-table">
                 <thead>
                 <tr>
-                    <th>{{ "Type"|t('freeform') }}</th>
-                    <th>{{ "Level"|t('freeform') }}</th>
-                    <th>{{ "Date"|t('freeform') }}</th>
-                    <th>{{ "Details"|t('freeform') }}</th>
+                    <th colspan="2">{{ "Type"|t('freeform') }}</th>
+                    <th>{{ "Message"|t('freeform') }}</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 {% for line in logReader.lastLines(100) %}
                     <tr>
-                        <td class="nowrap">
-                            {{ line.logger }}
+                        <td class="log-level log-level-{{ line.level|lower }}">
+                            <div title="{{ line.level|lower }}">
+                                {{ line.level|upper }}
+                            </div>
                         </td>
-                        <td class="nowrap">
-                        <span class="log-badge log-level-{{ line.level|lower }}">
-                            {{ line.level|lower }}
-                        </span>
-                        </td>
-                        <td class="nowrap code">
-                            {{ line.date|datetime }}
+                        <td class="nowrap log-meta">
+                            <div data-channel class="code">
+                                {{ line.channel }}
+                            </div>
+
+                            <div data-date class="code">
+                                {{ line.date.format('Y-m-d H:i:s') }}
+                            </div>
+
+                            {% if line.extra %}
+                                <div data-request-id class="code">
+                                    #{{ line.extra.requestId }}
+                                </div>
+                            {% endif %}
                         </td>
                         <td class="log-message">
-                            {{ line.message }}
+                            <div class="message">{{ line.message }}</div>
+
+                            {% if line.context %}
+                                <pre><code class="language-json">{{- line.context -}}</code></pre>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

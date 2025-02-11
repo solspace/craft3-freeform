@@ -28,4 +28,6 @@
       return false;
     },
   });
+
+  hljs.highlightAll();
 })();
