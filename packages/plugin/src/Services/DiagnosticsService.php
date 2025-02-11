@@ -387,6 +387,14 @@ class DiagnosticsService extends BaseService
                     $this->getSettingsService()->getSettingsModel()->updateSearchIndexes
                 ),
                 new DiagnosticItem(
+                    Freeform::t('Use Queue for Email Notifications').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
+                    $this->getSettingsService()->getSettingsModel()->useQueueForEmailNotifications
+                ),
+                new DiagnosticItem(
+                    Freeform::t('Use Queue for Integrations').': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
+                    $this->getSettingsService()->getSettingsModel()->useQueueForIntegrations
+                ),
+                new DiagnosticItem(
                     Freeform::t('Automatically Purge Submission Data').': <b>'.Freeform::t('{{ value.enabled ? "Enabled, "~value.interval~" days" : "Disabled" }}').'</b>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeSubmissions,
@@ -543,6 +551,10 @@ class DiagnosticsService extends BaseService
                             'This directory path is not set correctly.'
                         ),
                     ]
+                ),
+                new DiagnosticItem(
+                    Freeform::t("Include Freeform's Sample Formatting Templates").': <b>'.Freeform::t('{{ value ? "Enabled" : "Disabled" }}').'</b>',
+                    $this->getSettingsService()->getSettingsModel()->defaults->includeSampleTemplates,
                 ),
                 new DiagnosticItem(
                     Freeform::t('Email Templates Directory Path').': <b>'.Freeform::t('{{ value ? value : "Not set" }}').'</b>',
