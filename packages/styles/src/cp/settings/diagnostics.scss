@@ -185,6 +185,47 @@
   }
 }
 
+.diag-item {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  text-align: center;
+
+  &.diag-enabled {
+    background: var(--enabled-color);
+
+    &:before {
+      color: #ffffff;
+      content: "✓";
+    }
+  }
+
+  &.diag-disabled {
+    background: var(--gray-400);
+
+    &:before {
+      color: #ffffff;
+      content: "✕";
+    }
+  }
+
+  &.diag-info {
+    background: var(--cyan-500);
+    font-weight: 600;
+
+    &:before {
+      color: #ffffff;
+      content: "i";
+    }
+  }
+
+  &.diag-spacer {
+    background: transparent;
+  }
+}
+
 .items {
   display: flex;
   gap: 5px;
