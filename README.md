@@ -1,6 +1,6 @@
 # Solspace Freeform plugin for Craft CMS 5.x
 
-Freeform is the most flexible and user-friendly form builder!
+Freeform is the most flexible and user-friendly form building plugin!
 
 ![Freeform icon](packages/plugin/src/icon.svg)
 
