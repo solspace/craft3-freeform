@@ -28,7 +28,10 @@ class FileLogReader extends LogReader
         parent::__construct($parser);
 
         if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException('File does not exist: '.$filePath);
+            $this->file = new \SplFileObject('php://memory', 'r');
+            $this->lineCount = 0;
+
+            return;
         }
 
         $file = new \SplFileObject($filePath, 'r');
