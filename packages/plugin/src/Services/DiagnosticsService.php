@@ -9,7 +9,9 @@ use craft\helpers\UrlHelper;
 use craft\mail\transportadapters\Gmail;
 use craft\mail\transportadapters\Sendmail;
 use craft\mail\transportadapters\Smtp;
+use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationLoggerProvider;
 use Solspace\Freeform\Bundles\Integrations\Providers\IntegrationTypeProvider;
+use Solspace\Freeform\Bundles\Notifications\Providers\NotificationLoggerProvider;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Integrations\PaymentGateways\Stripe\Fields\StripeField;
 use Solspace\Freeform\Library\DataObjects\Diagnostics\DiagnosticItem;
@@ -45,7 +47,7 @@ class DiagnosticsService extends BaseService
 
         return [
             new DiagnosticItem(
-                '<span class="diag-check diag-{{ value ? "enabled" : "warning" }}"></span>Freeform <b>{{ value.edition|title }} {{ value.version }}</b>',
+                '<span class="diag-check diag-enabled"></span>Freeform <b>{{ value.edition|title }} {{ value.version }}</b>',
                 [
                     'edition' => Freeform::getInstance()->edition,
                     'version' => Freeform::getInstance()->getVersion(),
@@ -349,11 +351,11 @@ class DiagnosticsService extends BaseService
         if ($freeform->isPro()) {
             return [
                 new DiagnosticItem(
-                    Freeform::t('Regular').': <b>{{ value }}</b> '.Freeform::t('{{ value != 1 ? "forms" : "form" }}'),
+                    Freeform::t('Regular').': <b>{{ value }}</b> {{ value != 1 ? "'.Freeform::t('forms').'" : "'.Freeform::t('form').'" }}',
                     $statistics->totals->regularForm
                 ),
                 new DiagnosticItem(
-                    Freeform::t('Payments').': <b>{{ value }}</b> '.Freeform::t('{{ value != 1 ? "forms" : "form" }}'),
+                    Freeform::t('Payments').': <b>{{ value }}</b> {{ value != 1 ? "'.Freeform::t('forms').'" : "'.Freeform::t('form').'" }}',
                     $this->getFormsWithPaymentIntegrations()
                 ),
             ];
@@ -411,14 +413,14 @@ class DiagnosticsService extends BaseService
                     $this->getSettingsService()->getSettingsModel()->useQueueForIntegrations
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Automatically Purge Submission Data').': <b>'.Freeform::t('{{ value.enabled ? ""~value.interval~" days" : "" }}').'</b></span>',
+                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Automatically Purge Submission Data').'{{ value.enabled ? ": <b>"~value.interval~" '.Freeform::t('days').'</b>" : "" }}</span>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeSubmissions,
                         'interval' => $this->getSummary()->statistics->settings->purgeInterval,
                     ],
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Automatically Purge Unfinalized Assets').': <b>'.Freeform::t('{{ value.enabled ? ""~value.interval~" hours" : "" }}').'</b></span>',
+                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Automatically Purge Unfinalized Assets').'{{ value.enabled ? ": <b>"~value.interval~" '.Freeform::t('hours').'</b>" : "" }}</span>',
                     [
                         'enabled' => $this->getSummary()->statistics->settings->purgeAssets,
                         'interval' => $this->getSummary()->statistics->settings->purgeAssetsInterval / 60,
@@ -426,7 +428,7 @@ class DiagnosticsService extends BaseService
                 ),
                 new DiagnosticItem(
                     '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span>'.Freeform::t('Site-Aware Forms'),
-                    ['enabled' => $this->getSettingsService()->getSettingsModel()->sitesEnabled],
+                    $this->getSettingsService()->getSettingsModel()->sitesEnabled,
                 ),
             ],
             Freeform::t('Spam Controls') => [
@@ -463,7 +465,7 @@ class DiagnosticsService extends BaseService
                     $this->getSummary()->statistics->spam->bypassSpamCheckOnLoggedInUsers
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Minimum Submit Time').'{{ value.enabled ? ":" : "" }} <b>'.Freeform::t('{{ value.enabled ? ""~value.interval~" seconds" : "" }}').'</b></span>',
+                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Minimum Submit Time').'{{ value.enabled ? ":" : "" }} <b>{{ value.enabled ? ""~value.interval~" '.Freeform::t('seconds').'" : "" }}</b></span>',
                     [
                         'enabled' => $this->getSummary()->statistics->spam->minSubmitTime,
                         'interval' => $this->getSummary()->statistics->spam->minSubmitTimeInterval,
@@ -497,7 +499,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Form Submit Expiration').'{{ value.enabled ? ":" : "" }} <b>'.Freeform::t('{{ value.enabled ? ""~value.interval~" minutes" : "" }}').'</b></span>',
+                    '<span class="diag-check diag-{{ value.enabled ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Form Submit Expiration').'{{ value.enabled ? ":" : "" }} <b>{{ value.enabled ? ""~value.interval~" '.Freeform::t('minutes').'" : "" }}</b></span>',
                     [
                         'enabled' => $this->getSummary()->statistics->spam->submitExpiration,
                         'interval' => $this->getSummary()->statistics->spam->submitExpirationInterval,
@@ -531,7 +533,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.count > 0 ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Form Submission Throttling').': <b>'.Freeform::t('{% if value.count != 0 %}{{ value.count }} per {{ value.interval == "m" ? "minute" : "second" }}{% else %}Unlimited{% endif %}').'</b></span>',
+                    '<span class="diag-check diag-{{ value.count > 0 ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Form Submission Throttling').': <b>{% if value.count != 0 %}{{ value.count }} '.Freeform::t('per').' {{ value.interval == "m" ? "'.Freeform::t('minute').'" : "'.Freeform::t('second').'" }}{% else %}'.Freeform::t('Unlimited').'{% endif %}</b></span>',
                     [
                         'count' => $this->getSummary()->statistics->spam->submissionThrottlingCount,
                         'interval' => $this->getSummary()->statistics->spam->submissionThrottlingTimeFrame,
@@ -620,7 +622,7 @@ class DiagnosticsService extends BaseService
                 ),
             ],
 
-            Freeform::t('Reliability') => [
+            Freeform::t('Notices & Alerts') => [
                 new DiagnosticItem(
                     '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span>'.Freeform::t('Developer Digest Email'),
                     \count($this->getSettingsService()->getDigestRecipients()) > 0
@@ -634,18 +636,63 @@ class DiagnosticsService extends BaseService
                     ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "warning" : "enabled" }}"></span><span class="item-inline">'.Freeform::t('Errors logged').': <b>'.Freeform::t('{{ value ? value~" errors found" : "None found" }}').'</b></span>',
-                    Freeform::getInstance()->logger->getLogReader()->count(),
+                    '<span class="diag-check diag-{{ value.count ? "warning" : "enabled" }}"></span><span class="item-inline">'.Freeform::t('Error Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    [
+                        'count' => Freeform::getInstance()->logger->getLogReader()->count(),
+                    ],
                     [
                         new WarningValidator(
                             function ($value) {
                                 return !$value;
                             },
-                            '{{ extra.count }} Errors logged in the Freeform Error Log',
-                            Freeform::t('Please check the <a href="{{ extra.url }}">error log</a> to see if there are any serious issues.'),
+                            '',
+                            Freeform::t('Please check the <a href="{{ extra.url }}">{{ extra.type }}</a> to see if there are any potential issues.'),
                             [
                                 'url' => UrlHelper::cpUrl('freeform/settings/error-log'),
                                 'count' => Freeform::getInstance()->logger->getLogReader()->count(),
+                                'type' => Freeform::t('error log'),
+                            ]
+                        ),
+                    ]
+                ),
+                new DiagnosticItem(
+                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Integrations Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    [
+                        'count' => Freeform::getInstance()->logger->getLogReader(IntegrationLoggerProvider::LOG_FILE)->count(),
+                        'level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel),
+                    ],
+                    [
+                        new SuggestionValidator(
+                            function ($value) {
+                                return !$value['count'];
+                            },
+                            '',
+                            Freeform::t('Please check the <a href="{{ extra.url }}">{{ extra.type }}</a> to see if there are any potential issues.'),
+                            [
+                                'url' => UrlHelper::cpUrl('freeform/settings/integrations-log'),
+                                'count' => Freeform::getInstance()->logger->getLogReader()->count(),
+                                'type' => Freeform::t('integrations log'),
+                            ]
+                        ),
+                    ]
+                ),
+                new DiagnosticItem(
+                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Email Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    [
+                        'count' => Freeform::getInstance()->logger->getLogReader(NotificationLoggerProvider::LOG_FILE)->count(),
+                        'level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel),
+                    ],
+                    [
+                        new SuggestionValidator(
+                            function ($value) {
+                                return !$value['count'];
+                            },
+                            '',
+                            Freeform::t('Please check the <a href="{{ extra.url }}">{{ extra.type }}</a> to see if there are any potential issues.'),
+                            [
+                                'url' => UrlHelper::cpUrl('freeform/settings/email-log'),
+                                'count' => Freeform::getInstance()->logger->getLogReader()->count(),
+                                'type' => Freeform::t('email log'),
                             ]
                         ),
                     ]

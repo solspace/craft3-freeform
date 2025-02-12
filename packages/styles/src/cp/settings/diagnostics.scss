@@ -186,6 +186,11 @@
 
           &.suggestionvalidator {
             color: var(--notice-color);
+
+            > a {
+              color: var(--notice-color);
+              text-decoration: underline;
+            }
           }
 
           &.warningvalidator {
