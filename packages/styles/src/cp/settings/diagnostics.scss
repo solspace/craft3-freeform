@@ -138,14 +138,14 @@
   }
 
   > ul {
-    margin-left: 30px;
+    margin-left: 20px;
 
     > li {
       padding: 2px 0;
 
       svg {
         position: relative;
-        top: 5px;
+        top: 4px;
 
         flex-basis: 14px;
 
@@ -156,7 +156,7 @@
       h3 {
         padding: 5px 0 10px 0;
         margin: 0;
-        margin-left: -30px;
+        margin-left: -20px;
       }
 
       code {
@@ -182,7 +182,7 @@
         > li {
           font-style: italic;
           font-size: 12px;
-          margin-left: 10px;
+          margin-left: -2px;
 
           &.suggestionvalidator {
             color: var(--notice-color);
@@ -210,93 +210,27 @@
 }
 
 .diag-check {
-  width: 18px;
-  height: 18px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  font-size: 0.8rem;
-  line-height: 1.35;
-  margin: 3px 10px 0 -25px;
+  margin: 5.5px 3px 0 -20px;
   text-align: center;
 
   &.diag-enabled {
     background: var(--enabled-color);
-
-    &:before {
-      color: #ffffff;
-      content: "✓";
-    }
   }
 
   &.diag-disabled {
-    background: var(--gray-400);
-
-    &:before {
-      color: #ffffff;
-      content: "✕";
-    }
+    background: transparent;
+    box-shadow: inset 0 0 0 2px var(--gray-300);
   }
 
   &.diag-warning {
     background: var(--warning-color);
-
-    &:before {
-      color: #ffffff;
-      content: "✕";
-    }
   }
 
   &.diag-info {
-    background: var(--cyan-500);
-    font-weight: 600;
-
-    &:before {
-      color: #ffffff;
-      content: "i";
-    }
-  }
-
-  &.diag-spacer {
-    background: transparent;
-  }
-}
-
-.diag-toggle {
-  width: 30px;
-  height: 18px;
-  border-radius: 10px;
-  margin: 3px 5px 0 -30px;
-  padding: 1px;
-  text-align: center;
-
-  &:before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    background: #ffffff;
-    border-radius: 50%;
-    display: block;
-  }
-
-  &.diag-enabled {
-    background: var(--enabled-color);
-
-    &:before {
-      margin-left: 12px;
-    }
-  }
-
-  &.diag-disabled {
-    background: var(--gray-400);
-  }
-
-  &.diag-info {
-    background: var(--cyan-500);
-    font-weight: 600;
-
-    &:before {
-      color: #ffffff;
-      content: "i";
-    }
+    background: var(--notice-color);
   }
 
   &.diag-spacer {
@@ -311,11 +245,11 @@
   > .item {
     display: flex;
     gap: 5px;
-    line-height: 1.7;
+    line-height: 1.5;
 
     svg {
       position: relative;
-      top: 5px;
+      top: 4px;
 
       flex-basis: 14px;
 
