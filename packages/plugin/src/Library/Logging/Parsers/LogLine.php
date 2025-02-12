@@ -15,31 +15,14 @@ namespace Solspace\Freeform\Library\Logging\Parsers;
 
 class LogLine
 {
-    private \DateTime $date;
-    private string $channel;
-    private string $level;
-    private string $message;
-    private ?string $context = null;
-    private ?\stdClass $extra = null;
-
-    public function __construct(array $data)
-    {
-        $this->date = new \DateTime($data['date']);
-        $this->channel = $data['channel'];
-        $this->level = $data['level'];
-        $this->message = $data['message'];
-
-        $context = $data['context'] ? trim($data['context']) : null;
-        if (!empty($context) && '[]' !== $context) {
-            $context = json_decode($context, true);
-            $this->context = json_encode($context, \count($context) > 1 ? \JSON_PRETTY_PRINT : 0);
-        }
-
-        $extra = $data['extra'] ? trim($data['extra']) : null;
-        if (!empty($extra) && '[]' !== $extra) {
-            $this->extra = json_decode($extra);
-        }
-    }
+    public function __construct(
+        private \DateTime $date,
+        private string $channel,
+        private string $level,
+        private string $message,
+        private ?array $context = null,
+        private ?array $extra = null,
+    ) {}
 
     public function getDate(): \DateTime
     {
@@ -61,12 +44,12 @@ class LogLine
         return $this->message;
     }
 
-    public function getContext(): ?string
+    public function getContext(): ?array
     {
         return $this->context;
     }
 
-    public function getExtra(): ?\stdClass
+    public function getExtra(): ?array
     {
         return $this->extra;
     }

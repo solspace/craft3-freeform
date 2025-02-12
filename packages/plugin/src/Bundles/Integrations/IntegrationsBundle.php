@@ -130,10 +130,10 @@ class IntegrationsBundle extends FeatureBundle
             }
         }
 
-        $context = ['integration' => [
-            'id' => $integration->getId(),
-            'handle' => $integration->getHandle(),
-        ]];
+        $context = [
+            'form' => $event->getForm()->getHandle(),
+            'integration' => $integration->getHandle(),
+        ];
 
         $logger->error($message, $context);
 

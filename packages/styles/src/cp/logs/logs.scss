@@ -6,14 +6,13 @@ $logColors: (
         error: #dc3545,
         critical: #dc3545,
         alert: #dc3545,
-        emergency: #dc3545
+        emergency: #dc3545,
 );
 
 .log-table {
-
   tbody {
     tr {
-      box-shadow: 0 -1px 0 rgba(51, 64, 77, .1);
+      box-shadow: 0 -1px 0 rgba(51, 64, 77, 0.1);
     }
 
     td {
@@ -80,8 +79,48 @@ $logColors: (
           max-height: 300px;
           padding: 1em;
 
-          border: 1px solid rgba(51, 64, 77, .1);
+          border: 1px solid rgba(51, 64, 77, 0.1);
           border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+.paginator-wrapper {
+  position: absolute;
+  left: 30%;
+  right: 30%;
+
+  &.upper {
+    top: -47px;
+  }
+
+  &.lower {
+    bottom: -47px;
+  }
+
+  .paginator {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+
+    .group {
+      a {
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+
+        &[disabled] {
+          opacity: 0.5;
+        }
+
+        &[data-last],
+        &[data-next] {
+          svg {
+            transform: rotate(180deg);
+          }
         }
       }
     }
