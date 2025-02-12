@@ -382,8 +382,15 @@ class DiagnosticsService extends BaseService
                     $this->getSummary()->statistics->settings->autoScroll,
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Script Insert Location').': <b>{{ value|capitalize }}</b></span>',
-                    $this->getSummary()->statistics->settings->jsInsertLocation,
+                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Script Insert Location').': <b>{{ value }}</b></span>',
+                    Freeform::t(
+                        match (Freeform::getInstance()->settings->getSettingsModel()->scriptInsertLocation) {
+                            Settings::SCRIPT_INSERT_LOCATION_FOOTER => Freeform::t('Page Footer'),
+                            Settings::SCRIPT_INSERT_LOCATION_HEADER => Freeform::t('Page Header'),
+                            Settings::SCRIPT_INSERT_LOCATION_FORM => Freeform::t('Inside Form'),
+                            Settings::SCRIPT_INSERT_LOCATION_MANUAL => Freeform::t('None (add manually)'),
+                        }
+                    ),
                     [
                         new SuggestionValidator(
                             fn ($value) => Settings::SCRIPT_INSERT_LOCATION_MANUAL !== $value,
@@ -397,8 +404,14 @@ class DiagnosticsService extends BaseService
                     $this->getJsInsertType()
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Freeform Session Context').': <b>{{ value }}</b></span>',
-                    $this->getSettingsService()->getSettingsModel()->getSessionContextHumanReadable(),
+                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Freeform Session Context').': <b>'.Freeform::t('{{ value }}').'</b></span>',
+                    Freeform::t(
+                        match (Freeform::getInstance()->settings->getSettingsModel()->sessionContext) {
+                            Settings::CONTEXT_TYPE_PAYLOAD => Freeform::t('Encrypted Payload'),
+                            Settings::CONTEXT_TYPE_SESSION => Freeform::t('PHP Session'),
+                            Settings::CONTEXT_TYPE_DATABASE => Freeform::t('Database'),
+                        }
+                    ),
                 ),
                 new DiagnosticItem(
                     '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span>'.Freeform::t('Enable Search Index Updating on New Submissions'),
@@ -447,9 +460,9 @@ class DiagnosticsService extends BaseService
                     '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Spam Protection Behavior').': <b>{{ value }}</b></span>',
                     Freeform::t(
                         match ($this->getSummary()->statistics->spam->spamProtectionBehavior) {
-                            Settings::PROTECTION_DISPLAY_ERRORS => 'Display Errors',
-                            Settings::PROTECTION_SIMULATE_SUCCESS => 'Simulate Success',
-                            Settings::PROTECTION_RELOAD_FORM => 'Reload Form',
+                            Settings::PROTECTION_DISPLAY_ERRORS => Freeform::t('Display Errors'),
+                            Settings::PROTECTION_SIMULATE_SUCCESS => Freeform::t('Simulate Success'),
+                            Settings::PROTECTION_RELOAD_FORM => Freeform::t('Reload Form'),
                         }
                     ),
                     [
@@ -597,7 +610,13 @@ class DiagnosticsService extends BaseService
                 ),
                 new DiagnosticItem(
                     '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Email Template Storage Type').': <b>{{ value }}</b></span>',
-                    $this->getSettingsService()->getSettingsModel()->getEmailStorageTypeName()
+                    Freeform::t(
+                        match (Freeform::getInstance()->settings->getSettingsModel()->emailTemplateStorageType) {
+                            Settings::EMAIL_TEMPLATE_STORAGE_TYPE_FILES => Freeform::t('File'),
+                            Settings::EMAIL_TEMPLATE_STORAGE_TYPE_DATABASE => Freeform::t('Database'),
+                            Settings::EMAIL_TEMPLATE_STORAGE_TYPE_BOTH => Freeform::t('File & Database'),
+                        }
+                    ),
                 ),
                 new DiagnosticItem(
                     '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Success Templates Directory Path').': <code>'.Freeform::t('{{ value ? value : "" }}').'</code></span>',
@@ -632,11 +651,17 @@ class DiagnosticsService extends BaseService
                     (bool) $this->getSettingsService()->getSettingsModel()->displayFeed
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Logging Level').': <b>{{ value.level }}</b></span>',
-                    ['level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel)],
+                    '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Logging Level').': <b>{{ value }}</b></span>',
+                    Freeform::t(
+                        match (Freeform::getInstance()->settings->getSettingsModel()->loggingLevel) {
+                            Settings::LOGGING_LEVEL_INFO => Freeform::t('Info'),
+                            Settings::LOGGING_LEVEL_DEBUG => Freeform::t('Debug'),
+                            Settings::LOGGING_LEVEL_ERROR => Freeform::t('Errors'),
+                        }
+                    ),
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.count ? "warning" : "enabled" }}"></span><span class="item-inline">'.Freeform::t('Error Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    '<span class="diag-check diag-{{ value.count ? "warning" : "enabled" }}"></span><span class="item-inline">'.Freeform::t('Error Log').': <b>{{ value.count }} '.Freeform::t('item{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
                     [
                         'count' => Freeform::getInstance()->logger->getLogReader()->count(),
                     ],
@@ -656,7 +681,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Integrations Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Integrations Log').': <b>{{ value.count }} '.Freeform::t('item{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
                     [
                         'count' => Freeform::getInstance()->logger->getLogReader(IntegrationLoggerProvider::LOG_FILE)->count(),
                         'level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel),
@@ -677,7 +702,7 @@ class DiagnosticsService extends BaseService
                     ]
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Email Log').': <b>{{ value.count }} '.Freeform::t('log{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
+                    '<span class="diag-check diag-{{ value.level != "Error" ? (value.count ? "info" : "enabled") : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Email Log').': <b>{{ value.count }} '.Freeform::t('item{{ value.count == "1" ? "" : "s" }} found').'</b></span>',
                     [
                         'count' => Freeform::getInstance()->logger->getLogReader(NotificationLoggerProvider::LOG_FILE)->count(),
                         'level' => ucfirst($this->getSettingsService()->getSettingsModel()->loggingLevel),
@@ -797,9 +822,9 @@ class DiagnosticsService extends BaseService
     private function getJsInsertType(): string
     {
         return match ($this->getSummary()->statistics->settings->jsInsertType) {
-            Settings::SCRIPT_INSERT_TYPE_POINTERS => 'Static URLs',
-            Settings::SCRIPT_INSERT_TYPE_FILES => 'Asset Bundles',
-            Settings::SCRIPT_INSERT_TYPE_INLINE => 'Inline Scripts',
+            Settings::SCRIPT_INSERT_TYPE_POINTERS => Freeform::t('Static URLs'),
+            Settings::SCRIPT_INSERT_TYPE_FILES => Freeform::t('Asset Bundles'),
+            Settings::SCRIPT_INSERT_TYPE_INLINE => Freeform::t('Inline Scripts'),
             default => '',
         };
     }

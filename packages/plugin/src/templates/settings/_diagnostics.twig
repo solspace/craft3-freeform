@@ -110,7 +110,7 @@
         <div class="diag">
             {% for section in leftSections %}
                 {% if section.items|length > 0 %}
-                    <div class="diag-list{{ section.title in ['Statistics'] ? " diag-no-margin" }}">
+                    <div class="diag-list{{ section.title == "Statistics" ? " diag-no-margin" }}">
                         <h2>{{ section.title }}</h2>
                         {{ _self.renderItems(section.items) }}
                     </div>
@@ -140,7 +140,7 @@
         <div class="diag">
             {% for section in rightSections %}
                 {% if section.items|length > 0 %}
-                    <div class="diag-list{{ section.title in ['Integrations', 'Form Types', 'Modules'] ? " diag-no-margin" }}">
+                    <div class="diag-list diag-no-margin">
                         <h2>{{ section.title }}</h2>
                         {{ _self.renderItems(section.items, section.title) }}
                     </div>
