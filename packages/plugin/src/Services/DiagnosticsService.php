@@ -370,6 +370,7 @@ class DiagnosticsService extends BaseService
     public function getFreeformConfigurations(): array
     {
         [$emailTransport, $emailIssues] = $this->getEmailSettings();
+        $rawScriptInsertLocation = Freeform::getInstance()->settings->getSettingsModel()->scriptInsertLocation;
 
         return [
             Freeform::t('General Settings') => [
@@ -384,7 +385,7 @@ class DiagnosticsService extends BaseService
                 new DiagnosticItem(
                     '<span class="diag-check diag-spacer"></span><span class="item-inline">'.Freeform::t('Script Insert Location').': <b>{{ value }}</b></span>',
                     Freeform::t(
-                        match (Freeform::getInstance()->settings->getSettingsModel()->scriptInsertLocation) {
+                        match ($rawScriptInsertLocation) {
                             Settings::SCRIPT_INSERT_LOCATION_FOOTER => Freeform::t('Page Footer'),
                             Settings::SCRIPT_INSERT_LOCATION_HEADER => Freeform::t('Page Header'),
                             Settings::SCRIPT_INSERT_LOCATION_FORM => Freeform::t('Inside Form'),
@@ -393,7 +394,7 @@ class DiagnosticsService extends BaseService
                     ),
                     [
                         new SuggestionValidator(
-                            fn ($value) => Settings::SCRIPT_INSERT_LOCATION_MANUAL !== $value,
+                            fn ($value) => Settings::SCRIPT_INSERT_LOCATION_MANUAL !== $rawScriptInsertLocation,
                             '',
                             'Please make sure you are adding Freeform’s scripts manually.'
                         ),
