@@ -13,20 +13,20 @@
 
 namespace Solspace\Freeform\Library\Logging\Readers;
 
-use Solspace\Freeform\Library\Logging\Parsers\LineParser;
 use Solspace\Freeform\Library\Logging\Parsers\LogParserInterface;
+use Solspace\Freeform\Library\Logging\Parsers\MonologLineParser;
 
-class AbstractLogReader
+abstract class LogReader implements LogReaderInterface
 {
-    protected ?string $defaultParserPattern;
-
-    public function __construct(?string $defaultParserPattern = null)
+    public function __construct(private ?LogParserInterface $parser = null)
     {
-        $this->defaultParserPattern = $defaultParserPattern;
+        if (null === $this->parser) {
+            $this->parser = new MonologLineParser();
+        }
     }
 
-    protected function getDefaultParser(): LogParserInterface
+    public function getParser(): LogParserInterface
     {
-        return new LineParser($this->defaultParserPattern);
+        return $this->parser;
     }
 }

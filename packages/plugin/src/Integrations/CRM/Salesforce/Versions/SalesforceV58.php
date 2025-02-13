@@ -349,7 +349,7 @@ class SalesforceV58 extends BaseSalesforceIntegration implements SalesforceInteg
         $mapping = $this->triggerPushEvent(self::CATEGORY_LEAD, $mapping);
 
         $leadId = null;
-        $leadEmail = $mapping['Email'];
+        $leadEmail = $mapping['Email'] ?? null;
         if ($this->checkLeadDuplicates && $leadEmail) {
             $this->logger->debug('Checking for existing Lead', ['email' => $leadEmail]);
 

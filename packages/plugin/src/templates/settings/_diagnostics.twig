@@ -24,7 +24,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro renderItems(items) %}
+{% macro renderItems(items, sectionTitle) %}
     <ul>
         {%- for key, item in items -%}
             {%- if item is iterable or item.markup -%}
@@ -32,13 +32,23 @@
                     {% if item is iterable %}
 
                         <h3>{{ key }}</h3>
-                        {{ _self.renderItems(item) }}
+                        {{ _self.renderItems(item, sectionTitle) }}
 
                     {% else %}
 
                         <div class="items">
                             <div class="item {{ item.validationClasses|join(' ') }}">
-                                {{ item.markup }}
+                                {% if sectionTitle == 'Modules' %}
+                                    <code>
+                                        {{ item.markup }}
+                                    </code>
+                                {% elseif sectionTitle in ['Integrations', 'Form Types'] %}
+                                    <span class="item-inline">
+                                        {{ item.markup }}
+                                    </span>
+                                {% else %}
+                                    {{ item.markup }}
+                                {% endif %}
 
                                 {% if item.warnings %}
                                     {{ _self.renderIcon('WarningValidator') }}
@@ -94,11 +104,25 @@
     <div class="gridy">
         {% set leftSections = [
             {'title': "Server Checks"|t('freeform'), 'items': server},
-            {'title': "Statistics"|t('freeform'), 'items': stats},
-            {'title': "Integrations"|t('freeform'), 'items': integrations}
+            {'title': "Site Settings"|t('freeform'), 'items': site},
+            {'title': "Statistics"|t('freeform'), 'items': stats}
         ] %}
         <div class="diag">
             {% for section in leftSections %}
+                {% if section.items|length > 0 %}
+                    <div class="diag-list{{ section.title == "Statistics" ? " diag-no-margin" }}">
+                        <h2>{{ section.title }}</h2>
+                        {{ _self.renderItems(section.items) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% set centerSections = [
+            {'title': "Freeform Configuration"|t('freeform'), 'items': configurations}
+        ] %}
+        <div class="diag">
+            {% for section in centerSections %}
                 {% if section.items|length > 0 %}
                     <div class="diag-list">
                         <h2>{{ section.title }}</h2>
@@ -109,16 +133,16 @@
         </div>
 
         {% set rightSections = [
-            {'title': "Freeform Configuration"|t('freeform'), 'items': configurations},
+            {'title': "Integrations"|t('freeform'), 'items': integrations},
             {'title': "Form Types"|t('freeform'), 'items': formType},
             {'title': "Modules"|t('freeform'), 'items': modules}
         ] %}
         <div class="diag">
             {% for section in rightSections %}
                 {% if section.items|length > 0 %}
-                    <div class="diag-list">
+                    <div class="diag-list diag-no-margin">
                         <h2>{{ section.title }}</h2>
-                        {{ _self.renderItems(section.items) }}
+                        {{ _self.renderItems(section.items, section.title) }}
                     </div>
                 {% endif %}
             {% endfor %}

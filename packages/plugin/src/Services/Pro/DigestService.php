@@ -158,7 +158,7 @@ class DigestService extends Component
         $logReader = Freeform::getInstance()->logger->getLogReader();
 
         $data = [];
-        foreach ($logReader->getLastLines(5) as $line) {
+        foreach ($logReader->getLines(5) as $line) {
             $date = $line->getDate();
             if ($date && $rangeStart->lte($date) && $rangeEnd->gte($date)) {
                 $data[] = $line;

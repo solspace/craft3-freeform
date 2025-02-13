@@ -1,42 +1,149 @@
-.log-badge {
-  display: inline-block;
-  padding: 0 5px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: bold;
+$logColors: (
+        debug: #6c757d,
+        info: #0284c7,
+        notice: #28a745,
+        warning: #ffc107,
+        error: #dc3545,
+        critical: #dc3545,
+        alert: #dc3545,
+        emergency: #dc3545,
+);
 
-  &.log-level-debug {
-    background-color: #6c757d;
+.log-table {
+  thead {
+    tr {
+      th {
+        padding: 15px 0 !important;
+
+        &:nth-child(2) {
+          padding-left: 10px !important;
+        }
+      }
+    }
   }
-  &.log-level-info {
-    background-color: #0284c7;
-  }
-  &.log-level-notice {
-    background-color: #28a745;
-  }
-  &.log-level-warning {
-    background-color: #ffc107;
-  }
-  &.log-level-error {
-    background-color: #dc3545;
-  }
-  &.log-level-critical {
-    background-color: #dc3545;
-  }
-  &.log-level-alert {
-    background-color: #dc3545;
-  }
-  &.log-level-emergency {
-    background-color: #dc3545;
+  tbody {
+    tr {
+      box-shadow: 0 -1px 0 rgba(51, 64, 77, 0.1);
+    }
+
+    td {
+      max-width: 33vw;
+      padding: 0;
+      padding-block: 0 !important;
+      border-block-start: none !important;
+
+      &.log-meta {
+        padding: 4px 0 4px 10px !important;
+        vertical-align: top;
+
+        [data-level] {
+          padding: 7px !important;
+
+          color: #ffffff;
+          text-align: center;
+          font-size: 10px;
+          font-weight: bold;
+          line-height: 3px;
+          text-transform: uppercase;
+
+          user-select: none;
+
+          &.badge {
+            display: inline-block;
+            border-radius: 500px;
+          }
+
+          @each $level, $color in $logColors {
+            &.badge-level-#{$level} {
+              background-color: $color !important;
+            }
+          }
+        }
+
+        [data-channel] {
+          font-weight: bold;
+        }
+
+        [data-date] {
+          color: #b1b1b1;
+          font-size: 12px !important;
+        }
+
+        [data-request-id] {
+          color: #b1b1b1;
+          font-size: 12px !important;
+        }
+      }
+
+      &.log-level {
+        width: 5px;
+
+        @each $level, $color in $logColors {
+          &.log-level-#{$level} {
+            background-color: $color !important;
+          }
+        }
+      }
+
+      &.log-message {
+        word-break: break-word;
+        overflow-wrap: break-word;
+
+        padding: 10px 24px 10px 0 !important;
+
+        .message {
+          padding: 0 0 10px;
+        }
+
+        code {
+          max-height: 300px;
+          padding: 1em;
+
+          border: 1px solid rgba(51, 64, 77, 0.1);
+          border-radius: 5px;
+        }
+      }
+    }
   }
 }
 
-.log-message {
-  color: #b1b1b1;
-  width: 70%;
+.paginator-wrapper {
+  position: absolute;
+  z-index: 100;
+  left: 30%;
+  right: 30%;
 
-  word-break: break-word;
-  overflow-wrap: break-word;
+  &.upper {
+    top: -47px;
+  }
+
+  &.lower {
+    bottom: -47px;
+  }
+
+  .paginator {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+
+    .group {
+      a {
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+
+        &[disabled] {
+          opacity: 0.5;
+        }
+
+        &[data-last],
+        &[data-next] {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
 }
