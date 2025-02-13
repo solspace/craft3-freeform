@@ -1,7 +1,7 @@
-@import '../fields/opinion-scale';
-@import '../fields/drag-and-drop-file';
-@import '../fields/rating';
-@import "../components/visual";
+@use '../fields/opinion-scale';
+@use '../fields/drag-and-drop-file';
+@use '../fields/rating';
+@use "../components/visual";
 
 [data-freeform-controls] {
   display: flex;

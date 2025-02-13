@@ -1,6 +1,6 @@
-@import '../main';
-@import '../../shared/variables';
-@import '../../shared/alerts';
+@use '../main';
+@use '../../shared/variables';
+@use '../../shared/alerts';
 
 table#integrations {
   th {
