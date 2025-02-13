@@ -1,5 +1,6 @@
 import React from 'react';
 import { ErrorBlock } from '@components/notification-blocks/error/error-block';
+import config from '@config/freeform/freeform.config';
 import { useFetchFavorites } from '@ff-client/queries/field-favorites';
 import { useFieldTypeSearch } from '@ff-client/queries/field-types';
 import translate from '@ff-client/utils/translations';
@@ -36,11 +37,13 @@ export const FavoriteFields: React.FC = () => {
   return (
     <FieldGroup
       title={translate(title)}
-      button={{
-        icon: <EditIcon />,
-        title: translate('Edit Favorites'),
-        onClick: openModal,
-      }}
+      button={
+        config.limitations.can('layout.favoritesManager') && {
+          icon: <EditIcon />,
+          title: translate('Edit Favorites'),
+          onClick: openModal,
+        }
+      }
     >
       <List>
         {data.map((favorite) => {
