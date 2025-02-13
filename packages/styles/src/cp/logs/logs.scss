@@ -27,6 +27,7 @@ $logColors: (
     }
 
     td {
+      max-width: 33vw;
       padding: 0;
       padding-block: 0 !important;
       border-block-start: none !important;
@@ -46,6 +47,11 @@ $logColors: (
           text-transform: uppercase;
 
           user-select: none;
+
+          &.badge {
+            display: inline-block;
+            border-radius: 500px;
+          }
 
           @each $level, $color in $logColors {
             &.badge-level-#{$level} {
@@ -103,6 +109,7 @@ $logColors: (
 
 .paginator-wrapper {
   position: absolute;
+  z-index: 100;
   left: 30%;
   right: 30%;
 
