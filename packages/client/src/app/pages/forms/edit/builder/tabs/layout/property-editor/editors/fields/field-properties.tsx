@@ -1,6 +1,7 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
+import config from '@config/freeform/freeform.config';
 import { useAppDispatch } from '@editor/store';
 import { contextActions } from '@editor/store/slices/context';
 import { fieldSelectors } from '@editor/store/slices/layout/fields/fields.selectors';
@@ -79,7 +80,9 @@ export const FieldProperties: React.FC<{ uid: string }> = ({ uid }) => {
       <CloseLink onClick={() => dispatch(contextActions.unfocus())}>
         <CloseIcon />
       </CloseLink>
-      <FavoriteButton field={field} />
+      {config.limitations.can('layout.favorite') && (
+        <FavoriteButton field={field} />
+      )}
       <Title>
         <Icon dangerouslySetInnerHTML={{ __html: type.icon }} />
         <span>{translate(type.name)}</span>
