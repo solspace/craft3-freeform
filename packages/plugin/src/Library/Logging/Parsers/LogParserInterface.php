@@ -15,5 +15,5 @@ namespace Solspace\Freeform\Library\Logging\Parsers;
 
 interface LogParserInterface
 {
-    public function parse(string $log): mixed;
+    public function parse(string $log): ?LogLine;
 }

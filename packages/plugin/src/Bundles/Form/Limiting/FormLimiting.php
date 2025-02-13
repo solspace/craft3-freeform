@@ -91,7 +91,6 @@ class FormLimiting extends FeatureBundle
     private function limitByEmail(FormEventInterface $event): void
     {
         $request = \Craft::$app->getRequest();
-
         if ($request->getIsCpRequest() || $request->getIsConsoleRequest()) {
             return;
         }
@@ -165,6 +164,11 @@ class FormLimiting extends FeatureBundle
 
     private function limitByIp(FormEventInterface $event): void
     {
+        $request = \Craft::$app->getRequest();
+        if ($request->getIsCpRequest() || $request->getIsConsoleRequest()) {
+            return;
+        }
+
         $form = $event->getForm();
         $settings = $form->getSettings();
         $generalSettings = $settings->getGeneral();
@@ -180,7 +184,7 @@ class FormLimiting extends FeatureBundle
             ->where([
                 'isSpam' => false,
                 'formId' => $event->getForm()->getId(),
-                'ip' => \Craft::$app->request->getUserIP(),
+                'ip' => $request->getUserIP(),
             ])
             ->limit(1)
         ;

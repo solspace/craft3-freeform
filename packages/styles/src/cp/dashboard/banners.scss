@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $spacer: 1rem !default;
 $spacer-x: $spacer !default;
 $spacer-y: $spacer !default;
@@ -45,17 +47,17 @@ $alert-danger-border: $state-danger-border !default;
 // Alerts
 
 @mixin alert-variant($background, $border, $body-color) {
-  $lighterColour: lighten($background, 5);
+  $lighterColour: color.scale($background, $lightness: 5%);
 
   border-color: $border;
   color: $body-color;
   background: $background;
 
   hr {
-    border-top-color: darken($border, 5%);
+    border-top-color: color.scale($border, $lightness: -5%);
   }
   .alert-link {
-    color: darken($body-color, 5%);
+    color: color.scale($body-color, $lightness: -5%);
   }
 }
 

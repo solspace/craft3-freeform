@@ -520,7 +520,7 @@ class IntegrationsService extends BaseService
             $logger = $this->loggerProvider->getLogger($integration);
 
             try {
-                $logger->info('===> Pushing data to '.$type->shortName, ['form' => $form->getHandle()]);
+                $logger->info('Pushing data to '.$type->shortName, ['form' => $form->getHandle()]);
                 $integration->push($form, $client);
             } catch (\Exception $exception) {
                 $event = new FailedRequestEvent($form, $integration, $exception);

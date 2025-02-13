@@ -130,10 +130,15 @@ class IntegrationsBundle extends FeatureBundle
             }
         }
 
-        $context = ['integration' => [
-            'id' => $integration->getId(),
-            'handle' => $integration->getHandle(),
-        ]];
+        $context = [
+            'form' => $event->getForm()->getHandle(),
+            'integration' => $integration->getHandle(),
+        ];
+
+        if (json_validate($message)) {
+            $context['response'] = json_decode($message, true);
+            $message = 'Failed request';
+        }
 
         $logger->error($message, $context);
 

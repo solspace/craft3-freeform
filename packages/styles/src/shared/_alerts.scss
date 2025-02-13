@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $spacer: 1rem !default;
 $spacer-x: $spacer !default;
 $spacer-y: $spacer !default;
@@ -7,19 +9,19 @@ $border-width: 1px !default;
 
 $state-success-text: #3c763d !default;
 $state-success-bg: #dff0d8 !default;
-$state-success-border: darken($state-success-bg, 5%) !default;
+$state-success-border: color.scale($state-success-bg, $lightness: -5%) !default;
 
 $state-info-text: #31708f !default;
 $state-info-bg: #d9edf7 !default;
-$state-info-border: darken($state-info-bg, 7%) !default;
+$state-info-border: color.scale($state-info-bg, $lightness: -7%) !default;
 
 $state-warning-text: #8a6d3b !default;
 $state-warning-bg: #fcf8e3 !default;
-$state-warning-border: darken($state-warning-bg, 5%) !default;
+$state-warning-border: color.scale($state-warning-bg, $lightness: -5%) !default;
 
 $state-danger-text: #a94442 !default;
 $state-danger-bg: #f2dede !default;
-$state-danger-border: darken($state-danger-bg, 5%) !default;
+$state-danger-border: color.scale($state-danger-bg, $lightness: -5%) !default;
 
 $alert-padding: 7px 14px !default;
 $alert-border-radius: $border-radius !default;
@@ -45,7 +47,7 @@ $alert-danger-border: $state-danger-border !default;
 // Alerts
 
 @mixin alert-variant($background, $border, $body-color) {
-  $lighterColour: lighten($background, 5);
+  $lighterColour: color.scale($background, $lightness: 5%);
 
   border-color: $border;
   color: $body-color;
@@ -53,10 +55,10 @@ $alert-danger-border: $state-danger-border !default;
   background: linear-gradient(to bottom, $lighterColour 0%, $background 100%);
 
   hr {
-    border-top-color: darken($border, 5%);
+    border-top-color: color.scale($border, $lightness: -5%);
   }
   .alert-link {
-    color: darken($body-color, 10%);
+    color: color.scale($body-color, $lightness: -10%);
   }
 }
 

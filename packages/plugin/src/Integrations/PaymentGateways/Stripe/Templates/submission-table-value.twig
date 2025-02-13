@@ -33,7 +33,6 @@
             
                 img {
                     border-radius: 5px;
-                    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
                 }
             }
             
@@ -94,6 +93,9 @@
                          alt="Payment Method Icon"
                          class="{{ paymentMethod.type }}"
                     />
+                </div>
+                <div class="brand">
+                    {{ paymentMethod.type|capitalize|t('freeform') }}
                 </div>
 
             {% else %}
