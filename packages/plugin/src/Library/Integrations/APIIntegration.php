@@ -38,6 +38,8 @@ abstract class APIIntegration extends BaseIntegration implements APIIntegrationI
     protected function processMapping(Form $form, ?FieldMapping $mapping, string $category): array
     {
         if (null === $mapping) {
+            $this->logger->debug('Mapping empty - skipping.', ['category' => $category]);
+
             return [];
         }
 
@@ -82,6 +84,8 @@ abstract class APIIntegration extends BaseIntegration implements APIIntegrationI
 
         $mappedValues = $event->getMappedValues();
         if (empty($mappedValues)) {
+            $this->logger->debug('Mapping empty - skipping.', ['category' => $category]);
+
             return [];
         }
 

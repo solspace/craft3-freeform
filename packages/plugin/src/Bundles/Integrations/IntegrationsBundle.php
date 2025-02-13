@@ -135,6 +135,11 @@ class IntegrationsBundle extends FeatureBundle
             'integration' => $integration->getHandle(),
         ];
 
+        if (json_validate($message)) {
+            $context['response'] = json_decode($message, true);
+            $message = 'Failed request';
+        }
+
         $logger->error($message, $context);
 
         $this->plugin()
