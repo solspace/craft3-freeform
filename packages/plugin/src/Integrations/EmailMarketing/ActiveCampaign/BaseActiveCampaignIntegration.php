@@ -139,21 +139,16 @@ abstract class BaseActiveCampaignIntegration extends EmailMarketingIntegration i
     protected function getTagId(Client $client, string $name): null|int|string
     {
         static $tags;
+        if (null === $tags) {
+            $tags = [];
+            $fetchedTags = $this->fetchTags($client);
+            foreach ($fetchedTags as $tag) {
+                if ('contact' !== $tag->tagType) {
+                    continue;
+                }
 
-        if ($tags) {
-            return $tags;
-        }
-
-        $tags = [];
-
-        $existingTags = $this->fetchTags($client);
-
-        foreach ($existingTags as $item) {
-            if ('contact' !== $item->tagType) {
-                continue;
+                $tags[$tag->id] = $tag->tag;
             }
-
-            $tags[$item->id] = $item->tag;
         }
 
         foreach ($tags as $id => $tag) {
