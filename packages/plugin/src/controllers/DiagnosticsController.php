@@ -26,6 +26,7 @@ class DiagnosticsController extends BaseController
         $diagnostics = Freeform::getInstance()->diagnostics;
 
         $server = $diagnostics->getServerChecks();
+        $site = $diagnostics->getSiteChecks();
         $stats = $diagnostics->getFreeformStats();
         $configurations = $diagnostics->getFreeformConfigurations();
         $integrations = $diagnostics->getFreeformIntegrations();
@@ -39,6 +40,7 @@ class DiagnosticsController extends BaseController
             'freeform/settings/_diagnostics',
             [
                 'server' => $server,
+                'site' => $site,
                 'stats' => $stats,
                 'configurations' => $configurations,
                 'integrations' => $integrations,
