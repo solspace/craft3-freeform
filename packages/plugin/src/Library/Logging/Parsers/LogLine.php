@@ -15,30 +15,23 @@ namespace Solspace\Freeform\Library\Logging\Parsers;
 
 class LogLine
 {
-    private \DateTime $date;
-
-    private string $logger;
-
-    private string $level;
-
-    private string $message;
-
-    public function __construct(array $data)
-    {
-        $this->date = new \DateTime($data['date']);
-        $this->logger = $data['logger'];
-        $this->level = $data['level'];
-        $this->message = $data['message'];
-    }
+    public function __construct(
+        private \DateTime $date,
+        private string $channel,
+        private string $level,
+        private string $message,
+        private ?array $context = null,
+        private ?array $extra = null,
+    ) {}
 
     public function getDate(): \DateTime
     {
         return $this->date;
     }
 
-    public function getLogger(): string
+    public function getChannel(): string
     {
-        return $this->logger;
+        return $this->channel;
     }
 
     public function getLevel(): string
@@ -49,5 +42,15 @@ class LogLine
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    public function getContext(): ?array
+    {
+        return $this->context;
+    }
+
+    public function getExtra(): ?array
+    {
+        return $this->extra;
     }
 }

@@ -851,6 +851,7 @@ return [
     "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data." => "Un niveau de journalisation 'Info' ou 'Débogage' ne devrait pas être utilisé régulièrement en production, car les journaux peuvent contenir des données sensibles.",
     'Errors' => 'Erreurs',
     'Errors (recommended)' => 'Erreurs (recommandé)',
+    'Error' => 'Erreur',
     'Info' => 'Info',
     'Debug' => 'Débogage',
     'Element Field Type' => 'Type de champ d’élément',

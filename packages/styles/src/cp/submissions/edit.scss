@@ -1,6 +1,6 @@
-@import '../../shared/variables';
-@import '../../shared/extendable-classes';
-@import '../../front-end/fields/opinion-scale';
+@use '../../shared/variables';
+@use '../../shared/classes';
+@use '../../front-end/fields/opinion-scale';
 
 $spacing: 10px;
 $gutter: 10px;
@@ -19,8 +19,8 @@ $gutter: 10px;
     padding: $spacing $gutter;
   }
 
-  @extend %reset-lists;
-  @extend %reset-headings;
+  @extend .reset-lists;
+  @extend .reset-headings;
 
   .fields-column {
     overflow: hidden;

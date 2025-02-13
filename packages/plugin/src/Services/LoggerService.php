@@ -7,7 +7,7 @@ use craft\web\View;
 use Psr\Log\LoggerInterface;
 use Solspace\Freeform\Freeform;
 use Solspace\Freeform\Library\Logging\FreeformLogger;
-use Solspace\Freeform\Library\Logging\Readers\LineLogReader;
+use Solspace\Freeform\Library\Logging\Readers\FileLogReader;
 
 class LoggerService extends BaseService
 {
@@ -16,9 +16,9 @@ class LoggerService extends BaseService
         return FreeformLogger::getInstance($category, $fileName, $level);
     }
 
-    public function getLogReader(?string $fileName = null): LineLogReader
+    public function getLogReader(?string $fileName = null): FileLogReader
     {
-        return new LineLogReader(FreeformLogger::getLogfilePath($fileName));
+        return new FileLogReader(FreeformLogger::getLogfilePath($fileName));
     }
 
     public function registerJsTranslations(View $view): void
