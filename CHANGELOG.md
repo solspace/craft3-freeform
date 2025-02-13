@@ -1,5 +1,22 @@
 # Solspace Freeform Changelog
 
+## 5.9.10 - 2025-02-13
+
+### Added
+- Added additional checks for the _Limited Users_ feature:
+    - _Access Field Type Manager_
+    - _Access Favorite Fields Manager_
+    - _Save Fields as Favorites_
+
+### Changed
+- Improved the UI for the _log_ file view pages in the control panel.
+- Improved the UI for the _Diagnostics_ page in the control panel.
+- Adjustments to the _Spam Protection_ settings page.
+
+### Fixed
+- Fixed a bug where sites with prefixed database tables would see an error in _Export Profile_ area when using custom date ranges.
+- Fixed a bug in which the _ActiveCampaign_ integration was not correctly processing multiple _Contact_ tags.
+
 ## 5.9.9 - 2025-02-11
 
 ### Added
