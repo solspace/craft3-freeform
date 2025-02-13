@@ -1,5 +1,18 @@
 # Solspace Freeform Changelog
 
+## 5.9.9 - 2025-02-11
+
+### Added
+- Added diagnostic checks for Queue settings and sample templates.
+
+### Changed
+- Minor adjustments to visuals for Stripe payment cards, adding _Cashapp_ icon.
+
+### Fixed
+- Fixed a bug where a console request check was missing on the limit by IP logic.
+- Fixed a bug where the email logging feature could affect queued notifications in rare circumstances.
+- Fixed a bug where the _ActiveCampaign_ integration contained a hardcoded Deal title, currency and value.
+
 ## 5.9.8 - 2025-02-06
 
 ### Fixed

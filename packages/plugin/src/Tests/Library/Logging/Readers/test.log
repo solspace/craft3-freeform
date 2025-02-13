@@ -1,0 +1,2 @@
+[2025-02-11T12:19:43.254168+00:00] test category.DEBUG: test message without context [] {"requestId":"hL7Eux"}
+[2025-02-11T12:20:24.899599+00:00] test-category.DEBUG: test message with context {"password":"reda**********","username":"testuser"} {"requestId":"Cmo8SV"}

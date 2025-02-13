@@ -37,10 +37,15 @@
             }
         }
 
+        .payment-icon {
+            width: 50px;
+            border-radius: 4px;
+        }
+
         .payment-method {
 
             .icon {
-                width: 60px;
+                width: 40px;
             }
 
             &.card {
@@ -56,7 +61,6 @@
 
                     img {
                         border-radius: 5px;
-                        box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
                     }
                 }
 
@@ -115,7 +119,7 @@
 
                 <div class="icon">
                     {% if paymentMethodIcon %}
-                        <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="stripe-logo">
+                        <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="payment-icon">
                     {% endif %}
                 </div>
                 <div class="brand">
@@ -128,7 +132,10 @@
             {% elseif paymentMethodIcon %}
 
                 <div class="icon">
-                    <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="{{ paymentMethod.type }}">
+                    <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="payment-icon">
+                </div>
+                <div class="brand">
+                    {{ paymentMethod.type|capitalize|t('freeform') }}
                 </div>
 
             {% else %}

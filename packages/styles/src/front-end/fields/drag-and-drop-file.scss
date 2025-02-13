@@ -1,4 +1,4 @@
-@import '../../shared/media-queries';
+@use '../../shared/media-queries';
 
 $gap: 20px;
 $border-radius: 7px;
@@ -93,15 +93,15 @@ $color-fill: #077bff;
     grid-template-columns: repeat(1, 1fr);
     gap: $gap;
 
-    @include sm {
+    @include media-queries.sm {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @include md {
+    @include media-queries.md {
       grid-template-columns: repeat(4, 1fr);
     }
 
-    @include lg {
+    @include media-queries.lg {
       grid-template-columns: repeat(8, 1fr);
     }
 
@@ -128,9 +128,8 @@ $color-fill: #077bff;
         height: 0;
         padding-bottom: 100%;
 
-        background: #969797;
         background-size: cover;
-        background-position: center center;
+        background: #969797 center center;
 
         [data-extension-label] {
           position: absolute;

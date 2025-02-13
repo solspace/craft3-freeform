@@ -53,6 +53,13 @@
             }
         }
 
+        .payment-icon {
+            display: inline-block;
+            width: 50px;
+
+            border-radius: 4px;
+        }
+
         .payment-method {
 
             &.card {
@@ -61,6 +68,7 @@
                 grid-template-areas: 'icon brand' 'card-number card-number';
                 column-gap: 10px;
                 row-gap: 2px;
+                padding: 10px;
 
                 .icon {
                     grid-area: icon;
@@ -70,6 +78,8 @@
                 .brand {
                     grid-area: brand;
                     font-weight: bold;
+                    margin-top: auto;
+                    margin-bottom: auto;
                 }
 
                 .card-number {
@@ -123,12 +133,12 @@
             {% if paymentMethod %}
                 <li>
                     <div>{{ "Method"|t('freeform') }}</div>
-                    <span class="payment-method {{ paymentMethod.type }}">
+                    <span class="payment-method card">
                         {% if paymentMethod.type == "card" %}
 
                             <div class="icon">
                                 {% if paymentMethodIcon %}
-                                    <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="stripe-logo">
+                                    <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="payment-icon">
                                 {% endif %}
                             </div>
                             <div class="brand">
@@ -138,8 +148,21 @@
                                 {{ paymentMethod.details.last4 }}
                             </div>
 
+                        {% elseif paymentMethodIcon %}
+
+                            <div class="icon">
+                                <img src="{{ paymentMethodIcon }}" alt="Payment Method Icon" class="payment-icon">
+                            </div>
+                            <div class="brand">
+                                {{ paymentMethod.type|capitalize|t('freeform') }}
+                            </div>
+
                         {% else %}
-                            {{ paymentMethod.type|capitalize|t('freeform') }}
+
+                            <div class="brand">
+                                {{ paymentMethod.type|capitalize|t('freeform') }}
+                            </div>
+
                         {% endif %}
                     </span>
                 </li>

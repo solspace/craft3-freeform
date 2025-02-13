@@ -1,5 +1,5 @@
 /* Freeform default Foundation CSS */
-@import 'spinner';
+@use 'spinner';
 
 label.required:after {
   content: "*";

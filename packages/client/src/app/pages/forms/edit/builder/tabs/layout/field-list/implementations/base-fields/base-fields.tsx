@@ -58,11 +58,13 @@ export const BaseFields: React.FC = () => {
 
   return (
     <FieldGroup
-      button={{
-        icon: <EditIcon />,
-        title: translate('Edit Manager'),
-        onClick: openModal,
-      }}
+      button={
+        config.limitations.can('layout.fieldManager') && {
+          icon: <EditIcon />,
+          title: translate('Edit Manager'),
+          onClick: openModal,
+        }
+      }
       editionIsPro={config.editions.is(Edition.Pro)}
       title={translate(title)}
     >
