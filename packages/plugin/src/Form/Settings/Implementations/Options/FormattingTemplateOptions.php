@@ -15,6 +15,8 @@ class FormattingTemplateOptions implements OptionsGeneratorInterface
     {
         $options = new OptionCollection();
 
+        $options->add('', 'No Formatting Template (Not Recommended)');
+
         $includeDefaultTemplates = $this->settingsService->getSettingsModel()->defaults->includeSampleTemplates;
         if ($includeDefaultTemplates) {
             $base = $this->settingsService->getSolspaceFormTemplates();

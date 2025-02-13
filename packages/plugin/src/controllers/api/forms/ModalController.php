@@ -77,10 +77,6 @@ class ModalController extends BaseApiController
             $event->addErrorsToResponse('form', ['name' => ['Name cannot be empty']]);
         }
 
-        if (empty(trim($data->formattingTemplate))) {
-            $event->addErrorsToResponse('form', ['formattingTemplate' => ['You must select a formatting template']]);
-        }
-
         Event::trigger(FormsController::class, FormsController::EVENT_CREATE_FORM, $event);
         Event::trigger(FormsController::class, FormsController::EVENT_UPSERT_FORM, $event);
 

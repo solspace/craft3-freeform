@@ -358,7 +358,7 @@ class PageButtons
             ->translationProvider
             ->getTranslation(
                 $this->getPage(),
-                $this->getPage()->getUid(),
+                $this->getPage()?->getUid() ?? '',
                 $handle,
                 $defaultValue
             )

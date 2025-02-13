@@ -117,7 +117,6 @@ class GeneralSettings extends SettingsNamespace
     #[Section(self::SECTION_GENERAL)]
     #[Limitation('settings.tab.general.formattingTemplate')]
     #[ValueGenerator(DefaultTemplateGenerator::class)]
-    #[Validators\Required]
     #[DefaultValue('settings.general.formattingTemplate')]
     #[Input\Select(
         label: 'Formatting Template',
