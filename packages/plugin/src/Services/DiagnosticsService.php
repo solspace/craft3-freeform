@@ -564,7 +564,7 @@ class DiagnosticsService extends BaseService
 
             Freeform::t('Template Directories') => [
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Formatting Templates Directory Path').': <code>'.Freeform::t('{{ value ? value : "" }}').'</code></span>',
+                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Formatting Templates Directory Path').'{% if value %}: <code>'.Freeform::t('{{ value ? value : "" }}').'</code>{% endif %}</span>',
                     $this->getSettingsService()->getSettingsModel()->formTemplateDirectory,
                     [
                         new WarningValidator(
@@ -589,7 +589,7 @@ class DiagnosticsService extends BaseService
                     $this->getSettingsService()->getSettingsModel()->defaults->includeSampleTemplates,
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Email Templates Directory Path').': <code>'.Freeform::t('{{ value ? value : "" }}').'</code></span>',
+                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Email Templates Directory Path').'{% if value %}: <code>'.Freeform::t('{{ value ? value : "" }}').'</code>{% endif %}</span>',
                     $this->getSettingsService()->getSettingsModel()->emailTemplateDirectory,
                     [
                         new WarningValidator(
@@ -620,7 +620,7 @@ class DiagnosticsService extends BaseService
                     ),
                 ),
                 new DiagnosticItem(
-                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Success Templates Directory Path').': <code>'.Freeform::t('{{ value ? value : "" }}').'</code></span>',
+                    '<span class="diag-check diag-{{ value ? "enabled" : "disabled" }}"></span><span class="item-inline">'.Freeform::t('Success Templates Directory Path').'{% if value %}: <code>'.Freeform::t('{{ value ? value : "" }}').'</code>{% endif %}</span>',
                     $this->getSettingsService()->getSettingsModel()->successTemplateDirectory,
                     [
                         new WarningValidator(
@@ -669,7 +669,7 @@ class DiagnosticsService extends BaseService
                     [
                         new WarningValidator(
                             function ($value) {
-                                return !$value;
+                                return !$value['count'];
                             },
                             '',
                             Freeform::t('Please check the <a href="{{ extra.url }}">{{ extra.type }}</a> to see if there are any potential issues.'),
