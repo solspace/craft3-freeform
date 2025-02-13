@@ -167,7 +167,7 @@ class ExportProfileModel extends Model
 
     public function getQuery(): SubmissionQuery
     {
-        $table = Submission::TABLE;
+        $table = Submission::TABLE_STD;
         $form = $this->getForm();
 
         $query = Submission::find();
