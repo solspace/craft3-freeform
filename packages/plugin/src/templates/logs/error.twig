@@ -71,7 +71,8 @@
             <table class="data fullwidth log-table">
                 <thead>
                 <tr>
-                    <th colspan="2">{{ "Type"|t('freeform') }}</th>
+                    <th></th>
+                    <th>{{ "Type"|t('freeform') }}</th>
                     <th>{{ "Message"|t('freeform') }}</th>
                 </tr>
                 </thead>
@@ -80,11 +81,11 @@
                 {% for line in logReader.lines(perPage, perPage * (currentPage - 1)) %}
                     <tr>
                         <td class="log-level log-level-{{ line.level|lower }}">
-                            <div title="{{ line.level|lower }}">
-                                {{ line.level|upper }}
-                            </div>
                         </td>
                         <td class="nowrap log-meta">
+                            <div data-level class="badge badge-level-{{ line.level|lower }}">
+                                {{ line.level|capitalize|t('freeform') }}
+                            </div>
                             <div data-channel class="code">
                                 {{ line.channel }}
                             </div>

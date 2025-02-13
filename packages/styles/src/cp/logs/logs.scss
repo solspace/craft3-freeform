@@ -10,6 +10,17 @@ $logColors: (
 );
 
 .log-table {
+  thead {
+    tr {
+      th {
+        padding: 15px 0 !important;
+
+        &:nth-child(2) {
+          padding-left: 10px !important;
+        }
+      }
+    }
+  }
   tbody {
     tr {
       box-shadow: 0 -1px 0 rgba(51, 64, 77, 0.1);
@@ -23,6 +34,25 @@ $logColors: (
       &.log-meta {
         padding: 4px 0 4px 10px !important;
         vertical-align: top;
+
+        [data-level] {
+          padding: 7px !important;
+
+          color: #ffffff;
+          text-align: center;
+          font-size: 10px;
+          font-weight: bold;
+          line-height: 3px;
+          text-transform: uppercase;
+
+          user-select: none;
+
+          @each $level, $color in $logColors {
+            &.badge-level-#{$level} {
+              background-color: $color !important;
+            }
+          }
+        }
 
         [data-channel] {
           font-weight: bold;
@@ -40,28 +70,12 @@ $logColors: (
       }
 
       &.log-level {
-        width: 16px;
+        width: 5px;
 
         @each $level, $color in $logColors {
           &.log-level-#{$level} {
             background-color: $color !important;
           }
-        }
-
-        > div {
-          width: 16px;
-          padding: 8px 4px;
-
-          color: #ffffff;
-          text-align: center;
-          font-size: 8px;
-          font-weight: bold;
-          line-height: 8px;
-
-          writing-mode: sideways-lr;
-          text-orientation: mixed;
-
-          user-select: none;
         }
       }
 

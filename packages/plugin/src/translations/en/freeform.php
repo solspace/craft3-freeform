@@ -851,6 +851,7 @@ return [
     "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data." => "A logging level of 'Info' or 'Debug' should not be used in production regularly as logs may contain sensitive data.",
     'Errors' => 'Errors',
     'Errors (recommended)' => 'Errors (recommended)',
+    'Error' => 'Error',
     'Info' => 'Info',
     'Debug' => 'Debug',
     'Element Field Type' => 'Element Field Type',
