@@ -13,7 +13,6 @@ class CreateFormModal
     #[Input\Text('Form Name')]
     private string $name = '';
 
-    #[Required]
     #[DefaultValue('settings.general.formattingTemplate')]
     #[Input\Select(
         options: FormattingTemplateOptions::class,
