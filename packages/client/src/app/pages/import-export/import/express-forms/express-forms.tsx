@@ -101,7 +101,7 @@ export const ImportExpressForms: React.FC = () => {
 
       <button
         className={classes(
-          'btn',
+          'field btn',
           'submit',
           active && 'disabled',
           !options.forms.length &&
