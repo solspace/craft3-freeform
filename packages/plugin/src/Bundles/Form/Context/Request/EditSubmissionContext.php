@@ -5,6 +5,7 @@ namespace Solspace\Freeform\Bundles\Form\Context\Request;
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Events\FormEventInterface;
 use Solspace\Freeform\Events\Forms\ResetEvent;
+use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\CheckboxField;
 use Solspace\Freeform\Form\Form;
 use Solspace\Freeform\Freeform;
@@ -56,7 +57,12 @@ class EditSubmissionContext
         $form->disableAjaxReset();
         foreach ($form->getLayout()->getFields()->getStorableFields() as $field) {
             if (isset($submission->{$field->getHandle()})) {
-                $value = $submission->{$field->getHandle()}->getValue();
+                $submissionValue = $submission->{$field->getHandle()};
+                if ($submissionValue instanceof FieldInterface) {
+                    $value = $submissionValue->getValue();
+                } else {
+                    $value = $submissionValue;
+                }
 
                 if ($field instanceof CheckboxField) {
                     $field->setChecked((bool) $value);
