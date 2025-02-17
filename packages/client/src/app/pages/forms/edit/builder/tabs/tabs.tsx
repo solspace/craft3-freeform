@@ -103,6 +103,11 @@ export const Tabs: React.FC = () => {
             <span>{translate('Integrations')}</span>
           </NavLink>
         )}
+        {config.editions.is(Edition.Pro) && form.formMonitor.enabled && (
+          <NavLink to="form-monitor">
+            <span>{translate('Monitoring')}</span>
+          </NavLink>
+        )}
         {formSettingsData && config.limitations.can('settings.tab') && (
           <NavLink
             to="settings"

@@ -2,12 +2,16 @@ import { spacings } from '@ff-client/styles/variables';
 import styled from 'styled-components';
 
 export const CardBody = styled.div`
-  flex: 1;
+  display: flex;
+  justify-content: space-between;
+
+  padding: ${spacings.xl} ${spacings.xl} 0;
+`;
+
+export const FormBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
-
-  padding: ${spacings.xl} ${spacings.xl} 0;
 `;
 
 export const Title = styled.h2`

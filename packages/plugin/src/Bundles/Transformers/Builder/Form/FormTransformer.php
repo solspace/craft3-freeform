@@ -11,6 +11,7 @@ use Solspace\Freeform\Services\ChartsService;
 use Solspace\Freeform\Services\Form\FieldsService;
 use Solspace\Freeform\Services\Form\LayoutsService;
 use Solspace\Freeform\Services\Form\TranslationsService;
+use Solspace\Freeform\Services\FormMonitorService;
 use Solspace\Freeform\Services\SubmissionsService;
 use yii\base\Event;
 
@@ -26,6 +27,7 @@ class FormTransformer
         private LayoutTransformer $layoutTransformer,
         private ChartsService $chartsService,
         private SubmissionsService $submissionsService,
+        private FormMonitorService $formMonitorService,
     ) {}
 
     public function transformList(array $forms): array
@@ -130,6 +132,7 @@ class FormTransformer
             'ownership' => $this->getOwnership($form),
             'isNew' => $isNew,
             'dateArchived' => $form->getDateArchived(),
+            'formMonitor' => $this->formMonitorService->getStatus($form),
         ];
     }
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import { FormMonitor } from './tabs/form-monitor/monitor';
+import { FMResults } from './tabs/form-monitor/results/results';
 import { FormSettings } from './tabs/form-settings/settings';
 import { SettingsEditor } from './tabs/form-settings/settings.editor';
 import { Integrations } from './tabs/integrations/integrations';
@@ -43,6 +45,9 @@ export const Builder: React.FC = () => {
           <Route path="settings" element={<FormSettings />}>
             <Route index element={<SettingsEditor />} />
             <Route path=":sectionHandle" element={<SettingsEditor />} />
+          </Route>
+          <Route path="form-monitor" element={<FormMonitor />}>
+            <Route index element={<FMResults />} />
           </Route>
         </Routes>
       </BuilderContent>

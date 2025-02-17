@@ -1,8 +1,18 @@
 import React from 'react';
 import { colors, spacings } from '@ff-client/styles/variables';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-const Overlay = styled.div`
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const scaleIn = keyframes`
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+`;
+
+export const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -13,44 +23,25 @@ const Overlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.2s ease-in;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+  animation: ${fadeIn} 0.2s ease-in;
 `;
 
-const Modal = styled.div`
+export const ModalContent = styled.div`
   background: ${colors.white};
   padding: ${spacings.lg};
   border-radius: 8px;
   max-width: 90vw;
   max-height: 90vh;
-  animation: scaleIn 0.2s ease-out;
-
-  @keyframes scaleIn {
-    from {
-      transform: scale(0.95);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+  animation: ${scaleIn} 0.2s ease-out;
 
   img {
     max-width: 100%;
     max-height: 80vh;
+    border-radius: 4px;
   }
 `;
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   position: fixed;
   top: ${spacings.md};
   right: ${spacings.md};
@@ -58,21 +49,15 @@ const CloseButton = styled.button`
   height: 32px;
   border: none;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  animation: showButton 0.1s ease-out 0.3s forwards;
-
-  @keyframes showButton {
-    to {
-      opacity: 0.8;
-    }
-  }
+  transition: all 0.2s ease;
 
   &:hover {
-    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
   }
 
   &::before,
@@ -106,10 +91,14 @@ export const ScreenshotModal: React.FC<ScreenshotModalProps> = ({
 }) => {
   return (
     <Overlay onClick={onClose}>
-      <Modal onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={onClose} title="Close" />
-        <img src={imageUrl} alt={`Test #${testId} screenshot`} />
-      </Modal>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <CloseButton onClick={onClose} aria-label="Close screenshot" />
+        <img
+          src={imageUrl}
+          alt={`Screenshot for test #${testId}`}
+          loading="lazy"
+        />
+      </ModalContent>
     </Overlay>
   );
 };

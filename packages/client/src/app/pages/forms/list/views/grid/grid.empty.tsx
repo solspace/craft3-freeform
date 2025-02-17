@@ -28,6 +28,9 @@ const generateFormData = (
     submissions,
     spam,
   },
+  formMonitor: {
+    enabled: false,
+  },
   settings: {
     general: {
       namespaceType: 'settings',

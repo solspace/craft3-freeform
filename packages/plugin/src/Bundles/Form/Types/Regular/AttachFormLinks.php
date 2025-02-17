@@ -59,6 +59,7 @@ class AttachFormLinks extends FeatureBundle
                 $submissionCount = $data->counters['submissions'];
                 $spamCount = $data->counters['spam'];
                 $savedCount = $data->counters['saved'];
+                $isFormMonitorEnabled = $data->formMonitor['enabled'];
 
                 $submissions = Freeform::t('{count} Submissions', ['count' => $submissionCount]);
                 $spam = Freeform::t('{count} Spam', ['count' => $spamCount]);
@@ -70,6 +71,15 @@ class AttachFormLinks extends FeatureBundle
                         'formTitle',
                         UrlHelper::cpUrl('freeform/forms/'.$form->getId()),
                         'title'
+                    );
+                }
+
+                if ($isFormMonitorEnabled) {
+                    $event->add(
+                        Freeform::t('Form Monitor'),
+                        'formMonitor',
+                        UrlHelper::cpUrl('freeform/forms/'.$form->getId().'/form-monitor'),
+                        'formMonitor'
                     );
                 }
 

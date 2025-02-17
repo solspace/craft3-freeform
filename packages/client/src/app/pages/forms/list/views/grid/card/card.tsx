@@ -23,11 +23,13 @@ import {
   useCloneFormMutation,
 } from '../grid.mutations';
 
+import { StatsChart } from './card.monitor.stats';
 import {
   CardBody,
   CardWrapper,
   ControlButton,
   Controls,
+  FormBody,
   LinkList,
   PaddedChartFooter,
   Subtitle,
@@ -72,7 +74,7 @@ export const Card: React.FC<Props> = ({
     uv: randomSubmissions(0, Math.random() > 0.9 ? 50 : 20), // 15% chance for peak day
   }));
 
-  const { id, name, description, dateArchived, settings } = form;
+  const { id, name, description, dateArchived, settings, formMonitor } = form;
   const { color } = settings.general;
 
   const isArchiving =
@@ -94,6 +96,7 @@ export const Card: React.FC<Props> = ({
 
   const hasTitleLink = form.links.filter(({ type }) => type === 'title').length;
   const linkList = form.links.filter(({ type }) => type === 'linkList');
+  const formMonitorLink = form.links.find(({ type }) => type === 'formMonitor');
 
   return (
     <CardWrapper
@@ -144,56 +147,63 @@ export const Card: React.FC<Props> = ({
       </Controls>
 
       <CardBody>
-        {isTitleOverflowing ? (
-          <Tooltip title={name} {...tooltipProps}>
-            {hasTitleLink ? (
-              <TitleLink
-                ref={titleRef}
-                onClick={onNavigate}
-                onAuxClick={onNavigate}
-              >
-                {name}
-              </TitleLink>
-            ) : (
-              <Title ref={titleRef}>{name}</Title>
-            )}
-          </Tooltip>
-        ) : hasTitleLink ? (
-          <TitleLink
-            ref={titleRef}
-            onClick={onNavigate}
-            onAuxClick={onNavigate}
-          >
-            {name}
-          </TitleLink>
-        ) : (
-          <Title ref={titleRef}>{name}</Title>
-        )}
-        {!!description &&
-          (isDescriptionOverflowing ? (
-            <Tooltip title={description} {...tooltipProps}>
-              <Subtitle ref={descriptionRef}>{description}</Subtitle>
-            </Tooltip>
-          ) : (
-            <Subtitle ref={descriptionRef} title={description}>
-              {description}
-            </Subtitle>
-          ))}
-
-        {linkList.length > 0 && (
-          <LinkList>
-            {linkList.map((link, idx) =>
-              link.internal ? (
-                <NavLink key={idx} to={link.url}>
-                  {link.label}
-                </NavLink>
+        <FormBody>
+          {isTitleOverflowing ? (
+            <Tooltip title={name} {...tooltipProps}>
+              {hasTitleLink ? (
+                <TitleLink
+                  ref={titleRef}
+                  onClick={onNavigate}
+                  onAuxClick={onNavigate}
+                >
+                  {name}
+                </TitleLink>
               ) : (
-                <li key={idx}>
-                  <a href={link.url}>{link.label}</a>
-                </li>
-              )
-            )}
-          </LinkList>
+                <Title ref={titleRef}>{name}</Title>
+              )}
+            </Tooltip>
+          ) : hasTitleLink ? (
+            <TitleLink
+              ref={titleRef}
+              onClick={onNavigate}
+              onAuxClick={onNavigate}
+            >
+              {name}
+            </TitleLink>
+          ) : (
+            <Title ref={titleRef}>{name}</Title>
+          )}
+          {!!description &&
+            (isDescriptionOverflowing ? (
+              <Tooltip title={description} {...tooltipProps}>
+                <Subtitle ref={descriptionRef}>{description}</Subtitle>
+              </Tooltip>
+            ) : (
+              <Subtitle ref={descriptionRef} title={description}>
+                {description}
+              </Subtitle>
+            ))}
+
+          {linkList.length > 0 && (
+            <LinkList>
+              {linkList.map((link, idx) =>
+                link.internal ? (
+                  <NavLink key={idx} to={link.url}>
+                    {link.label}
+                  </NavLink>
+                ) : (
+                  <li key={idx}>
+                    <a href={link.url}>{link.label}</a>
+                  </li>
+                )
+              )}
+            </LinkList>
+          )}
+        </FormBody>
+        {formMonitor?.enabled && formMonitorLink && (
+          <NavLink to={formMonitorLink.url}>
+            <StatsChart stats={formMonitor?.stats} />
+          </NavLink>
         )}
       </CardBody>
 

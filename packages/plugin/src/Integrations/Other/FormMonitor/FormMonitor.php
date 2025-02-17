@@ -32,6 +32,7 @@ class FormMonitor extends APIIntegration
     #[Input\Hidden]
     private string $requestToken = '';
 
+    #[Required]
     #[Flag(self::FLAG_INSTANCE_ONLY)]
     #[Input\Text(
         label: 'URL the Form Monitor should access to check the form',
@@ -137,9 +138,9 @@ class FormMonitor extends APIIntegration
         return json_decode((string) $response->getBody(), true);
     }
 
-    public function fetchStats(Client $client): array
+    public function fetchStats(Client $client, Form $form): array
     {
-        $endpoint = $this->getEndpoint('/forms/stats');
+        $endpoint = $this->getEndpoint('/forms/'.$form->getId().'/stats');
         $response = $client->get($endpoint);
 
         return json_decode((string) $response->getBody(), true);
@@ -155,6 +156,13 @@ class FormMonitor extends APIIntegration
         ];
 
         $client->put($endpoint, ['json' => $payload]);
+    }
+
+    public function deleteManifest(Client $client, Form $form): void
+    {
+        $endpoint = $this->getEndpoint('forms/'.$form->getId());
+
+        $client->delete($endpoint);
     }
 
     protected function getProcessableFields(string $category): array
