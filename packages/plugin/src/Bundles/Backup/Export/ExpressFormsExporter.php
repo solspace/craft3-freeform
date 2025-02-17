@@ -41,7 +41,6 @@ use Solspace\Freeform\Fields\Implementations\TextField;
 use Solspace\Freeform\Form\Settings\Implementations\ValueGenerators\RandomColorGenerator;
 use Solspace\Freeform\Form\Settings\Settings as FormSettings;
 use Solspace\Freeform\Freeform;
-use Solspace\Freeform\Library\DataObjects\Form\Defaults\Defaults;
 use Solspace\Freeform\Library\Helpers\JsonHelper;
 use Solspace\Freeform\Library\Helpers\StringHelper as FreeformStringHelper;
 use Solspace\Freeform\Models\Settings;
@@ -358,17 +357,6 @@ class ExpressFormsExporter extends BaseExporter
 
     protected function collectSettings(bool $collect): ?Settings
     {
-        if (!$collect) {
-            return null;
-        }
-
-        $settings = ExpressForms::getInstance()->settings->getSettingsModel();
-
-        $exported = new Settings();
-        $exported->pluginName = $settings->name;
-        $exported->emailTemplateDirectory = $settings->emailNotificationsDirectoryPath;
-        $exported->defaults = new Defaults();
-
-        return $exported;
+        return null;
     }
 }

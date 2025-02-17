@@ -25,6 +25,10 @@ export const PdfTemplates: React.FC<Props> = ({
   values,
   onUpdate,
 }) => {
+  if (!templates.length) {
+    return null;
+  }
+
   return (
     <>
       <Blocks>
