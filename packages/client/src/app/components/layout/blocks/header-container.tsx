@@ -1,11 +1,16 @@
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import React from 'react';
+import styled from 'styled-components';
 
 type Props = PropsWithChildren<
   HTMLAttributes<HTMLDivElement> & {
     extra?: React.ReactNode;
   }
 >;
+
+const HeaderElement = styled.header`
+  width: auto !important;
+`;
 
 export const HeaderContainer: React.FC<Props> = ({
   children,
@@ -18,12 +23,12 @@ export const HeaderContainer: React.FC<Props> = ({
 
   return (
     <div id="header-container">
-      <header id="header" {...props}>
+      <HeaderElement id="header" {...props}>
         <div id="page-title" className="flex">
           <h1 className="screen-title">{children}</h1>
         </div>
         {extra}
-      </header>
+      </HeaderElement>
     </div>
   );
 };
