@@ -15,6 +15,7 @@ use Solspace\Freeform\Library\Rules\Types\NotificationRule;
 use Solspace\Freeform\Library\Rules\Types\PageRule;
 use Solspace\Freeform\Library\Rules\Types\SubmitFormRule;
 use Solspace\Freeform\Notifications\Types\Conditional\Conditional;
+use Solspace\Freeform\Records\Form\FormFieldRecord;
 use Solspace\Freeform\Records\Rules\ButtonRuleRecord;
 use Solspace\Freeform\Records\Rules\FieldRuleRecord;
 use Solspace\Freeform\Records\Rules\NotificationRuleRecord;
@@ -275,18 +276,36 @@ class RuleProvider
 
         /** @var RuleConditionRecord $condition */
         foreach ($ruleRecord->getConditions()->all() as $condition) {
-            $field = $condition->getField()->one();
-            if (!$field) {
-                $conditionRuleLogger->error('Conditional field was not found', ['condition' => $condition]);
+            /** @var FormFieldRecord $fieldRecord */
+            $fieldRecord = $condition->getField()->one();
+            if (!$fieldRecord) {
+                $conditionRuleLogger->error(
+                    'Conditional field was not found',
+                    [
+                        'condition' => $condition,
+                        'form' => $form->getHandle(),
+                    ]
+                );
 
                 continue;
             }
-            $field = $form->get($field->uid);
+
+            $field = $form->get($fieldRecord->uid);
             if (!$field instanceof FieldInterface) {
-                $conditionRuleLogger->error('Form field was not an instance of FieldInterface', ['field' => $field]);
+                $conditionRuleLogger->error(
+                    'Form field was not an instance of FieldInterface',
+                    [
+                        'field' => [
+                            'id' => $fieldRecord->id,
+                            'handle' => $fieldRecord->handle,
+                        ],
+                        'form' => $form->getHandle(),
+                    ]
+                );
 
                 continue;
             }
+
             $conditionCollection->add(
                 new Condition(
                     $condition->uid,
