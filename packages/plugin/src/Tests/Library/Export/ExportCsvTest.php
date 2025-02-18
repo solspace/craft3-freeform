@@ -94,6 +94,7 @@ class ExportCsvTest extends BaseExportTestingCase
                             ]),
                             'getLabel' => 'Table One',
                             'getHandle' => 'table1',
+                            'getValue' => [['one', 'two', 'three'], ['four', 'five', ''], ['', 'six', '']],
                         ]
                     ),
                     'table2' => $this->generateField(
@@ -108,6 +109,7 @@ class ExportCsvTest extends BaseExportTestingCase
                             ]),
                             'getLabel' => 'Table Two',
                             'getHandle' => 'table2',
+                            'getValue' => [['r1c1', 'r1c2', 'r1c3', 'r1c4', 'r1c5'], ['r2c1', 'r2c2', 'r2c3', 'r2c4', 'r2c5']],
                         ]
                     ),
                     'firstName' => $this->generateField(
@@ -115,6 +117,7 @@ class ExportCsvTest extends BaseExportTestingCase
                         [
                             'getLabel' => 'First Name',
                             'getHandle' => 'firstName',
+                            'getValue' => 'Some Name',
                         ]
                     ),
                     default => null,
@@ -134,7 +137,7 @@ class ExportCsvTest extends BaseExportTestingCase
                 ),
                 'firstName' => $this->generateField(
                     TextField::class,
-                    ['getValueAsString' => 'Some Name']
+                    ['getValue' => 'Some Name']
                 ),
                 'table2' => $this->generateField(
                     TableField::class,
@@ -155,7 +158,7 @@ class ExportCsvTest extends BaseExportTestingCase
                 ),
                 'firstName' => $this->generateField(
                     TextField::class,
-                    ['getValueAsString' => 'Other Name']
+                    ['getValue' => 'Other Name']
                 ),
                 'table2' => $this->generateField(
                     TableField::class,
@@ -222,14 +225,14 @@ class ExportCsvTest extends BaseExportTestingCase
                 'id' => 1,
                 'textarea' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => "some text\ncontaining\nnewlines"],
+                    ['getValue' => "some text\ncontaining\nnewlines"],
                 ),
             ],
             [
                 'id' => 2,
                 'textarea' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => "other text\ncontaining\n\n\nnewlines"],
+                    ['getValue' => "other text\ncontaining\n\n\nnewlines"],
                 ),
             ],
         ]);
@@ -274,14 +277,14 @@ class ExportCsvTest extends BaseExportTestingCase
                 'id' => 1,
                 'textarea' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => "some text\ncontaining\nnewlines"],
+                    ['getValue' => "some text\ncontaining\nnewlines"],
                 ),
             ],
             [
                 'id' => 2,
                 'textarea' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => "other text\ncontaining\n\n\nnewlines"],
+                    ['getValue' => "other text\ncontaining\n\n\nnewlines"],
                 ),
             ],
         ]);
@@ -331,14 +334,14 @@ class ExportCsvTest extends BaseExportTestingCase
                 'id' => 1,
                 'texty' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => 'some text'],
+                    ['getValue' => 'some text'],
                 ),
             ],
             [
                 'id' => 2,
                 'texty' => $this->generateField(
                     TextareaField::class,
-                    ['getValueAsString' => 'other text'],
+                    ['getValue' => 'other text'],
                 ),
             ],
         ]);
