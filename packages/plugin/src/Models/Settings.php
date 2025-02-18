@@ -358,19 +358,26 @@ class Settings extends Model
     public function prepareFolderStructure(): void
     {
         $templatesPath = \Craft::$app->path->getSiteTemplatesPath();
-        $formattingPath = FileHelper::absolutePath($this->formTemplateDirectory, $templatesPath);
-        if (!is_dir($formattingPath)) {
-            FileHelper::createDirectory($formattingPath, 0777);
+
+        if ($this->formTemplateDirectory) {
+            $formattingPath = FileHelper::absolutePath($this->formTemplateDirectory, $templatesPath);
+            if (!is_dir($formattingPath)) {
+                FileHelper::createDirectory($formattingPath, 0777);
+            }
         }
 
-        $emailTemplatesPath = FileHelper::absolutePath($this->emailTemplateDirectory, $templatesPath);
-        if (!is_dir($emailTemplatesPath)) {
-            FileHelper::createDirectory($emailTemplatesPath, 0777);
+        if ($this->emailTemplateDirectory) {
+            $emailTemplatesPath = FileHelper::absolutePath($this->emailTemplateDirectory ?? '', $templatesPath);
+            if (!is_dir($emailTemplatesPath)) {
+                FileHelper::createDirectory($emailTemplatesPath, 0777);
+            }
         }
 
-        $successTemplatesPath = FileHelper::absolutePath($this->successTemplateDirectory, $templatesPath);
-        if (!is_dir($successTemplatesPath)) {
-            FileHelper::createDirectory($successTemplatesPath, 0777);
+        if ($this->successTemplateDirectory) {
+            $successTemplatesPath = FileHelper::absolutePath($this->successTemplateDirectory ?? '', $templatesPath);
+            if (!is_dir($successTemplatesPath)) {
+                FileHelper::createDirectory($successTemplatesPath, 0777);
+            }
         }
     }
 
@@ -408,10 +415,8 @@ class Settings extends Model
 
     /**
      * If a form template directory has been set and it exists - return its absolute path.
-     *
-     * @return null|string
      */
-    public function getAbsoluteFormTemplateDirectory()
+    public function getAbsoluteFormTemplateDirectory(): ?string
     {
         if ($this->formTemplateDirectory) {
             $absolutePath = $this->getAbsolutePath($this->formTemplateDirectory);
@@ -434,10 +439,8 @@ class Settings extends Model
 
     /**
      * If an email template directory has been set and it exists - return its absolute path.
-     *
-     * @return null|string
      */
-    public function getAbsoluteEmailTemplateDirectory()
+    public function getAbsoluteEmailTemplateDirectory(): ?string
     {
         if ($this->emailTemplateDirectory) {
             $absolutePath = $this->getAbsolutePath($this->emailTemplateDirectory);
@@ -467,7 +470,7 @@ class Settings extends Model
         };
     }
 
-    public function getAbsoluteSuccessTemplateDirectory()
+    public function getAbsoluteSuccessTemplateDirectory(): ?string
     {
         if ($this->successTemplateDirectory) {
             $absolutePath = $this->getAbsolutePath($this->successTemplateDirectory);
