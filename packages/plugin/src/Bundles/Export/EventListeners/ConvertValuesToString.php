@@ -5,7 +5,6 @@ namespace Solspace\Freeform\Bundles\Export\EventListeners;
 use Solspace\Freeform\Bundles\Export\Events\PrepareExportValueEvent;
 use Solspace\Freeform\Bundles\Export\Interfaces\StringValueExportInterface;
 use Solspace\Freeform\Bundles\Export\SubmissionExportInterface;
-use Solspace\Freeform\Fields\FieldInterface;
 use Solspace\Freeform\Fields\Implementations\Pro\TableField;
 use Solspace\Freeform\Library\Bundles\FeatureBundle;
 use Solspace\Freeform\Library\Helpers\StringHelper;
@@ -36,11 +35,11 @@ class ConvertValuesToString extends FeatureBundle
         $field = $event->getField();
         $value = $event->getValue();
 
-        if ($field instanceof FieldInterface) {
-            if (!$field instanceof TableField) {
-                $value = $field->getValueAsString();
-            }
-        } elseif (\is_array($value) || \is_object($value)) {
+        if ($field instanceof TableField) {
+            return;
+        }
+
+        if (\is_array($value) || \is_object($value)) {
             $value = StringHelper::implodeRecursively(', ', (array) $value);
         }
 
