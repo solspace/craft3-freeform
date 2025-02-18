@@ -1,5 +1,17 @@
 # Solspace Freeform Changelog
 
+## 5.9.11 - 2025-02-17
+
+### Added
+- Added `freeform/freeform/convert-handles` console command to convert all form and field handles to _camelCase_ or _under_scores_.
+
+### Fixed
+- Fixed a bug where the Express Forms migration utility included PDF templates and Settings as options.
+- Fixed a bug where the Freeform Form Data export was not working with prefixed tables.
+- Fixed a bug where the Form Data importer would error when no template folders were defined.
+- Fixed a bug where exports of submission data would include file IDs instead of file URLs for File Upload and File Drag & Drop fields.
+- Fixed a bug where a `Call to a member function getValue() on string` error could occur in rare cases when attempting to edit a form submission on the front end.
+
 ## 5.9.10 - 2025-02-13
 
 ### Added
