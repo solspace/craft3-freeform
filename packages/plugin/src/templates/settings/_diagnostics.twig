@@ -12,6 +12,8 @@
 
 {% set title = "Diagnostics"|t("freeform") %}
 
+{% block actionButton %}{% endblock %}
+
 {% macro renderIcon(type) %}
     {%- if type == 'WarningValidator' -%}
         <svg aria-hidden="true" viewbox="0 0 576 512">
