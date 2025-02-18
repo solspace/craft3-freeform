@@ -8,6 +8,8 @@ const LoaderContainer = styled.div`
   flex-direction: column;
   gap: ${spacings.md};
   padding: ${spacings.md};
+  background: ${colors.white};
+  width: 100%;
 `;
 
 const ProgressLoader = styled.div`
