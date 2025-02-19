@@ -983,6 +983,7 @@ return [
     'Field Type Switcher' => 'Selettore del Tipo di Campo',
     'Advanced Settings on Submit Buttons' => 'Impostazioni Avanzate sui Pulsanti di Invio',
     'Access Field Type Manager' => 'Accedi al gestore dei tipi di campo',
+    'Access Fields from other Forms' => 'Accedi al campi di altri moduli',
     'Access Favorite Fields Manager' => 'Accedi al gestore dei campi preferiti',
     'Save Fields as Favorites' => 'Salva i campi come preferiti',
     'Field Option Sources' => 'Origini delle opzioni di campo',

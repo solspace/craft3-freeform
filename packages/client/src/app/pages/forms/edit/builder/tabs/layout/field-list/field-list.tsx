@@ -23,7 +23,7 @@ export const FieldList: React.FC = () => {
       <Search />
       <FavoriteFields />
       <BaseFields />
-      <FormsFields />
+      {config.limitations.can('layout.formsFields') && <FormsFields />}
     </FieldListWrapper>
   );
 };

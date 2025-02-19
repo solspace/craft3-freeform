@@ -983,6 +983,7 @@ return [
     'Field Type Switcher' => 'Veldtypeschakelaar',
     'Advanced Settings on Submit Buttons' => 'Geavanceerde instellingen op verzendknoppen',
     'Access Field Type Manager' => 'Toegang tot veldtypebeheer',
+    'Access Fields from other Forms' => 'Toegang tot velden uit andere formulieren',
     'Access Favorite Fields Manager' => 'Toegang tot favorietenveldenbeheer',
     'Save Fields as Favorites' => 'Velden opslaan als favorieten',
     'Field Option Sources' => 'Veldoptiebronnen',

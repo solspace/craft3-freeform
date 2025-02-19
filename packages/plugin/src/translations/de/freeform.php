@@ -983,6 +983,7 @@ return [
     'Field Type Switcher' => 'Feldtyp-Umschalter',
     'Advanced Settings on Submit Buttons' => 'Erweiterte Einstellungen für Senden-Schaltflächen',
     'Access Field Type Manager' => 'Zugriff auf Feldtyp-Manager',
+    'Access Fields from other Forms' => 'Zugriff auf Felder aus anderen Formularen',
     'Access Favorite Fields Manager' => 'Zugriff auf Favoriten-Felder-Manager',
     'Save Fields as Favorites' => 'Felder als Favoriten speichern',
     'Field Option Sources' => 'Feldoptionsquellen',
