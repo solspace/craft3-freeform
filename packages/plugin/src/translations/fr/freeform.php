@@ -983,6 +983,7 @@ return [
     'Field Type Switcher' => 'Commutateur de type de champ',
     'Advanced Settings on Submit Buttons' => 'Paramètres avancés sur les boutons de contribution',
     'Access Field Type Manager' => 'Accéder au gestionnaire des types de champs',
+    'Access Fields from other Forms' => 'Accéder au champs d’autres formulaires',
     'Access Favorite Fields Manager' => 'Accéder au gestionnaire des champs favoris',
     'Save Fields as Favorites' => 'Enregistrer les champs comme favoris',
     'Field Option Sources' => 'Sources des options de champ',

@@ -87,6 +87,7 @@ class LimitedUsersDefaults
 
                     new Boolean('buttons', 'Advanced Settings on Submit Buttons', true),
                     new Boolean('fieldManager', 'Access Field Type Manager', true),
+                    new Boolean('formsFields', 'Access Fields from other Forms', true),
                     new Boolean('favoritesManager', 'Access Favorite Fields Manager', true),
                     new Boolean('favorite', 'Save Fields as Favorites', true),
 

@@ -983,6 +983,7 @@ return [
     'Field Type Switcher' => 'Field Type Switcher',
     'Advanced Settings on Submit Buttons' => 'Advanced Settings on Submit Buttons',
     'Access Field Type Manager' => 'Access Field Type Manager',
+    'Access Fields from other Forms' => 'Access Fields from other Forms',
     'Access Favorite Fields Manager' => 'Access Favorite Fields Manager',
     'Save Fields as Favorites' => 'Save Fields as Favorites',
     'Field Option Sources' => 'Field Option Sources',
