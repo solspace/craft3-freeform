@@ -1,5 +1,18 @@
 # Solspace Freeform Changelog
 
+## 5.9.12 - 2025-02-19
+
+### Added
+- Added the ability to hide the _Fields from other Forms_ area in the form builder for Limited Users.
+
+### Changed
+- Updated error logging for Conditional Rules to include more context.
+
+### Fixed
+- Fixed a bug where error logging used `json_validate`, which is unsupported in PHP versions lower than 8.3 in Craft 4.
+- Fixed a bug with a spacing issue for the submit buttons in the Limited Users settings pages.
+- Fixed a bug where a stray _Save_ button appeared on the Diagnostics page.
+
 ## 5.9.11 - 2025-02-17
 
 ### Added
