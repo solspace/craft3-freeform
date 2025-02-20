@@ -177,6 +177,31 @@ class DiagnosticsService extends BaseService
                 ]
             ),
             new DiagnosticItem(
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Execution Time').': <b>{{ value }}</b>',
+                \ini_get('max_execution_time'),
+                []
+            ),
+            new DiagnosticItem(
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Input Time').': <b>{{ value }}</b>',
+                \ini_get('max_input_time'),
+                []
+            ),
+            new DiagnosticItem(
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Input Vars').': <b>{{ value }}</b>',
+                \ini_get('max_input_vars'),
+                []
+            ),
+            new DiagnosticItem(
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Post Size').': <b>{{ value }}</b>',
+                \ini_get('post_max_size'),
+                []
+            ),
+            new DiagnosticItem(
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Output Buffering').': <b>{{ value }}</b>',
+                \ini_get('output_buffering'),
+                []
+            ),
+            new DiagnosticItem(
                 '<span class="diag-check diag-{{ value ? "enabled" : "warning" }}"></span>'.Freeform::t('PHP Sessions'),
                 \PHP_SESSION_ACTIVE === session_status() && isset($_SESSION) && session_id(),
                 [
