@@ -178,32 +178,27 @@ class DiagnosticsService extends BaseService
             ),
             new DiagnosticItem(
                 '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Execution Time').': <b>{{ value }}</b>',
-                $system->phpInfo['Core']['max_execution_time'],
+                \ini_get('max_execution_time'),
                 []
             ),
             new DiagnosticItem(
                 '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Input Time').': <b>{{ value }}</b>',
-                $system->phpInfo['Core']['max_input_time'],
+                \ini_get('max_input_time'),
                 []
             ),
             new DiagnosticItem(
                 '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Input Vars').': <b>{{ value }}</b>',
-                $system->phpInfo['Core']['max_input_vars'],
+                \ini_get('max_input_vars'),
                 []
             ),
             new DiagnosticItem(
                 '<span class="diag-check diag-spacer"></span>'.Freeform::t('Max Post Size').': <b>{{ value }}</b>',
-                $system->phpInfo['Core']['post_max_size'],
+                \ini_get('post_max_size'),
                 []
             ),
             new DiagnosticItem(
                 '<span class="diag-check diag-spacer"></span>'.Freeform::t('Output Buffering').': <b>{{ value }}</b>',
-                $system->phpInfo['Core']['output_buffering'],
-                []
-            ),
-            new DiagnosticItem(
-                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Reflection').': <b>{{ value }}</b>',
-                $system->phpInfo['Reflection']['Reflection'],
+                \ini_get('output_buffering'),
                 []
             ),
             new DiagnosticItem(

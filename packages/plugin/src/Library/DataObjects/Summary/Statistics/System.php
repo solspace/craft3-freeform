@@ -6,7 +6,6 @@ class System
 {
     public string $databaseDriver = '';
     public string $phpVersion = '';
-    public array $phpInfo = [];
     public string $craftVersion = '';
     public string $craftEdition = '';
     public bool $formFieldType = false;

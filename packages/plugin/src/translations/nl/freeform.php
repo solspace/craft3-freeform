@@ -1178,7 +1178,6 @@ return [
     'Max Input Vars' => 'Max. invoervars',
     'Max Post Size' => 'Max. berichtgrootte',
     'Output Buffering' => 'Uitvoerbuffering',
-    'Reflection' => 'Reflectie',
     'PHP Sessions' => 'PHP-sessies',
     'BC Math extension' => 'BC Math-extensie',
     'ImageMagick extension' => 'ImageMagick-extensie',

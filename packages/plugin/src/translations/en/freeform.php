@@ -1178,7 +1178,6 @@ return [
     'Max Input Vars' => 'Max Input Vars',
     'Max Post Size' => 'Max Post Size',
     'Output Buffering' => 'Output Buffering',
-    'Reflection' => 'Reflection',
     'PHP Sessions' => 'PHP Sessions',
     'BC Math extension' => 'BC Math extension',
     'ImageMagick extension' => 'ImageMagick extension',
