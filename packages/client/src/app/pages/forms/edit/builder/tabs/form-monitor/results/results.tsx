@@ -3,7 +3,6 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useFMFormTestsQuery } from '@ff-client/queries/form-monitor';
 import { colors } from '@ff-client/styles/variables';
 import translate from '@ff-client/utils/translations';
-import { format } from 'date-fns';
 import {
   Bar,
   BarChart,
@@ -51,11 +50,6 @@ interface TooltipProps {
     };
   }>;
 }
-
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return format(date, "MMM d, yyyy 'at' h:mm a");
-};
 
 const CustomTooltip = ({
   active,
@@ -122,7 +116,7 @@ export const FMResults: React.FC = () => {
     id: test.id,
     value: 1,
     status: test.status,
-    date: formatDate(test.dateAttempted),
+    date: test.dateAttempted,
     color:
       test.status === 'success'
         ? colors.teal500
@@ -197,8 +191,8 @@ export const FMResults: React.FC = () => {
             return (
               <tr key={test.id}>
                 <td className="no-break">#{test.id}</td>
-                <td className="no-break" title={formatDate(dateString)}>
-                  {formatDate(dateString)}
+                <td className="no-break" title={dateString}>
+                  {dateString}
                 </td>
                 <td className="no-break">
                   <div className="status-col">

@@ -2,6 +2,7 @@
 
 namespace Solspace\Freeform\Integrations\Other\FormMonitor;
 
+use craft\helpers\DateTimeHelper;
 use GuzzleHttp\Client;
 use Solspace\Freeform\Attributes\Integration\Type;
 use Solspace\Freeform\Attributes\Property\Edition;
@@ -134,8 +135,27 @@ class FormMonitor extends APIIntegration
     {
         $endpoint = $this->getEndpoint('/forms/'.$form->getId().'/tests');
         $response = $client->get($endpoint, ['query' => $options]);
+        $data = json_decode((string) $response->getBody(), true);
 
-        return json_decode((string) $response->getBody(), true);
+        // Format dates according to Craft's settings
+        if (isset($data['tests']) && \is_array($data['tests'])) {
+            foreach ($data['tests'] as &$test) {
+                $dateFields = ['dateAttempted', 'dateCompleted'];
+                foreach ($dateFields as $field) {
+                    if (isset($test[$field])) {
+                        $date = DateTimeHelper::toDateTime($test[$field]);
+                        if ($date) {
+                            $test[$field] = \Craft::$app->getFormatter()->asDatetime(
+                                $date,
+                                \Craft::$app->getLocale()->getDateTimeFormat('short')
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function fetchStats(Client $client, Form $form): array
