@@ -84,11 +84,13 @@ class RulesBundle extends FeatureBundle
             $values[$field->getHandle()] = $processEvent->getValue();
         }
 
+        $filterRules = fn ($rule) => $rule->getConditions()->count() > 0;
+
         $rules = [
             'values' => $values,
             'rules' => [
-                'fields' => $this->ruleProvider->getFieldRules($event->getForm()),
-                'buttons' => $this->ruleProvider->getButtonRules($event->getForm(), true),
+                'fields' => array_filter($this->ruleProvider->getFieldRules($event->getForm()), $filterRules),
+                'buttons' => array_filter($this->ruleProvider->getButtonRules($event->getForm(), true), $filterRules),
             ],
         ];
 

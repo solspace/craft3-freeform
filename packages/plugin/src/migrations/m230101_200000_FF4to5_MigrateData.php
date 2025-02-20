@@ -76,6 +76,10 @@ class m230101_200000_FF4to5_MigrateData extends Migration
         $this->renameOldFieldColumns();
 
         foreach ($layouts as $formId => $layoutJson) {
+            $this->pageMap = [];
+            $this->fieldMap = [];
+            $this->submitFieldMap = [];
+
             $composer = json_decode($layoutJson)->composer;
 
             $properties = $composer->properties;
@@ -748,6 +752,10 @@ class m230101_200000_FF4to5_MigrateData extends Migration
             $submitRulesAdded = false;
 
             foreach ($data->fieldRules as $fieldRule) {
+                if (empty($fieldRule->criteria)) {
+                    continue;
+                }
+
                 $isSubmitFieldRule = \in_array($fieldRule->hash, $this->submitFieldMap, true);
                 $targetFieldRecord = $this->fieldMap[$fieldRule->hash] ?? null;
                 if (!$targetFieldRecord && !$isSubmitFieldRule) {

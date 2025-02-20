@@ -28,6 +28,10 @@ class RuleValidator
             return false;
         }
 
+        if (0 === $rule->getConditions()->count()) {
+            return false;
+        }
+
         $shouldShow = FieldRule::DISPLAY_SHOW === $rule->getDisplay();
         $triggersRule = $this->triggersRule($form, $rule);
 
@@ -38,6 +42,10 @@ class RuleValidator
     {
         $rule = $this->ruleProvider->getButtonRule($form, $button);
         if (!$rule) {
+            return false;
+        }
+
+        if (0 === $rule->getConditions()->count()) {
             return false;
         }
 
