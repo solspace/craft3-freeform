@@ -16,8 +16,9 @@ type Props = {
 
 export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
   const openCreateFormModal = useCreateFormModal();
-
   const { canCreate } = config.metadata.freeform;
+
+  const hasFormMonitor = forms?.some((form) => form.formMonitor?.enabled);
 
   return (
     <Table className="table data">
@@ -27,6 +28,7 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
           <th>{translate('Handle')}</th>
           <th>{translate('Description')}</th>
           <th>{translate('Chart')}</th>
+          {hasFormMonitor && <th>{translate('Form Monitor')}</th>}
           <th>{translate('Submissions')}</th>
           <th>{translate('Spam')}</th>
           <th>{translate('Manage')}</th>
@@ -44,7 +46,7 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
 
         {!isFetching && !forms?.length && canCreate && (
           <tr>
-            <td colSpan={7}>
+            <td colSpan={hasFormMonitor ? 8 : 7}>
               <p>
                 {translate(
                   `You don't have any forms yet. Create your first form now...`
@@ -63,7 +65,7 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
 
         {!isFetching && !forms?.length && !canCreate && (
           <tr>
-            <td colSpan={7}>
+            <td colSpan={hasFormMonitor ? 8 : 7}>
               <p>{translate(`You don't have any forms yet.`)}</p>
             </td>
           </tr>
@@ -71,7 +73,13 @@ export const ListTable: React.FC<Props> = ({ forms, isFetching }) => {
 
         {forms
           ?.sort((a, b) => a.name.localeCompare(b.name))
-          ?.map((form) => <ListTableRow key={form.id} form={form} />)}
+          ?.map((form) => (
+            <ListTableRow
+              key={form.id}
+              form={form}
+              hasFormMonitor={hasFormMonitor}
+            />
+          ))}
       </tbody>
     </Table>
   );

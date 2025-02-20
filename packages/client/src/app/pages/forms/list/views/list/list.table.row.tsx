@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import type { TooltipProps } from 'react-tippy';
 import { Tooltip } from 'react-tippy';
 import { FlexRow } from '@components/layout/blocks/flex';
@@ -24,6 +24,8 @@ import {
   useCloneFormMutation,
 } from '../grid/grid.mutations';
 
+import { MonitorStatus } from './list.table.row.styles';
+
 const tooltipProps: Omit<TooltipProps, 'children'> = {
   position: 'top',
   animation: 'fade',
@@ -32,9 +34,10 @@ const tooltipProps: Omit<TooltipProps, 'children'> = {
 
 type Props = {
   form: FormWithStats;
+  hasFormMonitor: boolean;
 };
 
-export const ListTableRow: React.FC<Props> = ({ form }) => {
+export const ListTableRow: React.FC<Props> = ({ form, hasFormMonitor }) => {
   const isLiteAndUp = config.editions.isAtLeast(Edition.Lite);
   const archiveMutation = useArchiveFormMutation();
   const cloneMutation = useCloneFormMutation();
@@ -45,7 +48,8 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
 
   const { canDelete } = config.metadata.freeform;
 
-  const { id, name, handle, description, settings, dateArchived } = form;
+  const { id, name, handle, description, settings, dateArchived, formMonitor } =
+    form;
   const color = settings.general.color;
 
   const hasTitleLink = form.links.some(({ type }) => type === 'title');
@@ -53,6 +57,8 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
     (link) => link.handle === 'submissions'
   );
   const spamLink = form.links.find((link) => link.handle === 'spam');
+
+  const formMonitorLink = form.links.find(({ type }) => type === 'formMonitor');
 
   return (
     <tr>
@@ -103,6 +109,21 @@ export const ListTableRow: React.FC<Props> = ({ form }) => {
           </AreaChart>
         </ResponsiveContainer>
       </td>
+      {hasFormMonitor && (
+        <td>
+          {formMonitor?.enabled && formMonitorLink && (
+            <NavLink to={formMonitorLink.url}>
+              <MonitorStatus
+                $type={formMonitor.stats.total > 0 ? 'active' : 'inactive'}
+              >
+                {formMonitor.stats.total > 0
+                  ? `${translate('Uptime')}: ${formMonitor.stats.percentage.success}%`
+                  : translate('Not monitored')}
+              </MonitorStatus>
+            </NavLink>
+          )}
+        </td>
+      )}
       <td>
         {!!submissionLink && (
           <a href={submissionLink.url}>{submissionLink.count}</a>
