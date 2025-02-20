@@ -51,6 +51,7 @@ class SubmissionsController extends BaseController
         $query = (new Query())
             ->select(["COUNT({$submissions}.[[id]]) as [[value]]"])
             ->from($submissions)
+            ->where(["{$submissions}.[[isHidden]]" => false])
         ;
 
         if (version_compare(\Craft::$app->getVersion(), '3.1', '>=')) {

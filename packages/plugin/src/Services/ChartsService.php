@@ -35,7 +35,10 @@ class ChartsService extends BaseService
                     $rangeStart->toDateTimeString(),
                     $rangeEnd->toDateTimeString(),
                 ])
-                ->andWhere(["{$submissions}.[[formId]]" => $formId])
+                ->andWhere([
+                    "{$submissions}.[[formId]]" => $formId,
+                    "{$submissions}.[[isHidden]]" => false,
+                ])
                 ->innerJoin(
                     $elements,
                     "{$elements}.[[id]] = {$submissions}.[[id]] AND {$elements}.[[dateDeleted]] IS NULL"
