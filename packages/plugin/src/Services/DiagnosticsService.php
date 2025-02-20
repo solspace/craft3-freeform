@@ -202,7 +202,7 @@ class DiagnosticsService extends BaseService
                 []
             ),
             new DiagnosticItem(
-                'Reflection <b>{{ value }}</b>',
+                '<span class="diag-check diag-spacer"></span>'.Freeform::t('Reflection').': <b>{{ value }}</b>',
                 $system->phpInfo['Reflection']['Reflection'],
                 []
             ),
